@@ -2,3 +2,4 @@ https://code.visualstudio.com/docs/containers/docker-compose
 https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-new
 https://stackoverflow.com/questions/51467914/how-to-add-a-project-csproj-to-solution-sln-under-a-solution-folder-using
 dotnet sln solution.sln add --solution-folder foo1\foo2\foo3 bar.csproj
+https://www.freecodecamp.org/news/how-to-debug-dockerized-net-core-apps-in-vs-code/
