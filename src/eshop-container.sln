@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{4D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API", "Services\Identity\Identity.API\Identity.API.csproj", "{8D64970A-DF5B-4ED1-BC05-30D10F074618}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HangFireServer", "Services\HangFireServer\HangFireServer.csproj", "{9C1FDC61-D7FA-42AC-8C0B-332E1AD7C2DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,9 +24,14 @@ Global
 		{8D64970A-DF5B-4ED1-BC05-30D10F074618}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D64970A-DF5B-4ED1-BC05-30D10F074618}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D64970A-DF5B-4ED1-BC05-30D10F074618}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C1FDC61-D7FA-42AC-8C0B-332E1AD7C2DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C1FDC61-D7FA-42AC-8C0B-332E1AD7C2DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C1FDC61-D7FA-42AC-8C0B-332E1AD7C2DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C1FDC61-D7FA-42AC-8C0B-332E1AD7C2DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4D4B0294-FA26-4C07-8344-0BF76A7C46C1} = {49C1D117-07E8-45EB-B5C4-47550E67341B}
 		{8D64970A-DF5B-4ED1-BC05-30D10F074618} = {4D4B0294-FA26-4C07-8344-0BF76A7C46C1}
+		{9C1FDC61-D7FA-42AC-8C0B-332E1AD7C2DD} = {49C1D117-07E8-45EB-B5C4-47550E67341B}
 	EndGlobalSection
 EndGlobal
