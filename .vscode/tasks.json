@@ -46,12 +46,12 @@
             "dockerBuild": {
                 "tag": "zaeshop:dev",
                 "target": "base",
-                "dockerfile": "${workspaceFolder}/src/Services/Catalog/Dockerfile",
+                "dockerfile": "${workspaceFolder}/src/Services/HangFireServer/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/src/Services/Catalog/Catalog.csproj"
+                "appProject": "${workspaceFolder}/src/Services/HangFireServer/HangFireServer.csproj"
             }
         },
         {
@@ -62,12 +62,12 @@
             ],
             "dockerBuild": {
                 "tag": "zaeshop:latest",
-                "dockerfile": "${workspaceFolder}/src/Services/Catalog/Dockerfile",
+                "dockerfile": "${workspaceFolder}/src/Services/HangFireServer/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/src/Services/Catalog/Catalog.csproj"
+                "appProject": "${workspaceFolder}/src/Services/HangFireServer/HangFireServer.csproj"
             }
         },
         {
@@ -78,7 +78,7 @@
             ],
             "dockerRun": {},
             "netCore": {
-                "appProject": "${workspaceFolder}/src/Services/Catalog/Catalog.csproj",
+                "appProject": "${workspaceFolder}/src/Services/HangFireServer/HangFireServer.csproj",
                 "enableDebugging": true
             }
         },
@@ -90,7 +90,7 @@
             ],
             "dockerRun": {},
             "netCore": {
-                "appProject": "${workspaceFolder}/src/Services/Catalog/Catalog.csproj"
+                "appProject": "${workspaceFolder}/src/Services/HangFireServer/HangFireServer.csproj"
             }
         }
     ]

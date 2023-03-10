@@ -3,24 +3,17 @@
 version: '3.4'
 
 services:
-  catalog:
-    image: catalog
+  hangfireserver:
+    image: hangfireserver
     build:
       context: .
-      dockerfile: src/Services/Catalog/Dockerfile
+      dockerfile: src/Services/HangFireServer/Dockerfile
     ports:
-      - 5055:5055
-  hangfire:
-    image: hangfire
-    build:
-      context: .
-      dockerfile: src/Services/HangFire/Dockerfile
-    ports:
-      - 5056:5056
+      - 5286:5286
   identity:
     image: identity
     build:
       context: .
-      dockerfile: src/Services/Identity/Dockerfile
+      dockerfile: src/Services/Identity/Identity.API/Dockerfile
     ports:
-      - 5057:5057
+      - 5287:5287

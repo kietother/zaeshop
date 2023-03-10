@@ -44,7 +44,7 @@
             "request": "launch",
             "preLaunchTask": "docker-run: debug",
             "netCore": {
-                "appProject": "${workspaceFolder}/src/Services/Catalog/Catalog.csproj"
+                "appProject": "${workspaceFolder}/src/Services/HangFireServer/HangFireServer.csproj"
             }
         }
     ]

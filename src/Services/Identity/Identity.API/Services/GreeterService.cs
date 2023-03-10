@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
 using Grpc.Core;
-using Catalog;
+using Identity.API;
+using Microsoft.Extensions.Logging;
 
-namespace Catalog.Services;
+namespace Identity.API.Services;
 
 public class GreeterService : Greeter.GreeterBase
 {
