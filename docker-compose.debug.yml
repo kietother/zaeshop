@@ -25,3 +25,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
