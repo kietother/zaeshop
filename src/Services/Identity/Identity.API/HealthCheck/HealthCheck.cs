@@ -9,8 +9,6 @@ namespace Identity.API.HealthCheck
         {
             var isHealthy = true;
 
-            // ...
-
             if (isHealthy)
             {
                 return Task.FromResult(
