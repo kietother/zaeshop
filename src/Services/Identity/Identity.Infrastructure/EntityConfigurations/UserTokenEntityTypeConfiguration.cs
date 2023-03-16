@@ -16,6 +16,7 @@ namespace Identity.Infrastructure.EntityConfigurations
             builder.HasKey(x => x.Id);
 
             builder.HasOne(o => o.User).WithMany(x => x.UserTokens).HasForeignKey(y => y.UserId);
+            builder.HasIndex(o => o.Token).IsUnique(true);
         }
     }
 }
