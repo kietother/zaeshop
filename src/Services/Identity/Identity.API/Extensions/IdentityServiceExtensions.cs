@@ -1,5 +1,7 @@
 using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Infrastructure;
+using Identity.Infrastructure.Implements.Services;
+using Identity.Infrastructure.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +24,9 @@ namespace Identity.API.Extensions
             .AddEntityFrameworkStores<AppIdentityDbContext>()
             .AddSignInManager<SignInManager<User>>();
 
+            // configure DI for application services
+            services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IUserService, UserService>();
             return services;
         }
     }

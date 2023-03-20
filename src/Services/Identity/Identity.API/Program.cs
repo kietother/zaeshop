@@ -1,18 +1,23 @@
 using Identity.API.Extensions;
 using Identity.API.HealthCheck;
+using Identity.Infrastructure.Models.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+{
+    builder.Services.AddControllers();
+    builder.Services.AddHealthChecks().AddCheck<SampleHealthCheck>("sample");
 
-builder.Services.AddControllers();
-builder.Services.AddHealthChecks()
-.AddCheck<SampleHealthCheck>("sample");
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+    builder.Services.AddIdentityServices(builder.Configuration);
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-//builder.Services.AddIdentityServices(builder.Configuration);
+    builder.Services.AddCors();
+
+    builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+}
 
 var app = builder.Build();
 
@@ -23,11 +28,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+{
+    app.UseHttpsRedirection();
 
-app.UseAuthorization();
+    app.UseCors(x => x
+       .SetIsOriginAllowed(origin => true)
+       .AllowAnyMethod()
+       .AllowAnyHeader()
+       .AllowCredentials());
 
-app.MapHealthChecks("/healthz");
-app.MapControllers();
+    app.UseAuthorization();
+
+    app.MapHealthChecks("/healthz");
+    app.MapControllers();
+}
 
 app.Run();
