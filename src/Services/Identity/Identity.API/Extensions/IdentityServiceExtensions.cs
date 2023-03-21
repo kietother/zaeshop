@@ -2,6 +2,7 @@ using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Infrastructure;
 using Identity.Infrastructure.Implements.Services;
 using Identity.Infrastructure.Interfaces.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,12 +13,10 @@ namespace Identity.API.Extensions
         public static IServiceCollection AddIdentityServices(this IServiceCollection services,
           IConfiguration config)
         {
-            services.AddDbContext<AppIdentityDbContext>(opt =>
-            {
-                opt.UseNpgsql(config.GetConnectionString("DefaultConnection"));
-            });
+            services.AddDbContext<AppIdentityDbContext>(opt => opt.UseNpgsql(config.GetConnectionString("DefaultConnection")));
+            services.AddSingleton<ISystemClock, SystemClock>();
 
-            services.AddIdentityCore<User>(opt =>
+            services.AddIdentityCore<User>(_ =>
             {
                 // add identity options here
             })

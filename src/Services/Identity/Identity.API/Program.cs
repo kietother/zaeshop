@@ -1,6 +1,10 @@
 using Identity.API.Extensions;
 using Identity.API.HealthCheck;
+using Identity.Domain.AggregatesModel.UserAggregate;
+using Identity.Infrastructure;
 using Identity.Infrastructure.Models.Helpers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +45,24 @@ if (app.Environment.IsDevelopment())
 
     app.MapHealthChecks("/healthz");
     app.MapControllers();
+}
+
+
+{
+    using var scope = app.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    var identityContext = services.GetRequiredService<AppIdentityDbContext>();
+    var userManager = services.GetRequiredService<UserManager<User>>();
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    try
+    {
+        await identityContext.Database.MigrateAsync();
+        await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occured during migration");
+    }
 }
 
 app.Run();

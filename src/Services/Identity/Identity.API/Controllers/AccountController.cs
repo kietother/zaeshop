@@ -25,7 +25,8 @@ namespace Identity.API.Controllers
         [HttpPost("authenticate")]
         public async Task<IActionResult> AuthenticateAsync(AuthenticateRequest model)
         {
-            var response = await _userService.AuthenticateAsync(model, IpAddress());
+            var ipAddress = IpAddress();
+            var response = await _userService.AuthenticateAsync(model, ipAddress);
 
             if (response == null)
             {

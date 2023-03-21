@@ -12,6 +12,8 @@ https://www.freecodecamp.org/news/how-to-debug-dockerized-net-core-apps-in-vs-co
 https://stackoverflow.com/questions/42730877/net-core-when-to-use-dotnet-new-sln
 https://code-maze.com/grpc-aspnet-mongodb/
 https://stackoverflow.com/questions/57846127/what-are-the-differences-between-app-userouting-and-app-useendpoints
+https://stackoverflow.com/questions/58344227/unable-to-resolve-service-for-isystemclock-while-attempting-to-activate-security
+https://www.pintonista.com/running-postgres-and-pgadmin-with-docker-compose/
 
 JWT Token
 https://jasonwatmore.com/post/2022/01/24/net-6-jwt-authentication-with-refresh-tokens-tutorial-with-example-api
