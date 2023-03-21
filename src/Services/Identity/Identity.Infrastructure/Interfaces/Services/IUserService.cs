@@ -9,10 +9,10 @@ namespace Identity.Infrastructure.Interfaces.Services
 {
     public interface IUserService
     {
-        AuthenticateResponse Authenticate(AuthenticateRequest model, string ipAddress);
-        AuthenticateResponse RefreshToken(string token, string ipAddress);
-        void RevokeToken(string token, string ipAddress);
-        IEnumerable<User> GetAll();
-        User GetById(string id);
+        Task<AuthenticateResponse?> AuthenticateAsync(AuthenticateRequest model, string ipAddress);
+        Task<AuthenticateResponse> RefreshTokenAsync(string token, string ipAddress);
+        Task RevokeTokenAsync(string token, string ipAddress);
+        Task<List<User>> GetAllAsync();
+        Task<User?> GetByIdAsync(string id);
     }
 }

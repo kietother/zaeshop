@@ -29,7 +29,7 @@ namespace Identity.API.Middlewares
             if (!string.IsNullOrEmpty(userId))
             {
                 // attach user to context on successful jwt validation
-                context.Items["User"] = userService.GetById(userId);
+                context.Items["User"] = await userService.GetByIdAsync(userId);
             }
 
             await _next(context);
