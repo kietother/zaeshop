@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Domain.POCOs.ErrorCodes;
+using Identity.Domain.POCOs.ErrorResponses;
 using Identity.Infrastructure.Interfaces.Services;
 using Identity.Infrastructure.Models.Authenticates;
+using Identity.Infrastructure.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -132,6 +134,36 @@ namespace Identity.Infrastructure.Implements.Services
         {
             var user = await _context.Users.FirstOrDefaultAsync(o => o.Id == id);
             return user;
+        }
+
+        public async Task<UserRegisterResponseModel?> Create(UserRegisterRequestModel userModel, ErrorResult errorResult)
+        {
+            var existsUser = await _userManager.FindByNameAsync(userModel.Email);
+            if (existsUser == null)
+            {
+                errorResult.Description = nameof(ErrorCodes.UserNotExists);
+                return null;
+            }
+
+            var user = new User
+            {
+                UserName = userModel.Username,
+                Email = userModel.Email,
+                FullName = userModel.FullName
+            };
+
+            var result = await _userManager.CreateAsync(user, userModel.Password);
+            if (!result.Succeeded)
+            {
+                errorResult.Description = string.Join(", ", result.Errors.Select(o => o.Description));
+                return null;
+            }
+
+            return new UserRegisterResponseModel {
+                Email = user.Email,
+                FullName = user.FullName,
+                Username = user.UserName
+            };
         }
     }
 }

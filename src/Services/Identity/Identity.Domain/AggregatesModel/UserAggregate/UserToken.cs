@@ -11,7 +11,7 @@ namespace Identity.Domain.AggregatesModel.UserAggregate
     public class UserToken : Entity, IAggregateRoot
     {
         public string Token { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         public DateTime ExpiresOnUtc { get; set; }
         public string CreatedByIp { get; set; }

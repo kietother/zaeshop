@@ -21,13 +21,8 @@ namespace Identity.Infrastructure
             base.OnModelCreating(builder);
             // builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            // builder.ApplyConfiguration(new UserEntityTypeConfiguration());
-            // builder.ApplyConfiguration(new UserTokenEntityTypeConfiguration());
+            builder.ApplyConfiguration(new UserEntityTypeConfiguration());
+            builder.ApplyConfiguration(new UserTokenEntityTypeConfiguration());
         }
-
-        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        // {
-        //     optionsBuilder.UseNpgsql("Server=tiny.db.elephantsql.com; Port=5432; User Id=vhbvlhko; Password=6GiIE2wvPo-Rln1EA6tcbfNE0Tadk8wX; Database=vhbvlhko");
-        // }
     }
 }

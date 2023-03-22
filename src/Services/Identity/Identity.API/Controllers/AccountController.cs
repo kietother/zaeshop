@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Identity.API.Attributes;
+using Identity.Domain.POCOs.ErrorResponses;
 using Identity.Infrastructure.Interfaces.Services;
 using Identity.Infrastructure.Models.Authenticates;
+using Identity.Infrastructure.Models.Users;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Controllers
@@ -28,7 +30,7 @@ namespace Identity.API.Controllers
             var ipAddress = IpAddress();
             var response = await _userService.AuthenticateAsync(model, ipAddress);
 
-            if (response == null)
+            if (response == null || !string.IsNullOrEmpty(response.ErrorResult))
             {
                 return Unauthorized();
             }
@@ -83,6 +85,22 @@ namespace Identity.API.Controllers
             return Ok(user.UserTokens);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateAsync([FromBody] UserRegisterRequestModel model)
+        {
+            var errorResult = new ErrorResult();
+            var user = await _userService.Create(model, errorResult);
+
+            if (user == null || !string.IsNullOrEmpty(errorResult.Description))
+            {
+                return BadRequest(errorResult);
+            }
+
+            return Ok(user);
+        }
+
+        #region Private Methods
         private void SetTokenCookie(string? token, string? expiresOnUtc)
         {
             // append cookie with refresh token to the http response
@@ -103,5 +121,6 @@ namespace Identity.API.Controllers
             else
                 return HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString();
         }
+        #endregion
     }
 }

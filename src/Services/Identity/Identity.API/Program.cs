@@ -47,7 +47,6 @@ if (app.Environment.IsDevelopment())
     app.MapControllers();
 }
 
-
 {
     using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
@@ -56,7 +55,10 @@ if (app.Environment.IsDevelopment())
     var logger = services.GetRequiredService<ILogger<Program>>();
     try
     {
-        await identityContext.Database.MigrateAsync();
+        if (app.Environment.IsProduction())
+        {
+            await identityContext.Database.MigrateAsync();
+        }
         await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
     }
     catch (Exception ex)

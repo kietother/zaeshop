@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Identity.Domain.AggregatesModel.UserAggregate;
+using Identity.Domain.POCOs.ErrorResponses;
 using Identity.Infrastructure.Models.Authenticates;
+using Identity.Infrastructure.Models.Users;
 
 namespace Identity.Infrastructure.Interfaces.Services
 {
@@ -14,5 +16,6 @@ namespace Identity.Infrastructure.Interfaces.Services
         Task RevokeTokenAsync(string token, string ipAddress);
         Task<List<User>> GetAllAsync();
         Task<User?> GetByIdAsync(string id);
+        Task<UserRegisterResponseModel?> Create(UserRegisterRequestModel userModel, ErrorResult errorResult);
     }
 }
