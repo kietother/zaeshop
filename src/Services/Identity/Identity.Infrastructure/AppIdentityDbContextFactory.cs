@@ -20,7 +20,7 @@ namespace Identity.Infrastructure
             var builder = new DbContextOptionsBuilder<AppIdentityDbContext>();
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            builder.UseLazyLoadingProxies().UseNpgsql(connectionString);
+            builder.UseNpgsql(connectionString);
 
             return new AppIdentityDbContext(builder.Options);
         }

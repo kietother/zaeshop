@@ -10,7 +10,7 @@ namespace Identity.Domain.AggregatesModel.UserAggregate
 {
     public class User : IdentityUser, IAggregateRoot
     {
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
         [JsonIgnore]
         public virtual ICollection<UserToken> UserTokens { get; set; }
     }
