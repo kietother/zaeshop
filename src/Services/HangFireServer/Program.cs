@@ -1,5 +1,6 @@
 using Hangfire;
 using HangFireServer.Extensions;
+using HangFireServer.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-app.UseHangfireDashboard();
+app.UseHangfireDashboard(options: new DashboardOptions {
+    Authorization = new[] { new DashboardNoAuthorizationFilter() }
+});
 
 app.MapControllers();
 app.MapHangfireDashboard();
