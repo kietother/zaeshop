@@ -7,7 +7,6 @@ namespace Identity.Infrastructure.Models.Helpers
 {
     public class AppSettings
     {
-
         public string Secret { get; set; }
 
         // refresh token time to live (in days), inactive tokens are

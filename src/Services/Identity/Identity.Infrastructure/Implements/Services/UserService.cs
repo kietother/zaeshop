@@ -7,9 +7,11 @@ using Identity.Domain.POCOs.ErrorCodes;
 using Identity.Domain.POCOs.ErrorResponses;
 using Identity.Infrastructure.Interfaces.Services;
 using Identity.Infrastructure.Models.Authenticates;
+using Identity.Infrastructure.Models.Helpers;
 using Identity.Infrastructure.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Identity.Infrastructure.Implements.Services
 {
@@ -19,17 +21,20 @@ namespace Identity.Infrastructure.Implements.Services
         private readonly IJwtService _jwtService;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly AppSettings _appSettings;
 
         public UserService(
             AppIdentityDbContext context,
             IJwtService jwtService,
             UserManager<User> userManager,
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager,
+            IOptions<AppSettings> appSettings)
         {
             _context = context;
             _jwtService = jwtService;
             _userManager = userManager;
             _signInManager = signInManager;
+            _appSettings = appSettings.Value;
         }
 
         #region Authorization
@@ -55,6 +60,7 @@ namespace Identity.Infrastructure.Implements.Services
             user.UserTokens.Add(refreshToken);
 
             // Remove referesh token is not unnecessary
+            RemoveOldRefreshTokens(user);
 
             // save changes to db
             _context.Update(user);
@@ -66,14 +72,14 @@ namespace Identity.Infrastructure.Implements.Services
         public async Task<AuthenticateResponse> RefreshTokenAsync(string token, string ipAddress)
         {
             var user = GetUserByRefreshToken(token);
-            var refreshToken = user.UserTokens.FirstOrDefault(x => x.Token == token);
+            var refreshToken = user?.UserTokens.FirstOrDefault(x => x.Token == token);
 
-            if (!refreshToken.IsActive)
+            if (refreshToken?.IsActive != true)
                 throw new Exception("Invalid token");
 
             // replace old refresh token with a new one (rotate token)
             var newRefreshToken = RotateRefreshToken(refreshToken, ipAddress);
-            user.UserTokens.Add(newRefreshToken);
+            user!.UserTokens.Add(newRefreshToken);
 
             _context.Update(user);
             await _context.SaveChangesAsync();
@@ -87,14 +93,14 @@ namespace Identity.Infrastructure.Implements.Services
         public async Task RevokeTokenAsync(string token, string ipAddress)
         {
             var user = GetUserByRefreshToken(token);
-            var refreshToken = user.UserTokens.FirstOrDefault(x => x.Token == token);
+            var refreshToken = user?.UserTokens.FirstOrDefault(x => x.Token == token);
 
-            if (!refreshToken.IsActive)
+            if (refreshToken?.IsActive != true)
                 throw new Exception("Invalid token");
 
             // revoke token and save
             RevokeRefreshToken(refreshToken, ipAddress, "Revoked without replacement");
-            _context.Update(user);
+            _context.Update(user!);
             await _context.SaveChangesAsync();
         }
 
@@ -121,6 +127,17 @@ namespace Identity.Infrastructure.Implements.Services
             token.RevokedByIp = ipAddress;
             token.ReasonRevoked = reason;
             token.ReplacedByToken = replacedByToken;
+        }
+
+        private void RemoveOldRefreshTokens(User user)
+        {
+            foreach (var token in user.UserTokens)
+            {
+                if (!token.IsActive && token.CreatedOnUtc.AddDays(_appSettings.RefreshTokenTTL) <= DateTime.UtcNow)
+                {
+                    user.UserTokens.Remove(token);
+                }
+            }
         }
         #endregion
 
