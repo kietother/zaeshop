@@ -23,7 +23,7 @@ namespace Identity.API.Middlewares
 
         public async Task Invoke(HttpContext context, IUserService userService, IJwtService jwtService)
         {
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split("Bearer ").Last();
             var userId = jwtService.ValidateJwtToken(token);
 
             if (!string.IsNullOrEmpty(userId))

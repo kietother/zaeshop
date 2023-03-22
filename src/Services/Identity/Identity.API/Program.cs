@@ -1,5 +1,6 @@
 using Identity.API.Extensions;
 using Identity.API.HealthCheck;
+using Identity.API.Middlewares;
 using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Infrastructure;
 using Identity.Infrastructure.Models.Helpers;
@@ -41,6 +42,7 @@ if (app.Environment.IsDevelopment())
        .AllowAnyHeader()
        .AllowCredentials());
 
+    app.UseMiddleware<JwtMiddleware>();
     app.UseAuthorization();
 
     app.MapHealthChecks("/healthz");
