@@ -18,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.AddIdentityServices(builder.Configuration);
+    //builder.Services.AddHangFireServices(builder.Configuration);
 
     builder.Services.AddCors();
 

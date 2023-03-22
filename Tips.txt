@@ -22,6 +22,9 @@ https://jasonwatmore.com/post/2022/01/24/net-6-jwt-authentication-with-refresh-t
 Add-Migration
 https://www.entityframeworktutorial.net/efcore/cli-commands-for-ef-core-migration.aspx
 
+Hangfire:
+https://docs.hangfire.io/en/latest/getting-started/aspnet-core-applications.html
+
 Command:
 dotnet new sln --name FooBar
 dotnet new classlib
