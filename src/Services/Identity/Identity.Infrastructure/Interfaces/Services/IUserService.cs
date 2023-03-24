@@ -16,6 +16,6 @@ namespace Identity.Infrastructure.Interfaces.Services
         Task RevokeTokenAsync(string token, string ipAddress);
         Task<List<User>> GetAllAsync();
         Task<User?> GetByIdAsync(string id);
-        Task<UserRegisterResponseModel?> Create(UserRegisterRequestModel userModel, ErrorResult errorResult);
+        Task<UserRegisterResponseModel?> CreateAsync(UserRegisterRequestModel userModel, string ipAddress, ErrorResult errorResult);
     }
 }

@@ -62,18 +62,26 @@ namespace Identity.API.Controllers
             return Ok(new { message = "Token revoked" });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] UserRegisterRequestModel model)
         {
-            var users = await _userService.GetAllAsync();
-            return Ok(users);
-        }
+            if (model.IsAcceptTerm)
+            {
+                return BadRequest(new { message = "Accept Term is required" });
+            }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetByIdAsync(string id)
-        {
-            var user = await _userService.GetByIdAsync(id);
-            return Ok(user);
+            var errorResult = new ErrorResult();
+            var ipAddress = IpAddress();
+
+            var userResponse = await _userService.CreateAsync(model, ipAddress, errorResult);
+
+            if (userResponse == null || !string.IsNullOrEmpty(errorResult.Description))
+            {
+                return BadRequest(errorResult);
+            }
+
+            SetTokenCookie(userResponse.RefreshToken, Convert.ToString(userResponse.ExpiresOnUtc));
+            return Ok(userResponse);
         }
 
         [HttpGet("{id}/refresh-tokens")]
@@ -83,21 +91,6 @@ namespace Identity.API.Controllers
             if (user == null)
                 return NotFound();
             return Ok(user.UserTokens);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> CreateAsync([FromBody] UserRegisterRequestModel model)
-        {
-            var errorResult = new ErrorResult();
-            var user = await _userService.Create(model, errorResult);
-
-            if (user == null || !string.IsNullOrEmpty(errorResult.Description))
-            {
-                return BadRequest(errorResult);
-            }
-
-            return Ok(user);
         }
 
         #region Private Methods

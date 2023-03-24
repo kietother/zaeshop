@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Identity.API.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method)]
+    // [AttributeUsage(AttributeTargets.Method)]
     public class AllowAnonymousAttribute : Attribute
     {
 

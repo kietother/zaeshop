@@ -25,6 +25,9 @@ https://www.entityframeworktutorial.net/efcore/cli-commands-for-ef-core-migratio
 Hangfire:
 https://docs.hangfire.io/en/latest/getting-started/aspnet-core-applications.html
 
+Ethereal:
+https://ethereal.email/
+
 Command:
 dotnet new sln --name FooBar
 dotnet new classlib

@@ -153,7 +153,7 @@ namespace Identity.Infrastructure.Implements.Services
             return user;
         }
 
-        public async Task<UserRegisterResponseModel?> Create(UserRegisterRequestModel userModel, ErrorResult errorResult)
+        public async Task<UserRegisterResponseModel?> CreateAsync(UserRegisterRequestModel userModel, string ipAddress, ErrorResult errorResult)
         {
             var existsUser = await _userManager.FindByNameAsync(userModel.Email);
             if (existsUser == null)
@@ -176,10 +176,33 @@ namespace Identity.Infrastructure.Implements.Services
                 return null;
             }
 
-            return new UserRegisterResponseModel {
+            // Don't create token if admin created account
+            if (string.IsNullOrEmpty(ipAddress))
+            {
+                return new UserRegisterResponseModel
+                {
+                    Email = user.Email,
+                    FullName = user.FullName,
+                    Username = user.UserName
+                };
+            }
+
+            // authentication successful so generate jwt and refresh tokens
+            var jwtToken = _jwtService.GenerateJwtToken(user);
+            var refreshToken = _jwtService.GenerateRefreshToken(ipAddress);
+            user.UserTokens.Add(refreshToken);
+
+            // Remove referesh token is not unnecessary
+            RemoveOldRefreshTokens(user);
+
+            return new UserRegisterResponseModel
+            {
                 Email = user.Email,
                 FullName = user.FullName,
-                Username = user.UserName
+                Username = user.UserName,
+                JwtToken = jwtToken,
+                RefreshToken = refreshToken.Token,
+                ExpiresOnUtc = refreshToken.ExpiresOnUtc
             };
         }
     }
