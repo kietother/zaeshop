@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Identity.API.Attributes;
-using Identity.Domain.POCOs.ErrorResponses;
+using Identity.Domain.Models.ErrorResponses;
 using Identity.Infrastructure.Interfaces.Services;
 using Identity.Infrastructure.Models.Authenticates;
 using Identity.Infrastructure.Models.Users;
@@ -16,10 +16,14 @@ namespace Identity.API.Controllers
     [Authorize]
     public class AccountController : ControllerBase
     {
+        private readonly IAccountService _accountService;
         private readonly IUserService _userService;
 
-        public AccountController(IUserService userService)
+        public AccountController(
+            IAccountService accountService,
+            IUserService userService)
         {
+            _accountService = accountService;
             _userService = userService;
         }
 
@@ -28,7 +32,7 @@ namespace Identity.API.Controllers
         public async Task<IActionResult> AuthenticateAsync(AuthenticateRequest model)
         {
             var ipAddress = IpAddress();
-            var response = await _userService.AuthenticateAsync(model, ipAddress);
+            var response = await _accountService.AuthenticateAsync(model, ipAddress);
 
             if (response == null || !string.IsNullOrEmpty(response.ErrorResult))
             {
@@ -44,7 +48,7 @@ namespace Identity.API.Controllers
         public async Task<IActionResult> RefreshTokenAsync()
         {
             var refreshToken = Request.Cookies["refreshToken"];
-            var response = await _userService.RefreshTokenAsync(refreshToken, IpAddress());
+            var response = await _accountService.RefreshTokenAsync(refreshToken, IpAddress());
             SetTokenCookie(response.RefreshToken, Convert.ToString(response.ExpiresOnUtc));
             return Ok(response);
         }
@@ -58,30 +62,8 @@ namespace Identity.API.Controllers
             if (string.IsNullOrEmpty(token))
                 return BadRequest(new { message = "Token is required" });
 
-            await _userService.RevokeTokenAsync(token, IpAddress());
+            await _accountService.RevokeTokenAsync(token, IpAddress());
             return Ok(new { message = "Token revoked" });
-        }
-
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] UserRegisterRequestModel model)
-        {
-            if (model.IsAcceptTerm)
-            {
-                return BadRequest(new { message = "Accept Term is required" });
-            }
-
-            var errorResult = new ErrorResult();
-            var ipAddress = IpAddress();
-
-            var userResponse = await _userService.CreateAsync(model, ipAddress, errorResult);
-
-            if (userResponse == null || !string.IsNullOrEmpty(errorResult.Description))
-            {
-                return BadRequest(errorResult);
-            }
-
-            SetTokenCookie(userResponse.RefreshToken, Convert.ToString(userResponse.ExpiresOnUtc));
-            return Ok(userResponse);
         }
 
         [HttpGet("{id}/refresh-tokens")]
@@ -91,6 +73,88 @@ namespace Identity.API.Controllers
             if (user == null)
                 return NotFound();
             return Ok(user.UserTokens);
+        }
+
+        [HttpPost("register")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterRequestModel model)
+        {
+            if (model.IsAcceptTerm)
+            {
+                return BadRequest(new { message = "Accept Term is required" });
+            }
+
+            var errorResult = new ErrorResult();
+            var userResponse = await _accountService.RegisterAsync(model, errorResult);
+
+            if (userResponse == null || !string.IsNullOrEmpty(errorResult.Description))
+            {
+                return BadRequest(errorResult);
+            }
+            return Ok(userResponse);
+        }
+
+        [HttpGet("verify-email")]
+        [AllowAnonymous]
+        public async Task<IActionResult> VerifyEmailAsync([FromQuery] VerifyEmailRequest model)
+        {
+            var errorResult = ErrorResult.Create();
+            var ipAddress = IpAddress();
+            var userResponse = await _accountService.VerifyEmailAsync(model.Token, ipAddress, errorResult);
+
+            if (userResponse == null || !string.IsNullOrEmpty(errorResult.Description))
+            {
+                return BadRequest(errorResult);
+            }
+
+            SetTokenCookie(userResponse.RefreshToken, Convert.ToString(userResponse.ExpiresOnUtc));
+            return Ok(new { message = "Verification successful, you can now login", userResponse });
+        }
+
+        [HttpPost("forgot-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPasswordAsync(ForgotPasswordRequest model)
+        {
+            var errorResult = ErrorResult.Create();
+            await _accountService.ForgotPasswordAsync(model, Request.Headers["origin"], errorResult);
+
+            if (!string.IsNullOrEmpty(errorResult.Description))
+            {
+                return BadRequest(errorResult.Description);
+            }
+
+            return Ok(new { message = "Please check your email for password reset instructions" });
+        }
+
+        [HttpPost("validate-reset-token")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ValidateResetTokenAsync(ValidateResetTokenRequest model)
+        {
+            var errorResult = ErrorResult.Create();
+            await _accountService.ValidateResetTokenAsync(model, errorResult);
+
+            if (!string.IsNullOrEmpty(errorResult.Description))
+            {
+                return BadRequest(errorResult.Description);
+            }
+
+            return Ok(new { message = "Token is valid" });
+        }
+
+        [HttpPost("reset-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPasswordAsync(ResetPasswordRequest model)
+        {
+            var errorResult = ErrorResult.Create();
+            var ipAddress = IpAddress();
+            var userResponse = await _accountService.ResetPasswordAsync(model, ipAddress, errorResult);
+
+            if (!string.IsNullOrEmpty(errorResult.Description))
+            {
+                return BadRequest(errorResult.Description);
+            }
+            SetTokenCookie(userResponse.RefreshToken, Convert.ToString(userResponse.ExpiresOnUtc));
+            return Ok(new { message = "Password reset successful, you can now login", userResponse });
         }
 
         #region Private Methods

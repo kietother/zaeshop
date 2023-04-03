@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace Identity.Domain.POCOs.ErrorCodes
+namespace Identity.Domain.Models.ErrorCodes
 {
     public enum ErrorCodes
     {
@@ -8,5 +8,7 @@ namespace Identity.Domain.POCOs.ErrorCodes
         UserOrPasswordNotCorrect = 0,
         [Description("User is not exists")]
         UserNotExists = 1,
+        [Description("User not confirmed email")]
+        UserNotConfirmedEmail = 2,
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Identity.API.Attributes;
 using Identity.Domain.AggregatesModel.UserAggregate;
-using Identity.Domain.POCOs.ErrorResponses;
+using Identity.Domain.Models.ErrorResponses;
 using Identity.Infrastructure.Interfaces.Services;
 using Identity.Infrastructure.Models.Users;
 using Microsoft.AspNetCore.Identity;
@@ -33,7 +33,7 @@ namespace Identity.API.Controllers
         public async Task<IActionResult> CreateAsync([FromBody] UserRegisterRequestModel model)
         {
             var errorResult = new ErrorResult();
-            var user = await _userService.CreateAsync(model, null, errorResult);
+            var user = await _userService.CreateAsync(model, errorResult);
 
             if (user == null || !string.IsNullOrEmpty(errorResult.Description))
             {
