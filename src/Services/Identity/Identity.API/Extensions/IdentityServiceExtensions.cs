@@ -42,6 +42,7 @@ namespace Identity.API.Extensions
             // configure DI for application services
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAccountService, AccountService>();
             return services;
         }
     }

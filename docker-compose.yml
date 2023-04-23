@@ -17,10 +17,3 @@ services:
       dockerfile: src/Services/Identity/Identity.API/Dockerfile
     ports:
       - 5287:5287
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-        - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-        - PGADMIN_DEFAULT_PASSWORD=root
-    ports:
-        - "8080:80"

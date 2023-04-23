@@ -28,6 +28,10 @@ https://docs.hangfire.io/en/latest/getting-started/aspnet-core-applications.html
 Ethereal:
 https://ethereal.email/
 
+Docker:
+docker container ls
+docker logs --details --follow a2d7275036eb
+
 Command:
 dotnet new sln --name FooBar
 dotnet new classlib
