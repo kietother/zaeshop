@@ -6,7 +6,7 @@ public abstract class Entity
     public DateTime CreatedOnUtc { get; set; }
     public DateTime UpdatedOnUtc { get; set; }
 
-    public Entity()
+    protected Entity()
     {
         CreatedOnUtc = DateTime.UtcNow;
     }

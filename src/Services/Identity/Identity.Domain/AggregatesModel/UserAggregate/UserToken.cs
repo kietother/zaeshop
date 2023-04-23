@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using Identity.Domain.SeedWork;
-using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Domain.AggregatesModel.UserAggregate
 {

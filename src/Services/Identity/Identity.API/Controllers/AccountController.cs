@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Identity.API.Attributes;
 using Identity.Domain.Models.ErrorResponses;
 using Identity.Infrastructure.Interfaces.Services;
@@ -31,7 +27,7 @@ namespace Identity.API.Controllers
         [HttpPost("authenticate")]
         public async Task<IActionResult> AuthenticateAsync(AuthenticateRequest model)
         {
-            var ipAddress = IpAddress();
+            var ipAddress = IpAddress() ?? string.Empty;;
             var response = await _accountService.AuthenticateAsync(model, ipAddress);
 
             if (response == null || !string.IsNullOrEmpty(response.ErrorResult))
@@ -47,7 +43,7 @@ namespace Identity.API.Controllers
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshTokenAsync()
         {
-            var refreshToken = Request.Cookies["refreshToken"];
+            var refreshToken = Request.Cookies["refreshToken"] ?? string.Empty;
             var response = await _accountService.RefreshTokenAsync(refreshToken, IpAddress());
             SetTokenCookie(response.RefreshToken, Convert.ToString(response.ExpiresOnUtc));
             return Ok(response);
@@ -56,13 +52,14 @@ namespace Identity.API.Controllers
         [HttpPost("revoke-token")]
         public async Task<IActionResult> RevokeTokenAsync(RevokeTokenRequest model)
         {
+            var ipAddress = IpAddress() ?? string.Empty;
             // accept refresh token in request body or cookie
             var token = model.Token ?? Request.Cookies["refreshToken"];
 
             if (string.IsNullOrEmpty(token))
                 return BadRequest(new { message = "Token is required" });
 
-            await _accountService.RevokeTokenAsync(token, IpAddress());
+            await _accountService.RevokeTokenAsync(token, ipAddress);
             return Ok(new { message = "Token revoked" });
         }
 
@@ -99,7 +96,7 @@ namespace Identity.API.Controllers
         public async Task<IActionResult> VerifyEmailAsync([FromQuery] VerifyEmailRequest model)
         {
             var errorResult = ErrorResult.Create();
-            var ipAddress = IpAddress();
+            var ipAddress = IpAddress() ?? string.Empty;
             var userResponse = await _accountService.VerifyEmailAsync(model.Token, ipAddress, errorResult);
 
             if (userResponse == null || !string.IsNullOrEmpty(errorResult.Description))
@@ -116,7 +113,7 @@ namespace Identity.API.Controllers
         public async Task<IActionResult> ForgotPasswordAsync(ForgotPasswordRequest model)
         {
             var errorResult = ErrorResult.Create();
-            await _accountService.ForgotPasswordAsync(model, Request.Headers["origin"], errorResult);
+            await _accountService.ForgotPasswordAsync(model, Request?.Headers["origin"] , errorResult);
 
             if (!string.IsNullOrEmpty(errorResult.Description))
             {

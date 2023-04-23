@@ -10,6 +10,6 @@ namespace Identity.Infrastructure.Models.Authenticates
     {
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
     }
 }

@@ -9,14 +9,14 @@ namespace Identity.Infrastructure.Models.Authenticates
     public class ResetPasswordRequest
     {
         [Required]
-        public string Token { get; set; }
+        public string Token { get; set; } = null!;
 
         [Required]
         [MinLength(6)]
-        public string NewPassword { get; set; }
+        public string NewPassword { get; set; } = null!;
 
         [Required]
         [Compare("Password")]
-        public string ConfirmNewPassword { get; set; }
+        public string ConfirmNewPassword { get; set; } = null!;
     }
 }
