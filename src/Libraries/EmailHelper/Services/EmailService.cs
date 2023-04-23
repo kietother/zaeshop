@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Logging;
@@ -27,12 +23,14 @@ namespace EmailHelper.Services
             HandleSendMail(subject, body, toEmails, ccEmails, attachments);
         }
 
-        private bool HandleSendMail(string subject, string body, List<string> toEmails, List<string> ccEmails = null, List<EmailAttachment> attachments = null)
+        private bool HandleSendMail(string subject, string body, List<string> toEmails, List<string>? ccEmails = null, List<EmailAttachment>? attachments = null)
         {
             try
             {
-                var message = new MailMessage();
-                message.From = new MailAddress(_emailOptions.SmtpUser, _emailOptions.MailFrom);
+                var message = new MailMessage
+                {
+                    From = new MailAddress(_emailOptions.SmtpUser, _emailOptions.MailFrom)
+                };
                 //to emails
                 foreach (var email in toEmails)
                 {
@@ -42,7 +40,7 @@ namespace EmailHelper.Services
                     }
                 }
                 //cc emails
-                if (ccEmails != null && ccEmails.Any())
+                if (ccEmails?.Any() == true)
                 {
                     foreach (var email in ccEmails)
                     {
@@ -53,7 +51,7 @@ namespace EmailHelper.Services
                     }
                 }
                 //attachment
-                if (attachments != null && attachments.Any())
+                if (attachments?.Any() == true)
                 {
                     foreach (var attachment in attachments)
                     {
