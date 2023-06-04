@@ -15,6 +15,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Hangfire.InMemory" Version="0.3.7" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.53.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +24,10 @@
     <ProjectReference Include="..\..\..\Libraries\EmailHelper\EmailHelper.csproj" />
     <ProjectReference Include="..\..\HangFireServer\HangFireServer.csproj" />
     <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\Users\user.proto" GrpcServices="Server" />
   </ItemGroup>
 
 </Project>

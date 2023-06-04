@@ -1,3 +1,4 @@
+using Identity.API.Controllers;
 using Identity.API.Extensions;
 using Identity.API.HealthCheck;
 using Identity.API.Middlewares;
@@ -21,6 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
     //builder.Services.AddHangFireServices(builder.Configuration);
 
     builder.Services.AddCors();
+    builder.Services.AddGrpc();
 
     builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 }
@@ -47,6 +49,9 @@ if (app.Environment.IsDevelopment())
 
     app.MapHealthChecks("/healthz");
     app.MapControllers();
+
+    // gRPC
+    app.MapGrpcService<UserGrpcController>();
 }
 
 {

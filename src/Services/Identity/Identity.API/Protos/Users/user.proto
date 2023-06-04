@@ -1,0 +1,22 @@
+syntax = "proto3";
+option csharp_namespace = "IdentityGrpc";
+package UserGrpc;
+
+service UserGrpcService {
+    rpc GetUsers(UserRequest) returns (UsersReply);
+}
+
+message UserRequest {
+
+}
+
+message UsersReply {
+    repeated UserReply userReply = 1;
+   
+}
+
+message UserReply {
+    string FullName = 1;
+    string VerificationToken = 2;
+    string ResetPasswordToken = 3;
+}

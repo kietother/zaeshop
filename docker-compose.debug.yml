@@ -25,3 +25,14 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
+  portal:
+    image: portal
+    build:
+      context: .
+      dockerfile: src/Services/Portal/Portal.API/Dockerfile
+    ports:
+      - 5288:5288
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw

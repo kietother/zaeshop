@@ -10,6 +10,8 @@ services:
       dockerfile: src/Services/HangFireServer/Dockerfile
     ports:
       - 5286:5286
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
   identity:
     image: identity
     build:
@@ -17,3 +19,14 @@ services:
       dockerfile: src/Services/Identity/Identity.API/Dockerfile
     ports:
       - 5287:5287
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+  portal:
+    image: portal
+    build:
+      context: .
+      dockerfile: src/Services/Portal/Portal.API/Dockerfile
+    ports:
+      - 5288:5288
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development

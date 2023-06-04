@@ -1,0 +1,37 @@
+using Grpc.Core;
+using Identity.Infrastructure.Interfaces.Services;
+using IdentityGrpc;
+
+namespace Identity.API.Controllers;
+
+public class UserGrpcController : UserGrpcService.UserGrpcServiceBase
+{
+    #region fields
+    private readonly IUserService _userService;
+    #endregion
+
+    #region ctor
+    public UserGrpcController(IUserService userService)
+    {
+        _userService = userService;
+    }
+    #endregion
+
+    public override async Task<UsersReply> GetUsers(UserRequest request, ServerCallContext context)
+    {
+        var users = await _userService.GetAllAsync();
+        var usersReply = new UsersReply();
+
+        foreach (var user in users)
+        {
+            usersReply.UserReply.Add(new UserReply
+            {
+                FullName = user.FullName,
+                ResetPasswordToken = user.ResetPasswordToken,
+                VerificationToken = user.VerificationToken
+            });
+        }
+
+        return usersReply;
+    }
+}

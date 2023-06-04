@@ -144,7 +144,7 @@ namespace Identity.API.Controllers
         {
             var errorResult = ErrorResult.Create();
             var ipAddress = IpAddress();
-            var userResponse = await _accountService.ResetPasswordAsync(model, ipAddress, errorResult);
+            var userResponse = await _accountService.ResetPasswordAsync(model, ipAddress ?? string.Empty, errorResult);
 
             if (!string.IsNullOrEmpty(errorResult.Description))
             {
@@ -155,7 +155,7 @@ namespace Identity.API.Controllers
         }
 
         #region Private Methods
-        private void SetTokenCookie(string? token, string? expiresOnUtc)
+        private void SetTokenCookie(string? token , string? expiresOnUtc)
         {
             // append cookie with refresh token to the http response
             var cookieOptions = new CookieOptions
@@ -163,8 +163,8 @@ namespace Identity.API.Controllers
                 HttpOnly = true,
                 Expires = DateTime.UtcNow.AddDays(7)
             };
-            Response.Cookies.Append("refreshToken", token, cookieOptions);
-            Response.Cookies.Append("refreshTokenExpiresOnUtc", expiresOnUtc, cookieOptions);
+            Response.Cookies.Append("refreshToken", token ?? string.Empty, cookieOptions);
+            Response.Cookies.Append("refreshTokenExpiresOnUtc", expiresOnUtc ?? string.Empty, cookieOptions);
         }
 
         private string? IpAddress()
