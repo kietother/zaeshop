@@ -37,8 +37,8 @@ jobs:
           
       - name: Test SSH Connection
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} centos@${{ secrets.EC2_HOST }} echo "SSH connection successful"
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.EC2_HOST }} echo "SSH connection successful"
 
       - name: Deploy to AWS EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} centos@${{ secrets.EC2_HOST }} 'bash -s' < deploy.sh
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.EC2_HOST }} 'bash -s' < deploy.sh
