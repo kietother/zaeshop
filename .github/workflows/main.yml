@@ -35,8 +35,8 @@ jobs:
       - name: SSH into EC2 instance
         uses: appleboy/ssh-action@master
         with:
-          host: your-ec2-instance-ip
-          username: your-ec2-instance-username
+          host: ${{ secrets.EC2_IP }}
+          username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Update repository source on EC2 instance
