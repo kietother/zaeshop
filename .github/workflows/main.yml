@@ -24,14 +24,31 @@ jobs:
       - name: Build and Publish Portal
         run: dotnet publish -c Release -o ./publish
         working-directory: ./src/Services/Portal/Portal.API
-
+        
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - id: deploy
-        uses: bitovi/github-actions-deploy-docker-to-ec2@v0.5.0
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: SSH into EC2 instance
+        uses: appleboy/ssh-action@master
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_default_region: ap-southeast-1
-          dot_env: ${{ secrets.DOT_ENV }}
+          host: your-ec2-instance-ip
+          username: your-ec2-instance-username
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Update repository source on EC2 instance
+        run: |
+          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} {{secrets.EC2_HOST}} 'cd /zaeshop && git pull'
+
+      - name: Build and push Docker images
+        run: |
+          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} {{secrets.EC2_HOST}} 'cd /zaeshop && docker-compose build --parallel'
+          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} {{secrets.EC2_HOST}} 'cd /zaeshop && docker-compose push'
+          
+      - name: Connect to EC2 instance and run Docker Compose
+        run: |
+          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} {{secrets.EC2_HOST}} 'cd /zaeshop && docker-compose down && docker-compose pull && docker-compose up -d'
+
