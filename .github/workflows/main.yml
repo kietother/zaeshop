@@ -31,8 +31,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${ { secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${ { secrets.HOST_DNS }}
+          REMOTE_USER: ${ { secrets.USERNAME }}
+          TARGET: ${ { secrets.TARGET_DIR }}
 
       - name: Update repository source on EC2 instance
         run: |
