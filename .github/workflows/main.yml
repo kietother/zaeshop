@@ -34,13 +34,6 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: SSH into EC2 instance
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_IP }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-
       - name: Update repository source on EC2 instance
         run: |
           ssh -i ${{ secrets.SSH_PRIVATE_KEY }} {{secrets.EC2_HOST}} 'cd /zaeshop && git pull'
