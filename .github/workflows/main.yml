@@ -43,9 +43,9 @@ jobs:
             cd ~ &&
             cd zaeshop/ &&
             git pull &&
-            docker-compose build --parallel &&
-            docker-compose down &&
-            docker-compose pull &&
-            docker-compose -f "docker-compose.debug.yml" up -d 
+            sudo docker-compose build --parallel &&
+            sudo docker-compose down &&
+            sudo docker-compose pull &&
+            sudo docker-compose -f "docker-compose.debug.yml" up -d 
           '
 
