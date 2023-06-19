@@ -41,7 +41,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
             # Now we have got the access of EC2 and we will start the deploy.
             cd ~ &&
-            cd /zaeshop &&
+            cd zaeshop/ &&
             git pull &&
             docker-compose build --parallel &&
             docker-compose down &&
