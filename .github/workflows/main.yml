@@ -40,17 +40,12 @@ jobs:
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
             # Now we have got the access of EC2 and we will start the deploy.
+            cd ~ &&
+            cd /zaeshop &&
+            git pull &&
+            docker-compose build --parallel &&
+            docker-compose down &&
+            docker-compose pull &&
+            docker-compose -f "docker-compose.debug.yml" up -d 
           '
-      - name: Update repository source on EC2 instance
-        run: |
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_HOST }} 'cd /zaeshop && git pull'
-
-      - name: Build and push Docker images
-        run: |
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_HOST }} 'cd /zaeshop && docker-compose build --parallel'
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_HOST }} 'cd /zaeshop && docker-compose push'
-
-      - name: Connect to EC2 instance and run Docker Compose
-        run: |
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_HOST }} 'cd /zaeshop && docker-compose down && docker-compose pull && docker-compose up -d'
 
