@@ -23,6 +23,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "homepage" : "https://kietdev1.github.io/zaeshop",
   "eslintConfig": {
     "extends": [
       "react-app",
