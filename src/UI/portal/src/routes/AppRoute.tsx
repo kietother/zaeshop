@@ -1,15 +1,15 @@
 import React from "react";
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Welcome from "../components/welcome/Webcome";
 import HelloPage from "../components/hello-page/HelloPage";
 
 const AppRoute = () => (
-    <HashRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Routes>
             <Route path="/hello" Component={HelloPage} />
             <Route path="/" Component={Welcome} />
         </Routes>
-    </HashRouter>
+    </BrowserRouter>
 );
 
 export default AppRoute;
