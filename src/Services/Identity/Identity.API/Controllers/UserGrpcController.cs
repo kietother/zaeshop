@@ -27,8 +27,8 @@ public class UserGrpcController : UserGrpcService.UserGrpcServiceBase
             usersReply.UserReply.Add(new UserReply
             {
                 FullName = user.FullName,
-                ResetPasswordToken = user.ResetPasswordToken,
-                VerificationToken = user.VerificationToken
+                ResetPasswordToken = user.ResetPasswordToken ?? string.Empty,
+                VerificationToken = user.VerificationToken ?? string.Empty
             });
         }
 
