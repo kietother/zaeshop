@@ -22,7 +22,8 @@ var builder = WebApplication.CreateBuilder(args);
     //builder.Services.AddHangFireServices(builder.Configuration);
 
     builder.Services.AddCors();
-    builder.Services.AddGrpc();
+    builder.Services.AddGrpc().AddJsonTranscoding();
+    builder.Services.AddGrpcReflection();
 
     builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 }
@@ -52,6 +53,7 @@ if (app.Environment.IsDevelopment())
 
     // gRPC
     app.MapGrpcService<UserGrpcController>();
+    app.MapGrpcReflectionService();
 }
 
 {
