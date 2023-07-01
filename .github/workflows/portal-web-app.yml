@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Portal Web Pipeline
 on:
   push:
     branches:
