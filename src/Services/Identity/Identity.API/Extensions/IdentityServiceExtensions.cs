@@ -15,7 +15,7 @@ namespace Identity.API.Extensions
         public static IServiceCollection AddIdentityServices(this IServiceCollection services,
           IConfiguration config)
         {
-            services.AddDbContext<AppIdentityDbContext>(opt => opt.UseLazyLoadingProxies().UseNpgsql(config.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppIdentityDbContext>(opt => opt.UseLazyLoadingProxies().UseSqlServer(config.GetConnectionString("IdentityConnection")));
             services.AddSingleton<ISystemClock, SystemClock>();
 
             services.AddIdentityCore<User>(_ =>

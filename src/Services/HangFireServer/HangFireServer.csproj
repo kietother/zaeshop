@@ -11,12 +11,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-    <PackageReference Include="Hangfire.Core" Version="1.7.33" />
-    <PackageReference Include="Hangfire.SqlServer" Version="1.7.33" />
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.33" />
-    <PackageReference Include="Hangfire.InMemory" Version="0.3.6" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.8" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Hangfire.Core" Version="1.8.3" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.8.3" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.3" />
+    <PackageReference Include="Hangfire.InMemory" Version="0.5.1" />
   </ItemGroup>
 
 </Project>
