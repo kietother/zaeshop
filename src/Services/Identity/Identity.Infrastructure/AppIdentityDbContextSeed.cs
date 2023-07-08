@@ -20,7 +20,7 @@ namespace Identity.Infrastructure
                     UserName = "admin",
                 };
 
-                var result = await userManager.CreateAsync(user, "Abc123!@#");
+                await userManager.CreateAsync(user, "Abc123!@#");
             }
         }
     }
