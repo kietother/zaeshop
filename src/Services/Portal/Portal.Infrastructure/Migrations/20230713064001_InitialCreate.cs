@@ -20,7 +20,7 @@ namespace Portal.Infrastructure.Migrations
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdentityUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    UpdatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {

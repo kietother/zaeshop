@@ -45,3 +45,6 @@ dotnet ef database update -p Identity.Infrastructure.csproj  -s ../Identity.API/
 -- Portal
 dotnet ef migrations add InitialCreate -p Portal.Infrastructure.csproj -c AppIdentityDbContext -s ../Portal.API/Portal.API.csproj  --verbose
 dotnet ef database update -p Portal.Infrastructure.csproj  -s ../Portal.API/Portal.API.csproj  --verbose
+
+--dotnet ef migrations remove -p Portal.Infrastructure.csproj -c AppIdentityDbContext -s ../Portal.API/Portal.API.csproj  --verbose
+--dotnet ef database update 0 -p Portal.Infrastructure.csproj  -s ../Portal.API/Portal.API.csproj  --verbose

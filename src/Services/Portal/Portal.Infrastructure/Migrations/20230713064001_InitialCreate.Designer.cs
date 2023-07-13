@@ -12,7 +12,7 @@ using Portal.Infrastructure;
 namespace Portal.Infrastructure.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20230713061050_InitialCreate")]
+    [Migration("20230713064001_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -46,7 +46,7 @@ namespace Portal.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("UpdatedOnUtc")
+                    b.Property<DateTime?>("UpdatedOnUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
