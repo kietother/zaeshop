@@ -9,6 +9,10 @@ public class AppIdentityDbContext : DbContext
     {
     }
 
+    protected AppIdentityDbContext()
+    {
+    }
+
     public DbSet<User> Users { get; set; }
 
     /// <summary>
