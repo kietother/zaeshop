@@ -1,15 +1,14 @@
 ﻿using System.Reflection;
-using Microsoft.EntityFrameworkCore;
-using Portal.Domain;
+using Portal.Domain.AggregatesModel.UserAggregate;
 
 namespace Portal.Infrastructure;
-public class AppIdentityDbContext : DbContext
+public class ApplicationDbContext : DbContext
 {
-    public AppIdentityDbContext(DbContextOptions options) : base(options)
+    public ApplicationDbContext(DbContextOptions options) : base(options)
     {
     }
 
-    protected AppIdentityDbContext()
+    protected ApplicationDbContext()
     {
     }
 

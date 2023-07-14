@@ -1,6 +1,5 @@
-﻿using Portal.Domain;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Portal.Domain.AggregatesModel.UserAggregate;
 
 namespace Portal.Infrastructure;
 public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>

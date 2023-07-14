@@ -1,4 +1,4 @@
-namespace Identity.Domain.SeedWork;
+namespace Portal.Domain.SeedWork;
 
 public abstract class Entity
 {
