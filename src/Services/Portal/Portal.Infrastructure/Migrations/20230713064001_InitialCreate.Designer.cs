@@ -11,7 +11,7 @@ using Portal.Infrastructure;
 
 namespace Portal.Infrastructure.Migrations
 {
-    [DbContext(typeof(AppIdentityDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20230713064001_InitialCreate")]
     partial class InitialCreate
     {

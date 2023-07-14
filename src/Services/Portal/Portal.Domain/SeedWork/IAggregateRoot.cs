@@ -1,12 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Identity.Domain.SeedWork
+namespace Portal.Domain.SeedWork;
+public interface IAggregateRoot
 {
-    public interface IAggregateRoot
-    {
-        
-    }
 }

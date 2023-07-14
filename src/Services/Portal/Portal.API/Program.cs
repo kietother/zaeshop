@@ -1,4 +1,4 @@
-using Portal.API;
+using Portal.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
