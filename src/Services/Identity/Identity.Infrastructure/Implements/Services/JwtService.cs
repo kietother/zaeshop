@@ -85,7 +85,7 @@ namespace Identity.Infrastructure.Implements.Services
         {
             var refreshToken = new UserToken
             {
-                Token = getUniqueToken(),
+                Token = GetUniqueToken(),
                 // token is valid for 7 days
                 ExpiresOnUtc = DateTime.UtcNow.AddDays(7),
                 CreatedByIp = ipAddress
@@ -95,7 +95,7 @@ namespace Identity.Infrastructure.Implements.Services
         }
 
 
-        private string getUniqueToken()
+        private string GetUniqueToken()
         {
             // token is a cryptographically strong random sequence of values
             var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
@@ -104,7 +104,7 @@ namespace Identity.Infrastructure.Implements.Services
             var tokenIsUnique = !isExistsToken;
 
             if (!tokenIsUnique)
-                return getUniqueToken();
+                return GetUniqueToken();
 
             return token;
         }
