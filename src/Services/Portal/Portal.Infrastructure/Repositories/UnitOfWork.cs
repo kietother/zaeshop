@@ -1,5 +1,8 @@
 ﻿using System.Collections;
+using System.Diagnostics;
+using Microsoft.EntityFrameworkCore.Storage;
 using Portal.Domain.SeedWork;
+using System.Data;
 
 namespace Portal.Infrastructure.Repositories;
 public class UnitOfWork : IUnitOfWork
@@ -7,15 +10,16 @@ public class UnitOfWork : IUnitOfWork
     private readonly ApplicationDbContext context;
     private readonly Hashtable repositories;
 
+    #region Transaction
+    private IDbContextTransaction? _currentTransaction;
+    public IDbContextTransaction? GetCurrentTransaction() => _currentTransaction;
+    public bool HasActiveTransaction => _currentTransaction != null;
+    #endregion
+
     public UnitOfWork(ApplicationDbContext context)
     {
         this.context = context;
         repositories = new Hashtable();
-    }
-
-    public async Task<int> SaveChangesAsync()
-    {
-        return await context.SaveChangesAsync();
     }
 
     public void Dispose()
@@ -26,6 +30,7 @@ public class UnitOfWork : IUnitOfWork
         GC.SuppressFinalize(this);
     }
 
+    [DebuggerStepThrough]
     public IGenericRepository<TEntity> Repository<TEntity>() where TEntity : Entity
     {
         // Find repository exists
@@ -46,4 +51,61 @@ public class UnitOfWork : IUnitOfWork
 
         return (IGenericRepository<TEntity>)repositories[type]!;
     }
+
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return await context.SaveChangesAsync(cancellationToken);
+    }
+
+    #region Transaction
+    public async Task<IDbContextTransaction?> BeginTransactionAsync()
+    {
+        if (_currentTransaction != null) return null;
+
+        _currentTransaction = await context.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+
+        return _currentTransaction;
+    }
+
+    public async Task CommitTransactionAsync(IDbContextTransaction? transaction)
+    {
+        if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+        if (transaction != _currentTransaction) throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
+
+        try
+        {
+            await SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            RollbackTransaction();
+            throw;
+        }
+        finally
+        {
+            if (_currentTransaction != null)
+            {
+                _currentTransaction.Dispose();
+                _currentTransaction = null;
+            }
+        }
+    }
+
+    public void RollbackTransaction()
+    {
+        try
+        {
+            _currentTransaction?.Rollback();
+        }
+        finally
+        {
+            if (_currentTransaction != null)
+            {
+                _currentTransaction.Dispose();
+                _currentTransaction = null;
+            }
+        }
+    }
+    #endregion
 }
