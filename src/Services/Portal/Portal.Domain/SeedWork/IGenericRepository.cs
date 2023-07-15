@@ -1,13 +1,15 @@
 ﻿namespace Portal.Domain.SeedWork;
 public interface IGenericRepository<T> where T : Entity
 {
-    Task<List<T>> GetAllAsync();
+    T? GetById(int id);
     Task<T?> GetByIdAsync(int id);
+    List<T> GetAll();
+    Task<List<T>> GetAllAsync();
     void Add(T entity);
+    void AddRange(List<T> entities);
     void Update(T entity);
+    void UpdateRange(List<T> entities);
     void Delete(T entity);
-
-    // Task<T> GetEntityWithSpec(ISpecification<T> spec);
-    // Task<IReadOnlyList<T>> GetAllWithSpec(ISpecification<T> spec);
-    // Task<int> CountAsync(ISpecification<T> spec);
+    void DeleteRange(T entity);
+    IQueryable<T> GetQueryable();
 }

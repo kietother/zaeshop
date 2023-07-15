@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage;
 using Portal.Domain.SeedWork;
-using System.Data;
 
 namespace Portal.Infrastructure.Repositories;
 public class UnitOfWork : IUnitOfWork
