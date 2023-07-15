@@ -1,5 +1,6 @@
 using Hangfire;
 using Microsoft.AspNetCore.Mvc;
+using Portal.API.Attributes;
 using Portal.Domain.AggregatesModel.UserAggregate;
 using Portal.Domain.SeedWork;
 
@@ -22,6 +23,7 @@ namespace Portal.API.Controllers
 
         [HttpGet]
         [Route("users")]
+        [Authorize]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _unitOfWork.Repository<User>().GetAllAsync();
