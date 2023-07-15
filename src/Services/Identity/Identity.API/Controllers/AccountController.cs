@@ -27,7 +27,7 @@ namespace Identity.API.Controllers
         [HttpPost("authenticate")]
         public async Task<IActionResult> AuthenticateAsync(AuthenticateRequest model)
         {
-            var ipAddress = IpAddress() ?? string.Empty;;
+            var ipAddress = IpAddress() ?? string.Empty; ;
             var response = await _accountService.AuthenticateAsync(model, ipAddress);
 
             if (response == null || !string.IsNullOrEmpty(response.ErrorResult))
@@ -43,8 +43,9 @@ namespace Identity.API.Controllers
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshTokenAsync()
         {
+            var ipAddress = IpAddress() ?? string.Empty;
             var refreshToken = Request.Cookies["refreshToken"] ?? string.Empty;
-            var response = await _accountService.RefreshTokenAsync(refreshToken, IpAddress());
+            var response = await _accountService.RefreshTokenAsync(refreshToken, ipAddress);
             SetTokenCookie(response.RefreshToken, Convert.ToString(response.ExpiresOnUtc));
             return Ok(response);
         }
@@ -113,7 +114,8 @@ namespace Identity.API.Controllers
         public async Task<IActionResult> ForgotPasswordAsync(ForgotPasswordRequest model)
         {
             var errorResult = ErrorResult.Create();
-            await _accountService.ForgotPasswordAsync(model, Request?.Headers["origin"] , errorResult);
+            var origin = Request?.Headers["origin"];
+            await _accountService.ForgotPasswordAsync(model, origin, errorResult);
 
             if (!string.IsNullOrEmpty(errorResult.Description))
             {
@@ -155,7 +157,7 @@ namespace Identity.API.Controllers
         }
 
         #region Private Methods
-        private void SetTokenCookie(string? token , string? expiresOnUtc)
+        private void SetTokenCookie(string? token, string? expiresOnUtc)
         {
             // append cookie with refresh token to the http response
             var cookieOptions = new CookieOptions
