@@ -1,3 +1,4 @@
+using Portal.API.Controllers;
 using Portal.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddPortalServices(builder.Configuration);
 builder.Services.AddHangFireServices(builder.Configuration);
+builder.Services.AddCors();
+builder.Services.AddGrpc().AddJsonTranscoding();
+builder.Services.AddGrpcReflection();
 
 var app = builder.Build();
 
@@ -25,5 +29,9 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// gRPC
+app.MapGrpcService<UserGrpcController>();
+app.MapGrpcReflectionService();
 
 app.Run();

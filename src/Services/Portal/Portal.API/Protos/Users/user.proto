@@ -1,0 +1,30 @@
+syntax = "proto3";
+import "google/api/annotations.proto";
+
+option csharp_namespace = "PortalGrpc";
+package UserGrpc;
+
+service UserGrpcService {
+    rpc GetUsers(UserRequest) returns (UsersReply)
+    {
+        option (google.api.http) =
+        {
+            get: "/v1/users"
+        };
+    }
+}
+
+message UserRequest {
+
+}
+
+message UsersReply {
+    repeated UserReply userReply = 1;
+   
+}
+
+message UserReply {
+    string Id = 1;
+    string FullName = 2;
+    string IdentityId = 3;
+}
