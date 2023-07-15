@@ -1,4 +1,5 @@
 using Grpc.Core;
+using Portal.API.Attributes;
 using Portal.Domain.AggregatesModel.UserAggregate;
 using PortalGrpc;
 

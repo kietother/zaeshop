@@ -1,3 +1,4 @@
+using Identity.API.Middlewares;
 using Portal.API.Controllers;
 using Portal.API.Extensions;
 
@@ -25,6 +26,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(x => x
+   .SetIsOriginAllowed(origin => true)
+   .AllowAnyMethod()
+   .AllowAnyHeader()
+   .AllowCredentials());
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.UseAuthorization();
 
