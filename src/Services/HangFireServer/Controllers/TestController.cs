@@ -11,11 +11,18 @@ namespace HangFireServer.Controllers
     [Route("api/[controller]")]
     public class TestController : ControllerBase
     {
+        private readonly IBackgroundJobClient _backgroundJobClient;
+
+        public TestController(IBackgroundJobClient backgroundJobClient)
+        {
+            _backgroundJobClient = backgroundJobClient;
+        }
+
         [HttpGet]
         [Route("hangfire")]
-        public IActionResult TestHangfire()
+        public IActionResult TestHangfire(string message)
         {
-            BackgroundJob.Enqueue(() => Console.WriteLine("Hello world !"));
+            _backgroundJobClient.Enqueue(() => Console.WriteLine(message));
             return Ok();
         }
     }

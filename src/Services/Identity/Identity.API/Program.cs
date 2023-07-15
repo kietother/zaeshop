@@ -19,7 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerServices();
     builder.Services.AddIdentityServices(builder.Configuration);
-    //builder.Services.AddHangFireServices(builder.Configuration);
+    builder.Services.AddHangFireServices(builder.Configuration);
 
     builder.Services.AddCors();
     builder.Services.AddGrpc().AddJsonTranscoding();

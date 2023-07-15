@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddPortalServices(builder.Configuration);
+builder.Services.AddHangFireServices(builder.Configuration);
 
 var app = builder.Build();
 
