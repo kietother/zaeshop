@@ -16,6 +16,9 @@ https://stackoverflow.com/questions/58344227/unable-to-resolve-service-for-isyst
 https://www.pintonista.com/running-postgres-and-pgadmin-with-docker-compose/
 https://learn.microsoft.com/en-us/ef/core/querying/related-data/lazy
 
+.gitpod.yml
+image: gitpod/workspace-dotnet
+
 JWT Token
 https://jasonwatmore.com/post/2022/01/24/net-6-jwt-authentication-with-refresh-tokens-tutorial-with-example-api
 

@@ -1,3 +1,4 @@
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Portal.Domain.AggregatesModel.UserAggregate;
 using Portal.Domain.SeedWork;
@@ -9,10 +10,14 @@ namespace Portal.API.Controllers
     public class TestController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IBackgroundJobClient _backgroundJobClient;
 
-        public TestController(IUnitOfWork unitOfWork)
+        public TestController(
+            IUnitOfWork unitOfWork,
+            IBackgroundJobClient backgroundJobClient)
         {
             _unitOfWork = unitOfWork;
+            _backgroundJobClient = backgroundJobClient;
         }
 
         [HttpGet]
@@ -32,6 +37,13 @@ namespace Portal.API.Controllers
                 .Project(x => new { x.FullName, x.IdentityUserId })
                 .ToListAsync();
             return Ok(users);
+        }
+
+        [HttpGet("portal-hangfire")]
+        public IActionResult TestHangFire(string message)
+        {
+            _backgroundJobClient.Enqueue(() => Console.WriteLine(message));
+            return Ok();
         }
     }
 }
