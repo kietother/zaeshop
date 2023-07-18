@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Common.Enums;
 using Common.Interfaces;
 using RestSharp;
@@ -40,7 +41,7 @@ public class ApiService : IApiService
         var client = GetRestClient(serviceHost);
         var request = new RestRequest(endpoint, Method.Post);
         AddHeaders(request, headers);
-        request.AddJsonBody(requestBody);
+        request.AddBody(JsonSerializer.Serialize(requestBody));
 
         var response = await client.ExecuteAsync<TResponse>(request);
         if (!response.IsSuccessful)
@@ -56,7 +57,7 @@ public class ApiService : IApiService
         var client = GetRestClient(serviceHost);
         var request = new RestRequest(endpoint, Method.Put);
         AddHeaders(request, headers);
-        request.AddJsonBody(requestBody);
+        request.AddBody(JsonSerializer.Serialize(requestBody));
 
         var response = await client.ExecuteAsync<TResponse>(request);
         if (!response.IsSuccessful)

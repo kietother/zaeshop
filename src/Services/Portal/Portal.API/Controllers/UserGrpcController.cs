@@ -97,7 +97,7 @@ namespace Portal.API.Controllers
 
             return new SyncUserReply
             {
-                IsSuccess = false,
+                IsSuccess = true,
                 Message = HttpStatusCode.OK.ToString(),
                 PortalId = user.Id
             };
