@@ -40,8 +40,9 @@ public class JwtService : IJwtService
             // return user id from JWT token if validation successful
             return userId;
         }
-        catch
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             // return null if validation fails
             return null;
         }

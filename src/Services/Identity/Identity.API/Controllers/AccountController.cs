@@ -148,7 +148,7 @@ namespace Identity.API.Controllers
             var ipAddress = IpAddress();
             var userResponse = await _accountService.ResetPasswordAsync(model, ipAddress ?? string.Empty, errorResult);
 
-            if (!string.IsNullOrEmpty(errorResult.Description))
+            if (userResponse == null || !string.IsNullOrEmpty(errorResult.Description))
             {
                 return BadRequest(errorResult.Description);
             }

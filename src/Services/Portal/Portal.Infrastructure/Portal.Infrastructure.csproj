@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Portal.Domain\Portal.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\Common\Common.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
