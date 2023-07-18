@@ -155,9 +155,9 @@ namespace Identity.Infrastructure.Implements.Services
         {
             // Validate
             var existsUser = await _userManager.FindByNameAsync(userModel.Email);
-            if (existsUser == null)
+            if (existsUser != null)
             {
-                errorResult.Description = CommonHelper.GetDescription(ErrorCodes.UserNotExists);
+                errorResult.Description = CommonHelper.GetDescription(ErrorCodes.UserExists);
                 return null;
             }
 
