@@ -77,9 +77,9 @@ namespace Identity.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterRequestModel model)
         {
-            if (model.IsAcceptTerm)
+            if (!model.IsAcceptTerm)
             {
-                return BadRequest(new { message = "Accept Term is required" });
+                return BadRequest(new { message = "Accept Term is enabled." });
             }
 
             var errorResult = new ErrorResult();
