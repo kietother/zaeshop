@@ -188,6 +188,7 @@ namespace Identity.Infrastructure.Implements.Services
             if (resultApi != null && !resultApi.IsSuccess)
             {
                 await _userManager.DeleteAsync(user);
+                errorResult.Description = resultApi.Message ?? string.Empty;
                 return null;
             }
 
