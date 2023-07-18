@@ -12,6 +12,15 @@ service UserGrpcService {
             get: "/v1/users"
         };
     }
+
+    rpc SyncUserFromIdentity(SyncUserRequest) returns (SyncUserReply)
+    {
+        option (google.api.http) =
+        {
+            post: "/v1/users",
+            body: "*"
+        };
+    }
 }
 
 message UserRequest {
@@ -20,11 +29,20 @@ message UserRequest {
 
 message UsersReply {
     repeated UserReply userReply = 1;
-   
 }
-
 message UserReply {
     string Id = 1;
     string FullName = 2;
     string IdentityId = 3;
+}
+
+message SyncUserRequest {
+    string IdentityId = 1;
+    string FullName = 2;
+}
+
+message SyncUserReply {
+    int32 PortalId = 1;
+    bool IsSuccess = 2;
+    string Message = 3;
 }

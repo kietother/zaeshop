@@ -31,6 +31,10 @@ https://docs.hangfire.io/en/latest/getting-started/aspnet-core-applications.html
 Ethereal:
 https://ethereal.email/
 
+https://www.baeldung.com/linux/docker-fix-no-space-error
+df -h /
+docker compose down --rmi all --volumes --remove-orphans
+
 Docker:
 docker container ls
 docker logs --details --follow a2d7275036eb

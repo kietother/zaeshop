@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using EmailHelper.Models;
 using EmailHelper.Services;
+using Common.Interfaces;
+using Common.Implements;
 
 namespace Identity.API.Extensions
 {
@@ -38,6 +40,7 @@ namespace Identity.API.Extensions
             services.AddScoped<IEmailService>(x =>
                 new EmailMockupService(x.GetRequiredService<ILogger<EmailMockupService>>(), options)
             );
+            services.AddScoped<IApiService, ApiService>();
 
             // configure DI for application services
             services.AddScoped<IJwtService, JwtService>();

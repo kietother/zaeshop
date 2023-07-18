@@ -12,4 +12,9 @@ namespace Identity.Infrastructure.Models.Users
         public string? Email { get; set; }
         public string? Username { get; set; }
     }
+    public class SyncUserFromIdentityRequestModel
+    {
+        public string IdentityId { get; set; } = null!;
+        public string FullName { get; set; } = null!;
+    }
 }

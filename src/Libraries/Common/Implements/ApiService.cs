@@ -12,8 +12,8 @@ public class ApiService : IApiService
     {
         _baseUrls = new Dictionary<EServiceHost, string>
         {
-            { EServiceHost.Identity, "http://host.docker.internal:5287" },
-            { EServiceHost.Portal, "http://host.docker.internal:5288" }
+            { EServiceHost.Identity, "http://identity:5287" },
+            { EServiceHost.Portal, "http://portal:5288" }
         };
 
         _restClients = new Dictionary<EServiceHost, RestClient>();

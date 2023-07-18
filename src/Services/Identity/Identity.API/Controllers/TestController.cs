@@ -1,3 +1,5 @@
+using Common.Enums;
+using Common.Interfaces;
 using EmailHelper.Services;
 using Hangfire;
 using Identity.API.Attributes;
@@ -13,15 +15,18 @@ namespace Identity.API.Controllers
         #region fields
         private readonly IEmailService _emailService;
         private readonly IBackgroundJobClient _backgroundJobClient;
+        private readonly IApiService _apiService;
         #endregion
 
         #region ctor
         public TestController(
             IEmailService emailService,
-            IBackgroundJobClient backgroundJobClient)
+            IBackgroundJobClient backgroundJobClient,
+            IApiService apiService)
         {
             _emailService = emailService;
             _backgroundJobClient = backgroundJobClient;
+            _apiService = apiService;
         }
         #endregion
 
@@ -41,8 +46,15 @@ namespace Identity.API.Controllers
         [HttpGet("identity-hangfire")]
         public IActionResult TestHangFire(string message)
         {
-           _backgroundJobClient.Enqueue(() => Console.WriteLine(message));
+            _backgroundJobClient.Enqueue(() => Console.WriteLine(message));
             return Ok();
+        }
+
+        [HttpGet("portal-grpc-get-user")]
+        public async Task<IActionResult> CallApiPortalAsync()
+        {
+            var result = await _apiService.GetAsync<object>(EServiceHost.Portal, "/v1/users");
+            return Ok(result);
         }
     }
 }

@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 using Common;
+using Common.Enums;
+using Common.Interfaces;
 using EmailHelper.Services;
 using Hangfire;
 using Identity.Domain.AggregatesModel.UserAggregate;
@@ -28,6 +26,7 @@ namespace Identity.Infrastructure.Implements.Services
         private readonly SignInManager<User> _signInManager;
         private readonly AppSettings _appSettings;
         private readonly IEmailService _emailService;
+        private readonly IApiService _apiService;
 
         public AccountService(
             AppIdentityDbContext context,
@@ -35,7 +34,8 @@ namespace Identity.Infrastructure.Implements.Services
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IOptions<AppSettings> appSettings,
-            IEmailService emailService)
+            IEmailService emailService,
+            IApiService apiService)
         {
             _context = context;
             _jwtService = jwtService;
@@ -43,6 +43,7 @@ namespace Identity.Infrastructure.Implements.Services
             _signInManager = signInManager;
             _appSettings = appSettings.Value;
             _emailService = emailService;
+            _apiService = apiService;
         }
 
         #region Token
@@ -177,6 +178,19 @@ namespace Identity.Infrastructure.Implements.Services
                 return null;
             }
 
+            // Sync to portal
+            var resultApi = await _apiService.PostAsync<SyncUserFromIdentityRequestModel, SyncUserFromIdentityResponseModel>(EServiceHost.Portal, "/v1/users", new SyncUserFromIdentityRequestModel
+            {
+                IdentityId = user.Id,
+                FullName = user.FullName
+            });
+
+            if (resultApi != null && !resultApi.IsSuccess)
+            {
+                await _userManager.DeleteAsync(user);
+                return null;
+            }
+
             // Send Email
             var userSendMailModel = new UserSendMailModel
             {
@@ -207,7 +221,7 @@ namespace Identity.Infrastructure.Implements.Services
             return token;
         }
 
-        public async Task<AuthenticateResponse> VerifyEmailAsync(string token, string ipAddress, ErrorResult errorResult)
+        public async Task<AuthenticateResponse?> VerifyEmailAsync(string token, string ipAddress, ErrorResult errorResult)
         {
             var user = await _context.Users.SingleOrDefaultAsync(x => x.VerificationToken == token);
 
@@ -273,7 +287,7 @@ namespace Identity.Infrastructure.Implements.Services
             return token;
         }
 
-        private async Task<User> GetAccountByResetTokenAsync(string token)
+        private async Task<User?> GetAccountByResetTokenAsync(string token)
         {
             var account = await _context.Users.FirstOrDefaultAsync(x =>
                 x.ResetPasswordToken == token && x.ResetPasswordTokenExpiresOnUtc > DateTime.UtcNow);
@@ -289,9 +303,13 @@ namespace Identity.Infrastructure.Implements.Services
             }
         }
 
-        public async Task<AuthenticateResponse> ResetPasswordAsync(ResetPasswordRequest model, string ipAddress, ErrorResult errorResult)
+        public async Task<AuthenticateResponse?> ResetPasswordAsync(ResetPasswordRequest model, string ipAddress, ErrorResult errorResult)
         {
             var user = await GetAccountByResetTokenAsync(model.Token);
+            if (user == null)
+            {
+                return null;
+            }
 
             // update password and remove reset token
             var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
@@ -352,7 +370,7 @@ namespace Identity.Infrastructure.Implements.Services
                         <p>Thanks for registering!</p>
                         {message}";
 
-            _emailService.SendMail(subject, body, toEmails: new List<string> { userModel.Email });
+            _emailService.SendMail(subject, body, toEmails: new List<string> { userModel.Email ?? string.Empty });
         }
 
         private void SendPasswordResetEmail(UserSendMailModel userModel, string origin)
@@ -376,7 +394,7 @@ namespace Identity.Infrastructure.Implements.Services
                         <h4>Reset Password Email</h4>
                         {message}";
 
-            _emailService.SendMail(subject, body, toEmails: new List<string> { userModel.Email });
+            _emailService.SendMail(subject, body, toEmails: new List<string> { userModel.Email ?? string.Empty });
         }
         #endregion
     }

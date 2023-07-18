@@ -1,8 +1,9 @@
+using Common.Enums;
+using Common.Interfaces;
 using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
 using Portal.Domain.AggregatesModel.UserAggregate;
-using Portal.Domain.SeedWork;
 
 namespace Portal.API.Controllers
 {
@@ -12,13 +13,16 @@ namespace Portal.API.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IBackgroundJobClient _backgroundJobClient;
+        private readonly IApiService _apiService;
 
         public TestController(
             IUnitOfWork unitOfWork,
-            IBackgroundJobClient backgroundJobClient)
+            IBackgroundJobClient backgroundJobClient,
+            IApiService apiService)
         {
             _unitOfWork = unitOfWork;
             _backgroundJobClient = backgroundJobClient;
+            _apiService = apiService;
         }
 
         [HttpGet]
@@ -46,6 +50,13 @@ namespace Portal.API.Controllers
         {
             _backgroundJobClient.Enqueue(() => Console.WriteLine(message));
             return Ok();
+        }
+
+        [HttpGet("identity-grpc-get-user")]
+        public async Task<IActionResult> CallApiPortalAsync()
+        {
+            var result = await _apiService.GetAsync<object>(EServiceHost.Identity, "/v1/users");
+            return Ok(result);
         }
     }
 }
