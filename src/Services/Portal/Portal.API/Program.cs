@@ -1,6 +1,6 @@
-using Identity.API.Middlewares;
 using Portal.API.Controllers;
 using Portal.API.Extensions;
+using Portal.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +34,7 @@ app.UseCors(x => x
    .AllowCredentials());
 
 app.UseMiddleware<JwtMiddleware>();
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseAuthorization();
 
