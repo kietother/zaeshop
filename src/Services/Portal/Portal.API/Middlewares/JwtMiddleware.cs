@@ -1,7 +1,7 @@
 using Portal.Domain.AggregatesModel.UserAggregate;
 using Portal.Infrastructure.Interfaces.Services;
 
-namespace Identity.API.Middlewares
+namespace Portal.API.Middlewares
 {
     public class JwtMiddleware
     {

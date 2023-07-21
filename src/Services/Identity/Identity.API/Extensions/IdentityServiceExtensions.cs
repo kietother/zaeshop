@@ -24,8 +24,10 @@ namespace Identity.API.Extensions
             {
                 // add identity options here
             })
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<AppIdentityDbContext>()
-            .AddSignInManager<SignInManager<User>>();
+            .AddSignInManager<SignInManager<User>>()
+            .AddRoleManager<RoleManager<IdentityRole>>();
 
             var appSettingsConfig = config.GetSection("AppSettings");
             var options = new EmailOptions

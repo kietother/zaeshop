@@ -6,6 +6,7 @@ using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Infrastructure;
 using Identity.Infrastructure.Models.Helpers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,10 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddGrpcReflection();
 
     builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+    builder.Services.Configure<ApiBehaviorOptions>(options =>
+    {
+        options.InvalidModelStateResponseFactory = _ => new ValidateModelActionResult();
+    });
 }
 
 var app = builder.Build();
@@ -46,6 +51,7 @@ if (app.Environment.IsDevelopment())
        .AllowCredentials());
 
     app.UseMiddleware<JwtMiddleware>();
+    app.UseMiddleware<GlobalExceptionMiddleware>();
     app.UseAuthorization();
 
     app.MapHealthChecks("/healthz");

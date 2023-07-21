@@ -114,7 +114,7 @@ namespace Identity.API.Controllers
         public async Task<IActionResult> ForgotPasswordAsync(ForgotPasswordRequest model)
         {
             var errorResult = ErrorResult.Create();
-            var origin = Request?.Headers["origin"];
+            var origin = Request.Headers["origin"].ToString();
             await _accountService.ForgotPasswordAsync(model, origin, errorResult);
 
             if (!string.IsNullOrEmpty(errorResult.Description))
