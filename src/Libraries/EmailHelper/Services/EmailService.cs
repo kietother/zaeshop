@@ -18,7 +18,7 @@ namespace EmailHelper.Services
             _emailOptions = emailOptions;
         }
 
-        public  void SendMail(string subject, string body, List<string> toEmails, List<string>? ccEmails = null, List<EmailAttachment>? attachments = null)
+        public void SendMail(string subject, string body, List<string> toEmails, List<string>? ccEmails = null, List<EmailAttachment>? attachments = null)
         {
             HandleSendMail(subject, body, toEmails, ccEmails, attachments);
         }
@@ -29,7 +29,7 @@ namespace EmailHelper.Services
             {
                 var message = new MailMessage
                 {
-                    From = new MailAddress(_emailOptions.SmtpUser, _emailOptions.MailFrom)
+                    From = new MailAddress(_emailOptions.SmtpUser ?? string.Empty, _emailOptions.MailFrom)
                 };
                 //to emails
                 foreach (var email in toEmails)
@@ -71,12 +71,12 @@ namespace EmailHelper.Services
                 }
 
                 message.Body = body;
-                using (var client = new SmtpClient(_emailOptions.SmtpServer, _emailOptions.SmtpPort))
-                {
-                    client.Credentials = new NetworkCredential(_emailOptions.SmtpUser, _emailOptions.SmtpPassword);
-                    client.EnableSsl = true;
-                    client.Send(message);
-                }
+
+                using var client = new SmtpClient(_emailOptions.SmtpServer, _emailOptions.SmtpPort);
+                client.Credentials = new NetworkCredential(_emailOptions.SmtpUser, _emailOptions.SmtpPassword);
+                client.EnableSsl = true;
+                client.Send(message);
+
                 return true;
             }
             catch (Exception e)
