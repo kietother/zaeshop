@@ -26,7 +26,7 @@ namespace Identity.API.Middlewares
             catch (Exception ex)
             {
                 // 1. Log exption exact bug.
-                logger.LogError(ex, ex.Message);
+                logger.LogError(ex, ex.StackTrace);
 
                 // 2. Attach header
                 context.Response.ContentType = "application/json";
@@ -34,8 +34,8 @@ namespace Identity.API.Middlewares
 
                 //3. Create a description according to env
                 var response = env.IsDevelopment() ?
-                    new ApiException((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace) :
-                    new ApiException((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace);
+                    new ApiExceptionResponse((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace) :
+                    new ApiResponse((int)HttpStatusCode.InternalServerError, ex.Message);
 
                 // 4. Convert Json to cammel case
                 var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
