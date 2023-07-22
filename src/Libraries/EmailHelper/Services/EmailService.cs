@@ -31,25 +31,22 @@ namespace EmailHelper.Services
                 {
                     From = new MailAddress(_emailOptions.SmtpUser ?? string.Empty, _emailOptions.MailFrom)
                 };
+
                 //to emails
-                foreach (var email in toEmails)
+                foreach (var email in toEmails.Where(email => !string.IsNullOrEmpty(email)))
                 {
-                    if (!string.IsNullOrEmpty(email))
-                    {
-                        message.To.Add(email);
-                    }
+                    message.To.Add(email);
                 }
+
                 //cc emails
                 if (ccEmails?.Any() == true)
                 {
-                    foreach (var email in ccEmails)
+                    foreach (var email in ccEmails.Where(email => !toEmails.Contains(email) && !string.IsNullOrEmpty(email)))
                     {
-                        if (!toEmails.Contains(email) && !string.IsNullOrEmpty(email))
-                        {
-                            message.CC.Add(email);
-                        }
+                        message.CC.Add(email);
                     }
                 }
+
                 //attachment
                 if (attachments?.Any() == true)
                 {
@@ -60,7 +57,6 @@ namespace EmailHelper.Services
                 }
 
                 message.IsBodyHtml = true;
-                message.Priority = MailPriority.High;
                 if (_emailOptions.Environment != "Production")
                 {
                     message.Subject = $"[{_emailOptions.Environment}] " + subject;
