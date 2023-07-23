@@ -1,3 +1,4 @@
+using Common.Enums;
 using Identity.API.Attributes;
 using Identity.Domain.AggregatesModel.UserAggregate;
 using Microsoft.AspNetCore.Identity;
@@ -22,6 +23,7 @@ namespace Identity.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(ERoles.Administrator)]
         public IActionResult GetAllRoles()
         {
             var roles = _roleManager.Roles;
@@ -29,6 +31,7 @@ namespace Identity.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(ERoles.Administrator)]
         public async Task<IActionResult> CreateRole([FromBody] string roleName)
         {
             if (string.IsNullOrEmpty(roleName))
@@ -48,6 +51,7 @@ namespace Identity.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(ERoles.Administrator)]
         public async Task<IActionResult> UpdateRole(string id, [FromBody] string roleName)
         {
             var role = await _roleManager.FindByIdAsync(id);
@@ -69,6 +73,7 @@ namespace Identity.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(ERoles.Administrator)]
         public async Task<IActionResult> DeleteRole(string id)
         {
             var role = await _roleManager.FindByIdAsync(id);
@@ -90,6 +95,7 @@ namespace Identity.API.Controllers
 
         #region User Roles
         [HttpGet("users/{userId}")]
+        [Authorize(ERoles.User)]
         public async Task<IActionResult> GetRolesAsync(string userId)
         {
             var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
@@ -103,6 +109,7 @@ namespace Identity.API.Controllers
         }
 
         [HttpPut("users/{userId}")]
+        [Authorize(ERoles.Administrator)]
         public async Task<IActionResult> UpdateRoles(string userId, [FromBody] List<string> roles)
         {
             var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
