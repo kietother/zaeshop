@@ -21,6 +21,6 @@ namespace Identity.Domain.AggregatesModel.UserAggregate
         public bool IsActive => !IsRevoked && !IsExpired;
 
         [JsonIgnore]
-        public virtual User User { get; set; }
+        public virtual User? User { get; set; }
     }
 }
