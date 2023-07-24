@@ -115,11 +115,7 @@ namespace Identity.Infrastructure.Implements.Services
 
         private User? GetUserByRefreshToken(string token)
         {
-            var user = _context.Users.SingleOrDefault(u => u.UserTokens.Any(t => t.Token == token));
-
-            if (user == null)
-                throw new Exception("Invalid token");
-
+            var user = _context.Users.SingleOrDefault(u => u.UserTokens.Any(t => t.Token == token)) ?? throw new Exception("Invalid token");
             return user;
         }
 
@@ -130,7 +126,7 @@ namespace Identity.Infrastructure.Implements.Services
             return newRefreshToken;
         }
 
-        private void RevokeRefreshToken(UserToken token, string ipAddress, string? reason = null, string? replacedByToken = null)
+        private static void RevokeRefreshToken(UserToken token, string ipAddress, string? reason = null, string? replacedByToken = null)
         {
             token.RevokedOnUtc = DateTime.UtcNow;
             token.RevokedByIp = ipAddress;

@@ -26,7 +26,7 @@ namespace Portal.API.Middlewares
             catch (Exception ex)
             {
                 // 1. Log exption exact bug.
-                logger.LogError(ex, ex.StackTrace);
+                logger.LogError(ex, $"[Global Exception]: {ex.Message}", ex.StackTrace);
 
                 // 2. Attach header
                 context.Response.ContentType = "application/json";

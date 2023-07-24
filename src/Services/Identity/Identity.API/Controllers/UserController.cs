@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Identity.API.Attributes;
-using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Domain.Models.ErrorResponses;
 using Identity.Infrastructure.Interfaces.Services;
 using Identity.Infrastructure.Models.Users;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Controllers
