@@ -1,4 +1,4 @@
-using Portal.Domain.AggregatesModel.UserAggregate;
+using System.Security.Claims;
 using Portal.Infrastructure.Interfaces.Services;
 
 namespace Portal.API.Middlewares
@@ -12,17 +12,29 @@ namespace Portal.API.Middlewares
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, IUnitOfWork unitOfWork, IJwtService jwtService)
+        public async Task Invoke(HttpContext context, IJwtService jwtService)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split("Bearer ").Last();
-            var userId = jwtService.ValidateJwtToken(token ?? string.Empty);
-
-            if (!string.IsNullOrEmpty(userId))
+            if (!string.IsNullOrWhiteSpace(token))
             {
-                // attach user to context on successful jwt validation
-                context.Items["User"] = await unitOfWork.Repository<User>().GetQueryable().Filter(o => o.IdentityUserId == userId).FirstOrDefaultAsync();
-            }
+                var userInfoModel = jwtService.ValidateJwtToken(token);
+                if (userInfoModel != null && !string.IsNullOrEmpty(userInfoModel.Id))
+                {
+                    // Create ClaimsIdentity with user roles if available
+                    var claimsIdentity = new ClaimsIdentity();
+                    claimsIdentity.AddClaim(new Claim("id", userInfoModel.Id));
 
+                    if (!string.IsNullOrEmpty(userInfoModel.FullName))
+                        claimsIdentity.AddClaim(new Claim(ClaimTypes.GivenName, userInfoModel.FullName));
+
+                    if (userInfoModel.Roles?.Any() == true)
+                        claimsIdentity.AddClaims(userInfoModel.Roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+                    // Create ClaimsPrincipal and set it to HttpContext.User
+                    var principal = new ClaimsPrincipal(claimsIdentity);
+                    context.User = principal;
+                }
+            }
             await _next(context);
         }
     }

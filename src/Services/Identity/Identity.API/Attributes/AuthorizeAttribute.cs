@@ -48,7 +48,7 @@ namespace Identity.API.Attributes
                 {
                     if (roles?.Any() == true)
                     {
-                        var hasRole = _roles.Any(r => roles.Contains(r.ToString()));
+                        var hasRole = _roles.Exists(r => roles.Contains(r.ToString()));
                         if (!hasRole)
                         {
                             context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };

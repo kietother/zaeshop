@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Common.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Portal.Infrastructure.Helpers;
@@ -15,11 +16,8 @@ public class JwtService : IJwtService
         _appSettings = appSettings.Value;
     }
 
-    public string? ValidateJwtToken(string token)
+    public UserInfomationTokenModel? ValidateJwtToken(string token)
     {
-        if (token == null)
-            return null;
-
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
         try
@@ -36,9 +34,17 @@ public class JwtService : IJwtService
 
             var jwtToken = (JwtSecurityToken)validatedToken;
             var userId = jwtToken.Claims.First(x => x.Type == "id").Value;
+            var fullName = jwtToken.Claims.First(x => x.Type == "given_name").Value;
+            var roles = jwtToken.Claims.Where(x => x.Type == "role").Select(x => x.Value).ToList();
 
             // return user id from JWT token if validation successful
-            return userId;
+            var userInfomationTokenModel = new UserInfomationTokenModel
+            {
+                Id = userId,
+                FullName = fullName,
+                Roles = roles
+            };
+            return userInfomationTokenModel;
         }
         catch (Exception e)
         {
