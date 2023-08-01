@@ -34,6 +34,11 @@ https://ethereal.email/
 https://www.baeldung.com/linux/docker-fix-no-space-error
 df -h /
 docker compose down --rmi all --volumes --remove-orphans
+sudo docker system prune --all --volumes
+sudo docker system prune --all --filter "until=<duration>" --filter "label=hangfireserver" --filter "label=identity" --filter "label=portal"
+sudo docker system prune --all --filter "label=hangfireserver" --filter "label=identity" --filter "label=portal"
+sudo docker system prune --all --volumes  --filter "label=hangfireserver" --filter "label=identity" --filter "label=portal"
+ 
 
 Docker:
 docker container ls
