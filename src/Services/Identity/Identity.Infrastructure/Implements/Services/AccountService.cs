@@ -27,6 +27,7 @@ namespace Identity.Infrastructure.Implements.Services
         private readonly AppSettings _appSettings;
         private readonly IEmailService _emailService;
         private readonly IApiService _apiService;
+        private readonly DbSet<UserToken> _userTokensDbSet;
 
         public AccountService(
             AppIdentityDbContext context,
@@ -44,6 +45,7 @@ namespace Identity.Infrastructure.Implements.Services
             _appSettings = appSettings.Value;
             _emailService = emailService;
             _apiService = apiService;
+            _userTokensDbSet = context.Set<UserToken>();
         }
 
         #region Token
@@ -66,13 +68,13 @@ namespace Identity.Infrastructure.Implements.Services
             // authentication successful so generate jwt and refresh tokens
             var jwtToken = _jwtService.GenerateJwtToken(user);
             var refreshToken = _jwtService.GenerateRefreshToken(ipAddress);
-            user.UserTokens.Add(refreshToken);
+            refreshToken.UserId = user.Id;
+            _userTokensDbSet.Add(refreshToken);
 
             // Remove referesh token is not unnecessary
             RemoveOldRefreshTokens(user);
 
             // save changes to db
-            _context.Update(user);
             await _context.SaveChangesAsync();
 
             return new AuthenticateResponse(user, jwtToken, refreshToken);
@@ -137,7 +139,7 @@ namespace Identity.Infrastructure.Implements.Services
         private void RemoveOldRefreshTokens(User user)
         {
             var expiredTokens = user.UserTokens.Where(token => !token.IsActive && token.CreatedOnUtc.AddDays(_appSettings.RefreshTokenTTL) <= DateTime.UtcNow).ToList();
-            expiredTokens.ForEach(token => user.UserTokens.Remove(token));
+            _userTokensDbSet.RemoveRange(expiredTokens);
         }
         #endregion
 
@@ -321,13 +323,13 @@ namespace Identity.Infrastructure.Implements.Services
             // authentication successful so generate jwt and refresh tokens
             var jwtToken = _jwtService.GenerateJwtToken(user);
             var refreshToken = _jwtService.GenerateRefreshToken(ipAddress);
-            user.UserTokens.Add(refreshToken);
+            refreshToken.UserId = user.Id;
+            _userTokensDbSet.Add(refreshToken);
 
             // Remove referesh token is not unnecessary
             RemoveOldRefreshTokens(user);
 
             // save changes to db
-            _context.Update(user);
             await _context.SaveChangesAsync();
 
             return new AuthenticateResponse(user, jwtToken, refreshToken);
