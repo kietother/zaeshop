@@ -27,7 +27,7 @@ namespace Identity.API.Controllers
         [HttpPost("authenticate")]
         public async Task<IActionResult> AuthenticateAsync(AuthenticateRequest model)
         {
-            var ipAddress = IpAddress() ?? string.Empty; ;
+            var ipAddress = IpAddress() ?? string.Empty;
             var response = await _accountService.AuthenticateAsync(model, ipAddress);
 
             if (response == null || !string.IsNullOrEmpty(response.ErrorResult))
@@ -44,7 +44,12 @@ namespace Identity.API.Controllers
         public async Task<IActionResult> RefreshTokenAsync()
         {
             var ipAddress = IpAddress() ?? string.Empty;
-            var refreshToken = Request.Cookies["refreshToken"] ?? string.Empty;
+            var refreshToken = Request.Cookies["refreshToken"];
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                return Unauthorized("INVALID_TOKEN");
+            }
+
             var response = await _accountService.RefreshTokenAsync(refreshToken, ipAddress);
             SetTokenCookie(response.RefreshToken, Convert.ToString(response.ExpiresOnUtc));
             return Ok(response);

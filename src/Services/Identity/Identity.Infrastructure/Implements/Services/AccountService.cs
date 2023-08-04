@@ -80,7 +80,7 @@ namespace Identity.Infrastructure.Implements.Services
 
         public async Task<AuthenticateResponse> RefreshTokenAsync(string token, string ipAddress)
         {
-            var user = GetUserByRefreshToken(token);
+            var user = await GetUserByRefreshTokenAsync(token);
             var refreshToken = user?.UserTokens.FirstOrDefault(x => x.Token == token);
 
             if (refreshToken?.IsActive != true)
@@ -101,7 +101,7 @@ namespace Identity.Infrastructure.Implements.Services
 
         public async Task RevokeTokenAsync(string token, string ipAddress)
         {
-            var user = GetUserByRefreshToken(token);
+            var user = await GetUserByRefreshTokenAsync(token);
             var refreshToken = user?.UserTokens.FirstOrDefault(x => x.Token == token);
 
             if (refreshToken?.IsActive != true)
@@ -113,9 +113,9 @@ namespace Identity.Infrastructure.Implements.Services
             await _context.SaveChangesAsync();
         }
 
-        private User? GetUserByRefreshToken(string token)
+        private async Task<User?> GetUserByRefreshTokenAsync(string token)
         {
-            var user = _context.Users.SingleOrDefault(u => u.UserTokens.Any(t => t.Token == token)) ?? throw new Exception("Invalid token");
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.UserTokens.Any(t => t.Token == token));
             return user;
         }
 
@@ -136,13 +136,8 @@ namespace Identity.Infrastructure.Implements.Services
 
         private void RemoveOldRefreshTokens(User user)
         {
-            foreach (var token in user.UserTokens)
-            {
-                if (!token.IsActive && token.CreatedOnUtc.AddDays(_appSettings.RefreshTokenTTL) <= DateTime.UtcNow)
-                {
-                    user.UserTokens.Remove(token);
-                }
-            }
+            var expiredTokens = user.UserTokens.Where(token => !token.IsActive && token.CreatedOnUtc.AddDays(_appSettings.RefreshTokenTTL) <= DateTime.UtcNow).ToList();
+            expiredTokens.ForEach(token => user.UserTokens.Remove(token));
         }
         #endregion
 

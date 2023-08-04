@@ -11,6 +11,9 @@
             "platform": "netCore",
             "sourceFileMap": {
                 "/src": "${workspaceFolder}"
+            },
+            "netCore": {
+                "debuggerPath": "/remote_debugger/vsdbg"
             }
         },
         {
