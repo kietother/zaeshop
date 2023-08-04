@@ -12,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddPortalServices(builder.Configuration);
 builder.Services.AddHangFireServices(builder.Configuration);
+builder.Services.AddSwaggerServices();
 builder.Services.AddCors();
 builder.Services.AddGrpc().AddJsonTranscoding();
 builder.Services.AddGrpcReflection();

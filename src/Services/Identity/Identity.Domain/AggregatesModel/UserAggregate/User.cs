@@ -19,6 +19,6 @@ namespace Identity.Domain.AggregatesModel.UserAggregate
         public DateTime? UpdatedOnUtc { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<UserToken> UserTokens { get; set; }
+        public virtual ICollection<UserToken> UserTokens { get; set; } = new List<UserToken>();
     }
 }

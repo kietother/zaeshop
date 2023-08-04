@@ -27,7 +27,7 @@ namespace Portal.API.Controllers
 
         [HttpGet]
         [Route("users")]
-        [Authorize]
+        [Authorize(ERoles.Administrator)]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _unitOfWork.Repository<User>().GetAllAsync();

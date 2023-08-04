@@ -20,7 +20,7 @@ public class UnitOfWork : IUnitOfWork
         repositories = new Hashtable();
     }
 
-    public void Dispose()
+    public virtual void Dispose()
     {
         context.Dispose();
         // Call informs the garbage collector that the finalizer (destructor) for 
