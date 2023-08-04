@@ -33,7 +33,7 @@ namespace Portal.API.Middlewares
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
                 //3. Create a description according to env
-                var response = env.IsDevelopment() ?
+                object response = env.IsDevelopment() ?
                     new ApiExceptionResponse((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace) :
                     new ApiResponse((int)HttpStatusCode.InternalServerError, ex.Message);
 
