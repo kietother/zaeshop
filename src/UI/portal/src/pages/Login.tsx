@@ -1,7 +1,18 @@
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
+import LoginModel from "../models/auth/LoginModel";
 
 const Login: React.FC = () => {
+
+    const [loginModel, setLoginModel] = useState<LoginModel>({
+        Username: '',
+        Password: '',
+    });
+
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setLoginModel({ ...loginModel, [e.target.name]: e.target.value });
+    };
+
     return (
         <div className="">
             {/* Section: Design Block */}
@@ -45,14 +56,18 @@ const Login: React.FC = () => {
                                 <form>
                                     {/* Email input */}
                                     <div className="form-outline mb-4">
-                                        <input type="email" id="loginName" className="form-control" />
+                                        <input type="email" id="loginName" className="form-control"
+                                            value={loginModel.Username}
+                                            onChange={onChange} />
                                         <label className="form-label" htmlFor="loginName">
                                             Email or username
                                         </label>
                                     </div>
                                     {/* Password input */}
                                     <div className="form-outline mb-4">
-                                        <input type="password" id="loginPassword" className="form-control" />
+                                        <input type="password" id="loginPassword" className="form-control"
+                                            value={loginModel.Password}
+                                            onChange={onChange} />
                                         <label className="form-label" htmlFor="loginPassword">
                                             Password
                                         </label>
@@ -89,75 +104,6 @@ const Login: React.FC = () => {
                                             Not a member? <a href="#!">Register</a>
                                         </p>
                                     </div>
-                                </form>
-                            </div>
-                            <div
-                                className="tab-pane fade"
-                                id="pills-register"
-                                role="tabpanel"
-                                aria-labelledby="tab-register"
-                            >
-                                <form>
-                                    {/* Name input */}
-                                    <div className="form-outline mb-4">
-                                        <input type="text" id="registerName" className="form-control" />
-                                        <label className="form-label" htmlFor="registerName">
-                                            Name
-                                        </label>
-                                    </div>
-                                    {/* Username input */}
-                                    <div className="form-outline mb-4">
-                                        <input type="text" id="registerUsername" className="form-control" />
-                                        <label className="form-label" htmlFor="registerUsername">
-                                            Username
-                                        </label>
-                                    </div>
-                                    {/* Email input */}
-                                    <div className="form-outline mb-4">
-                                        <input type="email" id="registerEmail" className="form-control" />
-                                        <label className="form-label" htmlFor="registerEmail">
-                                            Email
-                                        </label>
-                                    </div>
-                                    {/* Password input */}
-                                    <div className="form-outline mb-4">
-                                        <input
-                                            type="password"
-                                            id="registerPassword"
-                                            className="form-control"
-                                        />
-                                        <label className="form-label" htmlFor="registerPassword">
-                                            Password
-                                        </label>
-                                    </div>
-                                    {/* Repeat Password input */}
-                                    <div className="form-outline mb-4">
-                                        <input
-                                            type="password"
-                                            id="registerRepeatPassword"
-                                            className="form-control"
-                                        />
-                                        <label className="form-label" htmlFor="registerRepeatPassword">
-                                            Repeat password
-                                        </label>
-                                    </div>
-                                    {/* Checkbox */}
-                                    <div className="form-check d-flex justify-content-center mb-4">
-                                        <input
-                                            className="form-check-input me-2"
-                                            type="checkbox"
-                                            defaultValue=""
-                                            id="registerCheck"
-                                            aria-describedby="registerCheckHelpText"
-                                        />
-                                        <label className="form-check-label" htmlFor="registerCheck">
-                                            I have read and agree to the terms
-                                        </label>
-                                    </div>
-                                    {/* Submit button */}
-                                    <button type="submit" className="btn btn-primary btn-block mb-3">
-                                        Sign in
-                                    </button>
                                 </form>
                             </div>
                         </div>
