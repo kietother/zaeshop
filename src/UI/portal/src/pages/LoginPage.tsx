@@ -1,17 +1,40 @@
-import React, { ChangeEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import LoginModel from "../models/auth/LoginModel";
+import { login } from "../store/thunks/authThunk";
+import { useDispatch, useSelector } from "react-redux";
+import { StoreState } from "../store";
 
-const Login: React.FC = () => {
+const LoginPage: React.FC = () => {
+    
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [loginModel, setLoginModel] = useState<LoginModel>({
         Username: '',
         Password: '',
     });
 
+    const { auth } = useSelector((state: StoreState) => {
+        return {
+            auth: state.auth
+        }
+    })
+
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         setLoginModel({ ...loginModel, [e.target.name]: e.target.value });
     };
+
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        await login(loginModel)(dispatch);
+    }
+
+    useEffect(() => {
+        if (auth.isAuthenticate) {
+            navigate("/users");
+        }
+    }, [navigate, auth.isAuthenticate])
 
     return (
         <div className="">
@@ -53,10 +76,11 @@ const Login: React.FC = () => {
                         {/* Pills content */}
                         <div className="tab-content">
                             <div className="tab-pane fade show active">
-                                <form>
+                                <form onSubmit={(e) => onSubmit(e)}>
                                     {/* Email input */}
                                     <div className="form-outline mb-4">
-                                        <input type="email" id="loginName" className="form-control"
+                                        <input type="text" id="loginName" className="form-control"
+                                            name="Username"
                                             value={loginModel.Username}
                                             onChange={onChange} />
                                         <label className="form-label" htmlFor="loginName">
@@ -66,6 +90,7 @@ const Login: React.FC = () => {
                                     {/* Password input */}
                                     <div className="form-outline mb-4">
                                         <input type="password" id="loginPassword" className="form-control"
+                                            name="Password"
                                             value={loginModel.Password}
                                             onChange={onChange} />
                                         <label className="form-label" htmlFor="loginPassword">
@@ -95,7 +120,8 @@ const Login: React.FC = () => {
                                         </div>
                                     </div>
                                     {/* Submit button */}
-                                    <button type="submit" className="btn btn-primary btn-block mb-4">
+                                    <button type="submit" 
+                                        className="btn btn-primary btn-block mb-4">
                                         Sign in
                                     </button>
                                     {/* Register buttons */}
@@ -115,4 +141,4 @@ const Login: React.FC = () => {
     );
 };
 
-export default Login;
+export default LoginPage;

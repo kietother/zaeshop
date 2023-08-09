@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Register: React.FC = () => {
+const RegisterPage: React.FC = () => {
     return (
         <div className="">
             {/* Section: Design Block */}
@@ -114,4 +114,4 @@ const Register: React.FC = () => {
     );
 };
 
-export default Register;
+export default RegisterPage;

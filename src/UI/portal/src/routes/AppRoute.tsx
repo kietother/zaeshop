@@ -4,14 +4,14 @@ import Welcome from "../components/welcome/Webcome";
 import HelloPage from "../components/hello-page/HelloPage";
 import Navbar from "../components/layout/Navbar";
 import UserPage from "../pages/UserPage";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
+import RegisterPage from "../pages/RegisterPage";
+import LoginPage from "../pages/LoginPage";
 
 const AppRoute: React.FC = () => (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Routes>
-            <Route path="login" Component={Login} />
-            <Route path="register" Component={Register} />
+            <Route path="login" Component={LoginPage} />
+            <Route path="register" Component={RegisterPage} />
             <Route path='*' Component={MainComponent} />
         </Routes>
     </BrowserRouter>
