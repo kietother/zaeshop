@@ -1,7 +1,22 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { StoreState } from '../../store';
 
 const Navbar: React.FC = () => {
+
+    const { auth } = useSelector((state: StoreState) => {
+        return {
+            auth: state.auth
+        }
+    });
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        navigate("/login");
+    }, [navigate, auth.isAuthenticate]);
+
     return (
         <nav className="navbar navbar-expand-md navbar-dark bg-dark p-2">
             <Link to="/" className="navbar-brand">Home</Link>
