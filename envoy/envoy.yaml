@@ -25,20 +25,23 @@ static_resources:
                       domains: ["*"]
                       routes:
                         - match:
-                            prefix: "/identity" 
+                            prefix: "/identity/" 
                           route:
-                            prefix_rewrite: "/identity"
+                            prefix_rewrite: "/"
                             cluster: identity
+                            auto_host_rewrite: true
                         - match:
-                            prefix: "/hangfire"
+                            prefix: "/hangfire/"
                           route:
-                            prefix_rewrite: "/hangfire"
+                            prefix_rewrite: "/"
                             cluster: hangfireserver
+                            auto_host_rewrite: true
                         - match:
-                            prefix: "/portal"
+                            prefix: "/portal/"
                           route:
-                            prefix_rewrite: "/portal"
+                            prefix_rewrite: "/"
                             cluster: portal
+                            auto_host_rewrite: true
                 http_filters:
                   - name: envoy.filters.http.router
                     typed_config:
