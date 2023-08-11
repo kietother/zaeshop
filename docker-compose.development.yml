@@ -6,9 +6,10 @@ services:
   envoy:
     image: envoyproxy/envoy:tools-v1.27-latest
     volumes:
-      - ./envoy.yaml:/etc/envoy/envoy.yaml
+      - ./envoy/envoy.yaml:/etc/envoy/envoy.yaml
     ports:
-      - "10000:10000"
+      - "80:80"
+      - "443:443"
       - "9901:9901"
     networks:
       - mynetwork
