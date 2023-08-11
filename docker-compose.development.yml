@@ -7,6 +7,8 @@ services:
     image: envoyproxy/envoy:tools-v1.27-latest
     volumes:
       - ./envoy/envoy.yaml:/etc/envoy/envoy.yaml
+      - ./envoy/https.crt:/etc/ssl/certs/https.crt
+      - ./envoy/key.pem:/etc/ssl/certs/key.pem
     ports:
       - "80:80"
       - "443:443"
