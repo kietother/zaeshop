@@ -14,9 +14,9 @@ static_resources:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
                 stat_prefix: ingress_http
                 access_log:
-          - name: envoy.access_loggers.stdout
-            typed_config:
-              "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+                  - name: envoy.access_loggers.stdout
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
                 codec_type: AUTO
                 route_config:
                   name: local_route
@@ -25,20 +25,24 @@ static_resources:
                       domains: ["*"]
                       routes:
                         - match:
-                            prefix: "/" 
+                            prefix: "/identity" 
                           route:
                             prefix_rewrite: "/"
                             cluster: identity
                         - match:
                             prefix: "/hangfire"
                           route:
-                            prefix_rewrite: "/hangfire"
+                            prefix_rewrite: "/"
                             cluster: hangfireserver
                         - match:
                             prefix: "/portal"
                           route:
-                            prefix_rewrite: "/portal"
+                            prefix_rewrite: "/"
                             cluster: portal
+                        - match:
+                            prefix: "/"
+                          route:
+                            cluster: google_service
                 http_filters:
                   - name: envoy.filters.http.router
                     typed_config:
@@ -46,7 +50,8 @@ static_resources:
   clusters:
     - name: identity
       connect_timeout: 0.25s
-      type: STATIC
+      type: LOGICAL_DNS
+      dns_lookup_family: V4_ONLY
       lb_policy: ROUND_ROBIN
       load_assignment:
         cluster_name: identity
@@ -56,7 +61,9 @@ static_resources:
                   address:
                     socket_address: { address: identity , port_value: 5287 }
     - name: hangfireserver
-      type: STRICT_DNS
+      connect_timeout: 0.25s
+      type: LOGICAL_DNS
+      dns_lookup_family: V4_ONLY
       lb_policy: ROUND_ROBIN
       load_assignment:
         cluster_name: hangfireserver
@@ -66,7 +73,9 @@ static_resources:
                   address:
                     socket_address: { address: hangfireserver, port_value: 5286 }
     - name: portal
-      type: STRICT_DNS
+      connect_timeout: 0.25s
+      type: LOGICAL_DNS
+      dns_lookup_family: V4_ONLY
       lb_policy: ROUND_ROBIN
       load_assignment:
         cluster_name: portal
@@ -75,3 +84,18 @@ static_resources:
               - endpoint:
                   address:
                     socket_address: { address: portal, port_value: 5288 }
+    - name: google_service
+      connect_timeout: 0.25s
+      type: LOGICAL_DNS
+      # Comment out the following line to test on v6 networks
+      dns_lookup_family: V4_ONLY
+      lb_policy: ROUND_ROBIN
+      load_assignment:
+        cluster_name: google_service
+        endpoints:
+        - lb_endpoints:
+          - endpoint:
+              address:
+                socket_address:
+                  address: www.google.com
+                  port_value: 80
