@@ -47,6 +47,6 @@ jobs:
             sudo docker-compose down &&
             sudo docker system prune --all --volumes --force --filter "label=hangfireserver" --filter "label=identity" --filter "label=portal" &&
             sudo docker-compose build --parallel &&
-            sudo docker-compose -f "docker-compose.debug.yml" up -d 
+            sudo docker-compose -f "docker-compose.development.yml" up -d 
           '
 

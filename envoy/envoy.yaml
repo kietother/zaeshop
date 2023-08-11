@@ -1,0 +1,92 @@
+admin:
+  address:
+    socket_address: { address: 127.0.0.1, port_value: 9901 }
+
+static_resources:
+  listeners:
+    - name: listener_0
+      address:
+        socket_address: { address: 0.0.0.0, port_value: 80 }
+      filter_chains:
+        - filters:
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                stat_prefix: ingress_http
+                access_log:
+                  - name: envoy.access_loggers.stdout
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+                codec_type: AUTO
+                route_config:
+                  name: local_route
+                  virtual_hosts:
+                    - name: local_service
+                      domains: ["*"]
+                      routes:
+                        #region Hangfire
+                        - match:
+                            prefix: "/hangfire/"
+                          route:
+                            prefix_rewrite: "/"
+                            cluster: hangfireserver
+                        - match:
+                            prefix: "/hangfire"
+                          route:
+                            cluster: hangfireserver
+                        #endregion
+                        #region Identity
+                        - match:
+                            prefix: "/identity/" 
+                          route:
+                            prefix_rewrite: "/"
+                            cluster: identity
+                        #endregion
+                        #region Portal
+                        - match:
+                            prefix: "/portal/"
+                          route:
+                            prefix_rewrite: "/"
+                            cluster: portal
+                        #endregion
+                http_filters:
+                  - name: envoy.filters.http.router
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+  clusters:
+    - name: identity
+      connect_timeout: 0.25s
+      type: LOGICAL_DNS
+      #dns_lookup_family: V4_ONLY
+      lb_policy: ROUND_ROBIN
+      load_assignment:
+        cluster_name: identity
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address: { address: identity , port_value: 5287 }
+    - name: hangfireserver
+      connect_timeout: 0.25s
+      type: LOGICAL_DNS
+      #dns_lookup_family: V4_ONLY
+      lb_policy: ROUND_ROBIN
+      load_assignment:
+        cluster_name: hangfireserver
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address: { address: hangfireserver, port_value: 5286 }
+    - name: portal
+      connect_timeout: 0.25s
+      type: LOGICAL_DNS
+      #dns_lookup_family: V4_ONLY
+      lb_policy: ROUND_ROBIN
+      load_assignment:
+        cluster_name: portal
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address: { address: portal, port_value: 5288 }
