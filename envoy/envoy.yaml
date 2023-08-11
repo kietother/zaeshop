@@ -53,6 +53,65 @@ static_resources:
                   - name: envoy.filters.http.router
                     typed_config:
                       "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+    - name: listener_1
+      address:
+        socket_address: { address: 0.0.0.0, port_value: 443 }
+      filter_chains:
+        - filters:
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                stat_prefix: ingress_http
+                access_log:
+                  - name: envoy.access_loggers.stdout
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+                codec_type: AUTO
+                route_config:
+                  name: local_route
+                  virtual_hosts:
+                    - name: local_service
+                      domains: ["*"]
+                      routes:
+                        #region Hangfire
+                        - match:
+                            prefix: "/hangfire/"
+                          route:
+                            prefix_rewrite: "/"
+                            cluster: hangfireserver
+                        - match:
+                            prefix: "/hangfire"
+                          route:
+                            cluster: hangfireserver
+                        #endregion
+                        #region Identity
+                        - match:
+                            prefix: "/identity/" 
+                          route:
+                            prefix_rewrite: "/"
+                            cluster: identity
+                        #endregion
+                        #region Portal
+                        - match:
+                            prefix: "/portal/"
+                          route:
+                            prefix_rewrite: "/"
+                            cluster: portal
+                        #endregion
+                http_filters:
+                  - name: envoy.filters.http.router
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+          transport_socket:
+            name: envoy.transport_sockets.tls
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext
+              common_tls_context:
+                tls_certificates:
+                  - certificate_chain:
+                      filename: "/etc/ssl/certs/https.crt"
+                    private_key:
+                      filename: "/etc/ssl/certs/key.pem"
   clusters:
     - name: identity
       connect_timeout: 0.25s
