@@ -1,0 +1,56 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.4'
+
+services:
+  envoy:
+    image: envoyproxy/envoy:tools-v1.27-latest
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
+    ports:
+      - "10000:10000"
+      - "9901:9901"
+    networks:
+      - mynetwork
+  hangfireserver:
+    image: hangfireserver
+    build:
+      context: .
+      dockerfile: src/Services/HangFireServer/Dockerfile
+    ports:
+      - 5286:5286
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+    networks:
+      - mynetwork
+  identity:
+    image: identity
+    build:
+      context: .
+      dockerfile: src/Services/Identity/Identity.API/Dockerfile
+    ports:
+      - 5287:5287
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+    networks:
+      - mynetwork
+  portal:
+    image: portal
+    build:
+      context: .
+      dockerfile: src/Services/Portal/Portal.API/Dockerfile
+    ports:
+      - 5288:5288
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+    networks:
+      - mynetwork
+networks:
+  mynetwork:
+    driver: bridge
