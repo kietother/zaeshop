@@ -24,24 +24,31 @@ static_resources:
                     - name: local_service
                       domains: ["*"]
                       routes:
-                        - match:
-                            prefix: "/identity/" 
-                          route:
-                            prefix_rewrite: "/"
-                            cluster: identity
-                            auto_host_rewrite: true
+                        #region Hangfire
                         - match:
                             prefix: "/hangfire/"
                           route:
                             prefix_rewrite: "/"
                             cluster: hangfireserver
-                            auto_host_rewrite: true
+                        - match:
+                            prefix: "/hangfire"
+                          route:
+                            cluster: hangfireserver
+                        #endregion
+                        #region Identity
+                        - match:
+                            prefix: "/identity/" 
+                          route:
+                            prefix_rewrite: "/"
+                            cluster: identity
+                        #endregion
+                        #region Portal
                         - match:
                             prefix: "/portal/"
                           route:
                             prefix_rewrite: "/"
                             cluster: portal
-                            auto_host_rewrite: true
+                        #endregion
                 http_filters:
                   - name: envoy.filters.http.router
                     typed_config:
