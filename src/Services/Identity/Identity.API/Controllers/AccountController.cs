@@ -164,7 +164,7 @@ namespace Identity.API.Controllers
         #region Private Methods
         private void SetTokenCookie(string? token, string? expiresOnUtc)
         {
-            var origin = Request.Headers["Server"].ToString();
+            var server = Request.Headers["server"].ToString();
 
             // append cookie with refresh token to the http response
             var cookieOptions = new CookieOptions
@@ -174,7 +174,8 @@ namespace Identity.API.Controllers
             };
 
             // Https cookies
-            if (string.Equals(origin, "cloudflare", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(server, "cloudflare", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(server, "envoy", StringComparison.OrdinalIgnoreCase))
             {
                 cookieOptions.Secure = true;
                 cookieOptions.SameSite = SameSiteMode.None;
