@@ -26,7 +26,9 @@ axiosApiInstance.interceptors.response.use(response => {
     if (error.response.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
         try {
-            const response = await axios.post(identityServer + "/api/account/refresh-token");
+            const response = await axios.post(identityServer + "/api/account/refresh-token", null, {
+                withCredentials: true
+            });
             dispatch(loginSuccess({ data: response.data, token: response.data.jwtToken }));
     
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
