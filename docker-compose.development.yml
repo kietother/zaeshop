@@ -37,6 +37,7 @@ services:
       - 5287:5287
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - DEPLOYED=true
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
     networks:
