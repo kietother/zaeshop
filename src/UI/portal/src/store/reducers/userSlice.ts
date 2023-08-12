@@ -25,7 +25,7 @@ const userSlice = createSlice({
     // Update user reducer
     userUpdated(state, action: PayloadAction<{ id: string; updatedUser: Partial<User> }>) {
       const { id, updatedUser } = action.payload;
-      const index = state.users.findIndex((user) => user.Id === id);
+      const index = state.users.findIndex((user) => user.id === id);
       if (index !== -1) {
         state.users[index] = { ...state.users[index], ...updatedUser };
       }
@@ -34,7 +34,7 @@ const userSlice = createSlice({
     // Delete user reducer
     userDeleted(state, action: PayloadAction<string>) {
       const id = action.payload;
-      state.users = state.users.filter((user) => user.Id !== id);
+      state.users = state.users.filter((user) => user.id !== id);
     },
 
     // Fetch users reducers

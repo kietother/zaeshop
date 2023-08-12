@@ -15,11 +15,7 @@ const LoginPage: React.FC = () => {
         Password: '',
     });
 
-    const { auth } = useSelector((state: StoreState) => {
-        return {
-            auth: state.auth
-        }
-    })
+    const auth = useSelector((state: StoreState) => state.auth);
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         setLoginModel({ ...loginModel, [e.target.name]: e.target.value });
