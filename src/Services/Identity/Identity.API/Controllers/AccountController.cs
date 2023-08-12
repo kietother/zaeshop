@@ -168,7 +168,8 @@ namespace Identity.API.Controllers
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTime.UtcNow.AddDays(7)
+                Expires = DateTime.UtcNow.AddDays(7),
+                Secure = true
             };
             Response.Cookies.Append("refreshToken", token ?? string.Empty, cookieOptions);
             Response.Cookies.Append("refreshTokenExpiresOnUtc", expiresOnUtc ?? string.Empty, cookieOptions);
