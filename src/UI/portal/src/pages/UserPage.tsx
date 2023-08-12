@@ -12,8 +12,6 @@ const UserPage: React.FC = () => {
         getUsers()(dispatch);
     }, [dispatch]);
 
-    console.log(userState.users);
-
     return (
         <div className="container mt-4">
             <h1 className="mb-4">User List</h1>
