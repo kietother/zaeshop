@@ -164,18 +164,18 @@ namespace Identity.API.Controllers
         #region Private Methods
         private void SetTokenCookie(string? token, string? expiresOnUtc)
         {
-            var server = Request.Headers["server"].ToString();
+            bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
+            string referer = Request.Headers["Referer"].ToString();
 
             // append cookie with refresh token to the http response
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTime.UtcNow.AddDays(7)  
+                Expires = DateTime.UtcNow.AddDays(7)
             };
 
             // Https cookies
-            if (string.Equals(server, "cloudflare", StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(server, "envoy", StringComparison.OrdinalIgnoreCase))
+            if (isDeployed && !referer.Contains("/swagger/"))
             {
                 cookieOptions.Secure = true;
                 cookieOptions.SameSite = SameSiteMode.None;
