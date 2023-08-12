@@ -1,2 +1,4 @@
-export const IdentityServer = 'https://codegota.me/identity';
-export const PortalServer = 'https://codegota.me/portal';
+const baseUrl = 'https://codegota.me';
+
+export const identityServer = baseUrl + '/identity';
+export const portalServer = baseUrl + '/portal';
