@@ -164,15 +164,18 @@ namespace Identity.API.Controllers
         #region Private Methods
         private void SetTokenCookie(string? token, string? expiresOnUtc)
         {
-            bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("DEPLOYED") ?? "false");
-            
             // append cookie with refresh token to the http response
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
                 Expires = DateTime.UtcNow.AddDays(7),
-                Secure = isDeployed
+                Secure = Request.IsHttps        
             };
+            if (Request.IsHttps)
+            {
+                cookieOptions.SameSite = SameSiteMode.None;
+            }
+
             Response.Cookies.Append("refreshToken", token ?? string.Empty, cookieOptions);
             Response.Cookies.Append("refreshTokenExpiresOnUtc", expiresOnUtc ?? string.Empty, cookieOptions);
         }
