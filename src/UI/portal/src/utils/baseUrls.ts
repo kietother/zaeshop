@@ -1,2 +1,2 @@
-export const IdentityServer = 'http://3.1.6.241:5287';
-export const PortalServer = 'http://3.1.6.241:5288';
+export const IdentityServer = 'https://codegota.me/identity';
+export const PortalServer = 'https://codegota.me/portal';

@@ -1,11 +1,11 @@
 export default interface User {
-    Id: string;
-    FullName?: string;
-    VerificationToken?: string;
-    VerifiedOnUtc?: Date;
-    ResetPasswordToken?: string;
-    ResetPasswordTokenExpiresOnUtc?: Date;
-    ResetPasswordOnUtc?: Date;
-    CreatedOnUtc: Date;
-    UpdatedOnUtc?: Date;
+    id: string;
+    fullName?: string;
+    verificationToken?: string;
+    verifiedOnUtc?: Date;
+    resetPasswordToken?: string;
+    resetPasswordTokenExpiresOnUtc?: Date;
+    resetPasswordOnUtc?: Date;
+    createdOnUtc: Date;
+    updatedOnUtc?: Date;
 }

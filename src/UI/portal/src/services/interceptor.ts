@@ -1,5 +1,5 @@
 import axios from "axios";
-import { loginSuccess, logout } from "../store/reducers/authSlice";
+import { loginFailure, loginSuccess, logout } from "../store/reducers/authSlice";
 import { store } from "../store";
 import { IdentityServer } from "../utils/baseUrls";
 
@@ -23,11 +23,17 @@ axiosApiInstance.interceptors.response.use(response => {
 
     if (error.response.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
-        const response = await axios.post(IdentityServer + "/api/account/refresh-token");
-        dispatch(loginSuccess({ data: response.data, token: response.data.jwtToken }));
-
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
-        return axios(originalRequest);
+        try {
+            const response = await axios.post(IdentityServer + "/api/account/refresh-token");
+            dispatch(loginSuccess({ data: response.data, token: response.data.jwtToken }));
+    
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
+            return axios(originalRequest);
+        }
+        catch (err: any) {
+            dispatch(loginFailure(err.response));
+            return error;
+        }
     }
 
     dispatch(logout());

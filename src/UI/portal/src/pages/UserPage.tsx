@@ -1,12 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import User from '../models/User';
+import React, { useEffect } from 'react';
 import dayjs from 'dayjs';
+import { StoreState } from '../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUsers } from '../store/thunks/userThunk';
 
 const UserPage: React.FC = () => {
-    const [users, setUsers] = useState<User[]>([]);
+    const userState = useSelector((state: StoreState) => state.user);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-    }, []);
+        getUsers()(dispatch);
+    }, [dispatch]);
+
+    console.log(userState.users);
 
     return (
         <div className="container mt-4">
@@ -26,20 +32,20 @@ const UserPage: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map((user) => (
-                            <tr key={user.VerificationToken}>
-                                <td>{user.FullName}</td>
-                                <td>{user.VerificationToken}</td>
-                                <td>{user.VerifiedOnUtc ? dayjs(user.VerifiedOnUtc).format('DD-MM-YYYY HH:mm') : 'N/A'}</td>
-                                <td>{user.ResetPasswordToken}</td>
+                        {userState.users.map((user) => (
+                            <tr key={user.id}>
+                                <td>{user.fullName}</td>
+                                <td>{user.verificationToken}</td>
+                                <td>{user.verifiedOnUtc ? dayjs(user.verifiedOnUtc).format('DD-MM-YYYY HH:mm') : 'N/A'}</td>
+                                <td>{user.resetPasswordToken}</td>
                                 <td>
-                                    {user.ResetPasswordTokenExpiresOnUtc
-                                        ? dayjs(user.ResetPasswordTokenExpiresOnUtc).format('DD-MM-YYYY HH:mm')
+                                    {user.resetPasswordTokenExpiresOnUtc
+                                        ? dayjs(user.resetPasswordTokenExpiresOnUtc).format('DD-MM-YYYY HH:mm')
                                         : 'N/A'}
                                 </td>
-                                <td>{user.ResetPasswordOnUtc ? dayjs(user.ResetPasswordOnUtc).format('DD-MM-YYYY HH:mm') : 'N/A'}</td>
-                                <td>{dayjs(user.CreatedOnUtc).format('DD-MM-YYYY HH:mm')}</td>
-                                <td>{user.UpdatedOnUtc ? dayjs(user.UpdatedOnUtc).format('DD-MM-YYYY HH:mm') : 'N/A'}</td>
+                                <td>{user.resetPasswordOnUtc ? dayjs(user.resetPasswordOnUtc).format('DD-MM-YYYY HH:mm') : 'N/A'}</td>
+                                <td>{dayjs(user.createdOnUtc).format('DD-MM-YYYY HH:mm')}</td>
+                                <td>{user.updatedOnUtc ? dayjs(user.updatedOnUtc).format('DD-MM-YYYY HH:mm') : 'N/A'}</td>
                             </tr>
                         ))}
                     </tbody>

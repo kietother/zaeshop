@@ -5,16 +5,13 @@ import { StoreState } from '../../store';
 
 const Navbar: React.FC = () => {
 
-    const { auth } = useSelector((state: StoreState) => {
-        return {
-            auth: state.auth
-        }
-    });
-
+    const auth = useSelector((state: StoreState) => state.auth);
     const navigate = useNavigate();
 
     useEffect(() => {
-        navigate("/login");
+        if (!auth.isAuthenticate) {
+            navigate("/login");
+        }
     }, [navigate, auth.isAuthenticate]);
 
     return (
