@@ -14,7 +14,7 @@ namespace Identity.Infrastructure.EntityConfigurations
             builder.HasOne(o => o.User).WithMany(x => x.UserTokens)
                 .HasForeignKey(y => y.UserId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .IsRequired(false);
+                .IsRequired();
             builder.HasIndex(o => o.Token).IsUnique(true);
         }
     }

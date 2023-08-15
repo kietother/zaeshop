@@ -23,24 +23,27 @@ axiosApiInstance.interceptors.response.use(response => {
 }, async (error) => {
     const originalRequest = error.config;
 
-    if (error.response.status === 401 && !originalRequest._retry) {
-        originalRequest._retry = true;
-        try {
-            const response = await axios.post(identityServer + "/api/account/refresh-token", null, {
-                withCredentials: true
-            });
-            dispatch(loginSuccess({ data: response.data, token: response.data.jwtToken }));
-    
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
-            return axios(originalRequest);
+    if (error.response.status === 401) {
+        if (!originalRequest._retry) {
+            originalRequest._retry = true;
+            try {
+                const response = await axios.post(identityServer + "/api/account/refresh-token", null, {
+                    withCredentials: true
+                });
+                dispatch(loginSuccess({ data: response.data, token: response.data.jwtToken }));
+
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
+                return axios(originalRequest);
+            }
+            catch (err: any) {
+                dispatch(loginFailure(err.response));
+                return error;
+            }
         }
-        catch (err: any) {
-            dispatch(loginFailure(err.response));
-            return error;
+        else {
+            dispatch(logout());
         }
     }
-
-    dispatch(logout());
     return error;
 });
 

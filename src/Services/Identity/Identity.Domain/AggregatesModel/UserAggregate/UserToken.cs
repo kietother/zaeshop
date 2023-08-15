@@ -6,7 +6,7 @@ namespace Identity.Domain.AggregatesModel.UserAggregate
     public class UserToken : Entity, IAggregateRoot
     {
         public string? Token { get; set; }
-        public string? UserId { get; set; }
+        public string UserId { get; set; } = null!;
 
         public DateTime ExpiresOnUtc { get; set; }
         public string? CreatedByIp { get; set; }
@@ -21,6 +21,6 @@ namespace Identity.Domain.AggregatesModel.UserAggregate
         public bool IsActive => !IsRevoked && !IsExpired;
 
         [JsonIgnore]
-        public virtual User? User { get; set; }
+        public virtual User User { get; set; } = null!;
     }
 }
