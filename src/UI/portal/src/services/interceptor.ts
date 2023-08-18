@@ -27,11 +27,12 @@ axiosApiInstance.interceptors.response.use(response => {
         if (!originalRequest._retry) {
             originalRequest._retry = true;
             try {
-                const response = await axios.post(identityServer + "/api/account/refresh-token", null, {
+                const response = await axios.post(identityServer + "/api/account/refresh-token", {}, {
                     withCredentials: true
                 });
                 dispatch(loginSuccess({ data: response.data, token: response.data.jwtToken }));
 
+                localStorage.setItem("token", response.data.jwtToken);
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
                 return axios(originalRequest);
             }
