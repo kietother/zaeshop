@@ -6,13 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "../store";
 
 const LoginPage: React.FC = () => {
-    
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [loginModel, setLoginModel] = useState<LoginModel>({
-        Username: '',
-        Password: '',
+        username: '',
+        password: '',
     });
 
     const auth = useSelector((state: StoreState) => state.auth);
@@ -33,107 +33,165 @@ const LoginPage: React.FC = () => {
     }, [navigate, auth.isAuthenticate])
 
     return (
-        <div className="">
-            {/* Section: Design Block */}
-            <section className="text-center">
-                {/* Background image */}
-                <div
-                    className="p-5 bg-image"
-                    style={{
-                        backgroundImage:
-                            'url("https://mdbootstrap.com/img/new/textures/full/171.jpg")',
-                        height: 250
-                    }}
-                />
-                {/* Background image */}
-                <div
-                    className="card mx-4 mx-md-5 shadow-5-strong"
-                    style={{
-                        marginTop: "-100px",
-                        background: "hsla(0, 0%, 100%, 0.8)",
-                        backdropFilter: "blur(30px)"
-                    }}
-                >
-                    <div className="card-body py-5 px-md-5">
-                        {/* Pills navs */}
-                        <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
-                            <li className="nav-item" role="presentation">
-                                <Link className="nav-link active" to={"/login"}>
-                                    Login
-                                </Link>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <Link className="nav-link" to={"/register"}>
-                                    Register
-                                </Link>
-                            </li>
-                        </ul>
-                        {/* Pills navs */}
-                        {/* Pills content */}
-                        <div className="tab-content">
-                            <div className="tab-pane fade show active">
-                                <form onSubmit={(e) => onSubmit(e)}>
-                                    {/* Email input */}
-                                    <div className="form-outline mb-4">
-                                        <input type="text" id="loginName" className="form-control"
-                                            name="Username"
-                                            value={loginModel.Username}
-                                            onChange={onChange} />
-                                        <label className="form-label" htmlFor="loginName">
-                                            Email or username
-                                        </label>
-                                    </div>
-                                    {/* Password input */}
-                                    <div className="form-outline mb-4">
-                                        <input type="password" id="loginPassword" className="form-control"
-                                            name="Password"
-                                            value={loginModel.Password}
-                                            onChange={onChange} />
-                                        <label className="form-label" htmlFor="loginPassword">
-                                            Password
-                                        </label>
-                                    </div>
-                                    {/* 2 column grid layout */}
-                                    <div className="row mb-4">
-                                        <div className="col-md-6 d-flex justify-content-center">
-                                            {/* Checkbox */}
-                                            <div className="form-check mb-3 mb-md-0">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="loginCheck"
-                                                />
-                                                <label className="form-check-label" htmlFor="loginCheck">
-                                                    {" "}
-                                                    Remember me{" "}
-                                                </label>
+        <>
+            {/* Log In page */}
+            <div
+                className="container-md auth-page"
+                style={{
+                    backgroundImage: 'url("assets/images/p-1.png")',
+                    backgroundSize: "cover",
+                    backgroundPosition: "center center"
+                }}>
+                <div className="row vh-100 d-flex justify-content-center">
+                    <div className="col-12 align-self-center">
+                        <div className="card-body">
+                            <div className="row">
+                                <div className="col-lg-4 mx-auto">
+                                    <div className="card">
+                                        <div className="card-body p-0 auth-header-box">
+                                            <div className="text-center p-3">
+                                                <a href="index.html" className="logo logo-admin">
+                                                    <img
+                                                        src="assets/images/logo-sm.png"
+                                                        height={50}
+                                                        alt="logo"
+                                                        className="auth-logo"
+                                                    />
+                                                </a>
+                                                <h4 className="mt-3 mb-1 fw-semibold text-white font-18">
+                                                    Let's Get Started Metrica
+                                                </h4>
+                                                <p className="text-muted  mb-0">
+                                                    Sign in to continue to Metrica.
+                                                </p>
                                             </div>
                                         </div>
-                                        <div className="col-md-6 d-flex justify-content-center">
-                                            {/* Simple link */}
-                                            <a href="#!">Forgot password?</a>
+                                        <div className="card-body pt-0">
+                                            <form className="my-4" onSubmit={(e) => onSubmit(e)}>
+                                                <div className="form-group mb-2">
+                                                    <label className="form-label" htmlFor="username">
+                                                        Username
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="username"
+                                                        name="username"
+                                                        placeholder="Enter username"
+                                                        value={loginModel.username}
+                                                        onChange={onChange}
+                                                    />
+                                                </div>
+                                                {/*end form-group*/}
+                                                <div className="form-group">
+                                                    <label className="form-label" htmlFor="userpassword">
+                                                        Password
+                                                    </label>
+                                                    <input
+                                                        type="password"
+                                                        className="form-control"
+                                                        name="password"
+                                                        id="userpassword"
+                                                        placeholder="Enter password"
+                                                        value={loginModel.password}
+                                                        onChange={onChange}
+                                                    />
+                                                </div>
+                                                {/*end form-group*/}
+                                                <div className="form-group row mt-3">
+                                                    <div className="col-sm-6">
+                                                        <div className="form-check form-switch form-switch-success">
+                                                            <input
+                                                                className="form-check-input"
+                                                                type="checkbox"
+                                                                id="customSwitchSuccess"
+                                                            />
+                                                            <label
+                                                                className="form-check-label"
+                                                                htmlFor="customSwitchSuccess"
+                                                            >
+                                                                Remember me
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    {/*end col*/}
+                                                    <div className="col-sm-6 text-end">
+                                                        <a
+                                                            href="auth-recover-pw.html"
+                                                            className="text-muted font-13"
+                                                        >
+                                                            <i className="dripicons-lock" /> Forgot password?
+                                                        </a>
+                                                    </div>
+                                                    {/*end col*/}
+                                                </div>
+                                                {/*end form-group*/}
+                                                <div className="form-group mb-0 row">
+                                                    <div className="col-12">
+                                                        <div className="d-grid mt-3">
+                                                            <button className="btn btn-primary" type="submit">
+                                                                Log In <i className="fas fa-sign-in-alt ms-1" />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    {/*end col*/}
+                                                </div>{" "}
+                                                {/*end form-group*/}
+                                            </form>
+                                            {/*end form*/}
+                                            <div className="m-3 text-center text-muted">
+                                                <p className="mb-0">
+                                                    Don't have an account ?{" "}
+                                                    <a
+                                                        href="auth-register.html"
+                                                        className="text-primary ms-2"
+                                                    >
+                                                        Free Resister
+                                                    </a>
+                                                </p>
+                                            </div>
+                                            <hr className="hr-dashed mt-4" />
+                                            <div className="text-center mt-n5">
+                                                <h6 className="card-bg px-3 my-4 d-inline-block">
+                                                    Or Login With
+                                                </h6>
+                                            </div>
+                                            <div className="d-flex justify-content-center mb-1">
+                                                <a
+                                                    href="auth-login.html"
+                                                    className="d-flex justify-content-center align-items-center thumb-sm bg-soft-primary rounded-circle me-2"
+                                                >
+                                                    <i className="fab fa-facebook align-self-center" />
+                                                </a>
+                                                <a
+                                                    href="auth-login.html"
+                                                    className="d-flex justify-content-center align-items-center thumb-sm bg-soft-info rounded-circle me-2"
+                                                >
+                                                    <i className="fab fa-twitter align-self-center" />
+                                                </a>
+                                                <a
+                                                    href="auth-login.html"
+                                                    className="d-flex justify-content-center align-items-center thumb-sm bg-soft-danger rounded-circle"
+                                                >
+                                                    <i className="fab fa-google align-self-center" />
+                                                </a>
+                                            </div>
                                         </div>
+                                        {/*end card-body*/}
                                     </div>
-                                    {/* Submit button */}
-                                    <button type="submit" 
-                                        className="btn btn-primary btn-block mb-4">
-                                        Sign in
-                                    </button>
-                                    {/* Register buttons */}
-                                    <div className="text-center">
-                                        <p>
-                                            Not a member? <a href="#!">Register</a>
-                                        </p>
-                                    </div>
-                                </form>
+                                    {/*end card*/}
+                                </div>
+                                {/*end col*/}
                             </div>
+                            {/*end row*/}
                         </div>
-                        {/* Pills content */}
+                        {/*end card-body*/}
                     </div>
+                    {/*end col*/}
                 </div>
-            </section>
-        </div>
+                {/*end row*/}
+            </div>
+        </>
     );
 };
 

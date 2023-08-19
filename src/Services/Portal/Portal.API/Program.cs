@@ -29,7 +29,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(x => x
-   .SetIsOriginAllowed(origin => true)
+    .SetIsOriginAllowed(origin => origin.Contains("localhost") && origin.EndsWith(".github.io"))
    .AllowAnyMethod()
    .AllowAnyHeader()
    .AllowCredentials());

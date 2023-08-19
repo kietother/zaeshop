@@ -1,6 +1,9 @@
 export default interface User {
     id: string;
     fullName?: string;
+    userName?: string;
+    email?: string;
+    emailConfirmed: boolean;
     verificationToken?: string;
     verifiedOnUtc?: Date;
     resetPasswordToken?: string;

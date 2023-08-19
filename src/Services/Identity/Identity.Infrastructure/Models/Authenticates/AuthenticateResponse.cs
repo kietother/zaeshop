@@ -11,7 +11,7 @@ namespace Identity.Infrastructure.Models.Authenticates
     {
         public string? Id { get; set; }
         public string? FullName { get; set; }
-        public string? Username { get; set; }
+        public string? UserName { get; set; }
         public string? JwtToken { get; set; }
 
         [JsonIgnore] // refresh token is returned in http only cookie
@@ -32,7 +32,7 @@ namespace Identity.Infrastructure.Models.Authenticates
         {
             Id = user.Id;
             FullName = user.FullName;
-            Username = user.UserName;
+            UserName = user.UserName;
             JwtToken = jwtToken;
             RefreshToken = userToken?.Token;
             ExpiresOnUtc = userToken?.ExpiresOnUtc;
