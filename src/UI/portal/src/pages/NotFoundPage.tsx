@@ -1,4 +1,5 @@
-import React, { } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const NotFoundPage: React.FC = () => {
     return (
@@ -18,14 +19,14 @@ const NotFoundPage: React.FC = () => {
                                 <div className="card">
                                     <div className="card-body p-0 auth-header-box">
                                         <div className="text-center p-3">
-                                            <a href="index.html" className="logo logo-admin">
+                                            <Link to="/" className="logo logo-admin">
                                                 <img
-                                                    src="assets/images/logo-sm.png"
+                                                    src={process.env.PUBLIC_URL + "/assets/images/logo-sm.png"}
                                                     height={50}
                                                     alt="logo"
                                                     className="auth-logo"
                                                 />
-                                            </a>
+                                            </Link>
                                             <h4 className="mt-3 mb-1 fw-semibold text-white font-18">
                                                 Oops! Sorry page does not found
                                             </h4>
@@ -37,7 +38,7 @@ const NotFoundPage: React.FC = () => {
                                     <div className="card-body">
                                         <div className="ex-page-content text-center">
                                             <img
-                                                src="assets/images/error.svg"
+                                                src={process.env.PUBLIC_URL + "/assets/images/error.svg"}
                                                 className=""
                                                 height={170}
                                             />
@@ -46,9 +47,9 @@ const NotFoundPage: React.FC = () => {
                                                 Somthing went wrong
                                             </h5>
                                         </div>
-                                        <a className="btn btn-primary w-100" href="index.html">
+                                        <Link className="btn btn-primary w-100" to="/">
                                             Back to Dashboard <i className="fas fa-redo ml-1" />
-                                        </a>
+                                        </Link>
                                     </div>
                                     {/*end card-body*/}
                                     <div className="card-body bg-light-alt text-center">

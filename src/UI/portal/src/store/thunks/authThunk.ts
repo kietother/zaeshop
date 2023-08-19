@@ -2,7 +2,7 @@ import { Dispatch } from "@reduxjs/toolkit";
 import api from "../../services/interceptor";
 import LoginModel from "../../models/auth/LoginModel";
 import { loginFailure, loginStart, loginSuccess, logout } from "../reducers/authSlice";
-import { identityServer } from "../../utils/baseUrls";
+import { identityServer } from "../../services/baseUrls";
 
 export const login = (loginModel: LoginModel) => async (dispatch: Dispatch) => {
     try {

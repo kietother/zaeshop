@@ -1,7 +1,7 @@
 import { Dispatch } from "@reduxjs/toolkit";
 import { fetchUsersFailure, fetchUsersStart, fetchUsersSuccess } from "../reducers/userSlice";
 import api from "../../services/interceptor";
-import { identityServer } from "../../utils/baseUrls";
+import { identityServer } from "../../services/baseUrls";
 
 // GET list user
 export const getUsers = () => async (dispatch: Dispatch) => {
