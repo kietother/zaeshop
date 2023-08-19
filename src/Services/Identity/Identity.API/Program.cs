@@ -45,10 +45,10 @@ if (app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 
     app.UseCors(x => x
-        .SetIsOriginAllowed(origin => origin.Contains("localhost") && origin.EndsWith(".github.io"))
-       .AllowAnyMethod()
-       .AllowAnyHeader()
-       .AllowCredentials());
+        .SetIsOriginAllowed(origin => origin.Contains("localhost") || origin.EndsWith(".github.io"))
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
 
     app.UseMiddleware<JwtMiddleware>();
     app.UseMiddleware<GlobalExceptionMiddleware>();
