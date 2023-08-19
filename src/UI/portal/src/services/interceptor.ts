@@ -1,7 +1,7 @@
 import axios from "axios";
 import { loginFailure, loginSuccess, logout } from "../store/reducers/authSlice";
 import { store } from "../store";
-import { identityServer } from "../utils/baseUrls";
+import { identityServer } from "./baseUrls";
 
 const dispatch = store.dispatch;
 const axiosApiInstance = axios.create({

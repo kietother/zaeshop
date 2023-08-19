@@ -5,7 +5,7 @@ const LeftSideBar: React.FC = () => {
     return (
         <div className="leftbar-tab-menu">
             <div className="main-icon-menu">
-                <a href="index.html" className="logo logo-metrica d-block text-center">
+                <Link to="/" className="logo logo-metrica d-block text-center">
                     <span>
                         <img
                             src="assets/images/logo-sm.png"
@@ -13,7 +13,7 @@ const LeftSideBar: React.FC = () => {
                             className="logo-sm"
                         />
                     </span>
-                </a>
+                </Link>
                 <div className="main-icon-menu-body">
                     <div
                         className="position-reletive h-100"
