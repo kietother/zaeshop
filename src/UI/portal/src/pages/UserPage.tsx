@@ -71,7 +71,7 @@ const UserPage: React.FC = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {userState.users.map((user) => (
+                                                {users.map((user) => (
                                                     <tr key={user.id}>
                                                         <td>{user.id}
                                                             {dayjs(user.createdOnUtc).diff(dayjs(), 'day') > 0 && dayjs(user.createdOnUtc).diff(dayjs(), 'day') < 7
