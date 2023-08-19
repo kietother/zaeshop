@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { StoreState } from '../../store';
+import { signOut } from '../../store/thunks/authThunk';
 
 const Navbar: React.FC = () => {
-
     const auth = useSelector((state: StoreState) => state.auth);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -13,6 +14,11 @@ const Navbar: React.FC = () => {
             navigate("/login");
         }
     }, [navigate, auth.isAuthenticate]);
+
+    const logout = async () => {
+        await signOut()(dispatch);
+        navigate("/login");
+    }
 
     return (
         <div className="topbar">
@@ -234,9 +240,9 @@ const Navbar: React.FC = () => {
                                 Settings
                             </a>
                             <div className="dropdown-divider mb-0" />
-                            <a className="dropdown-item" href="crm-contacts.html#">
+                            <button className="dropdown-item" onClick={logout}>
                                 <i className="ti ti-power font-16 me-1 align-text-bottom" /> Logout
-                            </a>
+                            </button>
                         </div>
                     </li>
                     {/*end topbar-profile*/}

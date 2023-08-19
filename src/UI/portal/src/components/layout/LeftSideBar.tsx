@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const LeftSideBar: React.FC = () => {
     return (
@@ -27,13 +28,12 @@ const LeftSideBar: React.FC = () => {
                                 title="Dashboard"
                                 data-bs-trigger="hover"
                             >
-                                <a
-                                    href="crm-contacts.html#MetricaDashboard"
+                                <button
                                     id="dashboard-tab"
                                     className="nav-link"
                                 >
                                     <i className="ti ti-smart-home menu-icon" />
-                                </a>
+                                </button>
                                 {/*end nav-link*/}
                             </li>
                             {/*end nav-item*/}
@@ -44,13 +44,12 @@ const LeftSideBar: React.FC = () => {
                                 title="Apps"
                                 data-bs-trigger="hover"
                             >
-                                <a
-                                    href="crm-contacts.html#MetricaApps"
+                                <button
                                     id="apps-tab"
                                     className="nav-link"
                                 >
                                     <i className="ti ti-apps menu-icon" />
-                                </a>
+                                </button>
                                 {/*end nav-link*/}
                             </li>
                             {/*end nav-item*/}
@@ -61,13 +60,12 @@ const LeftSideBar: React.FC = () => {
                                 title="Uikit"
                                 data-bs-trigger="hover"
                             >
-                                <a
-                                    href="crm-contacts.html#MetricaUikit"
+                                <button
                                     id="uikit-tab"
                                     className="nav-link"
                                 >
                                     <i className="ti ti-planet menu-icon" />
-                                </a>
+                                </button>
                                 {/*end nav-link*/}
                             </li>
                             {/*end nav-item*/}
@@ -78,13 +76,12 @@ const LeftSideBar: React.FC = () => {
                                 title="Pages"
                                 data-bs-trigger="hover"
                             >
-                                <a
-                                    href="crm-contacts.html#MetricaPages"
+                                <button
                                     id="pages-tab"
                                     className="nav-link"
                                 >
                                     <i className="ti ti-files menu-icon" />
-                                </a>
+                                </button>
                                 {/*end nav-link*/}
                             </li>
                             {/*end nav-item*/}
@@ -95,13 +92,12 @@ const LeftSideBar: React.FC = () => {
                                 title="Authentication"
                                 data-bs-trigger="hover"
                             >
-                                <a
-                                    href="crm-contacts.html#MetricaAuthentication"
+                                <button
                                     id="authentication-tab"
                                     className="nav-link"
                                 >
                                     <i className="ti ti-shield-lock menu-icon" />
-                                </a>
+                                </button>
                                 {/*end nav-link*/}
                             </li>
                             {/*end nav-item*/}
@@ -112,42 +108,15 @@ const LeftSideBar: React.FC = () => {
                 </div>
                 {/*end main-icon-menu-body*/}
                 <div className="pro-metrica-end">
-                    <a href="crm-contacts.html" className="profile">
-                        <img
-                            src="assets/images/users/user-4.jpg"
-                            alt="profile-user"
-                            className="rounded-circle thumb-sm"
-                        />
-                    </a>
                 </div>
                 {/*end pro-metrica-end*/}
             </div>
             {/*end main-icon-menu*/}
             <div className="main-menu-inner">
-                {/* LOGO */}
-                <div className="topbar-left">
-                    <a href="index.html" className="logo">
-                        <span>
-                            <img
-                                src="assets/images/logo-dark.png"
-                                alt="logo-large"
-                                className="logo-lg logo-dark"
-                            />
-                            <img
-                                src="assets/images/logo.png"
-                                alt="logo-large"
-                                className="logo-lg logo-light"
-                            />
-                        </span>
-                    </a>
-                    {/*end logo*/}
-                </div>
-                {/*end topbar-left*/}
-                {/*end logo*/}
                 <div className="menu-body navbar-vertical tab-content" data-simplebar="">
                     <div
                         id="MetricaDashboard"
-                        className="main-icon-menu-pane tab-pane"
+                        className="main-icon-menu-pane tab-pane active"
                         role="tabpanel"
                         aria-labelledby="dasboard-tab"
                     >
@@ -156,47 +125,10 @@ const LeftSideBar: React.FC = () => {
                         </div>
                         <ul className="nav flex-column">
                             <li className="nav-item">
-                                <a className="nav-link" href="index.html">
-                                    Analytics
-                                </a>
+                                <Link className="nav-link" to="/users">
+                                    Users Management
+                                </Link>
                             </li>
-                            {/*end nav-item*/}
-                            <li className="nav-item">
-                                <a className="nav-link" href="crypto-index.html">
-                                    Crypto
-                                </a>
-                            </li>
-                            {/*end nav-item*/}
-                            <li className="nav-item">
-                                <a className="nav-link" href="crm-index.html">
-                                    CRM
-                                </a>
-                            </li>
-                            {/*end nav-item*/}
-                            <li className="nav-item">
-                                <a className="nav-link" href="projects-index.html">
-                                    Project
-                                </a>
-                            </li>
-                            {/*end nav-item*/}
-                            <li className="nav-item">
-                                <a className="nav-link" href="ecommerce-index.html">
-                                    Ecommerce
-                                </a>
-                            </li>
-                            {/*end nav-item*/}
-                            <li className="nav-item">
-                                <a className="nav-link" href="helpdesk-index.html">
-                                    Helpdesk
-                                </a>
-                            </li>
-                            {/*end nav-item*/}
-                            <li className="nav-item">
-                                <a className="nav-link" href="hospital-index.html">
-                                    Hospital
-                                </a>
-                            </li>
-                            {/*end nav-item*/}
                         </ul>
                         {/*end nav*/}
                     </div>
