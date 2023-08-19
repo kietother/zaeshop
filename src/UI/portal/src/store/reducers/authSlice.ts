@@ -11,7 +11,9 @@ interface AuthState {
 
 const initialState: AuthState = {
     token: localStorage.getItem("token"),
-    user: null,
+    user: {
+        ...JSON.parse(localStorage.getItem("user") || '{}')
+    },
     isAuthenticate: !!localStorage.getItem("token"),
     loading: false,
     error: null,
@@ -31,6 +33,9 @@ const authSlice = createSlice({
 
             state.loading = false;
             state.token = action.payload.token;
+            state.user = {
+                ...action.payload.data
+            };
             state.isAuthenticate = true;
         },
         loginFailure(state, action: PayloadAction<string>) {

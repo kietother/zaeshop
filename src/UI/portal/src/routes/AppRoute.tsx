@@ -5,6 +5,8 @@ import UserPage from "../pages/UserPage";
 import RegisterPage from "../pages/RegisterPage";
 import LoginPage from "../pages/LoginPage";
 import LeftSideBar from "../components/layout/LeftSideBar";
+import RightSideBar from "../components/layout/RightSideBar";
+import Footer from "../components/layout/Footer";
 
 const AppRoute: React.FC = () => (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
@@ -21,9 +23,11 @@ const MainComponent: React.FC = () => {
         <>
             <Navbar />
             <LeftSideBar />
+            <RightSideBar />
             <Routes>
                 <Route path="/users" Component={UserPage} />;
             </Routes>
+            <Footer />
         </>
     );
 }

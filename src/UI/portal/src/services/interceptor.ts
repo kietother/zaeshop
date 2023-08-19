@@ -37,7 +37,7 @@ axiosApiInstance.interceptors.response.use(response => {
                 return axios(originalRequest);
             }
             catch (err: any) {
-                dispatch(loginFailure(err.response));
+                dispatch(loginFailure(err.response.data));
                 return error;
             }
         }

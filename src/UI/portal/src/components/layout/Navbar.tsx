@@ -212,15 +212,15 @@ const Navbar: React.FC = () => {
                             aria-expanded="false"
                         >
                             <div className="d-flex align-items-center">
-                                <img
+                                {/* <img
                                     src="assets/images/users/user-4.jpg"
                                     alt="profile-user"
                                     className="rounded-circle me-2 thumb-sm"
-                                />
+                                /> */}
                                 <div>
-                                    <small className="d-none d-md-block font-11">Admin</small>
+                                    <small className="d-none d-md-block font-11">{auth.user?.userName}</small>
                                     <span className="d-none d-md-block fw-semibold font-12">
-                                        Maria Gibson <i className="mdi mdi-chevron-down" />
+                                        {auth.user?.fullName} <i className="fa-solid fa-caret-down"></i>
                                     </span>
                                 </div>
                             </div>
@@ -249,7 +249,7 @@ const Navbar: React.FC = () => {
                             role="button"
                             aria-controls="Rightbar"
                         >
-                            <i className="ti ti-settings ti-spin" />
+                            <i className="ti ti-settings" />
                         </a>
                     </li>
                 </ul>
