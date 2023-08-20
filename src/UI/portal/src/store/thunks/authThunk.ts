@@ -10,7 +10,7 @@ export const login = (loginModel: LoginModel) => async (dispatch: Dispatch) => {
         const response = await api.post(identityServer + "/api/account/authenticate", loginModel);
         dispatch(loginSuccess({ data: response.data, token: response.data.jwtToken }));
     } catch (err: any) {
-        return loginFailure(err.response);
+        return loginFailure(err.message);
     }
 }
 
@@ -20,7 +20,7 @@ export const signOut = () => async (dispatch: Dispatch) => {
         await api.post(identityServer + "/api/account/revoke-token", {});
         dispatch(logout());
     } catch (err: any) {
-        return loginFailure(err.response);
+        return loginFailure(err.message);
     }
 }
 
@@ -30,6 +30,6 @@ export const getRefereshToken = () => async (dispatch: Dispatch) => {
         const response = await api.post(identityServer + "/api/account/refresh-token");
         dispatch(loginSuccess(response.data));
     } catch (err: any) {
-        return loginFailure(err.response);
+        return loginFailure(err.message);
     }
 }

@@ -86,7 +86,12 @@ namespace Identity.Infrastructure.Implements.Services
             var refreshToken = user?.UserTokens.FirstOrDefault(x => x.Token == token);
 
             if (refreshToken?.IsActive != true)
-                throw new Exception("Invalid token");
+            {
+                return new AuthenticateResponse
+                {
+                    ErrorResult = CommonHelper.GetDescription(ErrorCodes.RefereshTokenNotActive)
+                };
+            }
 
             // replace old refresh token with a new one (rotate token)
             var newRefreshToken = RotateRefreshToken(refreshToken, ipAddress);

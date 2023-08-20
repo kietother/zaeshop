@@ -32,6 +32,7 @@ namespace Identity.API.Controllers
 
             if (response == null || !string.IsNullOrEmpty(response.ErrorResult))
             {
+                RemoveRefereshTokenCookie();
                 return Unauthorized();
             }
 
@@ -51,6 +52,12 @@ namespace Identity.API.Controllers
             }
 
             var response = await _accountService.RefreshTokenAsync(refreshToken, ipAddress);
+            if (response == null || !string.IsNullOrEmpty(response.ErrorResult))
+            {
+                RemoveRefereshTokenCookie();
+                return Unauthorized(response?.ErrorResult);
+            }
+
             SetTokenCookie(response.RefreshToken, Convert.ToString(response.ExpiresOnUtc));
             return Ok(response);
         }
@@ -66,6 +73,7 @@ namespace Identity.API.Controllers
                 return BadRequest(new { message = "Token is required" });
 
             await _accountService.RevokeTokenAsync(token, ipAddress);
+            RemoveRefereshTokenCookie();
             return Ok(new { message = "Token revoked" });
         }
 
@@ -183,6 +191,12 @@ namespace Identity.API.Controllers
 
             Response.Cookies.Append("refreshToken", token ?? string.Empty, cookieOptions);
             Response.Cookies.Append("refreshTokenExpiresOnUtc", expiresOnUtc ?? string.Empty, cookieOptions);
+        }
+
+        private void RemoveRefereshTokenCookie()
+        {
+            Response.Cookies.Delete("refreshToken");
+            Response.Cookies.Delete("refreshTokenExpiresOnUtc");
         }
 
         private string? IpAddress()
