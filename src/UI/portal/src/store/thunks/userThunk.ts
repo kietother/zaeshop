@@ -37,7 +37,7 @@ export const updateUser = (id: string, userUpdateRequestModel: UserUpdateRequest
         dispatch(fetchUsersStart());
         const response = await api.put(identityServer + `/api/user/${id}`, userUpdateRequestModel);
         if (response.status === 200) {
-            dispatch(userUpdated(response.data));
+            dispatch(userUpdated({ id, updatedUser: response.data }));
         }
     } catch (err: any) {
         return dispatch(fetchUsersFailure(err.response));

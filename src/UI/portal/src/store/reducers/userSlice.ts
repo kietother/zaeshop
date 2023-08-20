@@ -24,7 +24,7 @@ const userSlice = createSlice({
 
     // Update user reducer
     userUpdated(state, action: PayloadAction<{ id: string; updatedUser: Partial<User> }>) {
-      const { id, updatedUser } = action.payload;
+      const { id, ...updatedUser } = action.payload;
       const index = state.users.findIndex((user) => user.id === id);
       if (index !== -1) {
         state.users[index] = { ...state.users[index], ...updatedUser };

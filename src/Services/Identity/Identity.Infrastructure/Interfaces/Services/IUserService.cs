@@ -14,5 +14,6 @@ namespace Identity.Infrastructure.Interfaces.Services
         Task<List<User>> GetAllAsync();
         Task<User?> GetByIdAsync(string id);
         Task<UserRegisterResponseModel?> CreateAsync(UserRegisterRequestModel userModel, ErrorResult errorResult);
+        Task<UserRegisterResponseModel?> UpdateAsync(string id, UserUpdateRequestModel userModel, ErrorResult errorResult);
     }
 }

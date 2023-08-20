@@ -7,6 +7,7 @@ import ModalCommon from '../components/modals/ModalCommon';
 import CreateUser from '../components/user/CreateUser';
 import { ActionTypeGrid } from '../models/enums/ActionTypeGrid';
 import UpdateUser from '../components/user/UpdateUser';
+import User from '../models/User';
 
 const UserPage: React.FC = () => {
     const [modalIsOpen, setIsOpen] = useState(false);
@@ -16,13 +17,17 @@ const UserPage: React.FC = () => {
     const dispatch = useDispatch();
 
     const users = useMemo(() => userState.users, [userState.users]);
+    const [user, setUser] = useState<User>(users[0] || null);
 
     useEffect(() => {
         getUsers()(dispatch);
     }, [dispatch]);
 
-    const openModal = (actionGrid: ActionTypeGrid) => {
+    const openModal = (actionGrid: ActionTypeGrid, user?: User) => {
         setActionGrid(actionGrid);
+        if (user) {
+            setUser(user);
+        }
         setIsOpen(true);
     }
 
@@ -90,6 +95,7 @@ const UserPage: React.FC = () => {
                                                 <thead>
                                                     <tr>
                                                         <th>Id</th>
+                                                        <th>Full Name</th>
                                                         <th>UserName</th>
                                                         <th>Email</th>
                                                         <th>Email Confirmed</th>
@@ -105,6 +111,7 @@ const UserPage: React.FC = () => {
                                                                 {dayjs(user.createdOnUtc).diff(dayjs(), 'day') > 0 && dayjs(user.createdOnUtc).diff(dayjs(), 'day') < 7
                                                                     && <span className="badge bg-soft-success">New</span>}
                                                             </td>
+                                                            <td>{user.fullName}</td>
                                                             <td>{user.userName}</td>
                                                             <td>{user.email}</td>
                                                             <td>{user.emailConfirmed ? "Yes" : "No"}</td>
@@ -115,7 +122,7 @@ const UserPage: React.FC = () => {
                                                             </td>
                                                             <td>
                                                                 <button className="btn"
-                                                                    onClick={() => openModal(ActionTypeGrid.EDIT)}>
+                                                                    onClick={() => openModal(ActionTypeGrid.EDIT, user)}>
                                                                     <i className="fa-solid fa-pen text-secondary font-16"></i>
                                                                 </button>
                                                                 <button className="btn"
@@ -190,7 +197,7 @@ const UserPage: React.FC = () => {
                 {/* end page content */}
             </div>
             <ModalCommon
-                props={{ modalIsOpen, openModal, closeModal }}
+                props={{ modalIsOpen, openModal, closeModal, user }}
                 Component={BodyModal(actionGrid)}
             />
         </>

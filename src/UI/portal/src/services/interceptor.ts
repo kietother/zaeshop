@@ -8,18 +8,15 @@ const axiosApiInstance = axios.create({
     withCredentials: true
 });
 
-const token = localStorage.getItem("token");
-axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-
-// axiosApiInstance.interceptors.request.use((req) => {
-//     const token = localStorage.getItem("token");
-//     if (token) {
-//         req.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return req;
-// }, error => {
-//     Promise.reject(error)
-// });
+axiosApiInstance.interceptors.request.use((req) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+        req.headers.Authorization = `Bearer ${token}`;
+    }
+    return req;
+}, error => {
+    Promise.reject(error)
+});
 
 axiosApiInstance.interceptors.response.use(response => {
     return response;

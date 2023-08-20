@@ -30,8 +30,14 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log(userCreateRequestModel);
+
+        if (userCreateRequestModel.password !== userCreateRequestModel.confirmPassword) {
+            alert('Password and Confirm Password must be the same');
+            return;
+        }
+
         await createUser(userCreateRequestModel)(dispatch);
+        closeModal();
     };
 
     return (
@@ -45,23 +51,24 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                 aria-hidden="true"
             >
                 <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h6 className="modal-title m-0" id="exampleModalDefaultLogin">
-                                Create User
-                            </h6>
-                            <button
-                                type="button"
-                                className="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                                onClick={closeModal}
-                            />
-                        </div>
-                        {/*end modal-header*/}
-                        <div className="modal-body">
-                            <div className="card-body">
-                                <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h6 className="modal-title m-0" id="exampleModalDefaultLogin">
+                                    Create User
+                                </h6>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                                    onClick={closeModal}
+                                />
+                            </div>
+                            {/*end modal-header*/}
+                            <div className="modal-body">
+                                <div className="card-body">
+
                                     <div className="mb-3 row">
                                         <label
                                             htmlFor="example-text-input"
@@ -166,12 +173,26 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                                             Accept Term
                                         </label>
                                     </div>
-                                </form>
+                                </div>
                             </div>
+                            {/*end modal-body*/}
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-de-secondary btn-sm"
+                                    data-bs-dismiss="modal"
+                                    onClick={closeModal}
+                                >
+                                    Close
+                                </button>
+                                <button type="submit" className="btn btn-primary btn-sm">
+                                    Save changes
+                                </button>
+                            </div>
+                            {/*end modal-footer*/}
                         </div>
-                        {/*end modal-body*/}
-                    </div>
-                    {/*end modal-content*/}
+                        {/*end modal-content*/}
+                    </form>
                 </div>
                 {/*end modal-dialog*/}
             </div>

@@ -195,6 +195,11 @@ namespace Identity.API.Controllers
 
         private void RemoveRefereshTokenCookie()
         {
+            // Check if the cookie exists
+            if (Request.Cookies["refreshToken"] == null && Request.Cookies["refreshTokenExpiresOnUtc"] == null)
+                return;
+
+            // Then remove it from the response
             Response.Cookies.Delete("refreshToken");
             Response.Cookies.Delete("refreshTokenExpiresOnUtc");
         }
