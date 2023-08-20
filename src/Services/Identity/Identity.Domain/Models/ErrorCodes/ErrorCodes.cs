@@ -12,5 +12,7 @@ namespace Identity.Domain.Models.ErrorCodes
         UserNotConfirmedEmail = 2,
         [Description("User is exists.")]
         UserExists = 3,
+        [Description("Referesh token is not active.")]
+        RefereshTokenNotActive = 4
     }
 }

@@ -8,15 +8,18 @@ const axiosApiInstance = axios.create({
     withCredentials: true
 });
 
-axiosApiInstance.interceptors.request.use((req) => {
-    const token = localStorage.getItem("token");
-    if (token) {
-        req.headers.Authorization = `Bearer ${token}`;
-    }
-    return req;
-}, error => {
-    Promise.reject(error)
-});
+const token = localStorage.getItem("token");
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+
+// axiosApiInstance.interceptors.request.use((req) => {
+//     const token = localStorage.getItem("token");
+//     if (token) {
+//         req.headers.Authorization = `Bearer ${token}`;
+//     }
+//     return req;
+// }, error => {
+//     Promise.reject(error)
+// });
 
 axiosApiInstance.interceptors.response.use(response => {
     return response;
@@ -31,8 +34,6 @@ axiosApiInstance.interceptors.response.use(response => {
                     withCredentials: true
                 });
                 dispatch(loginSuccess({ data: response.data, token: response.data.jwtToken }));
-
-                localStorage.setItem("token", response.data.jwtToken);
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
                 return axios(originalRequest);
             }

@@ -1,10 +1,32 @@
 import * as React from 'react';
+import User from '../../models/User';
+import { useDispatch } from 'react-redux';
+import { updateUser } from '../../store/thunks/userThunk';
+import UserUpdateRequestModel from '../../models/user/UserUpdateRequestModel';
 
 type UpdateUserProps = {
+    user: User;
     closeModal: () => void;
 };
 
-const UpdateUser: React.FC<UpdateUserProps> = ({ closeModal }) => {
+const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
+    const dispatch = useDispatch();
+    const [userUpdateRequestModel, setUserUpdateRequestModel] = React.useState<UserUpdateRequestModel>({
+        fullName: '',
+        password: '',
+    });
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setUserUpdateRequestModel({ ...userUpdateRequestModel, [name]: value });
+    };
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        console.log(userUpdateRequestModel);
+        await updateUser(user.id, userUpdateRequestModel)(dispatch);
+    };
+
     return (
         <>
             <div
@@ -32,81 +54,44 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ closeModal }) => {
                         {/*end modal-header*/}
                         <div className="modal-body">
                             <div className="card-body">
-                                <div className="mb-3 row">
-                                    <label
-                                        htmlFor="example-text-input"
-                                        className="col-sm-2 col-form-label text-end">
-                                        FullName
-                                    </label>
-                                    <div className="col-sm-10">
-                                        <input
-                                            className="form-control"
-                                            type="text"
-                                            defaultValue="Artisanal kale"
-                                            id="example-text-input"
-                                        />
+                                <form onSubmit={handleSubmit}>
+                                    <div className="mb-3 row">
+                                        <label
+                                            htmlFor="example-text-input"
+                                            className="col-sm-2 col-form-label text-end">
+                                            FullName
+                                        </label>
+                                        <div className="col-sm-10">
+                                            <input
+                                                className="form-control"
+                                                type="text"
+                                                defaultValue="Artisanal kale"
+                                                id="example-text-input"
+                                                name="fullName"
+                                                onChange={handleInputChange}
+                                                value={userUpdateRequestModel.fullName}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="mb-3 row">
-                                    <label
-                                        htmlFor="example-text-input"
-                                        className="col-sm-2 col-form-label text-end">
-                                        Email
-                                    </label>
-                                    <div className="col-sm-10">
-                                        <input
-                                            className="form-control"
-                                            type="text"
-                                            defaultValue="Artisanal kale"
-                                            id="example-text-input"
-                                        />
+                                    <div className="mb-3 row">
+                                        <label
+                                            htmlFor="example-text-input"
+                                            className="col-sm-2 col-form-label text-end">
+                                            Password
+                                        </label>
+                                        <div className="col-sm-10">
+                                            <input
+                                                className="form-control"
+                                                type="text"
+                                                defaultValue="Artisanal kale"
+                                                id="example-text-input"
+                                                name="password"
+                                                onChange={handleInputChange}
+                                                value={userUpdateRequestModel.password}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="mb-3 row">
-                                    <label
-                                        htmlFor="example-text-input"
-                                        className="col-sm-2 col-form-label text-end">
-                                        UserName
-                                    </label>
-                                    <div className="col-sm-10">
-                                        <input
-                                            className="form-control"
-                                            type="text"
-                                            defaultValue="Artisanal kale"
-                                            id="example-text-input"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="mb-3 row">
-                                    <label
-                                        htmlFor="example-text-input"
-                                        className="col-sm-2 col-form-label text-end">
-                                        Password
-                                    </label>
-                                    <div className="col-sm-10">
-                                        <input
-                                            className="form-control"
-                                            type="text"
-                                            defaultValue="Artisanal kale"
-                                            id="example-text-input"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="mb-3 row">
-                                    <label
-                                        htmlFor="example-text-input"
-                                        className="col-sm-2 col-form-label text-end">
-                                        Password
-                                    </label>
-                                    <div className="col-sm-10">
-                                        <input
-                                            className="form-control"
-                                            type="text"
-                                            defaultValue="Artisanal kale"
-                                            id="example-text-input"
-                                        />
-                                    </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                         {/*end modal-body*/}
