@@ -12,7 +12,7 @@ type UpdateUserProps = {
 const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
     const dispatch = useDispatch();
     const [userUpdateRequestModel, setUserUpdateRequestModel] = React.useState<UserUpdateRequestModel>({
-        fullName: '',
+        fullName: user.fullName || '',
         password: '',
     });
 
@@ -23,8 +23,8 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log(userUpdateRequestModel);
         await updateUser(user.id, userUpdateRequestModel)(dispatch);
+        closeModal();
     };
 
     return (
@@ -38,23 +38,23 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
                 aria-hidden="true"
             >
                 <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h6 className="modal-title m-0" id="exampleModalDefaultLogin">
-                                Update User
-                            </h6>
-                            <button
-                                type="button"
-                                className="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                                onClick={closeModal}
-                            />
-                        </div>
-                        {/*end modal-header*/}
-                        <div className="modal-body">
-                            <div className="card-body">
-                                <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h6 className="modal-title m-0" id="exampleModalDefaultLogin">
+                                    Update User
+                                </h6>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                                    onClick={closeModal}
+                                />
+                            </div>
+                            {/*end modal-header*/}
+                            <div className="modal-body">
+                                <div className="card-body">
                                     <div className="mb-3 row">
                                         <label
                                             htmlFor="example-text-input"
@@ -91,12 +91,26 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
                                             />
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
+                            {/*end modal-body*/}
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-de-secondary btn-sm"
+                                    data-bs-dismiss="modal"
+                                    onClick={closeModal}
+                                >
+                                    Close
+                                </button>
+                                <button type="submit" className="btn btn-primary btn-sm">
+                                    Save changes
+                                </button>
+                            </div>
+                            {/*end modal-footer*/}
                         </div>
-                        {/*end modal-body*/}
-                    </div>
-                    {/*end modal-content*/}
+                        {/*end modal-content*/}
+                    </form>
                 </div>
                 {/*end modal-dialog*/}
             </div>

@@ -51,12 +51,12 @@ namespace Identity.API.Attributes
                         var hasRole = _roles.Exists(r => roles.Contains(r.ToString()));
                         if (!hasRole)
                         {
-                            context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
+                            context.Result = new JsonResult(new { message = "Forbidden" }) { StatusCode = StatusCodes.Status403Forbidden };
                         }
                     }
                     else
                     {
-                        context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
+                        context.Result = new JsonResult(new { message = "Forbidden" }) { StatusCode = StatusCodes.Status403Forbidden };
                     }
                 }
             }
