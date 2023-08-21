@@ -3,11 +3,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { StoreState } from '../../store';
 import { signOut } from '../../store/thunks/authThunk';
+import { useTranslation } from 'react-i18next';
 
 const Navbar: React.FC = () => {
     const auth = useSelector((state: StoreState) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // i18n
+    const { t, i18n } = useTranslation();
+    const changeLanguage = (language: string) => {
+        i18n.changeLanguage(language);
+    };
 
     useEffect(() => {
         if (!auth.isAuthenticate) {
@@ -29,7 +36,6 @@ const Navbar: React.FC = () => {
                         <a
                             className="nav-link dropdown-toggle arrow-none nav-icon"
                             data-bs-toggle="dropdown"
-                            href="crm-contacts.html#"
                             role="button"
                             aria-haspopup="false"
                             aria-expanded="false"
@@ -41,7 +47,8 @@ const Navbar: React.FC = () => {
                             />
                         </a>
                         <div className="dropdown-menu">
-                            <a className="dropdown-item" href="crm-contacts.html#">
+                            <a className="dropdown-item"
+                                onClick={() => changeLanguage("en")}>
                                 <img
                                     src="assets/images/flags/us_flag.jpg"
                                     alt=""
@@ -50,7 +57,8 @@ const Navbar: React.FC = () => {
                                 />
                                 English
                             </a>
-                            <a className="dropdown-item" href="crm-contacts.html#">
+                            <a className="dropdown-item" 
+                                onClick={() => changeLanguage("vn")}>
                                 <img
                                     src="assets/images/flags/spain_flag.jpg"
                                     alt=""
@@ -94,7 +102,7 @@ const Navbar: React.FC = () => {
                         </a>
                         <div className="dropdown-menu dropdown-menu-end dropdown-lg pt-0">
                             <h6 className="dropdown-item-text font-15 m-0 py-3 border-bottom d-flex justify-content-between align-items-center">
-                                Notifications{" "}
+                                {t('navbar.title')}{" "}
                                 <span className="badge bg-soft-primary badge-pill">2</span>
                             </h6>
                             <div className="notification-menu" data-simplebar="">

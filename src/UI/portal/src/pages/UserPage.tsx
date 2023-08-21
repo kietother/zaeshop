@@ -8,10 +8,13 @@ import CreateUser from '../components/user/CreateUser';
 import { ActionTypeGrid } from '../models/enums/ActionTypeGrid';
 import UpdateUser from '../components/user/UpdateUser';
 import User from '../models/User';
+import { useTranslation } from 'react-i18next';
 
 const UserPage: React.FC = () => {
     const [modalIsOpen, setIsOpen] = useState(false);
     const [actionGrid, setActionGrid] = useState(ActionTypeGrid.CREATE);
+
+    const [t] = useTranslation();
 
     const userState = useSelector((state: StoreState) => state.user);
     const dispatch = useDispatch();
@@ -69,7 +72,7 @@ const UserPage: React.FC = () => {
                                             <li className="breadcrumb-item active">Users</li>
                                         </ol>
                                     </div>
-                                    <h4 className="page-title">Users Management</h4>
+                                    <h4 className="page-title">{t("user_title")}</h4>
                                 </div>
                                 {/*end page-title-box*/}
                             </div>

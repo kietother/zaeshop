@@ -1,0 +1,8 @@
+{
+    "navbar": {
+        "title": "Notifications",
+        "profile": "Profile",
+        "logout": "Logout"
+    },
+    "user_title": "Users Management"
+}
