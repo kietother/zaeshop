@@ -31,8 +31,8 @@ axiosApiInstance.interceptors.response.use(response => {
                     withCredentials: true
                 });
                 dispatch(loginSuccess({ data: response.data, token: response.data.jwtToken }));
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
-                return axios(originalRequest);
+                axiosApiInstance.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
+                return axiosApiInstance(originalRequest);
             }
             catch (err: any) {
                 dispatch(loginFailure(err.response.data));
