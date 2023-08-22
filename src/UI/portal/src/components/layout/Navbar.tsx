@@ -24,10 +24,10 @@ const Navbar: React.FC = () => {
 
     const imageLocation = useMemo(() => {
         if (i18n.language == 'en') {
-            return process.env.PUBLIC_URL + 'assets/images/flags/us_flag.jpg';
+            return process.env.PUBLIC_URL + '/assets/images/flags/us_flag.jpg';
         }
 
-        return process.env.PUBLIC_URL + 'assets/images/flags/vietnam-flag.png';
+        return process.env.PUBLIC_URL + '/assets/images/flags/vietnam-flag.png';
     }, [i18n.language]);
 
     const logout = async () => {
@@ -58,7 +58,7 @@ const Navbar: React.FC = () => {
                             <a className="dropdown-item"
                                 onClick={() => changeLanguage("en")}>
                                 <img
-                                    src={process.env.PUBLIC_URL + "assets/images/flags/us_flag.jpg"}
+                                    src={process.env.PUBLIC_URL + "/assets/images/flags/us_flag.jpg"}
                                     alt=""
                                     height={15}
                                     className="me-2"
@@ -68,7 +68,7 @@ const Navbar: React.FC = () => {
                             <a className="dropdown-item"
                                 onClick={() => changeLanguage("vi")}>
                                 <img
-                                    src={process.env.PUBLIC_URL + "assets/images/flags/vietnam-flag.png"}
+                                    src={process.env.PUBLIC_URL + "/assets/images/flags/vietnam-flag.png"}
                                     alt=""
                                     height={25}
                                     className="me-2"
