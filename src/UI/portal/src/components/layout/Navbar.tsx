@@ -1,19 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { StoreState } from '../../store';
 import { signOut } from '../../store/thunks/authThunk';
+import { useTranslation } from 'react-i18next';
 
 const Navbar: React.FC = () => {
     const auth = useSelector((state: StoreState) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    // i18n
+    const { t, i18n } = useTranslation();
+    const changeLanguage = (language: string) => {
+        i18n.changeLanguage(language);
+    };
+
     useEffect(() => {
         if (!auth.isAuthenticate) {
             navigate("/login");
         }
     }, [navigate, auth.isAuthenticate]);
+
+    const imageLocation = useMemo(() => {
+        if (i18n.language == 'en') {
+            return process.env.PUBLIC_URL + 'assets/images/flags/us_flag.jpg';
+        }
+
+        return process.env.PUBLIC_URL + 'assets/images/flags/vietnam-flag.png';
+    }, [i18n.language]);
 
     const logout = async () => {
         await signOut()(dispatch);
@@ -29,53 +44,36 @@ const Navbar: React.FC = () => {
                         <a
                             className="nav-link dropdown-toggle arrow-none nav-icon"
                             data-bs-toggle="dropdown"
-                            href="crm-contacts.html#"
                             role="button"
                             aria-haspopup="false"
                             aria-expanded="false"
                         >
                             <img
-                                src="assets/images/flags/us_flag.jpg"
+                                src={imageLocation}
                                 alt=""
                                 className="thumb-xxs rounded-circle"
                             />
                         </a>
                         <div className="dropdown-menu">
-                            <a className="dropdown-item" href="crm-contacts.html#">
+                            <a className="dropdown-item"
+                                onClick={() => changeLanguage("en")}>
                                 <img
-                                    src="assets/images/flags/us_flag.jpg"
+                                    src={process.env.PUBLIC_URL + "assets/images/flags/us_flag.jpg"}
                                     alt=""
                                     height={15}
                                     className="me-2"
                                 />
-                                English
+                                {t('navbar.english')}
                             </a>
-                            <a className="dropdown-item" href="crm-contacts.html#">
+                            <a className="dropdown-item"
+                                onClick={() => changeLanguage("vi")}>
                                 <img
-                                    src="assets/images/flags/spain_flag.jpg"
+                                    src={process.env.PUBLIC_URL + "assets/images/flags/vietnam-flag.png"}
                                     alt=""
-                                    height={15}
+                                    height={25}
                                     className="me-2"
                                 />
-                                Spanish
-                            </a>
-                            <a className="dropdown-item" href="crm-contacts.html#">
-                                <img
-                                    src="assets/images/flags/germany_flag.jpg"
-                                    alt=""
-                                    height={15}
-                                    className="me-2"
-                                />
-                                German
-                            </a>
-                            <a className="dropdown-item" href="crm-contacts.html#">
-                                <img
-                                    src="assets/images/flags/french_flag.jpg"
-                                    alt=""
-                                    height={15}
-                                    className="me-2"
-                                />
-                                French
+                                {t('navbar.vietnamese')}
                             </a>
                         </div>
                     </li>
@@ -94,7 +92,7 @@ const Navbar: React.FC = () => {
                         </a>
                         <div className="dropdown-menu dropdown-menu-end dropdown-lg pt-0">
                             <h6 className="dropdown-item-text font-15 m-0 py-3 border-bottom d-flex justify-content-between align-items-center">
-                                Notifications{" "}
+                                {t('navbar.title')}{" "}
                                 <span className="badge bg-soft-primary badge-pill">2</span>
                             </h6>
                             <div className="notification-menu" data-simplebar="">

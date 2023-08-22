@@ -8,10 +8,13 @@ import CreateUser from '../components/user/CreateUser';
 import { ActionTypeGrid } from '../models/enums/ActionTypeGrid';
 import UpdateUser from '../components/user/UpdateUser';
 import User from '../models/User';
+import { useTranslation } from 'react-i18next';
 
 const UserPage: React.FC = () => {
     const [modalIsOpen, setIsOpen] = useState(false);
     const [actionGrid, setActionGrid] = useState(ActionTypeGrid.CREATE);
+
+    const [t] = useTranslation();
 
     const userState = useSelector((state: StoreState) => state.user);
     const dispatch = useDispatch();
@@ -69,7 +72,7 @@ const UserPage: React.FC = () => {
                                             <li className="breadcrumb-item active">Users</li>
                                         </ol>
                                     </div>
-                                    <h4 className="page-title">Users Management</h4>
+                                    <h4 className="page-title">{t("user.title")}</h4>
                                 </div>
                                 {/*end page-title-box*/}
                             </div>
@@ -82,7 +85,7 @@ const UserPage: React.FC = () => {
                                     <div className="card-header">
                                         <div className="row align-items-center">
                                             <div className="col">
-                                                <h4 className="card-title">User Details</h4>
+                                                <h4 className="card-title">{t('user.title_detail')}</h4>
                                             </div>
                                             {/*end col*/}
                                         </div>{" "}
@@ -94,14 +97,14 @@ const UserPage: React.FC = () => {
                                             <table className="table">
                                                 <thead>
                                                     <tr>
-                                                        <th>Id</th>
-                                                        <th>Full Name</th>
-                                                        <th>UserName</th>
-                                                        <th>Email</th>
-                                                        <th>Email Confirmed</th>
-                                                        <th>Created On</th>
-                                                        <th>Roles</th>
-                                                        <th>Action</th>
+                                                        <th>{t('user.id')}</th>
+                                                        <th>{t('user.full_name')}</th>
+                                                        <th>{t('user.username')}</th>
+                                                        <th>{t('user.email')}</th>
+                                                        <th>{t('user.email_confirmed')}</th>
+                                                        <th>{t('user.created_on')}</th>
+                                                        <th>{t('user.roles')}</th>
+                                                        <th>{t('user.action')}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -139,7 +142,7 @@ const UserPage: React.FC = () => {
                                             <div className="col">
                                                 <button className="btn btn-outline-light btn-sm px-4"
                                                     onClick={() => openModal(ActionTypeGrid.CREATE)}>
-                                                    + Add New
+                                                    + {t('user.add_new')}
                                                 </button>
                                             </div>
                                             {/*end col*/}
@@ -152,7 +155,7 @@ const UserPage: React.FC = () => {
                                                                 href="crm-contacts.html#"
                                                                 tabIndex={-1}
                                                             >
-                                                                Previous
+                                                                {t('previous')}
                                                             </a>
                                                         </li>
                                                         <li className="page-item active">
@@ -172,7 +175,7 @@ const UserPage: React.FC = () => {
                                                         </li>
                                                         <li className="page-item">
                                                             <a className="page-link" href="crm-contacts.html#">
-                                                                Next
+                                                            {t('next')}
                                                             </a>
                                                         </li>
                                                     </ul>
