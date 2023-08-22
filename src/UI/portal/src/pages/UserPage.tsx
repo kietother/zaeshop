@@ -85,7 +85,7 @@ const UserPage: React.FC = () => {
                                     <div className="card-header">
                                         <div className="row align-items-center">
                                             <div className="col">
-                                                <h4 className="card-title">User Details</h4>
+                                                <h4 className="card-title">{t('user.title_detail')}</h4>
                                             </div>
                                             {/*end col*/}
                                         </div>{" "}
@@ -97,14 +97,14 @@ const UserPage: React.FC = () => {
                                             <table className="table">
                                                 <thead>
                                                     <tr>
-                                                        <th>Id</th>
-                                                        <th>Full Name</th>
-                                                        <th>UserName</th>
-                                                        <th>Email</th>
-                                                        <th>Email Confirmed</th>
-                                                        <th>Created On</th>
-                                                        <th>Roles</th>
-                                                        <th>Action</th>
+                                                        <th>{t('user.id')}</th>
+                                                        <th>{t('user.full_name')}</th>
+                                                        <th>{t('user.username')}</th>
+                                                        <th>{t('user.email')}</th>
+                                                        <th>{t('user.email_confirmed')}</th>
+                                                        <th>{t('user.created_on')}</th>
+                                                        <th>{t('user.roles')}</th>
+                                                        <th>{t('user.action')}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

@@ -1,0 +1,21 @@
+{
+    "navbar": {
+        "title": "Thông báo",
+        "profile": "Hồ sơ",
+        "logout": "Đăng xuất",
+        "english": "Tiếng Anh",
+        "vietnamese": "Tiếng Việt"
+    },
+    "user": {
+        "title": "Quản lý Người dùng",
+        "title_detail": "Chi tiết Người dùng",
+        "id": "ID",
+        "full_name": "Họ và tên",
+        "username": "Tên người dùng",
+        "email": "Email",
+        "email_confirmed": "Email đã xác nhận",
+        "created_on": "Ngày tạo",
+        "roles": "Vai trò",
+        "action": "Hành động"
+    }
+}

@@ -1,21 +1,20 @@
-import i18n from "i18next";
+import i18n, { InitOptions } from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 
-import enJson from './locales/en/en.json';
-import vnJson from './locales/vi/vi.json';
+import enJson from './locales/en/translation.json';
+import viJson from './locales/vi/translation.json';
 
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
-  .init({
-    // we init with resources
+  .init<InitOptions>({
     resources: {
       en: {
         translations: enJson
       },
-      vn: {
-        translations: vnJson
+      vi: {
+        translations: viJson
       }
     },
     fallbackLng: "en",
@@ -24,9 +23,7 @@ i18n
     // have a common namespace used around the full app
     ns: ["translations"],
     defaultNS: "translations",
-
-    keySeparator: false, // we use content as keys
-
+    // keySeparator: false, // we use content as keys
     interpolation: {
       escapeValue: false
     }

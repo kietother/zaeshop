@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { StoreState } from '../../store';
@@ -22,6 +22,14 @@ const Navbar: React.FC = () => {
         }
     }, [navigate, auth.isAuthenticate]);
 
+    const imageLocation = useMemo(() => {
+        if (i18n.language == 'en') {
+            return process.env.PUBLIC_URL + 'assets/images/flags/us_flag.jpg';
+        }
+
+        return process.env.PUBLIC_URL + 'assets/images/flags/vietnam-flag.png';
+    }, [i18n.language]);
+
     const logout = async () => {
         await signOut()(dispatch);
         navigate("/login");
@@ -41,7 +49,7 @@ const Navbar: React.FC = () => {
                             aria-expanded="false"
                         >
                             <img
-                                src="assets/images/flags/us_flag.jpg"
+                                src={imageLocation}
                                 alt=""
                                 className="thumb-xxs rounded-circle"
                             />
@@ -50,40 +58,22 @@ const Navbar: React.FC = () => {
                             <a className="dropdown-item"
                                 onClick={() => changeLanguage("en")}>
                                 <img
-                                    src="assets/images/flags/us_flag.jpg"
+                                    src={process.env.PUBLIC_URL + "assets/images/flags/us_flag.jpg"}
                                     alt=""
                                     height={15}
                                     className="me-2"
                                 />
-                                English
+                                {t('navbar.english')}
                             </a>
-                            <a className="dropdown-item" 
-                                onClick={() => changeLanguage("vn")}>
+                            <a className="dropdown-item"
+                                onClick={() => changeLanguage("vi")}>
                                 <img
-                                    src="assets/images/flags/spain_flag.jpg"
+                                    src={process.env.PUBLIC_URL + "assets/images/flags/vietnam-flag.png"}
                                     alt=""
-                                    height={15}
+                                    height={25}
                                     className="me-2"
                                 />
-                                Spanish
-                            </a>
-                            <a className="dropdown-item" href="crm-contacts.html#">
-                                <img
-                                    src="assets/images/flags/germany_flag.jpg"
-                                    alt=""
-                                    height={15}
-                                    className="me-2"
-                                />
-                                German
-                            </a>
-                            <a className="dropdown-item" href="crm-contacts.html#">
-                                <img
-                                    src="assets/images/flags/french_flag.jpg"
-                                    alt=""
-                                    height={15}
-                                    className="me-2"
-                                />
-                                French
+                                {t('navbar.vietnamese')}
                             </a>
                         </div>
                     </li>
