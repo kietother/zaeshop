@@ -6,7 +6,6 @@
         "english": "English",
         "vietnamese": "Vietnamese"
     },
-    "user_title": "Users Management",
     "user": {
         "title": "Users Management",
         "title_detail": "User Details",
@@ -17,6 +16,9 @@
         "email_confirmed": "Email Confirmed",
         "created_on": "Created On",
         "roles": "Roles",
-        "action": "Action"
+        "action": "Action",
+        "add_new": "Add New",
+        "previous": "Previous",
+        "next": "Next"
     }
 }

@@ -72,7 +72,7 @@ const UserPage: React.FC = () => {
                                             <li className="breadcrumb-item active">Users</li>
                                         </ol>
                                     </div>
-                                    <h4 className="page-title">{t("user_title")}</h4>
+                                    <h4 className="page-title">{t("user.title")}</h4>
                                 </div>
                                 {/*end page-title-box*/}
                             </div>
@@ -142,7 +142,7 @@ const UserPage: React.FC = () => {
                                             <div className="col">
                                                 <button className="btn btn-outline-light btn-sm px-4"
                                                     onClick={() => openModal(ActionTypeGrid.CREATE)}>
-                                                    + Add New
+                                                    + {t('user.add_new')}
                                                 </button>
                                             </div>
                                             {/*end col*/}
@@ -155,7 +155,7 @@ const UserPage: React.FC = () => {
                                                                 href="crm-contacts.html#"
                                                                 tabIndex={-1}
                                                             >
-                                                                Previous
+                                                                {t('previous')}
                                                             </a>
                                                         </li>
                                                         <li className="page-item active">
@@ -175,7 +175,7 @@ const UserPage: React.FC = () => {
                                                         </li>
                                                         <li className="page-item">
                                                             <a className="page-link" href="crm-contacts.html#">
-                                                                Next
+                                                            {t('next')}
                                                             </a>
                                                         </li>
                                                     </ul>

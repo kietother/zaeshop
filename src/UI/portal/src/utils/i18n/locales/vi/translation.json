@@ -16,6 +16,8 @@
         "email_confirmed": "Email đã xác nhận",
         "created_on": "Ngày tạo",
         "roles": "Vai trò",
-        "action": "Hành động"
+        "action": "Hành động",
+        "previous": "Trước",
+        "next": "Tiếp theo"
     }
 }
