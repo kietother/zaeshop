@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE dbo.User_All_Paging
+CREATE OR ALTER PROCEDURE User_All_Paging
 	@pageNumber INT,
 	@pageSize INT
 AS
@@ -27,7 +27,7 @@ BEGIN
 		   ,u.CreatedOnUtc
 		   ,u.UpdatedOnUtc
 		FROM [User] u
-		WHERE u.FullName LIKE '%Albert%'),
+	),
 	TotalRecords
 	AS
 	(SELECT
