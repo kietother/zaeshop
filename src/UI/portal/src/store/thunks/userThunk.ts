@@ -6,10 +6,14 @@ import UserCreateRequestModel from "../../models/user/UserCreateRequestModel";
 import UserUpdateRequestModel from "../../models/user/UserUpdateRequestModel";
 
 // GET list user
-export const getUsers = () => async (dispatch: Dispatch) => {
+export const getUsers = (pageIndex: number, pageSize: number) => async (dispatch: Dispatch) => {
     try {
         dispatch(fetchUsersStart());
-        const response = await api.get(identityServer + `/api/user`);
+        var params = {
+            pageIndex,
+            pageSize
+        };
+        const response = await api.get(identityServer + `/api/user`, { params });
         if (response.status === 200) {
             dispatch(fetchUsersSuccess(response.data));
         }
