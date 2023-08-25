@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Common.Models;
 using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Domain.Models.ErrorResponses;
-using Identity.Infrastructure.Models.Authenticates;
 using Identity.Infrastructure.Models.Users;
 
 namespace Identity.Infrastructure.Interfaces.Services
@@ -15,5 +11,6 @@ namespace Identity.Infrastructure.Interfaces.Services
         Task<User?> GetByIdAsync(string id);
         Task<UserRegisterResponseModel?> CreateAsync(UserRegisterRequestModel userModel, ErrorResult errorResult);
         Task<UserRegisterResponseModel?> UpdateAsync(string id, UserUpdateRequestModel userModel, ErrorResult errorResult);
+        Task<PagingCommonResponse<UserPaging>> GetPagingAsync(int pageNumber, int pageSize);
     }
 }

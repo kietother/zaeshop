@@ -85,6 +85,13 @@ namespace Identity.API.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetPagingAsync(int pageNumber = 0, int pageSize = 10)
+        {
+            var usersPagingResponse = await _userService.GetPagingAsync(pageNumber, pageSize);
+            return Ok(usersPagingResponse);
+        }
+
+        [HttpGet("all")]
         public async Task<IActionResult> GetAllAsync()
         {
             var users = await _userService.GetAllAsync();

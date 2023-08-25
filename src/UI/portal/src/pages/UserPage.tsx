@@ -155,7 +155,7 @@ const UserPage: React.FC = () => {
                                                                 href="crm-contacts.html#"
                                                                 tabIndex={-1}
                                                             >
-                                                                {t('previous')}
+                                                                {t('user.previous')}
                                                             </a>
                                                         </li>
                                                         <li className="page-item active">
@@ -175,7 +175,7 @@ const UserPage: React.FC = () => {
                                                         </li>
                                                         <li className="page-item">
                                                             <a className="page-link" href="crm-contacts.html#">
-                                                            {t('next')}
+                                                            {t('user.next')}
                                                             </a>
                                                         </li>
                                                     </ul>

@@ -1,3 +1,6 @@
+using System.Data;
+using Common.Models;
+using Dapper;
 using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Domain.Models.ErrorCodes;
 using Identity.Domain.Models.ErrorResponses;
@@ -95,6 +98,35 @@ namespace Identity.Infrastructure.Implements.Services
                 Email = user.Email,
                 FullName = user.FullName,
                 Username = user.UserName
+            };
+        }
+
+        public async Task<PagingCommonResponse<UserPaging>> GetPagingAsync(int pageNumber, int pageSize)
+        {
+            const string query = "User_All_Paging";
+            var parameters = new DynamicParameters(
+            new
+            {
+                pageNumber,
+                pageSize
+            });
+            var result = (await _context.Database.GetDbConnection().QueryAsync<UserPaging>(query, parameters, commandType: CommandType.StoredProcedure)).ToList();
+            var record = result.FirstOrDefault();
+
+            if (record == null)
+            {
+                return new PagingCommonResponse<UserPaging>
+                {
+                    RowNum = 0,
+                    Data = new List<UserPaging>()
+                };
+            }
+
+            result.Remove(record);
+            return new PagingCommonResponse<UserPaging>
+            {
+                RowNum = record.RowNum,
+                Data = result
             };
         }
     }
