@@ -1,13 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import User from '../../models/User';
+import { PagingResponse } from '../../models/common/PagingResponse';
 
 interface UserState {
+  totalRecords: number;
   users: User[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: UserState = {
+  totalRecords: 0,
   users: [],
   loading: false,
   error: null,
@@ -42,15 +45,17 @@ const userSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    fetchUsersSuccess(state, action: PayloadAction<User[]>) {
+    fetchUsersSuccess(state, action: PayloadAction<PagingResponse<User>>) {
       state.loading = false;
       state.error = null;
-      state.users = action.payload;
+      state.users = action.payload.data;
+      state.totalRecords = action.payload.rowNum;
     },
     fetchUsersFailure(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
       state.users = [];
+      state.totalRecords = 0;
     },
   },
 });

@@ -9,6 +9,7 @@ import { ActionTypeGrid } from '../models/enums/ActionTypeGrid';
 import UpdateUser from '../components/user/UpdateUser';
 import User from '../models/User';
 import { useTranslation } from 'react-i18next';
+import Pagination from '../components/shared/Pagination';
 
 const UserPage: React.FC = () => {
     const [modalIsOpen, setIsOpen] = useState(false);
@@ -22,9 +23,13 @@ const UserPage: React.FC = () => {
     const users = useMemo(() => userState.users, [userState.users]);
     const [user, setUser] = useState<User>(users[0] || null);
 
+    // Paging
+    const [pageIndex, setPageIndex] = useState(1);
+    const [pageSize] = useState(2);
+
     useEffect(() => {
-        getUsers()(dispatch);
-    }, [dispatch]);
+        getUsers(pageIndex, pageSize)(dispatch);
+    }, [dispatch, pageIndex, pageSize]);
 
     const openModal = (actionGrid: ActionTypeGrid, user?: User) => {
         setActionGrid(actionGrid);
@@ -38,7 +43,7 @@ const UserPage: React.FC = () => {
         setIsOpen(false);
     }
 
-    const BodyModal = useCallback((actionGrid : ActionTypeGrid) => {
+    const BodyModal = useCallback((actionGrid: ActionTypeGrid) => {
         switch (actionGrid) {
             case ActionTypeGrid.CREATE:
                 return CreateUser;
@@ -148,37 +153,11 @@ const UserPage: React.FC = () => {
                                             {/*end col*/}
                                             <div className="col-auto">
                                                 <nav aria-label="...">
-                                                    <ul className="pagination pagination-sm mb-0">
-                                                        <li className="page-item disabled">
-                                                            <a
-                                                                className="page-link"
-                                                                href="crm-contacts.html#"
-                                                                tabIndex={-1}
-                                                            >
-                                                                {t('user.previous')}
-                                                            </a>
-                                                        </li>
-                                                        <li className="page-item active">
-                                                            <a className="page-link" href="crm-contacts.html#">
-                                                                1
-                                                            </a>
-                                                        </li>
-                                                        <li className="page-item">
-                                                            <a className="page-link" href="crm-contacts.html#">
-                                                                2 <span className="sr-only">(current)</span>
-                                                            </a>
-                                                        </li>
-                                                        <li className="page-item">
-                                                            <a className="page-link" href="crm-contacts.html#">
-                                                                3
-                                                            </a>
-                                                        </li>
-                                                        <li className="page-item">
-                                                            <a className="page-link" href="crm-contacts.html#">
-                                                            {t('user.next')}
-                                                            </a>
-                                                        </li>
-                                                    </ul>
+                                                    <Pagination
+                                                        pageIndex={pageIndex}
+                                                        totalCounts={userState.totalRecords}
+                                                        pageSize={pageSize}
+                                                        onPageChange={page => setPageIndex(page)} />
                                                     {/*end pagination*/}
                                                 </nav>
                                                 {/*end nav*/}
