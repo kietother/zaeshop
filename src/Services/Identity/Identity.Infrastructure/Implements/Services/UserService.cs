@@ -51,6 +51,7 @@ namespace Identity.Infrastructure.Implements.Services
                 Email = userModel.Email,
                 FullName = userModel.FullName,
                 VerifiedOnUtc = DateTime.UtcNow,
+                CreatedOnUtc = DateTime.UtcNow
             };
 
             var result = await _userManager.CreateAsync(user, userModel.Password);

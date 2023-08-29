@@ -7,6 +7,7 @@ interface UserState {
   users: User[];
   loading: boolean;
   error: string | null;
+  isTrigger: boolean; // CUD operation and trigger fetch users
 }
 
 const initialState: UserState = {
@@ -14,6 +15,7 @@ const initialState: UserState = {
   users: [],
   loading: false,
   error: null,
+  isTrigger: true
 };
 
 const userSlice = createSlice({
@@ -23,6 +25,7 @@ const userSlice = createSlice({
     // Add user reducer
     userAdded(state, action: PayloadAction<User>) {
       state.users.push(action.payload);
+      state.isTrigger = true;
     },
 
     // Update user reducer
@@ -32,30 +35,37 @@ const userSlice = createSlice({
       if (index !== -1) {
         state.users[index] = { ...state.users[index], ...updatedUser };
       }
+
+      state.isTrigger = true;
     },
 
     // Delete user reducer
     userDeleted(state, action: PayloadAction<string>) {
       const id = action.payload;
       state.users = state.users.filter((user) => user.id !== id);
+
+      state.isTrigger = true;
     },
 
     // Fetch users reducers
     fetchUsersStart(state) {
       state.loading = true;
       state.error = null;
+      state.isTrigger = true;
     },
     fetchUsersSuccess(state, action: PayloadAction<PagingResponse<User>>) {
       state.loading = false;
       state.error = null;
       state.users = action.payload.data;
       state.totalRecords = action.payload.rowNum;
+      state.isTrigger = false;
     },
     fetchUsersFailure(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
       state.users = [];
       state.totalRecords = 0;
+      state.isTrigger = false;
     },
   },
 });

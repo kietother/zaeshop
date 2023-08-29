@@ -1,5 +1,5 @@
 import { Dispatch } from "@reduxjs/toolkit";
-import { fetchUsersFailure, fetchUsersStart, fetchUsersSuccess, userAdded, userUpdated } from "../reducers/userSlice";
+import { fetchUsersFailure, fetchUsersStart, fetchUsersSuccess, userAdded, userDeleted, userUpdated } from "../reducers/userSlice";
 import api from "../../services/interceptor";
 import { identityServer } from "../../services/baseUrls";
 import UserCreateRequestModel from "../../models/user/UserCreateRequestModel";
@@ -42,6 +42,19 @@ export const updateUser = (id: string, userUpdateRequestModel: UserUpdateRequest
         const response = await api.put(identityServer + `/api/user/${id}`, userUpdateRequestModel);
         if (response.status === 200) {
             dispatch(userUpdated({ id, updatedUser: response.data }));
+        }
+    } catch (err: any) {
+        return dispatch(fetchUsersFailure(err.response));
+    }
+};
+
+// DELETE delete user
+export const deleteUser = (id: string) => async (dispatch: Dispatch) => {
+    try {
+        dispatch(fetchUsersStart());
+        const response = await api.delete(identityServer + `/api/user/${id}`);
+        if (response.status === 200) {
+            dispatch(userDeleted(id));
         }
     } catch (err: any) {
         return dispatch(fetchUsersFailure(err.response));

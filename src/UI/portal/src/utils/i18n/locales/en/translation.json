@@ -19,6 +19,14 @@
         "action": "Action",
         "add_new": "Add New",
         "previous": "Previous",
-        "next": "Next"
+        "next": "Next",
+        "modal": {
+            "delete": "Delete",
+            "close": "Close",
+            "create_user": "Create User",
+            "update_user": "Update User",
+            "delete_user": "Delete User",
+            "are_you_sure": "Are you sure?"
+        }
     }
 }
