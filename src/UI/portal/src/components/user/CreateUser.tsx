@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { createUser } from '../../store/thunks/userThunk';
 import UserCreateRequestModel from '../../models/user/UserCreateRequestModel';
+import { useTranslation } from 'react-i18next';
 
 type CreateUserProps = {
     closeModal: () => void;
@@ -9,6 +10,7 @@ type CreateUserProps = {
 
 const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
     const dispatch = useDispatch();
+    const [t] = useTranslation();
     const [userCreateRequestModel, setUserCreateRequestModel] = React.useState<UserCreateRequestModel>({
         fullName: '',
         email: '',
@@ -21,11 +23,6 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setUserCreateRequestModel({ ...userCreateRequestModel, [name]: value });
-    };
-
-    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, checked } = event.target;
-        setUserCreateRequestModel({ ...userCreateRequestModel, [name]: checked });
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -55,7 +52,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h6 className="modal-title m-0" id="exampleModalDefaultLogin">
-                                    Create User
+                                    {t('user.modal.create_user')}
                                 </h6>
                                 <button
                                     type="button"
@@ -132,7 +129,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                                         <div className="col-sm-10">
                                             <input
                                                 className="form-control"
-                                                type="text"
+                                                type="password"
                                                 defaultValue="Artisanal kale"
                                                 id="example-text-input"
                                                 name="password"
@@ -150,7 +147,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                                         <div className="col-sm-10">
                                             <input
                                                 className="form-control"
-                                                type="text"
+                                                type="password"
                                                 defaultValue="Artisanal kale"
                                                 id="example-text-input"
                                                 name="confirmPassword"
@@ -158,20 +155,6 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                                                 onChange={handleInputChange}
                                             />
                                         </div>
-                                    </div>
-                                    <div className="mb-3 row form-check">
-                                        <input
-                                            className="col-sm-2 form-check-input"
-                                            type="checkbox"
-                                            defaultValue=""
-                                            id="flexCheckDefault"
-                                            name="isAcceptTerm"
-                                            checked={userCreateRequestModel.isAcceptTerm}
-                                            onChange={handleCheckboxChange}
-                                        />
-                                        <label className="col-sm-10 form-check-label" htmlFor="flexCheckDefault">
-                                            Accept Term
-                                        </label>
                                     </div>
                                 </div>
                             </div>

@@ -3,13 +3,14 @@ import dayjs from 'dayjs';
 import { StoreState } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUsers } from '../store/thunks/userThunk';
-import ModalCommon from '../components/modals/ModalCommon';
+import ModalCommon from '../components/shared/ModalCommon';
 import CreateUser from '../components/user/CreateUser';
 import { ActionTypeGrid } from '../models/enums/ActionTypeGrid';
 import UpdateUser from '../components/user/UpdateUser';
 import User from '../models/User';
 import { useTranslation } from 'react-i18next';
 import Pagination from '../components/shared/Pagination';
+import DeleteUser from '../components/user/DeleteUser';
 
 const UserPage: React.FC = () => {
     const [modalIsOpen, setIsOpen] = useState(false);
@@ -25,9 +26,9 @@ const UserPage: React.FC = () => {
 
     // Paging
     const [pageIndex, setPageIndex] = useState(1);
-    const [pageSize] = useState(2);
+    const [pageSize] = useState(5);
 
-    useEffect(() => {
+    useEffect(() => {   
         getUsers(pageIndex, pageSize)(dispatch);
     }, [dispatch, pageIndex, pageSize]);
 
@@ -50,9 +51,9 @@ const UserPage: React.FC = () => {
             case ActionTypeGrid.EDIT:
                 return UpdateUser;
             case ActionTypeGrid.DELETE:
-                return CreateUser;
+                return DeleteUser;
         }
-    }, [actionGrid]);
+    }, []);
 
     return (
         <>
@@ -116,7 +117,7 @@ const UserPage: React.FC = () => {
                                                     {users.map((user) => (
                                                         <tr key={user.id}>
                                                             <td>{user.id}
-                                                                {dayjs(user.createdOnUtc).diff(dayjs(), 'day') > 0 && dayjs(user.createdOnUtc).diff(dayjs(), 'day') < 7
+                                                                {dayjs().diff(dayjs(user.createdOnUtc), 'day') > 0 && dayjs().diff(dayjs(user.createdOnUtc), 'day') < 7
                                                                     && <span className="badge bg-soft-success">New</span>}
                                                             </td>
                                                             <td>{user.fullName}</td>
@@ -134,7 +135,7 @@ const UserPage: React.FC = () => {
                                                                     <i className="fa-solid fa-pen text-secondary font-16"></i>
                                                                 </button>
                                                                 <button className="btn"
-                                                                    onClick={() => openModal(ActionTypeGrid.DELETE)}>
+                                                                    onClick={() => openModal(ActionTypeGrid.DELETE, user)}>
                                                                     <i className="fa-solid fa-trash text-secondary font-16"></i>
                                                                 </button>
                                                             </td>

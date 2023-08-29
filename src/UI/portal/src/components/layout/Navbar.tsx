@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { StoreState } from '../../store';
@@ -12,9 +12,9 @@ const Navbar: React.FC = () => {
 
     // i18n
     const { t, i18n } = useTranslation();
-    const changeLanguage = (language: string) => {
+    const changeLanguage = useCallback((language: string) => {
         i18n.changeLanguage(language);
-    };
+    }, [i18n]);
 
     useEffect(() => {
         if (!auth.isAuthenticate) {
@@ -23,12 +23,14 @@ const Navbar: React.FC = () => {
     }, [navigate, auth.isAuthenticate]);
 
     const imageLocation = useMemo(() => {
-        if (i18n.language == 'en') {
+        if (i18n.language === 'en') {
+            changeLanguage('en');
             return process.env.PUBLIC_URL + '/assets/images/flags/us_flag.jpg';
         }
 
+        changeLanguage('vi');
         return process.env.PUBLIC_URL + '/assets/images/flags/vietnam-flag.png';
-    }, [i18n.language]);
+    }, [i18n.language, changeLanguage]);
 
     const logout = async () => {
         await signOut()(dispatch);

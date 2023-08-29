@@ -3,6 +3,7 @@ import User from '../../models/User';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../../store/thunks/userThunk';
 import UserUpdateRequestModel from '../../models/user/UserUpdateRequestModel';
+import { useTranslation } from 'react-i18next';
 
 type UpdateUserProps = {
     user: User;
@@ -11,6 +12,7 @@ type UpdateUserProps = {
 
 const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
     const dispatch = useDispatch();
+    const [t] = useTranslation();
     const [userUpdateRequestModel, setUserUpdateRequestModel] = React.useState<UserUpdateRequestModel>({
         fullName: user.fullName || '',
         password: '',
@@ -42,7 +44,7 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h6 className="modal-title m-0" id="exampleModalDefaultLogin">
-                                    Update User
+                                    {t('user.modal.update_user')}
                                 </h6>
                                 <button
                                     type="button"

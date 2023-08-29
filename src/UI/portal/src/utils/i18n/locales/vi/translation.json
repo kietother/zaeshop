@@ -19,6 +19,14 @@
         "action": "Hành động",
         "add_new": "Thêm",
         "previous": "Trước",
-        "next": "Tiếp theo"
+        "next": "Tiếp theo",
+        "modal": {
+            "delete": "Xóa",
+            "close": "Đóng",
+            "create_user": "Tạo Người dùng",
+            "update_user": "Cập nhật Người dùng",
+            "delete_user": "Xóa Người dùng",
+            "are_you_sure": "Bạn có chắc chắn muốn xóa Người dùng này không?"
+        }
     }
 }
