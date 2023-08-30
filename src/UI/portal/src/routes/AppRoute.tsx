@@ -8,6 +8,7 @@ import LeftSideBar from "../components/layout/LeftSideBar";
 import RightSideBar from "../components/layout/RightSideBar";
 import Footer from "../components/layout/Footer";
 import NotFoundPage from "../pages/NotFoundPage";
+import { ToastContainer } from "react-toastify";
 
 const AppRoute: React.FC = () => (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
@@ -16,6 +17,7 @@ const AppRoute: React.FC = () => (
             <Route path="register" Component={RegisterPage} />
             <Route path='*' Component={MainComponent} />
         </Routes>
+        <ToastContainer />
     </BrowserRouter>
 );
 

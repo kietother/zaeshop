@@ -26,9 +26,9 @@ const UserPage: React.FC = () => {
 
     // Paging
     const [pageIndex, setPageIndex] = useState(1);
-    const [pageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(5);
 
-    useEffect(() => {   
+    useEffect(() => {
         getUsers(pageIndex, pageSize)(dispatch);
     }, [dispatch, pageIndex, pageSize]);
 
@@ -151,6 +151,17 @@ const UserPage: React.FC = () => {
                                                     + {t('user.add_new')}
                                                 </button>
                                             </div>
+                                            <div className="col">
+                                                <select className="form-select" 
+                                                    style={{ width: "auto" }}
+                                                    value={pageSize}
+                                                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setPageSize(Number(event.target.value))}>
+                                                    <option value={5}>5</option>
+                                                    <option value={15}>15</option>
+                                                    <option value={25}>25</option>
+                                                    <option value={35}>35</option>
+                                                </select>
+                                            </div>{" "}
                                             {/*end col*/}
                                             <div className="col-auto">
                                                 <nav aria-label="...">

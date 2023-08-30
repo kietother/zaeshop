@@ -1,28 +1,28 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginModel from "../models/auth/LoginModel";
 import { login } from "../store/thunks/authThunk";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "../store";
+import { useForm } from "react-hook-form";
+import classNames from 'classnames';
+import { useTranslation } from "react-i18next";
 
 const LoginPage: React.FC = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [t] = useTranslation();
 
-    const [loginModel, setLoginModel] = useState<LoginModel>({
-        username: '',
-        password: '',
-    });
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<LoginModel>();
 
     const auth = useSelector((state: StoreState) => state.auth);
 
-    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setLoginModel({ ...loginModel, [e.target.name]: e.target.value });
-    };
-
-    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const onSubmit = async (loginModel: LoginModel) => {
         await login(loginModel)(dispatch);
     }
 
@@ -59,43 +59,50 @@ const LoginPage: React.FC = () => {
                                                     />
                                                 </a>
                                                 <h4 className="mt-3 mb-1 fw-semibold text-white font-18">
-                                                    Let's Get Started Metrica
+                                                    {t('login.let_get_started_metrica')}
                                                 </h4>
                                                 <p className="text-muted  mb-0">
-                                                    Sign in to continue to Metrica.
+                                                    {t('login.sign_in_to_continue_to_cms')}
                                                 </p>
                                             </div>
                                         </div>
                                         <div className="card-body pt-0">
-                                            <form className="my-4" onSubmit={(e) => onSubmit(e)}>
+                                            <form className="my-4"
+                                                onSubmit={handleSubmit((data) => onSubmit(data))}>
                                                 <div className="form-group mb-2">
                                                     <label className="form-label" htmlFor="username">
-                                                        Username
+                                                        {t('login.username')}
                                                     </label>
                                                     <input
                                                         type="text"
                                                         className="form-control"
                                                         id="username"
-                                                        name="username"
                                                         placeholder="Enter username"
-                                                        value={loginModel.username}
-                                                        onChange={onChange}
+                                                        {...register('username', { required: true })}
                                                     />
+                                                    <div className={classNames("invalid-feedback", {
+                                                        "d-inline": errors.username
+                                                    })}>
+                                                        <p>{t('login.username_is_required')}</p>
+                                                    </div>
                                                 </div>
                                                 {/*end form-group*/}
                                                 <div className="form-group">
                                                     <label className="form-label" htmlFor="userpassword">
-                                                        Password
+                                                        {t('login.password')}
                                                     </label>
                                                     <input
                                                         type="password"
                                                         className="form-control"
-                                                        name="password"
                                                         id="userpassword"
                                                         placeholder="Enter password"
-                                                        value={loginModel.password}
-                                                        onChange={onChange}
+                                                        {...register('password', { required: true })}
                                                     />
+                                                    <div className={classNames("invalid-feedback", {
+                                                        "d-inline": errors.password
+                                                    })}>
+                                                        <p>{t('login.password_is_required')}</p>
+                                                    </div>
                                                 </div>
                                                 {/*end form-group*/}
                                                 <div className="form-group row mt-3">
