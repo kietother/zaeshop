@@ -35,5 +35,13 @@
         "logout_sucessfully": "Đăng xuất thành công",
         "some_thing_is_wrong": "Có gì đó không đúng",
         "user_or_password_is_incorrect": "Người dùng hoặc mật khẩu không chính xác"
+    },
+    "login": {
+        "let_get_started_metrica": "Bắt đầu với Trang quản trị CMS",
+        "sign_in_to_continue_to_cms": "Đăng nhập để tiếp tục vào Trang quản trị CMS.",
+        "username": "Tên người dùng",
+        "username_is_required": "Tên người dùng là bắt buộc.",
+        "password": "Mật khẩu",
+        "password_is_required": "Mật khẩu là bắt buộc."
     }
 }

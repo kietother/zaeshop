@@ -35,5 +35,13 @@
         "logout_sucessfully": "Logout Sucessfully",
         "some_thing_is_wrong": "Some Thing Is Wrong",
         "user_or_password_is_incorrect": "User or Password is incorrect"
+    },
+    "login": {
+        "let_get_started_metrica": "Let's Get Started CMS",
+        "sign_in_to_continue_to_cms": "Sign in to continue to CMS.",
+        "username": "Username",
+        "username_is_required": "Username is required.",
+        "password": "Password",
+        "password_is_required": "Password is required."
     }
 }

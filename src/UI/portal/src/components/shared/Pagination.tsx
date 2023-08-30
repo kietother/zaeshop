@@ -2,6 +2,7 @@ import React from 'react';
 import { DOTS, usePagination } from '../../hooks/usePagination';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
 
 type PaginationType = {
     onPageChange: (pageIndex: number) => void,
@@ -59,7 +60,7 @@ const Pagination: React.FC<PaginationType> = ({
                 // If the pageItem is a DOT, render the DOTS unicode character
                 if (pageNumber === DOTS) {
                     return (
-                        <li className="page-item">
+                        <li key={uuidv4()} className="page-item">
                             <button className="page-link">
                                 &#8230;
                             </button>
@@ -69,7 +70,7 @@ const Pagination: React.FC<PaginationType> = ({
 
                 // Render our Page Pills
                 return (
-                    <li className={classNames('page-item', { active: pageNumber === pageIndex })}>
+                    <li key={uuidv4()} className={classNames('page-item', { active: pageNumber === pageIndex })}>
                         <button className="page-link"
                             onClick={() => onPageChange(Number(pageNumber))}>
                             {pageNumber}
@@ -77,7 +78,7 @@ const Pagination: React.FC<PaginationType> = ({
                     </li>
                 );
             })}
-            <li className={classNames("page-item", { disabled: pageIndex === lastPage })}>
+            <li key={uuidv4()} className={classNames("page-item", { disabled: pageIndex === lastPage })}>
                 <button className="page-link"
                     onClick={onNext}>
                     {t('user.next')}
