@@ -28,5 +28,12 @@
             "delete_user": "Xóa Người dùng",
             "are_you_sure": "Bạn có chắc chắn muốn xóa Người dùng này không?"
         }
+    },
+    "toast": {
+        "please_wait": "Vui lòng đợi...",
+        "login_sucessfully": "Đăng nhập thành công",
+        "logout_sucessfully": "Đăng xuất thành công",
+        "some_thing_is_wrong": "Có gì đó không đúng",
+        "user_or_password_is_incorrect": "Người dùng hoặc mật khẩu không chính xác"
     }
 }

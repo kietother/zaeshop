@@ -28,5 +28,12 @@
             "delete_user": "Delete User",
             "are_you_sure": "Are you sure?"
         }
+    },
+    "toast": {
+        "please_wait" : "Please wait...",
+        "login_sucessfully": "Login Sucessfully",
+        "logout_sucessfully": "Logout Sucessfully",
+        "some_thing_is_wrong": "Some Thing Is Wrong",
+        "user_or_password_is_incorrect": "User or Password is incorrect"
     }
 }
