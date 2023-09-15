@@ -18,4 +18,7 @@ public class UserPaging : UserModel
 {
     [JsonIgnore]
     public long RowNum { get; set; }
+
+    [JsonIgnore]
+    public bool IsTotalRecord { get; set; }
 }

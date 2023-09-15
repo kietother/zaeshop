@@ -112,7 +112,7 @@ namespace Identity.Infrastructure.Implements.Services
                 pageSize
             });
             var result = (await _context.Database.GetDbConnection().QueryAsync<UserPaging>(query, parameters, commandType: CommandType.StoredProcedure)).ToList();
-            var record = result.FirstOrDefault();
+            var record = result.Find(o => o.IsTotalRecord);
 
             if (record == null)
             {

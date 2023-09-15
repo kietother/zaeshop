@@ -93,13 +93,8 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
                                                 type="text"
                                                 defaultValue="Artisanal kale"
                                                 id="example-text-input"
-                                                {...register('password', { required: true })}
+                                                {...register('password')}
                                             />
-                                            <div className={classNames("invalid-feedback", {
-                                                "d-inline": errors.password
-                                            })}>
-                                                <p>{t('user.password_is_required')}</p>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
