@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux';
 import { createUser } from '../../store/thunks/userThunk';
 import UserCreateRequestModel from '../../models/user/UserCreateRequestModel';
 import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import classNames from 'classnames';
 
 type CreateUserProps = {
     closeModal: () => void;
@@ -11,28 +13,23 @@ type CreateUserProps = {
 const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
     const dispatch = useDispatch();
     const [t] = useTranslation();
-    const [userCreateRequestModel, setUserCreateRequestModel] = React.useState<UserCreateRequestModel>({
-        fullName: '',
-        email: '',
-        username: '',
-        password: '',
-        confirmPassword: '',
-        isAcceptTerm: false,
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<UserCreateRequestModel>({
+        defaultValues: {
+            fullName: '',
+            email: '',
+            username: '',
+            password: '',
+            confirmPassword: '',
+            isAcceptTerm: false,
+        }
     });
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setUserCreateRequestModel({ ...userCreateRequestModel, [name]: value });
-    };
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        if (userCreateRequestModel.password !== userCreateRequestModel.confirmPassword) {
-            alert('Password and Confirm Password must be the same');
-            return;
-        }
-
+    const onSubmit = async (userCreateRequestModel: UserCreateRequestModel) => {
         await createUser(userCreateRequestModel)(dispatch);
         closeModal();
     };
@@ -45,10 +42,9 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                 tabIndex={-1}
                 role="dialog"
                 aria-labelledby="exampleModalDefaultLogin"
-                aria-hidden="true"
-            >
+                aria-hidden="true">
                 <div className="modal-dialog" role="document">
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit((data) => onSubmit(data))}>
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h6 className="modal-title m-0" id="exampleModalDefaultLogin">
@@ -70,7 +66,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                                         <label
                                             htmlFor="example-text-input"
                                             className="col-sm-2 col-form-label text-end">
-                                            FullName
+                                            {t('user.full_name')}
                                         </label>
                                         <div className="col-sm-10">
                                             <input
@@ -78,17 +74,20 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                                                 type="text"
                                                 defaultValue="Artisanal kale"
                                                 id="example-text-input"
-                                                name="fullName"
-                                                value={userCreateRequestModel.fullName}
-                                                onChange={handleInputChange}
+                                                {...register('fullName', { required: true })}
                                             />
+                                            <div className={classNames("invalid-feedback", {
+                                                "d-inline": errors.fullName
+                                            })}>
+                                                <p>{t('user.full_name_is_required')}</p>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="mb-3 row">
                                         <label
                                             htmlFor="example-text-input"
                                             className="col-sm-2 col-form-label text-end">
-                                            Email
+                                            {t('user.email')}
                                         </label>
                                         <div className="col-sm-10">
                                             <input
@@ -96,17 +95,20 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                                                 type="text"
                                                 defaultValue="Artisanal kale"
                                                 id="example-text-input"
-                                                name="email"
-                                                value={userCreateRequestModel.email}
-                                                onChange={handleInputChange}
+                                                {...register('email', { required: true })}
                                             />
+                                            <div className={classNames("invalid-feedback", {
+                                                "d-inline": errors.email
+                                            })}>
+                                                <p>{t('user.email_is_required')}</p>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="mb-3 row">
                                         <label
                                             htmlFor="example-text-input"
                                             className="col-sm-2 col-form-label text-end">
-                                            UserName
+                                            {t('user.username')}
                                         </label>
                                         <div className="col-sm-10">
                                             <input
@@ -114,17 +116,20 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                                                 type="text"
                                                 defaultValue="Artisanal kale"
                                                 id="example-text-input"
-                                                name="username"
-                                                value={userCreateRequestModel.username}
-                                                onChange={handleInputChange}
+                                                {...register('username', { required: true })}
                                             />
+                                            <div className={classNames("invalid-feedback", {
+                                                "d-inline": errors.username
+                                            })}>
+                                                <p>{t('user.username_is_required')}</p>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="mb-3 row">
                                         <label
                                             htmlFor="example-text-input"
                                             className="col-sm-2 col-form-label text-end">
-                                            Password
+                                            {t('user.password')}
                                         </label>
                                         <div className="col-sm-10">
                                             <input
@@ -132,17 +137,20 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                                                 type="password"
                                                 defaultValue="Artisanal kale"
                                                 id="example-text-input"
-                                                name="password"
-                                                value={userCreateRequestModel.password}
-                                                onChange={handleInputChange}
+                                                {...register('password', { required: true })}
                                             />
+                                            <div className={classNames("invalid-feedback", {
+                                                "d-inline": errors.password
+                                            })}>
+                                                <p>{t('user.password_is_required')}</p>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="mb-3 row">
                                         <label
                                             htmlFor="example-text-input"
                                             className="col-sm-2 col-form-label text-end">
-                                            Confirm Password
+                                            {t('user.confirm_password')}
                                         </label>
                                         <div className="col-sm-10">
                                             <input
@@ -150,10 +158,22 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                                                 type="password"
                                                 defaultValue="Artisanal kale"
                                                 id="example-text-input"
-                                                name="confirmPassword"
-                                                value={userCreateRequestModel.confirmPassword}
-                                                onChange={handleInputChange}
+                                                {...register('confirmPassword', {
+                                                    required: true,
+                                                    validate: (value, formValues) => {
+                                                        if (!!value && value !== formValues.password) {
+                                                            console.log(1, t('user.password_did_not_match'));
+                                                            return t('user.password_did_not_match');
+                                                        }
+                                                        return true;
+                                                    }
+                                                })}
                                             />
+                                            <div className={classNames("invalid-feedback", {
+                                                "d-inline": errors.confirmPassword
+                                            })}>
+                                                <p>{errors.confirmPassword?.message  || t('user.confirm_password_is_required')}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -166,10 +186,10 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                                     data-bs-dismiss="modal"
                                     onClick={closeModal}
                                 >
-                                    Close
+                                    {t('user.modal.close')}
                                 </button>
                                 <button type="submit" className="btn btn-primary btn-sm">
-                                    Save changes
+                                    {t('user.modal.save_changes')}
                                 </button>
                             </div>
                             {/*end modal-footer*/}

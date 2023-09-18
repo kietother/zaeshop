@@ -126,8 +126,9 @@ const UserPage: React.FC = () => {
                                                             <td>{user.emailConfirmed ? "Yes" : "No"}</td>
                                                             <td>{dayjs(user.createdOnUtc).format('DD-MM-YYYY HH:mm')}</td>
                                                             <td>
-                                                                <span className="badge bg-soft-primary">Admin</span>
-                                                                <span className="badge bg-soft-primary">User</span>
+                                                                {user?.roles?.split(',').map(role => (
+                                                                    <span className="badge bg-soft-primary">{role}</span>
+                                                                ))}
                                                             </td>
                                                             <td>
                                                                 <button className="btn"
@@ -152,7 +153,7 @@ const UserPage: React.FC = () => {
                                                 </button>
                                             </div>
                                             <div className="col">
-                                                <select className="form-select" 
+                                                <select className="form-select"
                                                     style={{ width: "auto" }}
                                                     value={pageSize}
                                                     onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setPageSize(Number(event.target.value))}>

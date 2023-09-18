@@ -26,11 +26,20 @@
             "create_user": "Create User",
             "update_user": "Update User",
             "delete_user": "Delete User",
-            "are_you_sure": "Are you sure?"
-        }
+            "are_you_sure": "Are you sure?",
+            "save_changes": "Save changes"
+        },
+        "password": "Password",
+        "confirm_password": "Confirm Password",
+        "full_name_is_required": "FullName is required.",
+        "email_is_required": "Email is required.",
+        "username_is_required": "Username is required.",
+        "password_is_required": "Password is required.",
+        "password_did_not_match": "Password did not match",
+        "confirm_password_is_required": "Confirm password is required."
     },
     "toast": {
-        "please_wait" : "Please wait...",
+        "please_wait": "Please wait...",
         "login_sucessfully": "Login Sucessfully",
         "logout_sucessfully": "Logout Sucessfully",
         "some_thing_is_wrong": "Some Thing Is Wrong",

@@ -10,6 +10,8 @@ public class UserModel
     public bool EmailConfirmed { get; set; }
     public string UserName { get; set; } = null!;
 
+    public string? Roles { get; set; }
+
     public DateTime CreatedOnUtc { get; set; }
     public DateTime? UpdatedOnUtc { get; set; }
 }
@@ -18,4 +20,7 @@ public class UserPaging : UserModel
 {
     [JsonIgnore]
     public long RowNum { get; set; }
+
+    [JsonIgnore]
+    public bool IsTotalRecord { get; set; }
 }

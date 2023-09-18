@@ -26,8 +26,17 @@
             "create_user": "Tạo Người dùng",
             "update_user": "Cập nhật Người dùng",
             "delete_user": "Xóa Người dùng",
-            "are_you_sure": "Bạn có chắc chắn muốn xóa Người dùng này không?"
-        }
+            "are_you_sure": "Bạn có chắc chắn muốn xóa Người dùng này không?",
+            "save_changes": "Lưu thay đổi"
+        },
+        "password": "Mật khẩu",
+        "confirm_password": "Xác nhận mật khẩu",
+        "full_name_is_required": "Họ và tên là bắt buộc.",
+        "email_is_required": "Email là bắt buộc.",
+        "username_is_required": "Tên người dùng là bắt buộc.",
+        "password_is_required": "Mật khẩu là bắt buộc.",
+        "password_did_not_match": "Mật khẩu không khớp",
+        "confirm_password_is_required": "Xác nhận mật khẩu là bắt buộc."
     },
     "toast": {
         "please_wait": "Vui lòng đợi...",
