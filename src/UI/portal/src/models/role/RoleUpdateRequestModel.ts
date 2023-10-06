@@ -1,4 +1,4 @@
-export default interface RoleCreateRequestModel {
+export default interface RoleUpdateRequestModel {
     name: string;
     userIds?: number[];
 }

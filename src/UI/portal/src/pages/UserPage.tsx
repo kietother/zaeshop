@@ -128,7 +128,7 @@ const UserPage: React.FC = () => {
                                                             <td>{dayjs(user.createdOnUtc).format('DD-MM-YYYY HH:mm')}</td>
                                                             <td>
                                                                 {user?.roles?.split(',').map(role => (
-                                                                    <span className="badge bg-soft-primary">{role}</span>
+                                                                    <span key={uuidv4()} className="badge bg-soft-primary">{role}</span>
                                                                 ))}
                                                             </td>
                                                             <td>

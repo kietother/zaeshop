@@ -9,6 +9,8 @@ import Pagination from '../components/shared/Pagination';
 import { getRoles } from '../store/thunks/roleThunk';
 import { v4 as uuidv4 } from 'uuid';
 import CreateRole from '../components/role/CreateRole';
+import DeleteRole from '../components/role/DeleteRole';
+import UpdateRole from '../components/role/UpdateRole';
 
 const RolePage: React.FC = () => {
     const [modalIsOpen, setIsOpen] = useState(false);
@@ -43,14 +45,13 @@ const RolePage: React.FC = () => {
     }
 
     const BodyModal = useCallback((actionGrid: ActionTypeGrid) => {
-
         switch (actionGrid) {
             case ActionTypeGrid.CREATE:
                 return CreateRole;
             case ActionTypeGrid.EDIT:
-            // return UpdateUser;
+                return UpdateRole;
             case ActionTypeGrid.DELETE:
-            // return DeleteUser;
+                return DeleteRole;
             default:
                 return React.Fragment;
         }

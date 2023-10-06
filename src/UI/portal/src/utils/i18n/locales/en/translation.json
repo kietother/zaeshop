@@ -64,7 +64,9 @@
         "add_new": "Add New",
         "name_is_required": "Role name is required.",
         "modal": {
-            "create_role": "Create Role"
+            "create_role": "Create Role",
+            "update_role": "Update role",
+            "delete_role": "Delete Role"
         }
     }
 }

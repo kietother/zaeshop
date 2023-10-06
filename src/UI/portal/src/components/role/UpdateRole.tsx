@@ -1,18 +1,18 @@
-import * as React from 'react';
-import User from '../../models/user/User';
-import { useDispatch } from 'react-redux';
-import { updateUser } from '../../store/thunks/userThunk';
-import UserUpdateRequestModel from '../../models/user/UserUpdateRequestModel';
-import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
-import classNames from 'classnames';
+import React from "react";
+import Role from "../../models/role/Role";
+import RoleUpdateRequestModel from "../../models/role/RoleUpdateRequestModel";
+import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
+import { updateRole } from "../../store/thunks/roleThunk";
+import classNames from "classnames";
 
-type UpdateUserProps = {
-    user: User;
+type UpdateRoleProps = {
+    role: Role;
     closeModal: () => void;
 };
 
-const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
+const UpdateRole: React.FC<UpdateRoleProps> = ({ role, closeModal }) => {
     const dispatch = useDispatch();
     const [t] = useTranslation();
 
@@ -20,18 +20,16 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<UserUpdateRequestModel>({
+    } = useForm<RoleUpdateRequestModel>({
         defaultValues: {
-            fullName: user.fullName ?? '',
-            password: '',
+            name: role.name ?? ''
         }
     });
 
-    const onSubmit = async (userUpdateRequestModel: UserUpdateRequestModel) => {
-        await updateUser(user.id, userUpdateRequestModel)(dispatch);
+    const onSubmit = async (roleUpdateRequestModel: RoleUpdateRequestModel) => {
+        await updateRole(role.id, roleUpdateRequestModel)(dispatch);
         closeModal();
     };
-
     return (
         <>
             <div
@@ -47,7 +45,7 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h6 className="modal-title m-0" id="exampleModalDefaultLogin">
-                                    {t('user.modal.update_user')}
+                                    {t('role.modal.update_role')}
                                 </h6>
                                 <button
                                     type="button"
@@ -72,29 +70,13 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
                                                 type="text"
                                                 defaultValue="Artisanal kale"
                                                 id="example-text-input"
-                                                {...register('fullName', { required: true })}
+                                                {...register('name', { required: true })}
                                             />
                                             <div className={classNames("invalid-feedback", {
-                                                "d-inline": errors.fullName
+                                                "d-inline": errors.name
                                             })}>
                                                 <p>{t('user.full_name_is_required')}</p>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div className="mb-3 row">
-                                        <label
-                                            htmlFor="example-text-input"
-                                            className="col-sm-2 col-form-label text-end">
-                                            {t('user.password')}
-                                        </label>
-                                        <div className="col-sm-10">
-                                            <input
-                                                className="form-control"
-                                                type="text"
-                                                defaultValue="Artisanal kale"
-                                                id="example-text-input"
-                                                {...register('password')}
-                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -123,6 +105,6 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
             {/*end modal*/}
         </>
     );
-};
+}
 
-export default UpdateUser;
+export default UpdateRole;

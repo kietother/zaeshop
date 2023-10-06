@@ -5,6 +5,7 @@ using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Domain.Models.ErrorCodes;
 using Identity.Domain.Models.ErrorResponses;
 using Identity.Infrastructure.Interfaces.Services;
+using Identity.Infrastructure.Models.Roles;
 using Identity.Infrastructure.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
