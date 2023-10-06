@@ -1,6 +1,7 @@
 using Common.Enums;
 using Identity.API.Attributes;
 using Identity.Domain.AggregatesModel.UserAggregate;
+using Identity.Infrastructure.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,21 +14,33 @@ namespace Identity.API.Controllers
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
+        private readonly IUserService _userService;
 
         public RoleController(
             RoleManager<IdentityRole> roleManager,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IUserService userService)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _userService = userService;
         }
 
         [HttpGet]
+        [Route("all")]
         [Authorize(ERoles.Administrator)]
         public IActionResult GetAllRoles()
         {
             var roles = _roleManager.Roles;
             return Ok(roles);
+        }
+
+        [HttpGet]
+        [Authorize(ERoles.Administrator)]
+        public async Task<IActionResult> GetPagingAsync(int pageIndex = 1, int pageSize = 10)
+        {
+            var usersPagingResponse = await _userService.GetRolesPagingAsync(pageIndex, pageSize);
+            return Ok(usersPagingResponse);
         }
 
         [HttpPost]

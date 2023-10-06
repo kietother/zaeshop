@@ -23,8 +23,21 @@ const Navbar: React.FC = () => {
     }, [navigate, auth.isAuthenticate]);
 
     useEffect(() => {
-        const isCollapsedMenu = Boolean(localStorage.getItem('isCollapsedMenu'));
-        if (isCollapsedMenu) {
+        const isCollapsedMenu = (() => {
+            const storedValue = localStorage.getItem('isCollapsedMenu');
+
+            if (storedValue === null) {
+                return false;
+            }
+
+            try {
+                return JSON.parse(storedValue) as boolean;
+            } catch {
+                return false;
+            }
+        })();
+
+        if (isCollapsedMenu === true) {
             toggleCollapsedMenu();
         }
     }, []);

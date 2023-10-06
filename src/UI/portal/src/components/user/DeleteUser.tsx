@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import User from '../../models/User';
+import User from '../../models/user/User';
 import { deleteUser } from '../../store/thunks/userThunk';
 
 type DeleteUserProps = {

@@ -130,5 +130,34 @@ namespace Identity.Infrastructure.Implements.Services
                 Data = result
             };
         }
+
+        public async Task<PagingCommonResponse<RolePaging>> GetRolesPagingAsync(int pageNumber, int pageSize)
+        {
+            const string query = "Role_All_Paging";
+            var parameters = new DynamicParameters(
+            new
+            {
+                pageNumber,
+                pageSize
+            });
+            var result = (await _context.Database.GetDbConnection().QueryAsync<RolePaging>(query, parameters, commandType: CommandType.StoredProcedure)).ToList();
+            var record = result.Find(o => o.IsTotalRecord);
+
+            if (record == null)
+            {
+                return new PagingCommonResponse<RolePaging>
+                {
+                    RowNum = 0,
+                    Data = new List<RolePaging>()
+                };
+            }
+
+            result.Remove(record);
+            return new PagingCommonResponse<RolePaging>
+            {
+                RowNum = record.RowNum,
+                Data = result
+            };
+        }
     }
 }

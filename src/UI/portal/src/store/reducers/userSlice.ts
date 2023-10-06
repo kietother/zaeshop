@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import User from '../../models/User';
+import User from '../../models/user/User';
 import { PagingResponse } from '../../models/common/PagingResponse';
 
 interface UserState {

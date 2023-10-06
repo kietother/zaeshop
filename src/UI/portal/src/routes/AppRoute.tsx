@@ -9,6 +9,7 @@ import RightSideBar from "../components/layout/RightSideBar";
 import Footer from "../components/layout/Footer";
 import NotFoundPage from "../pages/NotFoundPage";
 import { ToastContainer } from "react-toastify";
+import RolePage from "../pages/RolePage";
 
 const AppRoute: React.FC = () => (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
@@ -30,6 +31,7 @@ const MainComponent: React.FC = () => {
             <Routes>
                 <Route path="/" Component={UserPage} />;
                 <Route path="/users" Component={UserPage} />;
+                <Route path="/roles" Component={RolePage} />;
                 <Route path="*" Component={NotFoundPage} />;
             </Routes>
             <Footer />
