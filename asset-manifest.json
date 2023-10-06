@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/zaeshop/static/css/main.bc1dca3e.css",
-    "main.js": "/zaeshop/static/js/main.4786e5c7.js",
+    "main.js": "/zaeshop/static/js/main.33865d31.js",
     "static/js/787.fed13e9f.chunk.js": "/zaeshop/static/js/787.fed13e9f.chunk.js",
     "index.html": "/zaeshop/index.html",
     "main.bc1dca3e.css.map": "/zaeshop/static/css/main.bc1dca3e.css.map",
-    "main.4786e5c7.js.map": "/zaeshop/static/js/main.4786e5c7.js.map",
+    "main.33865d31.js.map": "/zaeshop/static/js/main.33865d31.js.map",
     "787.fed13e9f.chunk.js.map": "/zaeshop/static/js/787.fed13e9f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.bc1dca3e.css",
-    "static/js/main.4786e5c7.js"
+    "static/js/main.33865d31.js"
   ]
 }
