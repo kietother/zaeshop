@@ -1,42 +1,41 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import dayjs from 'dayjs';
-import { StoreState } from '../store';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUsers } from '../store/thunks/userThunk';
 import ModalCommon from '../components/shared/ModalCommon';
-import CreateUser from '../components/user/CreateUser';
 import { ActionTypeGrid } from '../models/enums/ActionTypeGrid';
-import UpdateUser from '../components/user/UpdateUser';
-import User from '../models/user/User';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { StoreState } from '../store';
+import Role from '../models/role/Role';
 import Pagination from '../components/shared/Pagination';
-import DeleteUser from '../components/user/DeleteUser';
+import { getRoles } from '../store/thunks/roleThunk';
 import { v4 as uuidv4 } from 'uuid';
+import CreateRole from '../components/role/CreateRole';
+import DeleteRole from '../components/role/DeleteRole';
+import UpdateRole from '../components/role/UpdateRole';
 
-const UserPage: React.FC = () => {
+const RolePage: React.FC = () => {
     const [modalIsOpen, setIsOpen] = useState(false);
     const [actionGrid, setActionGrid] = useState(ActionTypeGrid.CREATE);
 
     const [t] = useTranslation();
 
-    const userState = useSelector((state: StoreState) => state.user);
+    const roleState = useSelector((state: StoreState) => state.role);
     const dispatch = useDispatch();
 
-    const users = useMemo(() => userState.users, [userState.users]);
-    const [user, setUser] = useState<User>(users[0] || null);
+    const roles = useMemo(() => roleState.roles, [roleState.roles]);
+    const [role, setRole] = useState<Role>(roles[0] || null);
 
     // Paging
     const [pageIndex, setPageIndex] = useState(1);
     const [pageSize, setPageSize] = useState(5);
 
     useEffect(() => {
-        getUsers(pageIndex, pageSize)(dispatch);
+        getRoles(pageIndex, pageSize)(dispatch);
     }, [dispatch, pageIndex, pageSize]);
 
-    const openModal = (actionGrid: ActionTypeGrid, user?: User) => {
+    const openModal = (actionGrid: ActionTypeGrid, role?: Role) => {
         setActionGrid(actionGrid);
-        if (user) {
-            setUser(user);
+        if (role) {
+            setRole(role);
         }
         setIsOpen(true);
     }
@@ -48,11 +47,13 @@ const UserPage: React.FC = () => {
     const BodyModal = useCallback((actionGrid: ActionTypeGrid) => {
         switch (actionGrid) {
             case ActionTypeGrid.CREATE:
-                return CreateUser;
+                return CreateRole;
             case ActionTypeGrid.EDIT:
-                return UpdateUser;
+                return UpdateRole;
             case ActionTypeGrid.DELETE:
-                return DeleteUser;
+                return DeleteRole;
+            default:
+                return React.Fragment;
         }
     }, []);
 
@@ -79,7 +80,7 @@ const UserPage: React.FC = () => {
                                             <li className="breadcrumb-item active">Users</li>
                                         </ol>
                                     </div>
-                                    <h4 className="page-title">{t("user.title")}</h4>
+                                    <h4 className="page-title">{t("role.title")}</h4>
                                 </div>
                                 {/*end page-title-box*/}
                             </div>
@@ -92,7 +93,7 @@ const UserPage: React.FC = () => {
                                     <div className="card-header">
                                         <div className="row align-items-center">
                                             <div className="col">
-                                                <h4 className="card-title">{t('user.title_detail')}</h4>
+                                                <h4 className="card-title">{t('role.title_detail')}</h4>
                                             </div>
                                             {/*end col*/}
                                         </div>{" "}
@@ -104,40 +105,28 @@ const UserPage: React.FC = () => {
                                             <table className="table">
                                                 <thead>
                                                     <tr>
-                                                        <th>{t('user.id')}</th>
-                                                        <th>{t('user.full_name')}</th>
-                                                        <th>{t('user.username')}</th>
-                                                        <th>{t('user.email')}</th>
-                                                        <th>{t('user.email_confirmed')}</th>
-                                                        <th>{t('user.created_on')}</th>
-                                                        <th>{t('user.roles')}</th>
-                                                        <th>{t('user.action')}</th>
+                                                        <th>{t('role.id')}</th>
+                                                        <th>{t('role.name')}</th>
+                                                        <th>{t('role.normalized_name')}</th>
+                                                        <th>{t('role.users')}</th>
+                                                        <th>{t('role.action')}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {users.map((user) => (
+                                                    {roles.map((role) => (
                                                         <tr key={uuidv4()}>
-                                                            <td>{user.id}
-                                                                {dayjs().diff(dayjs(user.createdOnUtc), 'day') > 0 && dayjs().diff(dayjs(user.createdOnUtc), 'day') < 7
-                                                                    && <span className="badge bg-soft-success">New</span>}
+                                                            <td>{role.id}
                                                             </td>
-                                                            <td>{user.fullName}</td>
-                                                            <td>{user.userName}</td>
-                                                            <td>{user.email}</td>
-                                                            <td>{user.emailConfirmed ? "Yes" : "No"}</td>
-                                                            <td>{dayjs(user.createdOnUtc).format('DD-MM-YYYY HH:mm')}</td>
-                                                            <td>
-                                                                {user?.roles?.split(',').map(role => (
-                                                                    <span key={uuidv4()} className="badge bg-soft-primary">{role}</span>
-                                                                ))}
-                                                            </td>
+                                                            <td>{role.name}</td>
+                                                            <td>{role.normalizedName}</td>
+                                                            <td>{role.users}</td>
                                                             <td>
                                                                 <button className="btn"
-                                                                    onClick={() => openModal(ActionTypeGrid.EDIT, user)}>
+                                                                    onClick={() => openModal(ActionTypeGrid.EDIT, role)}>
                                                                     <i className="fa-solid fa-pen text-secondary font-16"></i>
                                                                 </button>
                                                                 <button className="btn"
-                                                                    onClick={() => openModal(ActionTypeGrid.DELETE, user)}>
+                                                                    onClick={() => openModal(ActionTypeGrid.DELETE, role)}>
                                                                     <i className="fa-solid fa-trash text-secondary font-16"></i>
                                                                 </button>
                                                             </td>
@@ -150,7 +139,7 @@ const UserPage: React.FC = () => {
                                             <div className="col">
                                                 <button className="btn btn-outline-light btn-sm px-4"
                                                     onClick={() => openModal(ActionTypeGrid.CREATE)}>
-                                                    + {t('user.add_new')}
+                                                    + {t('role.add_new')}
                                                 </button>
                                             </div>
                                             <div className="col">
@@ -169,7 +158,7 @@ const UserPage: React.FC = () => {
                                                 <nav aria-label="...">
                                                     <Pagination
                                                         pageIndex={pageIndex}
-                                                        totalCounts={userState.totalRecords}
+                                                        totalCounts={roleState.totalRecords}
                                                         pageSize={pageSize}
                                                         onPageChange={page => setPageIndex(page)} />
                                                     {/*end pagination*/}
@@ -193,11 +182,11 @@ const UserPage: React.FC = () => {
                 {/* end page content */}
             </div>
             <ModalCommon
-                props={{ modalIsOpen, openModal, closeModal, user }}
+                props={{ modalIsOpen, openModal, closeModal, role }}
                 Component={BodyModal(actionGrid)}
             />
         </>
     );
 };
 
-export default UserPage;
+export default RolePage;

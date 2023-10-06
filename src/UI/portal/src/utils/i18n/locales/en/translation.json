@@ -52,5 +52,21 @@
         "username_is_required": "Username is required.",
         "password": "Password",
         "password_is_required": "Password is required."
+    },
+    "role": {
+        "title": "Role Management",
+        "title_detail": "Role Details",
+        "id": "ID",
+        "name": "Role Name",
+        "normalized_name": "Role Normalized Name",
+        "users": "Users",
+        "action": "Action",
+        "add_new": "Add New",
+        "name_is_required": "Role name is required.",
+        "modal": {
+            "create_role": "Create Role",
+            "update_role": "Update role",
+            "delete_role": "Delete Role"
+        }
     }
 }

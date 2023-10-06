@@ -129,6 +129,11 @@ const LeftSideBar: React.FC = () => {
                                     Users Management
                                 </Link>
                             </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/roles">
+                                    Role Management
+                                </Link>
+                            </li>
                         </ul>
                         {/*end nav*/}
                     </div>

@@ -9,7 +9,7 @@ import UserUpdateRequestModel from "../../models/user/UserUpdateRequestModel";
 export const getUsers = (pageIndex: number, pageSize: number) => async (dispatch: Dispatch) => {
     try {
         dispatch(fetchUsersStart());
-        var params = {
+        const params = {
             pageIndex,
             pageSize
         };

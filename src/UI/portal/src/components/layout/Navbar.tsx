@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { StoreState } from '../../store';
@@ -22,6 +22,26 @@ const Navbar: React.FC = () => {
         }
     }, [navigate, auth.isAuthenticate]);
 
+    useEffect(() => {
+        const isCollapsedMenu = (() => {
+            const storedValue = localStorage.getItem('isCollapsedMenu');
+
+            if (storedValue === null) {
+                return false;
+            }
+
+            try {
+                return JSON.parse(storedValue) as boolean;
+            } catch {
+                return false;
+            }
+        })();
+
+        if (isCollapsedMenu === true) {
+            toggleCollapsedMenu();
+        }
+    }, []);
+
     const imageLocation = useMemo(() => {
         if (i18n.language === 'en') {
             changeLanguage('en');
@@ -35,6 +55,18 @@ const Navbar: React.FC = () => {
     const logout = async () => {
         await signOut()(dispatch);
         navigate("/login");
+    }
+
+    const toggleCollapsedMenu = () => {
+        const bodyElement = document.getElementById('body');
+        if (bodyElement) {
+            if (bodyElement.classList.toggle('enlarge-menu')) {
+                localStorage.setItem('isCollapsedMenu', JSON.stringify(true));
+            }
+            else {
+                localStorage.setItem('isCollapsedMenu', JSON.stringify(false));
+            }
+        }
     }
 
     return (
@@ -265,6 +297,7 @@ const Navbar: React.FC = () => {
                         <button
                             className="nav-link button-menu-mobile nav-icon"
                             id="togglemenu"
+                            onClick={toggleCollapsedMenu}
                         >
                             <i className="ti ti-menu-2" />
                         </button>

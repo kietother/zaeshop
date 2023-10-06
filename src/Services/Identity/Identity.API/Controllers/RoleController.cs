@@ -1,6 +1,8 @@
 using Common.Enums;
 using Identity.API.Attributes;
 using Identity.Domain.AggregatesModel.UserAggregate;
+using Identity.Infrastructure.Interfaces.Services;
+using Identity.Infrastructure.Models.Roles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,16 +15,20 @@ namespace Identity.API.Controllers
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
+        private readonly IUserService _userService;
 
         public RoleController(
             RoleManager<IdentityRole> roleManager,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IUserService userService)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _userService = userService;
         }
 
         [HttpGet]
+        [Route("all")]
         [Authorize(ERoles.Administrator)]
         public IActionResult GetAllRoles()
         {
@@ -30,16 +36,24 @@ namespace Identity.API.Controllers
             return Ok(roles);
         }
 
+        [HttpGet]
+        [Authorize(ERoles.Administrator)]
+        public async Task<IActionResult> GetPagingAsync(int pageIndex = 1, int pageSize = 10)
+        {
+            var usersPagingResponse = await _userService.GetRolesPagingAsync(pageIndex, pageSize);
+            return Ok(usersPagingResponse);
+        }
+
         [HttpPost]
         [Authorize(ERoles.Administrator)]
-        public async Task<IActionResult> CreateRole([FromBody] string roleName)
+        public async Task<IActionResult> CreateRole([FromBody] RoleCreateRequestModel roleRequest)
         {
-            if (string.IsNullOrEmpty(roleName))
+            if (string.IsNullOrEmpty(roleRequest.Name))
             {
                 return BadRequest("Role name cannot be empty.");
             }
 
-            var role = new IdentityRole(roleName);
+            var role = new IdentityRole(roleRequest.Name);
             var result = await _roleManager.CreateAsync(role);
 
             if (result.Succeeded)
@@ -52,7 +66,7 @@ namespace Identity.API.Controllers
 
         [HttpPut("{id}")]
         [Authorize(ERoles.Administrator)]
-        public async Task<IActionResult> UpdateRole(string id, [FromBody] string roleName)
+        public async Task<IActionResult> UpdateRole(string id, [FromBody] RoleUpdateRequestModel roleRequest)
         {
             var role = await _roleManager.FindByIdAsync(id);
 
@@ -61,7 +75,7 @@ namespace Identity.API.Controllers
                 return NotFound();
             }
 
-            role.Name = roleName;
+            role.Name = roleRequest.Name;
             var result = await _roleManager.UpdateAsync(role);
 
             if (result.Succeeded)
