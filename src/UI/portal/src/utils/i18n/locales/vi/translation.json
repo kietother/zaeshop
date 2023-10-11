@@ -36,7 +36,8 @@
         "username_is_required": "Tên người dùng là bắt buộc.",
         "password_is_required": "Mật khẩu là bắt buộc.",
         "password_did_not_match": "Mật khẩu không khớp",
-        "confirm_password_is_required": "Xác nhận mật khẩu là bắt buộc."
+        "confirm_password_is_required": "Xác nhận mật khẩu là bắt buộc.",
+        "role": "Vai trò"
     },
     "toast": {
         "please_wait": "Vui lòng đợi...",
@@ -52,5 +53,21 @@
         "username_is_required": "Tên người dùng là bắt buộc.",
         "password": "Mật khẩu",
         "password_is_required": "Mật khẩu là bắt buộc."
+    },
+    "role": {
+        "title": "Quản lý Vai trò",
+        "title_detail": "Chi tiết Vai trò",
+        "id": "ID",
+        "name": "Tên Vai trò",
+        "normalized_name": "Tên Vai trò chuẩn hóa",
+        "users": "Người dùng",
+        "action": "Hành động",
+        "add_new": "Thêm mới",
+        "name_is_required": "Tên Vai trò là bắt buộc.",
+        "modal": {
+            "create_role": "Tạo Vai trò",
+            "update_role": "Cập nhật Vai trò",
+            "delete_role": "Xóa Vai trò"
+        }
     }
 }

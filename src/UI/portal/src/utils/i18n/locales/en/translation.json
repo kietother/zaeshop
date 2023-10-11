@@ -36,7 +36,8 @@
         "username_is_required": "Username is required.",
         "password_is_required": "Password is required.",
         "password_did_not_match": "Password did not match",
-        "confirm_password_is_required": "Confirm password is required."
+        "confirm_password_is_required": "Confirm password is required.",
+        "role": "Role"
     },
     "toast": {
         "please_wait": "Please wait...",

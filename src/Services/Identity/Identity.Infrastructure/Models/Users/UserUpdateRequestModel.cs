@@ -8,5 +8,7 @@ namespace Identity.Infrastructure.Models.Users
         public string FullName { get; set; } = null!;
         
         public string? Password { get; set; }
+
+        public List<string>? Roles { get; set; }
     }
 }

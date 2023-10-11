@@ -16,13 +16,16 @@ namespace Identity.Infrastructure.Implements.Services
     {
         private readonly AppIdentityDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public UserService(
             AppIdentityDbContext context,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<List<User>> GetAllAsync()
@@ -92,6 +95,36 @@ namespace Identity.Infrastructure.Implements.Services
             {
                 errorResult.Description = string.Join(", ", result.Errors.Select(o => o.Description));
                 return null;
+            }
+
+            // Update role
+            if (userModel.Roles?.Any() == true)
+            {
+                var allRoles = _roleManager.Roles.ToList();
+                var dbRoles = allRoles.ConvertAll(o => o.Name);
+
+                var isValidRoles = userModel.Roles.TrueForAll(dbRoles.Contains);
+                if (!isValidRoles)
+                {
+                    errorResult.Description = "error_role_is_invalid";
+                    return null;
+                }
+
+                var userRoles = await _userManager.GetRolesAsync(user);
+
+                var rolesToAdd = userModel.Roles.Except(userRoles);
+                var rolesToRemove = userRoles.Except(userModel.Roles);
+
+                await _userManager.AddToRolesAsync(user, rolesToAdd);
+                await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
+            }
+            else
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+                if (userRoles.Any())
+                {
+                    await _userManager.RemoveFromRolesAsync(user, userRoles);
+                }
             }
 
             return new UserRegisterResponseModel
