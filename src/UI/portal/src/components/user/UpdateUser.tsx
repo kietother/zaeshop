@@ -1,11 +1,16 @@
-import * as React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import User from '../../models/user/User';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../../store/thunks/userThunk';
 import UserUpdateRequestModel from '../../models/user/UserUpdateRequestModel';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import classNames from 'classnames';
+import Select from 'react-select';
+import DropDownOption from '../../models/common/DropDownOption';
+import { StoreState } from '../../store';
+import Role from '../../models/role/Role';
+import { getAllRoles } from '../../store/thunks/roleThunk';
 
 type UpdateUserProps = {
     user: User;
@@ -15,6 +20,25 @@ type UpdateUserProps = {
 const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
     const dispatch = useDispatch();
     const [t] = useTranslation();
+    const [selectedOptions, setSelectedOptions] = useState<DropDownOption[]>([]);
+
+    const roles = useSelector((state: StoreState) => state.role.roles);
+    const rolesDropDown = useMemo((): DropDownOption[] => {
+        if (!roles) return [];
+        return roles.map((role: Role): DropDownOption => ({
+            value: role.name ?? '',
+            label: role.name ?? ''
+        }));
+    }, [roles]);
+
+    useEffect(() => {
+        getAllRoles()(dispatch).then(() => {
+        });
+    }, []);
+
+    useEffect(() => {
+        setSelectedOptions(rolesDropDown.filter(r => user.roles?.replaceAll(' ', '').split(',').includes(r.value)));
+    }, [user.roles, rolesDropDown])
 
     const {
         register,
@@ -28,8 +52,15 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
     });
 
     const onSubmit = async (userUpdateRequestModel: UserUpdateRequestModel) => {
-        await updateUser(user.id, userUpdateRequestModel)(dispatch);
+        await updateUser(user.id, {
+            ...userUpdateRequestModel,
+            roles: selectedOptions?.map(option => option.value)
+        })(dispatch);
         closeModal();
+    };
+
+    const onHandleChange = (selectedOption: any) => {
+        setSelectedOptions(selectedOption);
     };
 
     return (
@@ -94,6 +125,21 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
                                                 defaultValue="Artisanal kale"
                                                 id="example-text-input"
                                                 {...register('password')}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="mb-3 row">
+                                        <label
+                                            htmlFor="example-text-input"
+                                            className="col-sm-2 col-form-label text-end">
+                                            {t('user.role')}
+                                        </label>
+                                        <div className="col-sm-10">
+                                            <Select
+                                                options={rolesDropDown}
+                                                value={selectedOptions}
+                                                onChange={onHandleChange}
+                                                isMulti
                                             />
                                         </div>
                                     </div>

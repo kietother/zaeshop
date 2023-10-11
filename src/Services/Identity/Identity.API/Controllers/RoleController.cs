@@ -32,7 +32,7 @@ namespace Identity.API.Controllers
         [Authorize(ERoles.Administrator)]
         public IActionResult GetAllRoles()
         {
-            var roles = _roleManager.Roles;
+            var roles = _roleManager.Roles.OrderBy(r => r.Name);
             return Ok(roles);
         }
 

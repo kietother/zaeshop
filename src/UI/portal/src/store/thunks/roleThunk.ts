@@ -1,5 +1,5 @@
 import { Dispatch } from "@reduxjs/toolkit";
-import { fetchRolesFailure, fetchRolesStart, fetchRolesSuccess, roleAdded, roleDeleted, roleUpdated } from "../reducers/roleSlice";
+import { fetchRolesFailure, fetchRolesStart, fetchRolesSuccess, fetchRolesAllSucess, roleAdded, roleDeleted, roleUpdated } from "../reducers/roleSlice";
 import { identityServer } from "../../services/baseUrls";
 import api from "../../services/interceptor";
 import RoleCreateRequestModel from "../../models/role/RoleCreateRequestModel";
@@ -55,6 +55,19 @@ export const deleteRole = (id: string) => async (dispatch: Dispatch) => {
         const response = await api.delete(identityServer + `/api/role/${id}`);
         if (response.status === 200) {
             dispatch(roleDeleted(id));
+        }
+    } catch (err: any) {
+        return dispatch(fetchRolesFailure(err.response));
+    }
+};
+
+// GET dropdown role
+export const getAllRoles = () => async (dispatch: Dispatch) => {
+    try {
+        dispatch(fetchRolesStart());
+        const response = await api.get(identityServer + `/api/role/all`);
+        if (response.status === 200) {
+            dispatch(fetchRolesAllSucess(response.data));
         }
     } catch (err: any) {
         return dispatch(fetchRolesFailure(err.response));
