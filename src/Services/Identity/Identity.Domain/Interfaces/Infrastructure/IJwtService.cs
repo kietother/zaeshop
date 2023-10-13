@@ -1,7 +1,7 @@
 using Common.Models;
 using Identity.Domain.AggregatesModel.UserAggregate;
 
-namespace Identity.Domain.Interface.Infrastructure
+namespace Identity.Domain.Interfaces.Infrastructure
 {
     public interface IJwtService
     {

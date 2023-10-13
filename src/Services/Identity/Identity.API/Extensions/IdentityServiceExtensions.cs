@@ -7,10 +7,10 @@ using EmailHelper.Models;
 using EmailHelper.Services;
 using Common.Interfaces;
 using Common.Implements;
-using Identity.Domain.Interface.Infrastructure;
-using Identity.Infrastructure.Implement.Infrastructure;
-using Identity.Domain.Business.Interface.Services;
-using Identity.Infrastructure.Implement.Business.Interface.Services;
+using Identity.Domain.Business.Interfaces.Services;
+using Identity.Infrastructure.Implements.Business.Services;
+using Identity.Domain.Interfaces.Infrastructure;
+using Identity.Infrastructure.Implements.Infrastructure;
 
 namespace Identity.API.Extensions
 {

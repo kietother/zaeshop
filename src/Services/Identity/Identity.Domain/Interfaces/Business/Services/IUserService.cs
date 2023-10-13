@@ -4,7 +4,7 @@ using Identity.Domain.Models.ErrorResponses;
 using Identity.Domain.Models.Roles;
 using Identity.Domain.Models.Users;
 
-namespace Identity.Domain.Business.Interface.Services
+namespace Identity.Domain.Business.Interfaces.Services
 {
     public interface IUserService
     {
