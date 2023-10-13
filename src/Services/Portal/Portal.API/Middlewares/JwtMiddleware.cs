@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Portal.Infrastructure.Interfaces.Services;
+using Portal.Domain.Interfaces.Infrastructure;
 
 namespace Portal.API.Middlewares
 {

@@ -2,10 +2,10 @@
 using Common.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Middlewares;
+using Portal.Domain.Interfaces.Infrastructure;
 using Portal.Infrastructure;
 using Portal.Infrastructure.Implements.Services;
-using Portal.Infrastructure.Interfaces.Services;
-using Portal.Infrastructure.Repositories;
+using Portal.Infrastructure.SeedWork;
 
 namespace Portal.API.Extensions;
 public static class PortalServiceExtensions

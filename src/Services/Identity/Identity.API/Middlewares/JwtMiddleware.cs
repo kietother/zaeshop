@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Identity.Infrastructure.Interfaces.Services;
+using Identity.Domain.Interface.Infrastructure;
 
 namespace Identity.API.Middlewares
 {
