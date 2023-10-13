@@ -4,13 +4,13 @@ using System.Security.Cryptography;
 using System.Text;
 using Common.Models;
 using Identity.Domain.AggregatesModel.UserAggregate;
+using Identity.Domain.Interface.Infrastructure;
 using Identity.Domain.Models.Helpers;
-using Identity.Infrastructure.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Identity.Infrastructure.Implements.Services
+namespace Identity.Infrastructure.Implement.Infrastructure
 {
     public class JwtService : IJwtService
     {

@@ -1,8 +1,8 @@
 using Common.Enums;
 using Identity.API.Attributes;
 using Identity.Domain.AggregatesModel.UserAggregate;
+using Identity.Domain.Business.Interface.Services;
 using Identity.Domain.Models.Roles;
-using Identity.Infrastructure.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

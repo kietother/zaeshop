@@ -2,15 +2,15 @@ using System.Data;
 using Common.Models;
 using Dapper;
 using Identity.Domain.AggregatesModel.UserAggregate;
+using Identity.Domain.Business.Interface.Services;
 using Identity.Domain.Models.ErrorCodes;
 using Identity.Domain.Models.ErrorResponses;
 using Identity.Domain.Models.Roles;
 using Identity.Domain.Models.Users;
-using Identity.Infrastructure.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.Infrastructure.Implements.Services
+namespace Identity.Infrastructure.Implement.Business.Interface.Services
 {
     public class UserService : IUserService
     {

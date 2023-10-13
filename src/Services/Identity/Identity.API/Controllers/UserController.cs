@@ -1,10 +1,10 @@
 using Common.Enums;
 using Identity.API.Attributes;
+using Identity.Domain.Business.Interface.Services;
 using Identity.Domain.Models.ErrorCodes;
 using Identity.Domain.Models.ErrorResponses;
 using Identity.Domain.Models.Users;
 using Identity.Infrastructure;
-using Identity.Infrastructure.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Controllers

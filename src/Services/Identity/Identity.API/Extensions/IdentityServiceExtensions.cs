@@ -1,7 +1,5 @@
 using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Infrastructure;
-using Identity.Infrastructure.Implements.Services;
-using Identity.Infrastructure.Interfaces.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +7,10 @@ using EmailHelper.Models;
 using EmailHelper.Services;
 using Common.Interfaces;
 using Common.Implements;
+using Identity.Domain.Interface.Infrastructure;
+using Identity.Infrastructure.Implement.Infrastructure;
+using Identity.Domain.Business.Interface.Services;
+using Identity.Infrastructure.Implement.Business.Interface.Services;
 
 namespace Identity.API.Extensions
 {

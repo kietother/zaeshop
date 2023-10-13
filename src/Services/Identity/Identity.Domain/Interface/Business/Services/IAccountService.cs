@@ -2,7 +2,7 @@ using Identity.Domain.Models.Authenticates;
 using Identity.Domain.Models.ErrorResponses;
 using Identity.Domain.Models.Users;
 
-namespace Identity.Infrastructure.Interfaces.Services
+namespace Identity.Domain.Business.Interface.Services
 {
     public interface IAccountService
     {
