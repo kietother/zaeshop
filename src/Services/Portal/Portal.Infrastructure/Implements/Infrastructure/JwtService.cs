@@ -3,8 +3,8 @@ using System.Text;
 using Common.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Portal.Domain.Interfaces.Infrastructure;
 using Portal.Infrastructure.Helpers;
-using Portal.Infrastructure.Interfaces.Services;
 
 namespace Portal.Infrastructure.Implements.Services;
 public class JwtService : IJwtService

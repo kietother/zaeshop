@@ -3,7 +3,7 @@ using Dapper;
 using Microsoft.EntityFrameworkCore.Storage;
 using Portal.Domain.SeedWork;
 
-namespace Portal.Infrastructure.Repositories;
+namespace Portal.Infrastructure.SeedWork;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly ApplicationDbContext context;

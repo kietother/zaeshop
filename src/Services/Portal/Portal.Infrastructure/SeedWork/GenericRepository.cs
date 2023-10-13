@@ -1,6 +1,6 @@
 ﻿using Portal.Domain.SeedWork;
 
-namespace Portal.Infrastructure;
+namespace Portal.Infrastructure.SeedWork;
 public class GenericRepository<T> : IGenericRepository<T> where T : Entity
 {
     public readonly ApplicationDbContext context;

@@ -1,7 +1,7 @@
 using System.Net;
 using Grpc.Core;
 using Portal.Domain.AggregatesModel.UserAggregate;
-using Portal.Infrastructure.Interfaces.Services;
+using Portal.Domain.Interfaces.Infrastructure;
 using PortalGrpc;
 
 namespace Portal.API.Controllers

@@ -1,6 +1,6 @@
 using Common.Models;
 
-namespace Portal.Infrastructure.Interfaces.Services;
+namespace Portal.Domain.Interfaces.Infrastructure;
 public interface IJwtService
 {
     UserInfomationTokenModel? ValidateJwtToken(string token);
