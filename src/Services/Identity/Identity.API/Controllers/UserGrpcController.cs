@@ -1,5 +1,5 @@
 using Grpc.Core;
-using Identity.Domain.Business.Interface.Services;
+using Identity.Domain.Business.Interfaces.Services;
 using IdentityGrpc;
 
 namespace Identity.API.Controllers;

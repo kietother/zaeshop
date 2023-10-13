@@ -5,8 +5,8 @@ using Common.Interfaces;
 using EmailHelper.Services;
 using Hangfire;
 using Identity.Domain.AggregatesModel.UserAggregate;
-using Identity.Domain.Business.Interface.Services;
-using Identity.Domain.Interface.Infrastructure;
+using Identity.Domain.Business.Interfaces.Services;
+using Identity.Domain.Interfaces.Infrastructure;
 using Identity.Domain.Models.Authenticates;
 using Identity.Domain.Models.ErrorCodes;
 using Identity.Domain.Models.ErrorResponses;
@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Identity.Infrastructure.Implement.Business.Interface.Services
+namespace Identity.Infrastructure.Implements.Business.Services
 {
     public class AccountService : IAccountService
     {

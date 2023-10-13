@@ -1,5 +1,5 @@
 using Identity.API.Attributes;
-using Identity.Domain.Business.Interface.Services;
+using Identity.Domain.Business.Interfaces.Services;
 using Identity.Domain.Models.Authenticates;
 using Identity.Domain.Models.ErrorResponses;
 using Identity.Domain.Models.Users;
