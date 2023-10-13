@@ -1,8 +1,8 @@
 using Common.Models;
 using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Domain.Models.ErrorResponses;
-using Identity.Infrastructure.Models.Roles;
-using Identity.Infrastructure.Models.Users;
+using Identity.Domain.Models.Roles;
+using Identity.Domain.Models.Users;
 
 namespace Identity.Infrastructure.Interfaces.Services
 {

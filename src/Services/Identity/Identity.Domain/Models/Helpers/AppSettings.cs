@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Identity.Infrastructure.Models.Helpers
+namespace Identity.Domain.Models.Helpers
 {
     public class AppSettings
     {

@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using Identity.Domain.AggregatesModel.UserAggregate;
 
-namespace Identity.Infrastructure.Models.Authenticates
+namespace Identity.Domain.Models.Authenticates
 {
     public class AuthenticateResponse
     {

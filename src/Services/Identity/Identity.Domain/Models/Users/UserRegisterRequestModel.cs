@@ -1,4 +1,4 @@
-namespace Identity.Infrastructure.Models.Users
+namespace Identity.Domain.Models.Users
 {
     public class UserRegisterRequestModel
     {

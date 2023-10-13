@@ -1,4 +1,4 @@
-namespace Identity.Infrastructure.Models.HangFire
+namespace Identity.Domain.Models.HangFire
 {
     public class UserSendMailModel
     {

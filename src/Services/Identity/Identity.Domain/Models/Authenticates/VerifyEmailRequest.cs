@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Identity.Infrastructure.Models.Authenticates
+namespace Identity.Domain.Models.Authenticates
 {
     public class VerifyEmailRequest
     {

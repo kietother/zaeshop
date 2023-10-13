@@ -2,8 +2,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
-    <ProjectReference Include="..\..\..\Libraries\EmailHelper\EmailHelper.csproj" />
-    <ProjectReference Include="..\..\..\Libraries\Common\Common.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

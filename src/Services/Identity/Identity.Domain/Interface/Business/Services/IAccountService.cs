@@ -1,6 +1,6 @@
+using Identity.Domain.Models.Authenticates;
 using Identity.Domain.Models.ErrorResponses;
-using Identity.Infrastructure.Models.Authenticates;
-using Identity.Infrastructure.Models.Users;
+using Identity.Domain.Models.Users;
 
 namespace Identity.Infrastructure.Interfaces.Services
 {

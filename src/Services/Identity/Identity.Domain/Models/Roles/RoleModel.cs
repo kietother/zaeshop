@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Identity.Infrastructure.Models.Roles;
+namespace Identity.Domain.Models.Roles;
 
 public class RoleModel
 {

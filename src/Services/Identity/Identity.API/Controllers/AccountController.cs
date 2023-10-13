@@ -1,8 +1,8 @@
 using Identity.API.Attributes;
+using Identity.Domain.Models.Authenticates;
 using Identity.Domain.Models.ErrorResponses;
+using Identity.Domain.Models.Users;
 using Identity.Infrastructure.Interfaces.Services;
-using Identity.Infrastructure.Models.Authenticates;
-using Identity.Infrastructure.Models.Users;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Controllers
