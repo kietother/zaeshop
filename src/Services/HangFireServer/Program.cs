@@ -12,6 +12,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHangFireServices(builder.Configuration);
 
+// Hangfire will DI of Portal to background jobs
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

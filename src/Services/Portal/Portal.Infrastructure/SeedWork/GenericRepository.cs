@@ -1,4 +1,5 @@
-﻿using Portal.Domain.SeedWork;
+﻿using System.Reflection;
+using Portal.Domain.SeedWork;
 
 namespace Portal.Infrastructure.SeedWork;
 public class GenericRepository<T> : IGenericRepository<T> where T : Entity
@@ -42,12 +43,29 @@ public class GenericRepository<T> : IGenericRepository<T> where T : Entity
 
     public void Update(T entity)
     {
+        // Auto set DateTime.UtcNow on UpdatedOnUtc when update Entity
+        PropertyInfo? prop = entity.GetType().GetProperty("UpdatedOnUtc");
+        if (prop != null && prop.PropertyType == typeof(DateTime?))
+        {
+            prop.SetValue(entity, DateTime.UtcNow);
+        }
+
         context.Set<T>().Attach(entity);
         context.Entry(entity).State = EntityState.Modified;
     }
 
     public void UpdateRange(List<T> entities)
     {
+        // Auto set DateTime.UtcNow on UpdatedOnUtc when update Entities
+        foreach (var entity in entities)
+        {
+            PropertyInfo? prop = entity.GetType().GetProperty("UpdatedOnUtc");
+            if (prop != null && prop.PropertyType == typeof(DateTime?))
+            {
+                prop.SetValue(entity, DateTime.UtcNow);
+            }
+        }
+
         context.Set<T>().AttachRange(entities);
         context.Entry(entities).State = EntityState.Modified;
     }
