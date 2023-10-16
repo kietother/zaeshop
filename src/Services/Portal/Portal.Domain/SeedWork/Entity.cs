@@ -1,6 +1,6 @@
 namespace Portal.Domain.SeedWork;
 
-public abstract class Entity
+public abstract class Entity : IAggregateRoot
 {
     public int Id { get; set; }
     public DateTime CreatedOnUtc { get; set; }
