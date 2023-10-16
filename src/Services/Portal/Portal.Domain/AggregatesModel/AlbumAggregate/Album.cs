@@ -10,6 +10,8 @@ namespace Portal.Domain.AggregatesModel.AlbumAggregate
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
 
+        public int? AlbumAlertMessageId { get; set; }
+
         #region More Infomation
         public string? AlternativeName { get; set; }
         public string? Type { get; set; }
@@ -24,9 +26,9 @@ namespace Portal.Domain.AggregatesModel.AlbumAggregate
         public virtual ICollection<Collection> Collections { get; set; } = new List<Collection>();
 
         [JsonIgnore]
-        public virtual ICollection<ContentType> ContentTypes { get; set; } = new List<ContentType>();
+        public virtual ICollection<AlbumContentType> AlbumContentTypes { get; set; } = new List<AlbumContentType>();
 
         [JsonIgnore]
-        public virtual ICollection<AlbumAlertMessage> AlbumAlertMessages { get; set; } = new List<AlbumAlertMessage>();
+        public virtual AlbumAlertMessage? AlbumAlertMessage { get; set; }
     }
 }
