@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Portal.Domain.AggregatesModel.UserAggregate;
 
 namespace Portal.Infrastructure;
 public class ApplicationDbContext : DbContext
@@ -11,8 +10,6 @@ public class ApplicationDbContext : DbContext
     protected ApplicationDbContext()
     {
     }
-
-    public DbSet<User> Users { get; set; }
 
     /// <summary>
     /// Responsiblity to migration database.
