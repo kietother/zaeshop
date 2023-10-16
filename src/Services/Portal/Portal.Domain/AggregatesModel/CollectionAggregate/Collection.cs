@@ -16,7 +16,10 @@ namespace Portal.Domain.AggregatesModel.CollectionAggregate
         [JsonIgnore]
         public virtual Album Album { get; set; } = null!;
 
+        [JsonIgnore]
         public virtual ICollection<ContentItem> ContentItems { get; set; } = new List<ContentItem>();
+
+        [JsonIgnore]
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

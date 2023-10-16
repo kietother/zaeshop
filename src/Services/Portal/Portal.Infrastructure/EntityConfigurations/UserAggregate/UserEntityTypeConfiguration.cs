@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Portal.Domain.AggregatesModel.UserAggregate;
 
-namespace Portal.Infrastructure;
+namespace Portal.Infrastructure.EntityConfigurations.UserAggregate;
 public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)

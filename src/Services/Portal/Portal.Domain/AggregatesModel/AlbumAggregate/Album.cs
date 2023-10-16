@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Portal.Domain.AggregatesModel.CollectionAggregate;
 using Portal.Domain.Enums;
 using Portal.Domain.SeedWork;
 
@@ -18,6 +19,9 @@ namespace Portal.Domain.AggregatesModel.AlbumAggregate
         public string? ArtitstNames { get; set; }
         public string? Tags { get; set; }
         #endregion
+
+        [JsonIgnore]
+        public virtual ICollection<Collection> Collections { get; set; } = new List<Collection>();
 
         [JsonIgnore]
         public virtual ICollection<ContentType> ContentTypes { get; set; } = new List<ContentType>();
