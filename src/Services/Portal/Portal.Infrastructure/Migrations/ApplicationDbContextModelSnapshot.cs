@@ -33,6 +33,9 @@ namespace Portal.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AlbumAlertMessageId")
+                        .HasColumnType("int");
+
                     b.Property<int>("AlbumStatus")
                         .HasColumnType("int");
 
@@ -69,6 +72,8 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AlbumAlertMessageId");
+
                     b.ToTable("Album", (string)null);
                 });
 
@@ -80,9 +85,6 @@ namespace Portal.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AlbumId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("datetime2");
 
@@ -98,9 +100,36 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.ToTable("AlbumAlertMessage", (string)null);
+                });
+
+            modelBuilder.Entity("Portal.Domain.AggregatesModel.AlbumAggregate.AlbumContentType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AlbumId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ContentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
                     b.HasIndex("AlbumId");
 
-                    b.ToTable("AlbumAlertMessage", (string)null);
+                    b.HasIndex("ContentTypeId");
+
+                    b.ToTable("AlbumContentType", (string)null);
                 });
 
             modelBuilder.Entity("Portal.Domain.AggregatesModel.AlbumAggregate.ContentType", b =>
@@ -111,9 +140,6 @@ namespace Portal.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AlbumId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("datetime2");
 
@@ -128,8 +154,6 @@ namespace Portal.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AlbumId");
 
                     b.ToTable("ContentType", (string)null);
                 });
@@ -261,18 +285,32 @@ namespace Portal.Infrastructure.Migrations
                     b.ToTable("User", (string)null);
                 });
 
-            modelBuilder.Entity("Portal.Domain.AggregatesModel.AlbumAggregate.AlbumAlertMessage", b =>
+            modelBuilder.Entity("Portal.Domain.AggregatesModel.AlbumAggregate.Album", b =>
                 {
-                    b.HasOne("Portal.Domain.AggregatesModel.AlbumAggregate.Album", null)
-                        .WithMany("AlbumAlertMessages")
-                        .HasForeignKey("AlbumId");
+                    b.HasOne("Portal.Domain.AggregatesModel.AlbumAggregate.AlbumAlertMessage", "AlbumAlertMessage")
+                        .WithMany("Albums")
+                        .HasForeignKey("AlbumAlertMessageId");
+
+                    b.Navigation("AlbumAlertMessage");
                 });
 
-            modelBuilder.Entity("Portal.Domain.AggregatesModel.AlbumAggregate.ContentType", b =>
+            modelBuilder.Entity("Portal.Domain.AggregatesModel.AlbumAggregate.AlbumContentType", b =>
                 {
-                    b.HasOne("Portal.Domain.AggregatesModel.AlbumAggregate.Album", null)
-                        .WithMany("ContentTypes")
-                        .HasForeignKey("AlbumId");
+                    b.HasOne("Portal.Domain.AggregatesModel.AlbumAggregate.Album", "Album")
+                        .WithMany("AlbumContentTypes")
+                        .HasForeignKey("AlbumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Portal.Domain.AggregatesModel.AlbumAggregate.ContentType", "ContentType")
+                        .WithMany("AlbumContentTypes")
+                        .HasForeignKey("ContentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Album");
+
+                    b.Navigation("ContentType");
                 });
 
             modelBuilder.Entity("Portal.Domain.AggregatesModel.CollectionAggregate.Collection", b =>
@@ -318,11 +356,19 @@ namespace Portal.Infrastructure.Migrations
 
             modelBuilder.Entity("Portal.Domain.AggregatesModel.AlbumAggregate.Album", b =>
                 {
-                    b.Navigation("AlbumAlertMessages");
+                    b.Navigation("AlbumContentTypes");
 
                     b.Navigation("Collections");
+                });
 
-                    b.Navigation("ContentTypes");
+            modelBuilder.Entity("Portal.Domain.AggregatesModel.AlbumAggregate.AlbumAlertMessage", b =>
+                {
+                    b.Navigation("Albums");
+                });
+
+            modelBuilder.Entity("Portal.Domain.AggregatesModel.AlbumAggregate.ContentType", b =>
+                {
+                    b.Navigation("AlbumContentTypes");
                 });
 
             modelBuilder.Entity("Portal.Domain.AggregatesModel.CollectionAggregate.Collection", b =>

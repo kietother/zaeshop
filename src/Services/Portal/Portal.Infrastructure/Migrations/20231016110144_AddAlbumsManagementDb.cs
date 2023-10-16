@@ -12,6 +12,38 @@ namespace Portal.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AlbumAlertMessage",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AlbumAlertMessage", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ContentType",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContentType", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Album",
                 columns: table => new
                 {
@@ -19,6 +51,7 @@ namespace Portal.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AlbumAlertMessageId = table.Column<int>(type: "int", nullable: true),
                     AlternativeName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AlbumStatus = table.Column<int>(type: "int", nullable: false),
@@ -32,28 +65,39 @@ namespace Portal.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Album", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Album_AlbumAlertMessage_AlbumAlertMessageId",
+                        column: x => x.AlbumAlertMessageId,
+                        principalTable: "AlbumAlertMessage",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "AlbumAlertMessage",
+                name: "AlbumContentType",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AlbumId = table.Column<int>(type: "int", nullable: true),
+                    AlbumId = table.Column<int>(type: "int", nullable: false),
+                    ContentTypeId = table.Column<int>(type: "int", nullable: false),
                     CreatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AlbumAlertMessage", x => x.Id);
+                    table.PrimaryKey("PK_AlbumContentType", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AlbumAlertMessage_Album_AlbumId",
+                        name: "FK_AlbumContentType_Album_AlbumId",
                         column: x => x.AlbumId,
                         principalTable: "Album",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AlbumContentType_ContentType_ContentTypeId",
+                        column: x => x.ContentTypeId,
+                        principalTable: "ContentType",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,28 +123,6 @@ namespace Portal.Infrastructure.Migrations
                         principalTable: "Album",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ContentType",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AlbumId = table.Column<int>(type: "int", nullable: true),
-                    CreatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ContentType", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ContentType_Album_AlbumId",
-                        column: x => x.AlbumId,
-                        principalTable: "Album",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -155,9 +177,19 @@ namespace Portal.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AlbumAlertMessage_AlbumId",
-                table: "AlbumAlertMessage",
+                name: "IX_Album_AlbumAlertMessageId",
+                table: "Album",
+                column: "AlbumAlertMessageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AlbumContentType_AlbumId",
+                table: "AlbumContentType",
                 column: "AlbumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AlbumContentType_ContentTypeId",
+                table: "AlbumContentType",
+                column: "ContentTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Collection_AlbumId",
@@ -178,18 +210,13 @@ namespace Portal.Infrastructure.Migrations
                 name: "IX_ContentItem_CollectionId",
                 table: "ContentItem",
                 column: "CollectionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ContentType_AlbumId",
-                table: "ContentType",
-                column: "AlbumId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AlbumAlertMessage");
+                name: "AlbumContentType");
 
             migrationBuilder.DropTable(
                 name: "Comment");
@@ -205,6 +232,9 @@ namespace Portal.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Album");
+
+            migrationBuilder.DropTable(
+                name: "AlbumAlertMessage");
         }
     }
 }
