@@ -1,10 +1,11 @@
-using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Portal.Domain.Models.ContentTypeModels
 {
     // Request model
     public class ContentTypeRequestModel
     {
+        [Required(ErrorMessage = "error_coo_name_is_required")]
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
     }
