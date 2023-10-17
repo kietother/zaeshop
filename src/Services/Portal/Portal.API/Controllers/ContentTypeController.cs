@@ -56,7 +56,7 @@ namespace Portal.API.Controllers
             var result = await _contentTypeService.DeleteContentTypeAsync(id);
             if (!result.IsSuccess)
             {
-                return BadRequest(result.ErrorMessage);
+                return BadRequest(result);
             }
 
             return Ok(result);
