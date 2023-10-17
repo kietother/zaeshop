@@ -21,6 +21,11 @@ namespace Portal.API.Controllers
         public async Task<IActionResult> Create(ContentTypeRequestModel model)
         {
             var result = await _contentTypeService.CreateContentTypeAsync(model);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+
             return Ok(result);
         }
 
@@ -29,6 +34,11 @@ namespace Portal.API.Controllers
         public async Task<IActionResult> Update(int id, ContentTypeRequestModel model)
         {
             var result = await _contentTypeService.UpdateContentTypeAsync(id, model);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+
             return Ok(result);
         }
 
@@ -44,6 +54,11 @@ namespace Portal.API.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _contentTypeService.DeleteContentTypeAsync(id);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+
             return Ok(result);
         }
     }

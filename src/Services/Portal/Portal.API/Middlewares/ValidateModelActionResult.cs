@@ -13,7 +13,11 @@ public class ValidateModelActionResult : IActionResult
             if (!string.IsNullOrEmpty(key))
             {
                 context.HttpContext.Response.StatusCode = 400;
-                await context.HttpContext.Response.WriteAsJsonAsync(new { message = state[key]?.Errors[0].ErrorMessage ?? string.Empty });
+                await context.HttpContext.Response.WriteAsJsonAsync(new
+                {
+                    IsSuccess = false,
+                    ErrorMessage = state[key]?.Errors[0].ErrorMessage ?? string.Empty
+                });
             }
         }
     }
