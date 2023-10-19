@@ -6,7 +6,7 @@ using Portal.Domain.Models.ContentTypeModels;
 namespace Portal.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [Authorize]
     public class ContentTypeController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace Portal.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ContentTypeRequestModel model)
         {
-            var result = await _contentTypeService.CreateContentTypeAsync(model);
+            var result = await _contentTypeService.CreateAsync(model);
             if (!result.IsSuccess)
             {
                 return BadRequest(result);
@@ -33,7 +33,7 @@ namespace Portal.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Update(int id, ContentTypeRequestModel model)
         {
-            var result = await _contentTypeService.UpdateContentTypeAsync(id, model);
+            var result = await _contentTypeService.UpdateAsync(id, model);
             if (!result.IsSuccess)
             {
                 return BadRequest(result);
@@ -45,7 +45,7 @@ namespace Portal.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _contentTypeService.GetAllContentTypesAsync();
+            var result = await _contentTypeService.GetAllAsync();
             return Ok(result);
         }
 
@@ -53,7 +53,7 @@ namespace Portal.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _contentTypeService.DeleteContentTypeAsync(id);
+            var result = await _contentTypeService.DeleteAsync(id);
             if (!result.IsSuccess)
             {
                 return BadRequest(result);

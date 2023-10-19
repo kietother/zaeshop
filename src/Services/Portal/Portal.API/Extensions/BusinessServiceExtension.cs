@@ -10,6 +10,7 @@ namespace Portal.API.Extensions
         {
             // Inject Services
             services.AddScoped<IContentTypeService, ContentTypeService>();
+            services.AddScoped<IAlbumAlertMessageService, AlbumAlertMessageService>();
 
             return services;
         }

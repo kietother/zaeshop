@@ -17,7 +17,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             _contentTypeRepository = unitOfWork.Repository<ContentType>();
         }
 
-        public async Task<ServiceResponse<ContentTypeResponseModel>> CreateContentTypeAsync(ContentTypeRequestModel request)
+        public async Task<ServiceResponse<ContentTypeResponseModel>> CreateAsync(ContentTypeRequestModel request)
         {
             // Validate
             var existsContentType = await _contentTypeRepository.GetQueryable().AnyAsync(o => o.Name == request.Name);
@@ -47,7 +47,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
         }
 
         // Update
-        public async Task<ServiceResponse<ContentTypeResponseModel>> UpdateContentTypeAsync(int id, ContentTypeRequestModel request)
+        public async Task<ServiceResponse<ContentTypeResponseModel>> UpdateAsync(int id, ContentTypeRequestModel request)
         {
             var contentType = await _contentTypeRepository.GetByIdAsync(id);
 
@@ -73,7 +73,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
         }
 
         // Get All
-        public async Task<ServiceResponse<List<ContentTypeResponseModel>>> GetAllContentTypesAsync()
+        public async Task<ServiceResponse<List<ContentTypeResponseModel>>> GetAllAsync()
         {
             var contentTypes = await _contentTypeRepository.GetAllAsync();
 
@@ -88,7 +88,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
         }
 
         // Delete
-        public async Task<ServiceResponse<bool>> DeleteContentTypeAsync(int id)
+        public async Task<ServiceResponse<bool>> DeleteAsync(int id)
         {
             var contentType = await _contentTypeRepository.GetByIdAsync(id);
 
