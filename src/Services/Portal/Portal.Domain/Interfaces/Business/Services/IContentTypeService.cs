@@ -5,9 +5,9 @@ namespace Portal.Domain.Interfaces.Business.Services
 {
     public interface IContentTypeService
     {
-        Task<ServiceResponse<ContentTypeResponseModel>> CreateContentTypeAsync(ContentTypeRequestModel request);
-        Task<ServiceResponse<ContentTypeResponseModel>> UpdateContentTypeAsync(int id, ContentTypeRequestModel request);
-        Task<ServiceResponse<List<ContentTypeResponseModel>>> GetAllContentTypesAsync();
-        Task<ServiceResponse<bool>> DeleteContentTypeAsync(int id);
+        Task<ServiceResponse<ContentTypeResponseModel>> CreateAsync(ContentTypeRequestModel request);
+        Task<ServiceResponse<ContentTypeResponseModel>> UpdateAsync(int id, ContentTypeRequestModel request);
+        Task<ServiceResponse<List<ContentTypeResponseModel>>> GetAllAsync();
+        Task<ServiceResponse<bool>> DeleteAsync(int id);
     }
 }
