@@ -1,22 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Common
 {
     public static class CommonHelper
     {
-        /// <summary>
-        /// Retrieve the description on the enum, e.g.
-        /// [Description("Bright Pink")]
-        /// BrightPink = 2,
-        /// Then when you pass in the enum, it will retrieve the description
-        /// </summary>
-        /// <param name="en">The Enumeration</param>
-        /// <returns>A string representing the friendly name</returns>
         public static string GetDescription(Enum en)
         {
             Type type = en.GetType();
@@ -34,6 +22,21 @@ namespace Common
             }
 
             return en.ToString();
+        }
+
+        public static string? JoinSeparator(this IEnumerable<string>? list, string separator = ",", bool isSpace = false)
+        {
+            if (list == null)
+                return null;
+
+            if (isSpace)
+            {
+                return string.Join(separator + " ", list);
+            }
+            else
+            {
+                return string.Join(separator, list);
+            }
         }
     }
 }

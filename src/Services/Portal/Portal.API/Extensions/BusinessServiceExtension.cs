@@ -1,4 +1,3 @@
-using System;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Infrastructure.Implements.Business.Services;
 
@@ -11,6 +10,7 @@ namespace Portal.API.Extensions
             // Inject Services
             services.AddScoped<IContentTypeService, ContentTypeService>();
             services.AddScoped<IAlbumAlertMessageService, AlbumAlertMessageService>();
+            services.AddScoped<IAlbumService, AlbumService>();
 
             return services;
         }
