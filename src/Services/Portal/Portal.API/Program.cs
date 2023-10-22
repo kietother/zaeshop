@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Portal.API.Controllers;
 using Portal.API.Extensions;
 using Portal.API.Middlewares;
@@ -12,6 +13,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddPortalServices(builder.Configuration);
 builder.Services.AddHangFireServices(builder.Configuration);
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = _ => new ValidateModelActionResult();
+});
+
 builder.Services.AddBusinessServices();
 builder.Services.AddSwaggerServices();
 builder.Services.AddCors();

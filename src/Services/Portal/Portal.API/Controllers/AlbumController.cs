@@ -1,26 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
 using Portal.Domain.Interfaces.Business.Services;
-using Portal.Domain.Models.AlbumAlertMessageModels;
+using Portal.Domain.Models.AlbumModels;
 
 namespace Portal.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class AlbumAlertMessageController : ControllerBase
+    public class AlbumController : ControllerBase
     {
-        private readonly IAlbumAlertMessageService _service;
+        private readonly IAlbumService _albumService;
 
-        public AlbumAlertMessageController(IAlbumAlertMessageService service)
+        public AlbumController(IAlbumService albumService)
         {
-            _service = service;
+            _albumService = albumService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(AlbumAlertMessageRequestModel model)
+        public async Task<IActionResult> Create(AlbumRequestModel model)
         {
-            var response = await _service.CreateAsync(model);
+            var response = await _albumService.CreateAsync(model);
 
             if (!response.IsSuccess)
                 return BadRequest(response);
@@ -29,9 +29,9 @@ namespace Portal.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, AlbumAlertMessageRequestModel model)
+        public async Task<IActionResult> Update(int id, AlbumRequestModel model)
         {
-            var response = await _service.UpdateAsync(id, model);
+            var response = await _albumService.UpdateAsync(id, model);
 
             if (!response.IsSuccess)
                 return BadRequest(response);
@@ -42,7 +42,7 @@ namespace Portal.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var response = await _service.GetAllAsync();
+            var response = await _albumService.GetAllAsync();
 
             if (!response.IsSuccess)
                 return BadRequest(response);
@@ -53,7 +53,7 @@ namespace Portal.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _service.DeleteAsync(id);
+            var response = await _albumService.DeleteAsync(id);
 
             if (!response.IsSuccess)
                 return BadRequest(response);

@@ -17,7 +17,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             _repository = unitOfWork.Repository<AlbumAlertMessage>();
         }
 
-        public async Task<ServiceResponse<AlbumAlertMessageResponseModel>> AddAsync(AlbumAlertMessageRequestModel requestModel)
+        public async Task<ServiceResponse<AlbumAlertMessageResponseModel>> CreateAsync(AlbumAlertMessageRequestModel requestModel)
         {
             // Validate
             if (await DoesNameExistAsync(requestModel.Name))
