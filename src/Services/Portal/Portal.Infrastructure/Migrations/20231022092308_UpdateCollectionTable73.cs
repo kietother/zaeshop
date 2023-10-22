@@ -5,7 +5,7 @@
 namespace Portal.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class _73UpdateCollectionTable : Migration
+    public partial class UpdateCollectionTable73 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
