@@ -20,7 +20,7 @@ namespace Portal.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(AlbumAlertMessageRequestModel model)
         {
-            var response = await _service.AddAsync(model);
+            var response = await _service.CreateAsync(model);
 
             if (!response.IsSuccess)
                 return BadRequest(response);

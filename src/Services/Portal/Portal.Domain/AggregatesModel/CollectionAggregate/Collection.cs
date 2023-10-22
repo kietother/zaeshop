@@ -7,7 +7,7 @@ namespace Portal.Domain.AggregatesModel.CollectionAggregate
     public class Collection : Entity
     {
         public int AlbumId { get; set; }
-        public int Volume { get; set; }
+        public int? Volume { get; set; }
 
         public string Title { get; set; } = null!;
         public string? ExtendName { get; set; }

@@ -23,7 +23,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             _contentTypeRepository = unitOfWork.Repository<ContentType>();
         }
 
-        public async Task<ServiceResponse<AlbumResponseModel>> AddAsync(AlbumRequestModel requestModel)
+        public async Task<ServiceResponse<AlbumResponseModel>> CreateAsync(AlbumRequestModel requestModel)
         {
             // Validate
             if (await DoesTitleExistAsync(requestModel.Title))
@@ -92,7 +92,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
             // Get existing entity
             var existingAlbum = await _repository.GetByIdAsync(id);
             if (existingAlbum == null)
+            {
                 return new ServiceResponse<AlbumResponseModel>("error_album_not_found");
+            }
 
             // Validate
             if (await DoesTitleExistAsync(requestModel.Title))
@@ -131,7 +133,6 @@ namespace Portal.Infrastructure.Implements.Business.Services
             // Create or Update ContentType
             if (requestModel.ContentTypeIds?.Any() == true)
             {
-                var existingAlbumContentTypeIds = existingAlbum.AlbumContentTypes.Select(x => x.ContentTypeId).ToList();
                 foreach (var contentTypeId in requestModel.ContentTypeIds)
                 {
                     var existingAlbumContentType = existingAlbum.AlbumContentTypes.FirstOrDefault(x => x.ContentTypeId == contentTypeId);
