@@ -22,17 +22,17 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
         public async Task<ServiceResponse<CollectionResponseModel>> CreateAsync(CollectionRequestModel requestModel)
         {
-            // Validate if the associated album exists
-            var isExistsTitle = await _repository.GetQueryable().AnyAsync(x => x.Title == requestModel.Title);
-            if (isExistsTitle)
-            {
-                return new ServiceResponse<CollectionResponseModel>("error_collection_title_exists");
-            }
-
             var existingAlbum = await _albumRepository.GetByIdAsync(requestModel.AlbumId);
             if (existingAlbum == null)
             {
                 return new ServiceResponse<CollectionResponseModel>("error_album_not_found");
+            }
+
+            // Validate if the associated album exists
+            var isExistsTitle = await _repository.GetQueryable().AnyAsync(x => x.Title == requestModel.Title && x.AlbumId == requestModel.AlbumId);
+            if (isExistsTitle)
+            {
+                return new ServiceResponse<CollectionResponseModel>("error_collection_title_exists");
             }
 
             // Create a new collection entity
@@ -68,12 +68,6 @@ namespace Portal.Infrastructure.Implements.Business.Services
         public async Task<ServiceResponse<CollectionResponseModel>> UpdateAsync(int id, CollectionRequestModel requestModel)
         {
             // Retrieve the existing collection entity by ID
-            var isExistsTitle = await _repository.GetQueryable().AnyAsync(x => x.Title == requestModel.Title);
-            if (isExistsTitle)
-            {
-                return new ServiceResponse<CollectionResponseModel>("error_collection_title_exists");
-            }
-
             var existingEntity = await _repository.GetByIdAsync(id);
             if (existingEntity == null)
             {
@@ -85,6 +79,12 @@ namespace Portal.Infrastructure.Implements.Business.Services
             if (existingAlbum == null)
             {
                 return new ServiceResponse<CollectionResponseModel>("error_album_not_found");
+            }
+
+            var isExistsTitle = await _repository.GetQueryable().AnyAsync(x => x.Title == requestModel.Title && x.AlbumId == requestModel.AlbumId);
+            if (isExistsTitle)
+            {
+                return new ServiceResponse<CollectionResponseModel>("error_collection_title_exists");
             }
 
             // Update the existing collection entity properties

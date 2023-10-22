@@ -12,8 +12,8 @@ using Portal.Infrastructure;
 namespace Portal.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231022084918_73UpdateCollectionTable")]
-    partial class _73UpdateCollectionTable
+    [Migration("20231022092308_UpdateCollectionTable73")]
+    partial class UpdateCollectionTable73
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
