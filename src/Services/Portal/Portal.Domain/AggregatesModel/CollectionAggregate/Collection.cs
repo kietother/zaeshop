@@ -13,6 +13,8 @@ namespace Portal.Domain.AggregatesModel.CollectionAggregate
         public string? ExtendName { get; set; }
         public string? Description { get; set; }
 
+        public bool IsPublic { get; set; }
+
         [JsonIgnore]
         public virtual Album Album { get; set; } = null!;
 
