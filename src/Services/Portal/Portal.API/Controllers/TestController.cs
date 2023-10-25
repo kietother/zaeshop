@@ -4,6 +4,8 @@ using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
 using Portal.Domain.AggregatesModel.UserAggregate;
+using Portal.Domain.Interfaces.External;
+using Portal.Domain.Models.ImageUploadModels;
 
 namespace Portal.API.Controllers
 {
@@ -14,15 +16,18 @@ namespace Portal.API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly IApiService _apiService;
+        private readonly IImageService _imageService;
 
         public TestController(
             IUnitOfWork unitOfWork,
             IBackgroundJobClient backgroundJobClient,
-            IApiService apiService)
+            IApiService apiService,
+            IImageService imageService)
         {
             _unitOfWork = unitOfWork;
             _backgroundJobClient = backgroundJobClient;
             _apiService = apiService;
+            _imageService = imageService;
         }
 
         [HttpGet]
@@ -57,6 +62,36 @@ namespace Portal.API.Controllers
         {
             var result = await _apiService.GetAsync<object>(EServiceHost.Identity, "/v1/users");
             return Ok(result);
+        }
+
+        [HttpPost("bulk-upload")]
+        // Limit 1 MB
+        [RequestSizeLimit(1024 * 1024)]
+        public async Task<IActionResult> BulkUploadAsync([FromForm] List<IFormFile> files)
+        {
+            // Validate and get data
+            var listImages = new List<ImageUploadRequestModel>();
+            foreach (var file in files)
+            {
+                var fileName = file.FileName;
+                var fileBytes = GetFileBytes(file);
+
+                listImages.Add(new ImageUploadRequestModel
+                {
+                    FileName = fileName,
+                    ImageData = fileBytes
+                });
+            }
+
+            var response = await _imageService.BulkUploadAsync(listImages);
+            return Ok(response);
+        }
+
+        private static byte[] GetFileBytes(IFormFile file)
+        {
+            using var ms = new MemoryStream();
+            file.CopyTo(ms);
+            return ms.ToArray();
         }
     }
 }

@@ -1,13 +1,16 @@
 ﻿using Common.Implements;
 using Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Portal.Domain.Interfaces.External;
 using Portal.Domain.Interfaces.Infrastructure;
+using Portal.Domain.SeedWork;
 using Portal.Infrastructure;
+using Portal.Infrastructure.Helpers;
 using Portal.Infrastructure.Implements.External;
 using Portal.Infrastructure.Implements.Services;
 using Portal.Infrastructure.SeedWork;
 
-namespace Portal.API.Extensions;
+namespace HangFireServer.Extensions;
 public static class PortalServiceExtensions
 {
     public static IServiceCollection AddPortalServices(this IServiceCollection services, IConfiguration config)
