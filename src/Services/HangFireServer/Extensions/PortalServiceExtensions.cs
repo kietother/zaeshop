@@ -26,7 +26,6 @@ public static class PortalServiceExtensions
         services.AddScoped<IApiService, ApiService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IJwtService, JwtService>();
-        services.AddScoped<IImageService, ImageService>();
         services.AddScoped<IAmazonS3Service, AmazonS3Service>();
         return services;
     }
