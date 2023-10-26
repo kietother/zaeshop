@@ -2,7 +2,9 @@ using Common.Models;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
 using Portal.Domain.Interfaces.Business.Services;
+using Portal.Domain.Interfaces.External;
 using Portal.Domain.Models.CollectionModels;
+using Portal.Domain.Models.ImageUploadModels;
 using Portal.Domain.SeedWork;
 
 namespace Portal.Infrastructure.Implements.Business.Services
@@ -12,12 +14,16 @@ namespace Portal.Infrastructure.Implements.Business.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IGenericRepository<Collection> _repository;
         private readonly IGenericRepository<Album> _albumRepository;
+        private readonly IGenericRepository<ContentItem> _contentItemRepository;
+        private readonly IAmazonS3Service _amazonS3Service;
 
-        public CollectionService(IUnitOfWork unitOfWork)
+        public CollectionService(IUnitOfWork unitOfWork, IAmazonS3Service amazonS3Service)
         {
             _unitOfWork = unitOfWork;
             _repository = unitOfWork.Repository<Collection>();
             _albumRepository = unitOfWork.Repository<Album>();
+            _contentItemRepository = unitOfWork.Repository<ContentItem>();
+            _amazonS3Service = amazonS3Service;
         }
 
         public async Task<ServiceResponse<CollectionResponseModel>> CreateAsync(CollectionRequestModel requestModel)
@@ -127,8 +133,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 AlbumId = x.AlbumId,
                 Volume = x.Volume,
                 ExtendName = x.ExtendName,
-                Description = x.Description
+                Description = x.Description,
                 // Add other properties as needed
+                ContentItems = x.ContentItems?.Select(y => y.DisplayUrl).ToList()
             }).ToList();
 
             return new ServiceResponse<List<CollectionResponseModel>>(response);
@@ -145,6 +152,56 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
             // Delete the entity from the repository and save changes
             _repository.Delete(existingEntity);
+            await _unitOfWork.SaveChangesAsync();
+
+            return new ServiceResponse<bool>(true);
+        }
+
+        public async Task<ServiceResponse<bool>> CreateOrUpdateContentItemsAsync(int id, ContentItemRequestModel model)
+        {
+            if (model.Items == null || model.Items.Count == 0)
+            {
+                return new ServiceResponse<bool>("error_content_type_not_empty");
+            }
+
+            // Retrieve the existing collection entity by ID
+            var existingCollection = await _repository.GetByIdAsync(id);
+            if (existingCollection == null)
+            {
+                return new ServiceResponse<bool>("error_collection_not_found");
+            }
+
+            // Build and Upload to image services
+            var amazonBulkUploadModels = model.Items.Select(x => new ImageUploadRequestModel
+            {
+                FileName = x.Name,
+                ImageData = x.Data
+            }).ToList();
+
+            var result = await _amazonS3Service.BulkUploadImages(amazonBulkUploadModels, $"{existingCollection.Album?.Title}-{existingCollection.Title}");
+
+            // Store database
+            var deleteItems = new List<ContentItem>();
+            var addItems = new List<ContentItem>();
+
+            foreach (var item in existingCollection.ContentItems)
+            {
+                if (model.Items.Any(x => x.Name == item.Name))
+                {
+                    deleteItems.Add(item);
+                }
+            }
+
+            addItems.AddRange(result.Select(x => new ContentItem
+            {
+                CollectionId = id,
+                Name = x.FileName,
+                DisplayUrl = x.AbsoluteUrl,
+                FileName = x.RelativeUrl
+            }));
+
+            _contentItemRepository.DeleteRange(deleteItems);
+            _contentItemRepository.AddRange(addItems);
             await _unitOfWork.SaveChangesAsync();
 
             return new ServiceResponse<bool>(true);

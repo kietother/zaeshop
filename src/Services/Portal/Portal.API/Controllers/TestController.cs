@@ -16,20 +16,17 @@ namespace Portal.API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly IApiService _apiService;
-        private readonly IImageService _imageService;
         private readonly IAmazonS3Service _amazonS3Service;
 
         public TestController(
             IUnitOfWork unitOfWork,
             IBackgroundJobClient backgroundJobClient,
             IApiService apiService,
-            IImageService imageService,
             IAmazonS3Service amazonS3Service)
         {
             _unitOfWork = unitOfWork;
             _backgroundJobClient = backgroundJobClient;
             _apiService = apiService;
-            _imageService = imageService;
             _amazonS3Service = amazonS3Service;
         }
 

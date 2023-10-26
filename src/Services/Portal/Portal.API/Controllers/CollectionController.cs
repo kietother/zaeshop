@@ -66,5 +66,44 @@ namespace Portal.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost]
+        [Route("{id}/content-items")]
+        [RequestSizeLimit(1024 * 1024)]
+        public async Task<IActionResult> CreateOrUpdateContentItemsAsync([FromRoute] int id, [FromForm] List<IFormFile> files)
+        {
+            // Validate and get data
+            var model = new ContentItemRequestModel
+            {
+                Items = new List<ContentItemRequestDetailModel>()
+            };
+
+            foreach (var file in files)
+            {
+                var fileName = file.FileName;
+                var fileBytes = GetFileBytes(file);
+
+                model.Items.Add(new ContentItemRequestDetailModel
+                {
+                    Name = fileName,
+                    Data = fileBytes
+                });
+            }
+
+            var result = await _collectionService.CreateOrUpdateContentItemsAsync(id, model);
+            if (!result.IsSuccess)
+            {
+                return BadRequest("error_server_upload_images_not_sucessfully");
+            }
+
+            return Ok();
+        }
+
+        private static byte[] GetFileBytes(IFormFile file)
+        {
+            using var ms = new MemoryStream();
+            file.CopyTo(ms);
+            return ms.ToArray();
+        }
     }
 }

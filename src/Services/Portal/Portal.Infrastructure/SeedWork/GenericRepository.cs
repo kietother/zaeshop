@@ -75,9 +75,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : Entity
         context.Set<T>().Remove(entity);
     }
 
-    public void DeleteRange(T entity)
+    public void DeleteRange(List<T> entities)
     {
-        context.Set<T>().RemoveRange(entity);
+        context.Set<T>().RemoveRange(entities);
     }
 
     public IQueryable<T> GetQueryable()
