@@ -17,6 +17,17 @@ namespace Portal.Domain.Models.CollectionModels
         public string? Description { get; set; }
     }
 
+    public class ContentItemRequestModel
+    {
+        public List<ContentItemRequestDetailModel>? Items;
+    }
+
+    public class ContentItemRequestDetailModel
+    {
+        public string Name { get; set; } = null!;
+        public byte[] Data { get; set; } = null!;
+    }
+
     // Response model for Collection
     public class CollectionResponseModel
     {
@@ -27,5 +38,7 @@ namespace Portal.Domain.Models.CollectionModels
         public int? Volume { get; set; }
         public string? ExtendName { get; set; }
         public string? Description { get; set; }
+
+        public List<string?>? ContentItems { get; set; }
     }
 }
