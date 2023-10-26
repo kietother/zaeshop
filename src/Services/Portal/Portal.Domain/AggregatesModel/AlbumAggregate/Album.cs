@@ -22,6 +22,8 @@ namespace Portal.Domain.AggregatesModel.AlbumAggregate
         public string? Tags { get; set; }
         #endregion
 
+        public bool IsPublic { get; set; }
+
         [JsonIgnore]
         public virtual ICollection<Collection> Collections { get; set; } = new List<Collection>();
 

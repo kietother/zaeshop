@@ -66,3 +66,7 @@ Envoy
 openssl req -config https.config -new -out csr.pem
 openssl x509 -req -days 365 -extfile https.config -extensions v3_req -in csr.pem -signkey key.pem -out https.crt
 https://stackoverflow.com/questions/69441899/issue-with-envoy-unable-to-read-server-key-pem
+
+Aws cli
+https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+https://codewithmukesh.com/blog/working-with-aws-s3-using-aspnet-core/

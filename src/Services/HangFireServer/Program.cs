@@ -13,6 +13,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHangFireServices(builder.Configuration);
 
 // Hangfire will DI of Portal to background jobs
+builder.Services.AddPortalServices(builder.Configuration);
+builder.Services.AddBusinessServices();
 
 var app = builder.Build();
 
