@@ -17,17 +17,20 @@ namespace Portal.API.Controllers
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly IApiService _apiService;
         private readonly IImageService _imageService;
+        private readonly IAmazonS3Service _amazonS3Service;
 
         public TestController(
             IUnitOfWork unitOfWork,
             IBackgroundJobClient backgroundJobClient,
             IApiService apiService,
-            IImageService imageService)
+            IImageService imageService,
+            IAmazonS3Service amazonS3Service)
         {
             _unitOfWork = unitOfWork;
             _backgroundJobClient = backgroundJobClient;
             _apiService = apiService;
             _imageService = imageService;
+            _amazonS3Service = amazonS3Service;
         }
 
         [HttpGet]
@@ -83,7 +86,7 @@ namespace Portal.API.Controllers
                 });
             }
 
-            var response = await _imageService.BulkUploadAsync(listImages);
+            var response = await _amazonS3Service.BulkUploadImages(listImages, "Test");
             return Ok(response);
         }
 

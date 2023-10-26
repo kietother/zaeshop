@@ -4,6 +4,6 @@ namespace Portal.Domain.Interfaces.External
 {
     public interface IImageService
     {
-        Task<List<ImageUploadResponseModel>> BulkUploadAsync(List<ImageUploadRequestModel> requestModels, int? expiration = null);
+        Task<List<ImageUploadResultModel>> BulkUploadAsync(List<ImageUploadRequestModel> requestModels, int? expiration = null);
     }
 }

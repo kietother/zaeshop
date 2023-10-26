@@ -19,6 +19,8 @@
     <PackageReference Include="Hangfire.SqlServer" Version="1.8.6" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.205.17" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.7" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Helpers/" />
