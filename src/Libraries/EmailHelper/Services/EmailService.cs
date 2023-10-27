@@ -23,7 +23,7 @@ namespace EmailHelper.Services
             HandleSendMail(subject, body, toEmails, ccEmails, attachments);
         }
 
-        private bool HandleSendMail(string subject, string body, List<string> toEmails, List<string>? ccEmails = null, List<EmailAttachment>? attachments = null)
+        private void HandleSendMail(string subject, string body, List<string> toEmails, List<string>? ccEmails = null, List<EmailAttachment>? attachments = null)
         {
             try
             {
@@ -72,13 +72,10 @@ namespace EmailHelper.Services
                 client.Credentials = new NetworkCredential(_emailOptions.SmtpUser, _emailOptions.SmtpPassword);
                 client.EnableSsl = true;
                 client.Send(message);
-
-                return true;
             }
             catch (Exception e)
             {
                 _logger.LogError("An error during send email (SMTP)", e);
-                return false;
             }
         }
     }

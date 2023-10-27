@@ -14,7 +14,7 @@ namespace Identity.API.Middlewares
 
         public async Task Invoke(HttpContext context, IJwtService jwtService)
         {
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split("Bearer ").Last();
+            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split("Bearer ").LastOrDefault();
             if (!string.IsNullOrWhiteSpace(token))
             {
                 var userInfoModel = jwtService.ValidateJwtToken(token);

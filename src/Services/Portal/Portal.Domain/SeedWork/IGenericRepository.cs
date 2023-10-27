@@ -10,6 +10,6 @@ public interface IGenericRepository<T> where T : Entity
     void Update(T entity);
     void UpdateRange(List<T> entities);
     void Delete(T entity);
-    void DeleteRange(List<T> entity);
+    void DeleteRange(List<T> entities);
     IQueryable<T> GetQueryable();
 }
