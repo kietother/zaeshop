@@ -1,26 +1,21 @@
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+# Build image
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /app
-EXPOSE 5287
 
-ENV ASPNETCORE_URLS=http://+:5287
+COPY . .
+RUN dotnet publish "src/Services/Identity/Identity.API/Identity.API.csproj" -c Release -o out
 
-# Creates a non-root user with an explicit UID and adds permission to access the /app folder
-# For more info, please refer to https://aka.ms/vscode-docker-dotnet-configure-containers
-RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+# Runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
+WORKDIR /app
+COPY --from=build /app/out .
+
+# Non-root user for security
+RUN addgroup --system --gid 5678 appgroup && \
+    adduser --system --uid 5678 --gid 5678 appuser
 USER appuser
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
-COPY ["src/Services/Identity/Identity.API/Identity.API.csproj", "src/Services/Identity/Identity.API/"]
-RUN dotnet restore "src/Services/Identity/Identity.API/Identity.API.csproj"
-COPY . .
-WORKDIR "/src/src/Services/Identity/Identity.API"
-RUN dotnet build "Identity.API.csproj" -c Release -o /app/build
-
-FROM build AS publish
-RUN dotnet publish "Identity.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
+# Configure listening port and run
+ENV ASPNETCORE_URLS=http://+:5287
+EXPOSE 5287
 ENTRYPOINT ["dotnet", "Identity.API.dll"]
