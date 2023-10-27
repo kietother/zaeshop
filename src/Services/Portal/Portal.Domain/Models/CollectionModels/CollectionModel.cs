@@ -19,7 +19,7 @@ namespace Portal.Domain.Models.CollectionModels
 
     public class ContentItemRequestModel
     {
-        public List<ContentItemRequestDetailModel>? Items;
+        public List<ContentItemRequestDetailModel>? Items { get; set; }
     }
 
     public class ContentItemRequestDetailModel

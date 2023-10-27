@@ -90,7 +90,7 @@ namespace Portal.API.Controllers
                 });
             }
 
-            var result = await _collectionService.CreateOrUpdateContentItemsAsync(id, model);
+            var result = await _collectionService.CreateContentItemsAsync(id, model);
             if (!result.IsSuccess)
             {
                 return BadRequest("error_server_upload_images_not_sucessfully");

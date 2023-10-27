@@ -157,7 +157,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             return new ServiceResponse<bool>(true);
         }
 
-        public async Task<ServiceResponse<bool>> CreateOrUpdateContentItemsAsync(int id, ContentItemRequestModel model)
+        public async Task<ServiceResponse<bool>> CreateContentItemsAsync(int id, ContentItemRequestModel model)
         {
             if (model.Items == null || model.Items.Count == 0)
             {
@@ -171,36 +171,33 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 return new ServiceResponse<bool>("error_collection_not_found");
             }
 
+            // Check if Collection has any content item, that should be update instead create
+            var isExistingContentItems = existingCollection.ContentItems.Any();
+            if (isExistingContentItems)
+            {
+                return new ServiceResponse<bool>("error_content_type_not_empty");
+            }
+
             // Build and Upload to image services
-            var amazonBulkUploadModels = model.Items.Select(x => new ImageUploadRequestModel
+            var amazonBulkUploadModels = model.Items.ConvertAll(x => new ImageUploadRequestModel
             {
                 FileName = x.Name,
                 ImageData = x.Data
             }).ToList();
 
-            var result = await _amazonS3Service.BulkUploadImages(amazonBulkUploadModels, $"{existingCollection.Album?.Title}-{existingCollection.Title}");
+            var result = await _amazonS3Service.BulkUploadImages(amazonBulkUploadModels, $"{existingCollection.Album.Title}/{existingCollection.Title}");
 
             // Store database
-            var deleteItems = new List<ContentItem>();
-            var addItems = new List<ContentItem>();
-
-            foreach (var item in existingCollection.ContentItems)
-            {
-                if (model.Items.Any(x => x.Name == item.Name))
-                {
-                    deleteItems.Add(item);
-                }
-            }
-
-            addItems.AddRange(result.Select(x => new ContentItem
+            var addItems = result.Select((x, index) => new ContentItem
             {
                 CollectionId = id,
                 Name = x.FileName,
+                OriginalUrl = x.AbsoluteUrl,
                 DisplayUrl = x.AbsoluteUrl,
-                FileName = x.RelativeUrl
-            }));
+                RelativeUrl = x.RelativeUrl,
+                OrderBy = index
+            }).OrderBy(x => x.OrderBy).ToList();
 
-            _contentItemRepository.DeleteRange(deleteItems);
             _contentItemRepository.AddRange(addItems);
             await _unitOfWork.SaveChangesAsync();
 

@@ -9,6 +9,6 @@ namespace Portal.Domain.Interfaces.Business.Services
         Task<ServiceResponse<CollectionResponseModel>> UpdateAsync(int id, CollectionRequestModel requestModel);
         Task<ServiceResponse<List<CollectionResponseModel>>> GetAllAsync();
         Task<ServiceResponse<bool>> DeleteAsync(int id);
-        Task<ServiceResponse<bool>> CreateOrUpdateContentItemsAsync(int id, ContentItemRequestModel model);
+        Task<ServiceResponse<bool>> CreateContentItemsAsync(int id, ContentItemRequestModel model);
     }
 }

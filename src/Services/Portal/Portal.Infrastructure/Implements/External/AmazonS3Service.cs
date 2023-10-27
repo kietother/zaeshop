@@ -16,7 +16,7 @@ namespace Portal.Infrastructure.Implements.External
             _s3Client = s3Client;
         }
 
-        [Obsolete]
+        [Obsolete("Replaced by DoesS3BucketExistV2Async in the future")]
         public async Task<List<ImageUploadResultModel>> BulkUploadImages(List<ImageUploadRequestModel> requestModels, string? prefix = null)
         {
             var bucketExists = await _s3Client.DoesS3BucketExistAsync(_bucketName);
@@ -31,7 +31,7 @@ namespace Portal.Infrastructure.Implements.External
                 var putRequest = new PutObjectRequest
                 {
                     BucketName = _bucketName,
-                    Key = string.IsNullOrEmpty(prefix) ? requestModel.FileName : $"{prefix?.TrimEnd('/')}/{requestModel.FileName}",
+                    Key = string.IsNullOrEmpty(prefix) ? requestModel.FileName : $"{prefix.TrimEnd('/')}/{requestModel.FileName}",
                     InputStream = new MemoryStream(requestModel.ImageData)
                 };
 

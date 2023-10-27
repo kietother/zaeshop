@@ -11,7 +11,7 @@ namespace Identity.Domain.Models.ErrorResponses
             Message = message ?? GetDefaultMessageForStatusCode(statusCode);
         }
 
-        public string? GetDefaultMessageForStatusCode(int statusCode)
+        public static string? GetDefaultMessageForStatusCode(int statusCode)
         {
             return statusCode switch
             {
