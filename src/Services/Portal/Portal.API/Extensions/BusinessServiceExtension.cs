@@ -12,6 +12,7 @@ namespace Portal.API.Extensions
             services.AddScoped<IAlbumAlertMessageService, AlbumAlertMessageService>();
             services.AddScoped<IAlbumService, AlbumService>();
             services.AddScoped<ICollectionService, CollectionService>();
+            services.AddScoped<IContentItemService, ContentItemService>();
 
             return services;
         }
