@@ -1,3 +1,4 @@
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
 using Portal.Domain.Interfaces.Business.Services;
@@ -11,10 +12,14 @@ namespace Portal.API.Controllers
     public class CollectionController : ControllerBase
     {
         private readonly ICollectionService _collectionService;
+        private readonly IBackgroundJobClient _backgroundJobClient;
 
-        public CollectionController(ICollectionService collectionService)
+        public CollectionController(
+            ICollectionService collectionService,
+            IBackgroundJobClient backgroundJobClient)
         {
             _collectionService = collectionService;
+            _backgroundJobClient = backgroundJobClient;
         }
 
         [HttpPost]
@@ -70,7 +75,7 @@ namespace Portal.API.Controllers
         [HttpPost]
         [Route("{id}/content-items")]
         [RequestSizeLimit(1024 * 1024)]
-        public async Task<IActionResult> CreateOrUpdateContentItemsAsync([FromRoute] int id, [FromForm] List<IFormFile> files)
+        public IActionResult CreateContentItems([FromRoute] int id, [FromForm] List<IFormFile> files)
         {
             // Validate and get data
             var model = new ContentItemRequestModel
@@ -90,12 +95,7 @@ namespace Portal.API.Controllers
                 });
             }
 
-            var result = await _collectionService.CreateContentItemsAsync(id, model);
-            if (!result.IsSuccess)
-            {
-                return BadRequest("error_server_upload_images_not_sucessfully");
-            }
-
+            _backgroundJobClient.Enqueue<IContentItemService>(x => x.CreateContentItemsAsync(id, model));
             return Ok();
         }
 
