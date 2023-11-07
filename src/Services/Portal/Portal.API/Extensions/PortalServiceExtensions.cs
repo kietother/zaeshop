@@ -26,6 +26,7 @@ public static class PortalServiceExtensions
              options.Configuration = config.GetConnectionString("RedisConnection");
              options.InstanceName = "Portal";
          });
+        services.AddDistributedMemoryCache();
 
         services.AddScoped<IRedisService>(x => new RedisService(x.GetRequiredService<IDistributedCache>(), new RedisOptions
         {

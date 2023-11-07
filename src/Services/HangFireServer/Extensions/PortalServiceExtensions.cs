@@ -18,7 +18,7 @@ public static class PortalServiceExtensions
 {
     public static IServiceCollection AddPortalServices(this IServiceCollection services, IConfiguration config)
     {
-                services.AddDbContext<ApplicationDbContext>(opt => opt.UseLazyLoadingProxies().UseSqlServer(config.GetConnectionString("PortalConnection")));
+        services.AddDbContext<ApplicationDbContext>(opt => opt.UseLazyLoadingProxies().UseSqlServer(config.GetConnectionString("PortalConnection")));
         services.Configure<AppSettings>(config.GetSection("AppSettings"));
 
         services.AddDefaultAWSOptions(config.GetAWSOptions());
@@ -29,6 +29,7 @@ public static class PortalServiceExtensions
              options.Configuration = config.GetConnectionString("RedisConnection");
              options.InstanceName = "Portal";
          });
+        services.AddDistributedMemoryCache();
 
         services.AddScoped<IRedisService>(x => new RedisService(x.GetRequiredService<IDistributedCache>(), new RedisOptions
         {

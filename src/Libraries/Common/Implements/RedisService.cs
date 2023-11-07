@@ -41,6 +41,12 @@ namespace Common.Implements
             return default;
         }
 
+        public async Task<string?> GetStringAsync(string key)
+        {
+            var value = await _cache.GetStringAsync(key);
+            return value;
+        }
+
         public void Set<T>(string key, T value, int expiration)
         {
             _cache.SetString(key, JsonSerializer.Serialize(value), new DistributedCacheEntryOptions

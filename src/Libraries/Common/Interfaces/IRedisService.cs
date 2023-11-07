@@ -4,6 +4,7 @@ namespace Common.Interfaces
     {
         T? Get<T>(string key);
         Task<T?> GetAsync<T>(string key);
+        Task<string?> GetStringAsync(string key);
         void Set<T>(string key, T value, int expiration);
         Task SetAsync<T>(string key, T value, int expiration);
         T GetByFunction<T>(string key, int expiration, Func<T> func);
