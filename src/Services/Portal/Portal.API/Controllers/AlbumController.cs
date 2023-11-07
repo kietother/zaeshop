@@ -40,6 +40,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet]
+        [RedisCache(5)]
         public async Task<IActionResult> GetAll()
         {
             var response = await _albumService.GetAllAsync();

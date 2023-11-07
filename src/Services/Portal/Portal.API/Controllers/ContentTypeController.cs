@@ -43,6 +43,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet]
+        [RedisCache(5)]
         public async Task<IActionResult> GetAll()
         {
             var result = await _contentTypeService.GetAllAsync();

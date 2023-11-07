@@ -1,4 +1,6 @@
 using System.Data;
+using Common.Enums;
+using Common.Interfaces;
 using Common.Models;
 using Dapper;
 using Identity.Domain.AggregatesModel.UserAggregate;
@@ -17,15 +19,18 @@ namespace Identity.Infrastructure.Implements.Business.Services
         private readonly AppIdentityDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IApiService _apiService;
 
         public UserService(
             AppIdentityDbContext context,
             UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IApiService apiService)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _apiService = apiService;
         }
 
         public async Task<List<User>> GetAllAsync()
@@ -62,6 +67,20 @@ namespace Identity.Infrastructure.Implements.Business.Services
             if (!result.Succeeded)
             {
                 errorResult.Description = string.Join(", ", result.Errors.Select(o => o.Description));
+                return null;
+            }
+
+            // Sync to portal
+            var resultApi = await _apiService.PostAsync<SyncUserFromIdentityRequestModel, SyncUserFromIdentityResponseModel>(EServiceHost.Portal, "/v1/users", new SyncUserFromIdentityRequestModel
+            {
+                IdentityId = user.Id,
+                FullName = user.FullName
+            });
+
+            if (resultApi != null && !resultApi.IsSuccess)
+            {
+                await _userManager.DeleteAsync(user);
+                errorResult.Description = resultApi.Message ?? string.Empty;
                 return null;
             }
 
