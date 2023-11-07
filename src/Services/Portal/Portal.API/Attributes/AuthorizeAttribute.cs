@@ -21,7 +21,7 @@ namespace Portal.API.Attributes
         public AuthorizeAttribute(params ERoles[] roles)
         {
             _roles = roles.ToList();
-            if (!roles.Any(r => r == ERoles.Administrator))
+            if (!_roles.Exists(r => r == ERoles.Administrator))
             {
                 _roles.Add(ERoles.Administrator);
             }
