@@ -21,10 +21,6 @@ namespace HangFireServer.Extensions
                     DisableGlobalLocks = true
                 }));
 
-            // Add Hangfire services - In memory
-            // var inMemory = GlobalConfiguration.Configuration.UseInMemoryStorage();
-            // services.AddHangfire(x => x.UseInMemoryStorage());
-
             // Add the processing server as IHostedService
             services.AddHangfireServer();
 

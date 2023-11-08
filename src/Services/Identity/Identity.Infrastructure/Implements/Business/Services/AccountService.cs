@@ -255,7 +255,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
             {
                 errorResult.Description = CommonHelper.GetDescription(ErrorCodes.UserNotExists);
                 return;
-            };
+            }
 
             // create reset token that expires after 1 day
             user.ResetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -320,8 +320,6 @@ namespace Identity.Infrastructure.Implements.Business.Services
             }
 
             user.ResetPasswordOnUtc = DateTime.UtcNow;
-            // user.ResetPasswordToken = null;
-            // user.ResetPasswordTokenExpiresOnUtc = null;
 
             _context.Users.Update(user);
             _context.SaveChanges();
