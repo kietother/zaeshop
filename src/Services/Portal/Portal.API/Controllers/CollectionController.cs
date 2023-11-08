@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.CollectionModels;
+using Portal.Domain.Models.ContentItemModels;
 
 namespace Portal.API.Controllers
 {
@@ -73,6 +74,20 @@ namespace Portal.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("{id}/content-items")]
+        [RedisCache(5)]
+        public async Task<IActionResult> GetContentItems(int id)
+        {
+            var result = await _collectionService.GetContentItemsAsync(id);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
         [HttpPost]
         [Route("{id}/content-items")]
         [RequestSizeLimit(1024 * 1024)]
@@ -97,6 +112,15 @@ namespace Portal.API.Controllers
             }
 
             _backgroundJobClient.Enqueue<IContentItemService>(x => x.CreateContentItemsAsync(id, model));
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("{id}/content-items")]
+        [RequestSizeLimit(1024 * 1024)]
+        public IActionResult UpdateContentItems([FromRoute] int id, [FromBody] ContentItemUpdateRequestModel updateRequestModel)
+        {
+            _backgroundJobClient.Enqueue<IContentItemService>(x => x.UpdateContentItemsAsync(id, updateRequestModel));
             return Ok();
         }
 

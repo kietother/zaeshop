@@ -17,7 +17,7 @@ namespace Portal.Infrastructure.Implements.External
         }
 
         [Obsolete("Replaced by DoesS3BucketExistV2Async in the future")]
-        public async Task<List<ImageUploadResultModel>> BulkUploadImages(List<ImageUploadRequestModel> requestModels, string? prefix = null)
+        public async Task<List<ImageUploadResultModel>> BulkUploadImagesAsync(List<ImageUploadRequestModel> requestModels, string? prefix = null)
         {
             var bucketExists = await _s3Client.DoesS3BucketExistAsync(_bucketName);
             if (!bucketExists)
@@ -40,7 +40,9 @@ namespace Portal.Infrastructure.Implements.External
                 {
                     FileName = requestModel.FileName,
                     AbsoluteUrl = uploadResult.HttpStatusCode == HttpStatusCode.OK ? $"https://{_bucketName}.s3.amazonaws.com/{putRequest.Key}" : null,
-                    RelativeUrl = uploadResult.HttpStatusCode == HttpStatusCode.OK ? putRequest.Key: null
+                    RelativeUrl = uploadResult.HttpStatusCode == HttpStatusCode.OK ? putRequest.Key: null,
+                    OrderBy = requestModel.OrderBy,
+                    IsPublic = requestModel.IsPublic
                 });
             }
 

@@ -26,7 +26,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             _amazonS3Service = amazonS3Service;
         }
 
-        public async Task<ServiceResponse<bool>> CreateContentItemsAsync(int id, ContentItemRequestModel model)
+        public async Task<ServiceResponse<bool>> CreateContentItemsAsync(int collectionId, ContentItemRequestModel model)
         {
             if (model.Items == null || model.Items.Count == 0)
             {
@@ -34,7 +34,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
 
             // Retrieve the existing collection entity by ID
-            var existingCollection = await _collectionRepository.GetByIdAsync(id);
+            var existingCollection = await _collectionRepository.GetByIdAsync(collectionId);
             if (existingCollection == null)
             {
                 return new ServiceResponse<bool>("error_collection_not_found");
@@ -54,12 +54,12 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 ImageData = x.Data
             }).ToList();
 
-            var result = await _amazonS3Service.BulkUploadImages(amazonBulkUploadModels, $"{existingCollection.Album.Title}/{existingCollection.Title}");
+            var result = await _amazonS3Service.BulkUploadImagesAsync(amazonBulkUploadModels, $"{existingCollection.Album.Title}/{existingCollection.Title}");
 
             // Store database
             var addItems = result.Select((x, index) => new ContentItem
             {
-                CollectionId = id,
+                CollectionId = collectionId,
                 Name = x.FileName,
                 OriginalUrl = x.AbsoluteUrl,
                 DisplayUrl = x.AbsoluteUrl,
@@ -73,21 +73,21 @@ namespace Portal.Infrastructure.Implements.Business.Services
             return new ServiceResponse<bool>(true);
         }
 
-        public async Task<ServiceResponse<bool>> UpdateContentItemsAsync(int id, ContentItemUpdateRequestModel model)
+        public async Task<ServiceResponse<bool>> UpdateContentItemsAsync(int collectionId, ContentItemUpdateRequestModel model)
         {
             var createContentItems = new List<ContentItem>();
             var updateContentItems = new List<ContentItem>();
             var deleteContentItems = new List<ContentItem>();
 
             // Retrieve the existing collection entity by ID
-            var existingCollection = await _collectionRepository.GetByIdAsync(id);
+            var existingCollection = await _collectionRepository.GetByIdAsync(collectionId);
             if (existingCollection == null)
             {
                 return new ServiceResponse<bool>("error_collection_not_found");
             }
 
             // Check when new collection - before create then update
-            var contentItems = await _contentItemRepository.GetQueryable().Where(x => x.CollectionId == id).ToListAsync();
+            var contentItems = await _contentItemRepository.GetQueryable().Where(x => x.CollectionId == collectionId).ToListAsync();
             if (!contentItems.Any())
             {
                 return new ServiceResponse<bool>("error_content_type_empty");
@@ -98,12 +98,10 @@ namespace Portal.Infrastructure.Implements.Business.Services
             {
                 foreach (var item in model.ExistsItems)
                 {
-                    var contentItem = contentItems.FirstOrDefault(x => x.Id == item.Id);
+                    var contentItem = contentItems.Find(x => x.Id == item.Id);
                     if (contentItem != null)
                     {
                         contentItem.OrderBy = item.OrderBy;
-                        //contentItem.IsPublic = item.IsPublic;
-
                         updateContentItems.Add(contentItem);
                     }
                 }
@@ -120,22 +118,25 @@ namespace Portal.Infrastructure.Implements.Business.Services
             // Build and Upload to image services
             if (model.Items?.Any() == true)
             {
-                var amazonBulkUploadModels = model.Items.ConvertAll(x => new ImageUploadRequestModel
+                var amazonBulkUploadModels = model.Items.Where(o => !string.IsNullOrEmpty(o.FileName) && o.FileData != null).Select(x => new ImageUploadRequestModel
                 {
-                    FileName = x.Name,
-                    ImageData = x.Data
+                    FileName = x.FileName!,
+                    ImageData = x.FileData!,
+                    OrderBy = x.OrderBy,
+                    IsPublic = x.IsPublic
                 }).ToList();
 
-                var result = await _amazonS3Service.BulkUploadImages(amazonBulkUploadModels, $"{existingCollection.Album.Title}/{existingCollection.Title}");
+                var result = await _amazonS3Service.BulkUploadImagesAsync(amazonBulkUploadModels, $"{existingCollection.Album.Title}/{existingCollection.Title}");
                 foreach (var newItem in result)
                 {
-                    var contentItem = contentItems.FirstOrDefault(x => x.Name == newItem.FileName);
+                    var contentItem = contentItems.Find(x => x.Name == newItem.FileName);
                     if (contentItem != null)
                     {
                         contentItem.Name = newItem.FileName;
                         contentItem.OriginalUrl = newItem.AbsoluteUrl;
                         contentItem.DisplayUrl = newItem.AbsoluteUrl;
                         contentItem.RelativeUrl = newItem.RelativeUrl;
+                        contentItem.OrderBy = newItem.OrderBy;
 
                         updateContentItems.Add(contentItem);
                     }
@@ -143,11 +144,12 @@ namespace Portal.Infrastructure.Implements.Business.Services
                     {
                         createContentItems.Add(new ContentItem
                         {
-                            CollectionId = id,
+                            CollectionId = collectionId,
                             Name = newItem.FileName,
                             OriginalUrl = newItem.AbsoluteUrl,
                             DisplayUrl = newItem.AbsoluteUrl,
-                            RelativeUrl = newItem.RelativeUrl
+                            RelativeUrl = newItem.RelativeUrl,
+                            OrderBy = newItem.OrderBy
                         });
                     }
                 }
