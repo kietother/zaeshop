@@ -83,7 +83,7 @@ namespace Portal.API.Controllers
                 });
             }
 
-            var response = await _amazonS3Service.BulkUploadImages(listImages, "Test");
+            var response = await _amazonS3Service.BulkUploadImagesAsync(listImages, "Test");
             return Ok(response);
         }
 

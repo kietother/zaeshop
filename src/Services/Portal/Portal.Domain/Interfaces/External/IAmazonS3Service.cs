@@ -4,6 +4,6 @@ namespace Portal.Domain.Interfaces.External
 {
     public interface IAmazonS3Service
     {
-        Task<List<ImageUploadResultModel>> BulkUploadImages(List<ImageUploadRequestModel> requestModels, string? prefix = null);
+        Task<List<ImageUploadResultModel>> BulkUploadImagesAsync(List<ImageUploadRequestModel> requestModels, string? prefix = null);
     }
 }

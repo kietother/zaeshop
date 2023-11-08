@@ -50,8 +50,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : Entity
             prop.SetValue(entity, DateTime.UtcNow);
         }
 
-        context.Set<T>().Attach(entity);
-        context.Entry(entity).State = EntityState.Modified;
+        // EF Core is already tracking the existing entity
     }
 
     public void UpdateRange(List<T> entities)
@@ -66,8 +65,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : Entity
             }
         }
 
-        context.Set<T>().AttachRange(entities);
-        context.Entry(entities).State = EntityState.Modified;
+        // EF Core is already tracking the existing entities
     }
 
     public void Delete(T entity)

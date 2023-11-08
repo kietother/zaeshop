@@ -3,6 +3,7 @@ using Portal.Domain.AggregatesModel.CollectionAggregate;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Interfaces.External;
 using Portal.Domain.Models.CollectionModels;
+using Portal.Domain.Models.ContentItemModels;
 using Portal.Domain.Models.ImageUploadModels;
 using Portal.Domain.SeedWork;
 
@@ -25,7 +26,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             _amazonS3Service = amazonS3Service;
         }
 
-        public async Task<ServiceResponse<bool>> CreateContentItemsAsync(int id, ContentItemRequestModel model)
+        public async Task<ServiceResponse<bool>> CreateContentItemsAsync(int collectionId, ContentItemRequestModel model)
         {
             if (model.Items == null || model.Items.Count == 0)
             {
@@ -33,7 +34,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
 
             // Retrieve the existing collection entity by ID
-            var existingCollection = await _collectionRepository.GetByIdAsync(id);
+            var existingCollection = await _collectionRepository.GetByIdAsync(collectionId);
             if (existingCollection == null)
             {
                 return new ServiceResponse<bool>("error_collection_not_found");
@@ -53,12 +54,12 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 ImageData = x.Data
             }).ToList();
 
-            var result = await _amazonS3Service.BulkUploadImages(amazonBulkUploadModels, $"{existingCollection.Album.Title}/{existingCollection.Title}");
+            var result = await _amazonS3Service.BulkUploadImagesAsync(amazonBulkUploadModels, $"{existingCollection.Album.Title}/{existingCollection.Title}");
 
             // Store database
             var addItems = result.Select((x, index) => new ContentItem
             {
-                CollectionId = id,
+                CollectionId = collectionId,
                 Name = x.FileName,
                 OriginalUrl = x.AbsoluteUrl,
                 DisplayUrl = x.AbsoluteUrl,
@@ -69,6 +70,107 @@ namespace Portal.Infrastructure.Implements.Business.Services
             _contentItemRepository.AddRange(addItems);
             await _unitOfWork.SaveChangesAsync();
 
+            return new ServiceResponse<bool>(true);
+        }
+
+        public async Task<ServiceResponse<bool>> UpdateContentItemsAsync(int collectionId, ContentItemUpdateRequestModel model)
+        {
+            var createContentItems = new List<ContentItem>();
+            var updateContentItems = new List<ContentItem>();
+            var deleteContentItems = new List<ContentItem>();
+
+            // Retrieve the existing collection entity by ID
+            var existingCollection = await _collectionRepository.GetByIdAsync(collectionId);
+            if (existingCollection == null)
+            {
+                return new ServiceResponse<bool>("error_collection_not_found");
+            }
+
+            // Check when new collection - before create then update
+            var contentItems = await _contentItemRepository.GetQueryable().Where(x => x.CollectionId == collectionId).ToListAsync();
+            if (!contentItems.Any())
+            {
+                return new ServiceResponse<bool>("error_content_type_empty");
+            }
+
+            // Update exists content item by id
+            if (model.ExistsItems?.Any() == true)
+            {
+                foreach (var item in model.ExistsItems)
+                {
+                    var contentItem = contentItems.Find(x => x.Id == item.Id);
+                    if (contentItem != null)
+                    {
+                        contentItem.OrderBy = item.OrderBy;
+                        updateContentItems.Add(contentItem);
+                    }
+                }
+
+                // Content are not longer use, we will remove them
+                var existingContentItemIds = updateContentItems.ConvertAll(x => x.Id);
+                deleteContentItems.AddRange(contentItems.Where(x => !existingContentItemIds.Contains(x.Id)));
+            }
+            else
+            {
+                deleteContentItems.AddRange(contentItems);
+            }
+
+            // Build and Upload to image services
+            if (model.Items?.Any() == true)
+            {
+                var amazonBulkUploadModels = model.Items.Where(o => !string.IsNullOrEmpty(o.FileName) && o.FileData != null).Select(x => new ImageUploadRequestModel
+                {
+                    FileName = x.FileName!,
+                    ImageData = x.FileData!,
+                    OrderBy = x.OrderBy,
+                    IsPublic = x.IsPublic
+                }).ToList();
+
+                var result = await _amazonS3Service.BulkUploadImagesAsync(amazonBulkUploadModels, $"{existingCollection.Album.Title}/{existingCollection.Title}");
+                foreach (var newItem in result)
+                {
+                    var contentItem = contentItems.Find(x => x.Name == newItem.FileName);
+                    if (contentItem != null)
+                    {
+                        contentItem.Name = newItem.FileName;
+                        contentItem.OriginalUrl = newItem.AbsoluteUrl;
+                        contentItem.DisplayUrl = newItem.AbsoluteUrl;
+                        contentItem.RelativeUrl = newItem.RelativeUrl;
+                        contentItem.OrderBy = newItem.OrderBy;
+
+                        updateContentItems.Add(contentItem);
+                    }
+                    else
+                    {
+                        createContentItems.Add(new ContentItem
+                        {
+                            CollectionId = collectionId,
+                            Name = newItem.FileName,
+                            OriginalUrl = newItem.AbsoluteUrl,
+                            DisplayUrl = newItem.AbsoluteUrl,
+                            RelativeUrl = newItem.RelativeUrl,
+                            OrderBy = newItem.OrderBy
+                        });
+                    }
+                }
+            }
+
+            if (deleteContentItems.Any())
+            {
+                _contentItemRepository.DeleteRange(deleteContentItems);
+            }
+
+            if (updateContentItems.Any())
+            {
+                _contentItemRepository.UpdateRange(updateContentItems);
+            }
+
+            if (createContentItems.Any())
+            {
+                _contentItemRepository.AddRange(createContentItems);
+            }
+
+            await _unitOfWork.SaveChangesAsync();
             return new ServiceResponse<bool>(true);
         }
     }

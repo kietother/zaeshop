@@ -3,6 +3,7 @@ using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.CollectionModels;
+using Portal.Domain.Models.ContentItemModels;
 using Portal.Domain.SeedWork;
 
 namespace Portal.Infrastructure.Implements.Business.Services
@@ -12,12 +13,14 @@ namespace Portal.Infrastructure.Implements.Business.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IGenericRepository<Collection> _repository;
         private readonly IGenericRepository<Album> _albumRepository;
+        private readonly IGenericRepository<ContentItem> _contentItemRepository;
 
         public CollectionService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _repository = unitOfWork.Repository<Collection>();
             _albumRepository = unitOfWork.Repository<Album>();
+            _contentItemRepository = unitOfWork.Repository<ContentItem>();
         }
 
         public async Task<ServiceResponse<CollectionResponseModel>> CreateAsync(CollectionRequestModel requestModel)
@@ -151,6 +154,25 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
             return new ServiceResponse<bool>(true);
         }
+
+        public async Task<ServiceResponse<List<GetContentItemModel>>> GetContentItemsAsync(int id)
+        {
+            var contentItems = await _contentItemRepository.GetQueryable().Where(x => x.CollectionId == id)
+                                    .Select(x => new GetContentItemModel
+                                    {
+                                        Id = x.Id,
+                                        Name = x.Name,
+                                        OrderBy = x.OrderBy,
+                                        RelativeUrl = x.RelativeUrl,
+                                        DisplayUrl = x.DisplayUrl,
+                                        OriginalUrl = x.OriginalUrl,
+                                        CreatedOnUtc = x.CreatedOnUtc,
+                                        Type = x.Type
+                                    }).ToListAsync();
+
+            return new ServiceResponse<List<GetContentItemModel>>(contentItems);
+        }
+
         // Additional private methods or helper functions can be added here
     }
 }
