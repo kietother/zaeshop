@@ -1,4 +1,5 @@
-﻿using Amazon.S3;
+﻿using Amazon;
+using Amazon.S3;
 using Common.Implements;
 using Common.Interfaces;
 using Common.Models.Redis;
@@ -18,8 +19,7 @@ public static class PortalServiceExtensions
         services.AddDbContext<ApplicationDbContext>(opt => opt.UseLazyLoadingProxies().UseSqlServer(config.GetConnectionString("PortalConnection")));
         services.Configure<AppSettings>(config.GetSection("AppSettings"));
 
-        services.AddDefaultAWSOptions(config.GetAWSOptions());
-        services.AddAWSService<IAmazonS3>();
+        services.AddScoped<IAmazonS3>(x => new AmazonS3Client(config["AWS:AccessKey"], config["AWS:SecretKey"], RegionEndpoint.USEast1));
 
         services.AddStackExchangeRedisCache(options =>
          {
