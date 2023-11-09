@@ -1,4 +1,3 @@
-using System.Reflection;
 using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Infrastructure.EntityConfigurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -19,7 +18,6 @@ namespace Identity.Infrastructure
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             builder.ApplyConfiguration(new UserEntityTypeConfiguration());
             builder.ApplyConfiguration(new UserTokenEntityTypeConfiguration());
