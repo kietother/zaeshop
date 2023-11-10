@@ -1,4 +1,5 @@
-﻿using System.Security.Authentication;
+﻿using System.Reflection;
+using System.Security.Authentication;
 using Amazon;
 using Amazon.S3;
 using Common.Implements;
@@ -43,7 +44,8 @@ public static class PortalServiceExtensions
 
         services.AddMassTransit(x =>
         {
-            x.AddConsumer<HelloWorldComsumer>();
+            var entryAssembly = Assembly.GetExecutingAssembly();
+            x.AddConsumers(entryAssembly);
 
             x.UsingRabbitMq((context, cfg) =>
             {
