@@ -1,8 +1,12 @@
-﻿using Amazon;
+﻿using System.Reflection;
+using System.Security.Authentication;
+using Amazon;
 using Amazon.S3;
 using Common.Implements;
 using Common.Interfaces;
 using Common.Models.Redis;
+using HangFireServer.Messaging.Comsumers;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Portal.Domain.Interfaces.External;
@@ -37,6 +41,27 @@ public static class PortalServiceExtensions
             Port = config.GetSection("RedisSettings").GetValue<string>("Port") ?? string.Empty,
             InstanceName = "Portal"
         }));
+
+        services.AddMassTransit(x =>
+        {
+            var entryAssembly = Assembly.GetExecutingAssembly();
+            x.AddConsumers(entryAssembly);
+
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(config.GetSection("RabitMQSettings").GetValue<string>("Hostname"), 5671, config.GetSection("RabitMQSettings").GetValue<string>("VHost"), h =>
+                {
+                    h.Username(config.GetSection("RabitMQSettings").GetValue<string>("Username"));
+                    h.Password(config.GetSection("RabitMQSettings").GetValue<string>("Password"));
+                    h.UseSsl(s =>
+                    {
+                        s.Protocol = SslProtocols.Tls12;
+                    });
+                });
+
+                cfg.ConfigureEndpoints(context);
+            });
+        });
 
         // Inject Services
         services.AddScoped<IApiService, ApiService>();

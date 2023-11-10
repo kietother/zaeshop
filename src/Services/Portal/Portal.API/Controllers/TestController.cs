@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
 using Portal.Domain.AggregatesModel.UserAggregate;
 using Portal.Domain.Interfaces.External;
+using Portal.Domain.Interfaces.Messaging;
 using Portal.Domain.Models.ImageUploadModels;
 
 namespace Portal.API.Controllers
@@ -17,17 +18,20 @@ namespace Portal.API.Controllers
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly IApiService _apiService;
         private readonly IAmazonS3Service _amazonS3Service;
+        private readonly IHelloWorldSender _helloWorldSender;
 
         public TestController(
             IUnitOfWork unitOfWork,
             IBackgroundJobClient backgroundJobClient,
             IApiService apiService,
-            IAmazonS3Service amazonS3Service)
+            IAmazonS3Service amazonS3Service,
+            IHelloWorldSender helloWorldSender)
         {
             _unitOfWork = unitOfWork;
             _backgroundJobClient = backgroundJobClient;
             _apiService = apiService;
             _amazonS3Service = amazonS3Service;
+            _helloWorldSender = helloWorldSender;
         }
 
         [HttpGet]
@@ -92,6 +96,14 @@ namespace Portal.API.Controllers
             using var ms = new MemoryStream();
             file.CopyTo(ms);
             return ms.ToArray();
+        }
+
+        // API send message from helloworldsender
+        [HttpPost("send-message")]
+        public async Task<IActionResult> SendMessageAsync(string message)
+        {
+            await _helloWorldSender.SendAsync(message);
+            return Ok();
         }
     }
 }
