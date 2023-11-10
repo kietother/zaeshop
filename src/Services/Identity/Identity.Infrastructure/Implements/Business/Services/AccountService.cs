@@ -84,7 +84,15 @@ namespace Identity.Infrastructure.Implements.Business.Services
         public async Task<AuthenticateResponse> RefreshTokenAsync(string token, string ipAddress)
         {
             var user = await GetUserByRefreshTokenAsync(token);
-            var refreshToken = user?.UserTokens.FirstOrDefault(x => x.Token == token);
+            var refreshToken = await _userTokensDbSet.FirstOrDefaultAsync(x => x.Token == token);
+
+            if (user == null)
+            {
+                return new AuthenticateResponse
+                {
+                    ErrorResult = CommonHelper.GetDescription(ErrorCodes.UserNotExists)
+                };
+            }
 
             if (refreshToken?.IsActive != true)
             {
@@ -96,9 +104,10 @@ namespace Identity.Infrastructure.Implements.Business.Services
 
             // replace old refresh token with a new one (rotate token)
             var newRefreshToken = RotateRefreshToken(refreshToken, ipAddress);
-            user!.UserTokens.Add(newRefreshToken);
-
-            _context.Update(user);
+            newRefreshToken.UserId = user.Id;
+            _userTokensDbSet.Add(newRefreshToken);
+            _userTokensDbSet.Update(refreshToken);
+        
             await _context.SaveChangesAsync();
 
             // generate new jwt
