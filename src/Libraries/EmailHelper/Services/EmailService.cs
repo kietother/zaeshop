@@ -18,12 +18,12 @@ namespace EmailHelper.Services
             _emailOptions = emailOptions;
         }
 
-        public void SendMail(string subject, string body, List<string> toEmails, List<string>? ccEmails = null, List<EmailAttachment>? attachments = null)
+        public async Task SendMailAsync(string subject, string body, List<string> toEmails, List<string>? ccEmails = null, List<EmailAttachment>? attachments = null)
         {
-            HandleSendMail(subject, body, toEmails, ccEmails, attachments);
+            await HandleSendMailAsync(subject, body, toEmails, ccEmails, attachments);
         }
 
-        private void HandleSendMail(string subject, string body, List<string> toEmails, List<string>? ccEmails = null, List<EmailAttachment>? attachments = null)
+        private async Task HandleSendMailAsync(string subject, string body, List<string> toEmails, List<string>? ccEmails = null, List<EmailAttachment>? attachments = null)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace EmailHelper.Services
                 using var client = new SmtpClient(_emailOptions.SmtpServer, _emailOptions.SmtpPort);
                 client.Credentials = new NetworkCredential(_emailOptions.SmtpUser, _emailOptions.SmtpPassword);
                 client.EnableSsl = true;
-                client.Send(message);
+                await client.SendMailAsync(message);
             }
             catch (Exception e)
             {

@@ -20,7 +20,7 @@ namespace EmailHelper.Services
             _emailOptions = emailOptions;
         }
 
-        public void SendMail(string subject, string body, List<string> toEmails,
+        public async Task SendMailAsync(string subject, string body, List<string> toEmails,
             List<string>? ccEmails = null,
             List<EmailAttachment>? attachments = null)
         {
@@ -40,10 +40,10 @@ namespace EmailHelper.Services
 
                 // send email
                 using var smtp = new SmtpClient();
-                smtp.Connect(_emailOptions.SmtpServer, _emailOptions.SmtpPort, SecureSocketOptions.StartTls);
-                smtp.Authenticate(_emailOptions.SmtpUser, _emailOptions.SmtpPassword);
-                smtp.Send(email);
-                smtp.Disconnect(true);
+                await smtp.ConnectAsync(_emailOptions.SmtpServer, _emailOptions.SmtpPort, SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync(_emailOptions.SmtpUser, _emailOptions.SmtpPassword);
+                await smtp.SendAsync(email);
+                await smtp.DisconnectAsync(true);
             }
             catch (Exception e)
             {

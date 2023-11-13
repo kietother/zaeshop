@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Portal\Portal.Infrastructure\Portal.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Libraries\EmailHelper\EmailHelper.csproj" />
   </ItemGroup>
 
 </Project>

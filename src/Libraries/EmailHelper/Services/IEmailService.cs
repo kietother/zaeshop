@@ -8,6 +8,6 @@ namespace EmailHelper.Services
 {
     public interface IEmailService
     {
-        void SendMail(string subject, string body, List<string> toEmails, List<string>? ccEmails = null, List<EmailAttachment>? attachments = null);
+        Task SendMailAsync(string subject, string body, List<string> toEmails, List<string>? ccEmails = null, List<EmailAttachment>? attachments = null);
     }
 }
