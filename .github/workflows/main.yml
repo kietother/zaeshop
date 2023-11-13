@@ -39,28 +39,28 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build and push Hangfire Server
-         uses: docker/build-push-action@v5
-          with:
-            context: .
-            file: ./src/Services/HangFireServer/Dockerfile
-            push: true
-            tags: ${{ secrets.DOCKERHUB_USERNAME }}/zaeshop-hangfireserver-dev:latest
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./src/Services/HangFireServer/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/zaeshop-hangfireserver-dev:latest
 
       - name: Build and push Identity API
-         uses: docker/build-push-action@v5
-          with:
-            context: .
-            file: ./src/Services/Identity/Dockerfile
-            push: true
-            tags: ${{ secrets.DOCKERHUB_USERNAME }}/zaeshop-identity-dev:latest
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./src/Services/Identity/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/zaeshop-identity-dev:latest
 
       - name: Build and push Portal API
-         uses: docker/build-push-action@v5
-          with:
-            context: .
-            file: ./src/Services/Portal/Dockerfile
-            push: true
-            tags: ${{ secrets.DOCKERHUB_USERNAME }}/zaeshop-portal-dev:latest
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./src/Services/Portal/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/zaeshop-portal-dev:latest
   deploy:
     name: Deploy to EC2
     needs: build
