@@ -16,44 +16,29 @@ services:
     networks:
       - mynetwork
   hangfireserver:
-    image: hangfireserver
-    build:
-      context: .
-      dockerfile: src/Services/HangFireServer/Dockerfile
+    image: kietdev1/zaeshop-hangfireserver-dev:latest
     ports:
       - 5286:5286
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    volumes:
-      - ~/.vsdbg:/remote_debugger:rw
     networks:
       - mynetwork
   identity:
-    image: identity
-    build:
-      context: .
-      dockerfile: src/Services/Identity/Identity.API/Dockerfile
+    image: kietdev1/zaeshop-identity-dev:latest
     ports:
       - 5287:5287
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_ENVIRONMENT_DEPLOYED=True
-    volumes:
-      - ~/.vsdbg:/remote_debugger:rw
     networks:
       - mynetwork
   portal:
-    image: portal
-    build:
-      context: .
-      dockerfile: src/Services/Portal/Portal.API/Dockerfile
+    image: kietdev1/zaeshop-portal-dev:latest
     ports:
       - 5288:5288
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_ENVIRONMENT_DEPLOYED=True
-    volumes:
-      - ~/.vsdbg:/remote_debugger:rw
     networks:
       - mynetwork
 networks:
