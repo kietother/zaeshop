@@ -57,7 +57,7 @@ public static class PortalServiceExtensions
             });
         });
 
-        // Portal register publishers for MassTransit
+        // Portal registers publishers for MassTransit
         services.AddScoped<IHelloWorldPublisher, HelloWorldPublisher>();
         services.AddScoped<ISendMailPublisher, SendMailPublisher>();
 

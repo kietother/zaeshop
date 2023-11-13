@@ -9,7 +9,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.13" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Libraries\EmailHelper\EmailHelper.csproj" />
     <ProjectReference Include="..\..\..\Libraries\Common\Common.csproj" />
   </ItemGroup>
 

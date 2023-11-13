@@ -2,8 +2,7 @@ using System.Security.Cryptography;
 using Common;
 using Common.Enums;
 using Common.Interfaces;
-using EmailHelper.Services;
-using Hangfire;
+using Common.Interfaces.Messaging;
 using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Domain.Business.Interfaces.Services;
 using Identity.Domain.Interfaces.Infrastructure;
@@ -26,7 +25,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly AppSettings _appSettings;
-        private readonly IEmailService _emailService;
+        private readonly ISendMailPublisher _sendMailPublisher;
         private readonly IApiService _apiService;
         private readonly DbSet<UserToken> _userTokensDbSet;
 
@@ -36,7 +35,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IOptions<AppSettings> appSettings,
-            IEmailService emailService,
+            ISendMailPublisher sendMailPublisher,
             IApiService apiService)
         {
             _context = context;
@@ -44,7 +43,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
             _userManager = userManager;
             _signInManager = signInManager;
             _appSettings = appSettings.Value;
-            _emailService = emailService;
+            _sendMailPublisher = sendMailPublisher;
             _apiService = apiService;
             _userTokensDbSet = context.Set<UserToken>();
         }
@@ -107,7 +106,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
             newRefreshToken.UserId = user.Id;
             _userTokensDbSet.Add(newRefreshToken);
             _userTokensDbSet.Update(refreshToken);
-        
+
             await _context.SaveChangesAsync();
 
             // generate new jwt
@@ -207,7 +206,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
                 Email = user.Email,
                 VerificationToken = user.VerificationToken
             };
-            BackgroundJob.Enqueue<AccountService>(x => x.SendVerificationEmail(userSendMailModel, ""));
+            await SendVerificationEmailAsync(userSendMailModel, "");
 
             return new UserRegisterResponseModel
             {
@@ -280,7 +279,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
                 Email = user.Email,
                 ResetPasswordToken = user.ResetPasswordToken
             };
-            BackgroundJob.Enqueue<AccountService>(x => x.SendPasswordResetEmail(userSendMailModel, ""));
+            await SendPasswordResetEmailAsync(userSendMailModel, "");
         }
 
         private string GenerateResetToken()
@@ -350,7 +349,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
         #endregion
 
         #region Email
-        private void SendVerificationEmail(UserSendMailModel userModel, string origin)
+        private async Task SendVerificationEmailAsync(UserSendMailModel userModel, string origin)
         {
             string message;
 
@@ -377,10 +376,15 @@ namespace Identity.Infrastructure.Implements.Business.Services
                         <p>Thanks for registering!</p>
                         {message}";
 
-            _emailService.SendMail(subject, body, toEmails: new List<string> { userModel.Email ?? string.Empty });
+            await _sendMailPublisher.SendMailAsync(new Common.Shared.Models.Emails.SendEmailMessage
+            {
+                Subject = subject,
+                Body = body,
+                ToEmails = new List<string> { userModel.Email ?? string.Empty }
+            });
         }
 
-        private void SendPasswordResetEmail(UserSendMailModel userModel, string origin)
+        private async Task SendPasswordResetEmailAsync(UserSendMailModel userModel, string origin)
         {
             string message;
             if (!string.IsNullOrEmpty(origin))
@@ -401,7 +405,12 @@ namespace Identity.Infrastructure.Implements.Business.Services
                         <h4>Reset Password Email</h4>
                         {message}";
 
-            _emailService.SendMail(subject, body, toEmails: new List<string> { userModel.Email ?? string.Empty });
+            await _sendMailPublisher.SendMailAsync(new Common.Shared.Models.Emails.SendEmailMessage
+            {
+                Subject = subject,
+                Body = body,
+                ToEmails = new List<string> { userModel.Email ?? string.Empty }
+            });
         }
         #endregion
     }

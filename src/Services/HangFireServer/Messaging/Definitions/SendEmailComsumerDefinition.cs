@@ -3,19 +3,19 @@ using MassTransit;
 
 namespace HangFireServer.Messaging.Definitions
 {
-    public class SendEmailComsumerDefinition : ConsumerDefinition<HelloWorldComsumer>
+    public class SendEmailComsumerDefinition : ConsumerDefinition<SendEmailComsumer>
     {
         public SendEmailComsumerDefinition()
         {
             // override the default endpoint name
-            EndpointName = "send-mail-comsumer-local";
+            EndpointName = "send-mail-comsumer";
 
             // limit the number of messages consumed concurrently
             // this applies to the consumer only, not the endpoint
             ConcurrentMessageLimit = 8;
         }
 
-        protected override void ConfigureConsumer(IReceiveEndpointConfigurator endpointConfigurator, IConsumerConfigurator<HelloWorldComsumer> consumerConfigurator, IRegistrationContext context)
+        protected override void ConfigureConsumer(IReceiveEndpointConfigurator endpointConfigurator, IConsumerConfigurator<SendEmailComsumer> consumerConfigurator, IRegistrationContext context)
         {
             base.ConfigureConsumer(endpointConfigurator, consumerConfigurator, context);
 
