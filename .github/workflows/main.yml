@@ -51,7 +51,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./src/Services/Identity/Dockerfile
+          file: ./src/Services/Identity/Identity.API/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/zaeshop-identity-dev:latest
 
@@ -59,7 +59,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./src/Services/Portal/Dockerfile
+          file: ./src/Services/Portal/Portal.API/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/zaeshop-portal-dev:latest
   deploy:
