@@ -4,11 +4,11 @@ using Portal.Domain.Interfaces.Messaging;
 
 namespace Portal.Infrastructure.Implements.Messaging
 {
-    public class HelloWorldSender : IHelloWorldSender
+    public class HelloWorldPublisher : IHelloWorldPublisher
     {
         private readonly IPublishEndpoint _publishEndpoint;
 
-        public HelloWorldSender(IPublishEndpoint publishEndpoint)
+        public HelloWorldPublisher(IPublishEndpoint publishEndpoint)
         {
             _publishEndpoint = publishEndpoint;
         }

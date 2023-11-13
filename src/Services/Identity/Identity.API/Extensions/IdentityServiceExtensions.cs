@@ -3,14 +3,16 @@ using Identity.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using EmailHelper.Models;
-using EmailHelper.Services;
 using Common.Interfaces;
 using Common.Implements;
 using Identity.Domain.Business.Interfaces.Services;
 using Identity.Infrastructure.Implements.Business.Services;
 using Identity.Domain.Interfaces.Infrastructure;
 using Identity.Infrastructure.Implements.Infrastructure;
+using MassTransit;
+using System.Security.Authentication;
+using Common.Interfaces.Messaging;
+using Common.Implements.Messaging;
 
 namespace Identity.API.Extensions
 {
@@ -31,20 +33,26 @@ namespace Identity.API.Extensions
             .AddSignInManager<SignInManager<User>>()
             .AddRoleManager<RoleManager<IdentityRole>>();
 
-            var appSettingsConfig = config.GetSection("AppSettings");
-            var options = new EmailOptions
-            {
-                Environment = appSettingsConfig.GetValue<string>("Environment"),
-                SmtpServer = appSettingsConfig.GetValue<string>("SmtpServer"),
-                SmtpPort = appSettingsConfig.GetValue<int>("SmtpPort"),
-                SmtpUser = appSettingsConfig.GetValue<string>("SmtpUser"),
-                SmtpPassword = appSettingsConfig.GetValue<string>("SmtpPass"),
-                MailFrom = appSettingsConfig.GetValue<string>("EmailFrom"),
-            };
-            services.AddScoped<IEmailService>(x =>
-                new EmailMockupService(x.GetRequiredService<ILogger<EmailMockupService>>(), options)
-            );
             services.AddScoped<IApiService, ApiService>();
+
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host(config.GetSection("RabitMQSettings").GetValue<string>("Hostname"), 5671, config.GetSection("RabitMQSettings").GetValue<string>("VHost"), h =>
+                    {
+                        h.Username(config.GetSection("RabitMQSettings").GetValue<string>("Username"));
+                        h.Password(config.GetSection("RabitMQSettings").GetValue<string>("Password"));
+                        h.UseSsl(s =>
+                        {
+                            s.Protocol = SslProtocols.Tls12;
+                        });
+                    });
+                });
+            });
+
+            // Identity registers publishers for MassTransit
+            services.AddScoped<ISendMailPublisher, SendMailPublisher>();
 
             // configure DI for application services
             services.AddScoped<IJwtService, JwtService>();

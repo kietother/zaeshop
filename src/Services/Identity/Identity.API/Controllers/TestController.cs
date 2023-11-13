@@ -1,6 +1,6 @@
 using Common.Enums;
 using Common.Interfaces;
-using EmailHelper.Services;
+using Common.Interfaces.Messaging;
 using Hangfire;
 using Identity.API.Attributes;
 using Microsoft.AspNetCore.Mvc;
@@ -13,48 +13,44 @@ namespace Identity.API.Controllers
     public class TestController : ControllerBase
     {
         #region fields
-        private readonly IEmailService _emailService;
-        private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly IApiService _apiService;
+        private readonly ISendMailPublisher _sendMailPublisher;
         #endregion
 
         #region ctor
         public TestController(
-            IEmailService emailService,
-            IBackgroundJobClient backgroundJobClient,
-            IApiService apiService)
+            IApiService apiService,
+            ISendMailPublisher sendMailPublisher)
         {
-            _emailService = emailService;
-            _backgroundJobClient = backgroundJobClient;
             _apiService = apiService;
+            _sendMailPublisher = sendMailPublisher;
         }
         #endregion
-
-        [HttpGet("send-email")]
-        public IActionResult TestSendMail(string emails)
-        {
-            var listEmails = emails?.Split(",").ToList();
-
-            if (listEmails?.Any() == true)
-            {
-                _emailService.SendMail("Test Email", "<p>Test Email</p>", listEmails);
-            }
-
-            return Ok();
-        }
-
-        [HttpGet("identity-hangfire")]
-        public IActionResult TestHangFire(string message)
-        {
-            _backgroundJobClient.Enqueue(() => Console.WriteLine(message));
-            return Ok();
-        }
 
         [HttpGet("portal-grpc-get-user")]
         public async Task<IActionResult> CallApiPortalAsync()
         {
             var result = await _apiService.GetAsync<object>(EServiceHost.Portal, "/v1/users");
             return Ok(result);
+        }
+
+        [HttpPost("send-email")]
+        public async Task<IActionResult> SendMailAsync(
+           string subject,
+           string body,
+           string toEmails,
+           string? ccEmails
+        )
+        {
+            var message = new Common.Shared.Models.Emails.SendEmailMessage
+            {
+                Subject = subject,
+                Body = body,
+                ToEmails = toEmails.Split(',').ToList(),
+                CcEmails = ccEmails?.Split(',').ToList()
+            };
+            await _sendMailPublisher.SendMailAsync(message);
+            return Ok();
         }
     }
 }

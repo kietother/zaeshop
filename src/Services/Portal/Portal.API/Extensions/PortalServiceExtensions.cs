@@ -2,7 +2,9 @@
 using Amazon;
 using Amazon.S3;
 using Common.Implements;
+using Common.Implements.Messaging;
 using Common.Interfaces;
+using Common.Interfaces.Messaging;
 using Common.Models.Redis;
 using MassTransit;
 using Microsoft.Extensions.Caching.Distributed;
@@ -55,8 +57,9 @@ public static class PortalServiceExtensions
             });
         });
 
-        // Portal register sender services
-        services.AddScoped<IHelloWorldSender, HelloWorldSender>();
+        // Portal registers publishers for MassTransit
+        services.AddScoped<IHelloWorldPublisher, HelloWorldPublisher>();
+        services.AddScoped<ISendMailPublisher, SendMailPublisher>();
 
         // Inject Services
         services.AddScoped<IApiService, ApiService>();

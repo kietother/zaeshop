@@ -5,7 +5,8 @@ using Amazon.S3;
 using Common.Implements;
 using Common.Interfaces;
 using Common.Models.Redis;
-using HangFireServer.Messaging.Comsumers;
+using EmailHelper.Models;
+using EmailHelper.Services;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -68,6 +69,24 @@ public static class PortalServiceExtensions
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IAmazonS3Service, AmazonS3Service>();
+
+        // Hangfire use service differnce than Portal
+        #region Email Service
+        var appSettingsConfig = config.GetSection("AppSettings");
+        var options = new EmailOptions
+        {
+            Environment = appSettingsConfig.GetValue<string>("Environment"),
+            SmtpServer = appSettingsConfig.GetValue<string>("SmtpServer"),
+            SmtpPort = appSettingsConfig.GetValue<int>("SmtpPort"),
+            SmtpUser = appSettingsConfig.GetValue<string>("SmtpUser"),
+            SmtpPassword = appSettingsConfig.GetValue<string>("SmtpPass"),
+            MailFrom = appSettingsConfig.GetValue<string>("EmailFrom"),
+        };
+        services.AddScoped<IEmailService>(x =>
+            new EmailMockupService(x.GetRequiredService<ILogger<EmailMockupService>>(), options)
+        );
+        #endregion
+        
         return services;
     }
 }

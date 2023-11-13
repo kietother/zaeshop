@@ -27,7 +27,7 @@ namespace Portal.API.Extensions
             else
             {
                 // Add Hangfire services - In memory
-                var inMemory = GlobalConfiguration.Configuration.UseInMemoryStorage();
+                GlobalConfiguration.Configuration.UseInMemoryStorage();
                 services.AddHangfire(x => x.UseInMemoryStorage());
                 services.AddHangfireServer();
             }

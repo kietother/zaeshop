@@ -1,5 +1,6 @@
 using Common.Enums;
 using Common.Interfaces;
+using Common.Interfaces.Messaging;
 using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
@@ -18,20 +19,23 @@ namespace Portal.API.Controllers
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly IApiService _apiService;
         private readonly IAmazonS3Service _amazonS3Service;
-        private readonly IHelloWorldSender _helloWorldSender;
+        private readonly IHelloWorldPublisher _helloWorldSender;
+        private readonly ISendMailPublisher _sendMailPublisher;
 
         public TestController(
             IUnitOfWork unitOfWork,
             IBackgroundJobClient backgroundJobClient,
             IApiService apiService,
             IAmazonS3Service amazonS3Service,
-            IHelloWorldSender helloWorldSender)
+            IHelloWorldPublisher helloWorldSender,
+            ISendMailPublisher sendMailPublisher)
         {
             _unitOfWork = unitOfWork;
             _backgroundJobClient = backgroundJobClient;
             _apiService = apiService;
             _amazonS3Service = amazonS3Service;
             _helloWorldSender = helloWorldSender;
+            _sendMailPublisher = sendMailPublisher;
         }
 
         [HttpGet]
@@ -103,6 +107,25 @@ namespace Portal.API.Controllers
         public async Task<IActionResult> SendMessageAsync(string message)
         {
             await _helloWorldSender.SendAsync(message);
+            return Ok();
+        }
+
+        [HttpPost("send-email")]
+        public async Task<IActionResult> SendMailAsync(
+            string subject,
+            string body,
+            string toEmails,
+            string? ccEmails
+        )
+        {
+            var message = new Common.Shared.Models.Emails.SendEmailMessage
+            {
+                Subject = subject,
+                Body = body,
+                ToEmails = toEmails.Split(',').ToList(),
+                CcEmails = ccEmails?.Split(',').ToList()
+            };
+            await _sendMailPublisher.SendMailAsync(message);
             return Ok();
         }
     }
