@@ -42,7 +42,7 @@ namespace Portal.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         [RedisCache(5)]
         public async Task<IActionResult> GetAll()
         {

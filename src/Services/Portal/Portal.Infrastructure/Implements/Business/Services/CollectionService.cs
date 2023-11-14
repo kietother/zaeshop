@@ -174,5 +174,34 @@ namespace Portal.Infrastructure.Implements.Business.Services
         }
 
         // Additional private methods or helper functions can be added here
+        public async Task<ServiceResponse<PagingCommonResponse<CollectionPagingResponse>>> GetPagingAsync(CollectionPagingRequest request)
+        {
+            var parameters = new Dictionary<string, object?>
+            {
+                { "PageNumber", request.PageNumber },
+                { "PageSize", request.PageSize },
+                { "SortColumn", request.SortColumn },
+                { "SortDirection", request.SortDirection },
+                { "AlbumId", request.AlbumId }
+            };
+            var result = await _unitOfWork.QueryAsync<CollectionPagingResponse>("Collection_All_Paging", parameters);
+            
+            var record = result.Find(o => o.IsTotalRecord);
+            if (record == null)
+            {
+                return new ServiceResponse<PagingCommonResponse<CollectionPagingResponse>>(new PagingCommonResponse<CollectionPagingResponse>
+                {
+                    RowNum = 0,
+                    Data = new List<CollectionPagingResponse>()
+                });
+            }
+
+            result.Remove(record);
+            return new ServiceResponse<PagingCommonResponse<CollectionPagingResponse>>(new PagingCommonResponse<CollectionPagingResponse>
+            {
+                RowNum = record.RowNum,
+                Data = result
+            });
+        }
     }
 }

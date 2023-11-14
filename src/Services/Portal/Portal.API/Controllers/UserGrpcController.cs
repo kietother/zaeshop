@@ -1,7 +1,6 @@
 using System.Net;
 using Grpc.Core;
 using Portal.Domain.AggregatesModel.UserAggregate;
-using Portal.Domain.Interfaces.Infrastructure;
 using PortalGrpc;
 
 namespace Portal.API.Controllers
@@ -9,12 +8,10 @@ namespace Portal.API.Controllers
     public class UserGrpcController : UserGrpcService.UserGrpcServiceBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IJwtService _jwtService;
 
-        public UserGrpcController(IUnitOfWork unitOfWork, IJwtService jwtService)
+        public UserGrpcController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _jwtService = jwtService;
         }
 
         public override async Task<UsersReply> GetUsers(UserRequest request, ServerCallContext context)
@@ -40,20 +37,6 @@ namespace Portal.API.Controllers
 
         public override async Task<SyncUserReply> SyncUserFromIdentity(SyncUserRequest request, ServerCallContext context)
         {
-            // // Check token
-            // var token = context.RequestHeaders.FirstOrDefault(e => string.Equals(e.Key, "Authorization", StringComparison.OrdinalIgnoreCase))?.Value.Split("Bearer ").Last();
-            // var userId = _jwtService.ValidateJwtToken(token ?? string.Empty);
-
-            // if (string.IsNullOrEmpty(userId))
-            // {
-            //     return new SyncUserReply
-            //     {
-            //         PortalId = 0,
-            //         IsSuccess = false,
-            //         Message = HttpStatusCode.Unauthorized.ToString()
-            //     };
-            // }
-
             // Validate model
             if (string.IsNullOrEmpty(request.IdentityId))
             {

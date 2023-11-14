@@ -70,3 +70,15 @@ https://stackoverflow.com/questions/69441899/issue-with-envoy-unable-to-read-ser
 Aws cli
 https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 https://codewithmukesh.com/blog/working-with-aws-s3-using-aspnet-core/
+
+VS Code Extensions:
+C# + C# dev kit + C# InteliCode
+C# Utilities
+Nuget Package Manager GUI
+Postman
+SonarLint
+Git Graph
+Docker
+CodeGeeX
+Simple React Sinppets
+VSCode React Fefactor
