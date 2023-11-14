@@ -57,12 +57,12 @@ public class UnitOfWork : IUnitOfWork
     }
 
     #region Dapper
-    public async Task ExecuteAsync(string query, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.StoredProcedure, int? commandTimeout = null)
+    public async Task ExecuteAsync(string query, Dictionary<string, object?>? parameters = null, CommandType commandType = CommandType.StoredProcedure, int? commandTimeout = null)
     {
         await context.Database.GetDbConnection().ExecuteAsync(query, parameters, commandType: commandType, commandTimeout: commandTimeout);
     }
 
-    public async Task<List<T>> QueryAsync<T>(string query, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.StoredProcedure, int? commandTimeout = null)
+    public async Task<List<T>> QueryAsync<T>(string query, Dictionary<string, object?>? parameters = null, CommandType commandType = CommandType.StoredProcedure, int? commandTimeout = null)
     {
         var result = await context.Database.GetDbConnection().QueryAsync<T>(query, parameters, commandType: commandType, commandTimeout: commandTimeout);
         return result.ToList();

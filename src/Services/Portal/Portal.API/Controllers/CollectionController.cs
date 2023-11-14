@@ -48,7 +48,7 @@ namespace Portal.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         [RedisCache(5)]
         public async Task<IActionResult> GetAll()
         {
@@ -129,6 +129,17 @@ namespace Portal.API.Controllers
             using var ms = new MemoryStream();
             file.CopyTo(ms);
             return ms.ToArray();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPagingAsync([FromQuery] CollectionPagingRequest request)
+        {
+            var response = await _collectionService.GetPagingAsync(request);
+
+            if (!response.IsSuccess)
+                return BadRequest(response);
+
+            return Ok(response);
         }
     }
 }

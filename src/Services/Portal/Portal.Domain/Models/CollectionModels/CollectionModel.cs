@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using Common.Models;
 
 namespace Portal.Domain.Models.CollectionModels
 {
@@ -40,5 +42,30 @@ namespace Portal.Domain.Models.CollectionModels
         public string? Description { get; set; }
 
         public List<string?>? ContentItems { get; set; }
+    }
+
+    public class CollectionPagingRequest : PagingCommonRequest
+    {
+        public int AlbumId { get; set; }
+    }
+
+    public class CollectionPagingResponse
+    {
+        public int Id { get; set; }
+        public string Title { get; set; } = null!;
+        public int AlbumId { get; set; }
+        public string? AlbumTitle { get; set; }
+        public int? Volume { get; set; }
+        public string? ExtendName { get; set; }
+        public string? Description { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+
+        [JsonIgnore]
+        public long RowNum { get; set; }
+
+        [JsonIgnore]
+        public bool IsTotalRecord { get; set; }
     }
 }

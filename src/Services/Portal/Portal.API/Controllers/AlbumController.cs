@@ -1,3 +1,4 @@
+using Common.Models;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
 using Portal.Domain.Interfaces.Business.Services;
@@ -39,7 +40,7 @@ namespace Portal.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         [RedisCache(5)]
         public async Task<IActionResult> GetAll()
         {
@@ -55,6 +56,17 @@ namespace Portal.API.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var response = await _albumService.DeleteAsync(id);
+
+            if (!response.IsSuccess)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPagingAsync([FromQuery] PagingCommonRequest request)
+        {
+            var response = await _albumService.GetPagingAsync(request);
 
             if (!response.IsSuccess)
                 return BadRequest(response);

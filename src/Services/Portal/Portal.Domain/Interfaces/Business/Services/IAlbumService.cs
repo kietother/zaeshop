@@ -9,5 +9,6 @@ namespace Portal.Domain.Interfaces.Business.Services
         Task<ServiceResponse<AlbumResponseModel>> UpdateAsync(int id, AlbumRequestModel requestModel);
         Task<ServiceResponse<List<AlbumResponseModel>>> GetAllAsync();
         Task<ServiceResponse<bool>> DeleteAsync(int id);
+        Task<ServiceResponse<PagingCommonResponse<AlbumPagingResponse>>> GetPagingAsync(PagingCommonRequest request);
     }
 }

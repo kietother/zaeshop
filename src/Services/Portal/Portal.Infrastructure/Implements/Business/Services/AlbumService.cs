@@ -211,5 +211,34 @@ namespace Portal.Infrastructure.Implements.Business.Services
         {
             return await _repository.GetQueryable().AnyAsync(x => x.Title == title);
         }
+
+        public async Task<ServiceResponse<PagingCommonResponse<AlbumPagingResponse>>> GetPagingAsync(PagingCommonRequest request)
+        {
+            var parameters = new Dictionary<string, object?>
+            {
+                { "PageNumber", request.PageNumber },
+                { "PageSize", request.PageSize },
+                { "SortColumn", request.SortColumn },
+                { "SortDirection", request.SortDirection }
+            };
+            var result = await _unitOfWork.QueryAsync<AlbumPagingResponse>("Album_All_Paging", parameters);
+            
+            var record = result.Find(o => o.IsTotalRecord);
+            if (record == null)
+            {
+                return new ServiceResponse<PagingCommonResponse<AlbumPagingResponse>>(new PagingCommonResponse<AlbumPagingResponse>
+                {
+                    RowNum = 0,
+                    Data = new List<AlbumPagingResponse>()
+                });
+            }
+
+            result.Remove(record);
+            return new ServiceResponse<PagingCommonResponse<AlbumPagingResponse>>(new PagingCommonResponse<AlbumPagingResponse>
+            {
+                RowNum = record.RowNum,
+                Data = result
+            });
+        }
     }
 }
