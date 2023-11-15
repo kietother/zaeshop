@@ -5,6 +5,7 @@ https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice
 https://github.com/TryCatchLearn/skinet
 https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu-2004
 https://learn.microsoft.com/en-us/dotnet/core/install/linux-scripted-manual#scripted-install
+https://code-maze.com/csharp-testing-time-dependent-code-with-timeprovider/
 
 Project
 https://code.visualstudio.com/docs/containers/docker-compose

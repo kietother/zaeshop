@@ -22,7 +22,7 @@ namespace Identity.API.Extensions
         {
             services.AddDbContext<AppIdentityDbContext>(opt => opt.UseLazyLoadingProxies().UseSqlServer(config.GetConnectionString("IdentityConnection")));
             services.AddDataProtection();
-            services.AddSingleton<TimeProvider>();
+            services.AddSingleton(TimeProvider.System);
 
             services.AddIdentityCore<User>(_ =>
             {
