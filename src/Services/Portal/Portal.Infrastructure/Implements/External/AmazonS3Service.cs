@@ -32,7 +32,8 @@ namespace Portal.Infrastructure.Implements.External
                 {
                     BucketName = _bucketName,
                     Key = string.IsNullOrEmpty(prefix) ? requestModel.FileName : $"{prefix.TrimEnd('/')}/{requestModel.FileName}",
-                    InputStream = new MemoryStream(requestModel.ImageData)
+                    InputStream = new MemoryStream(requestModel.ImageData),
+                    CannedACL = S3CannedACL.PublicRead
                 };
 
                 var uploadResult = await _s3Client.PutObjectAsync(putRequest);
