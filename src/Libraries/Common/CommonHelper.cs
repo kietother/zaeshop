@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Reflection;
+using Common.Enums;
 
 namespace Common
 {
@@ -37,6 +38,24 @@ namespace Common
             {
                 return string.Join(separator, list);
             }
+        }
+
+        public static string GetServiceUrl(EServiceHost serviceHost)
+        {
+            var _baseUrls = new Dictionary<EServiceHost, string>
+            {
+                { EServiceHost.Identity, "http://identity:5287" },
+                { EServiceHost.Portal, "http://portal:5288" },
+                { EServiceHost.Hangfire, "http://hangfireserver:5286" }
+            };
+
+            if (!_baseUrls.ContainsKey(serviceHost))
+            {
+                var baseUrl = _baseUrls[serviceHost];
+                return baseUrl;
+            }
+
+            return string.Empty;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Identity.Domain.Models.Authenticates
         public string NewPassword { get; set; } = null!;
 
         [Required]
-        [Compare("Password")]
+        [Compare("NewPassword")]
         public string ConfirmNewPassword { get; set; } = null!;
     }
 }

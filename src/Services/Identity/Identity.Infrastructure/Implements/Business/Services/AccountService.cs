@@ -121,7 +121,9 @@ namespace Identity.Infrastructure.Implements.Business.Services
             var refreshToken = user?.UserTokens.FirstOrDefault(x => x.Token == token);
 
             if (refreshToken?.IsActive != true)
-                throw new Exception("Invalid token");
+            {
+                return;
+            }
 
             // revoke token and save
             RevokeRefreshToken(refreshToken, ipAddress, "Revoked without replacement");
@@ -186,7 +188,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
             }
 
             // Sync to portal
-            var resultApi = await _apiService.PostAsync<SyncUserFromIdentityRequestModel, SyncUserFromIdentityResponseModel>(EServiceHost.Portal, "/v1/users", new SyncUserFromIdentityRequestModel
+            var resultApi = await _apiService.PostAsync<SyncUserFromIdentityRequestModel, SyncUserFromIdentityResponseModel>(CommonHelper.GetServiceUrl(EServiceHost.Portal), "/v1/users", new SyncUserFromIdentityRequestModel
             {
                 IdentityId = user.Id,
                 FullName = user.FullName

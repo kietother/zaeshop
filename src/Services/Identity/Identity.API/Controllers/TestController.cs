@@ -1,7 +1,7 @@
+using Common;
 using Common.Enums;
 using Common.Interfaces;
 using Common.Interfaces.Messaging;
-using Hangfire;
 using Identity.API.Attributes;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,7 +30,7 @@ namespace Identity.API.Controllers
         [HttpGet("portal-grpc-get-user")]
         public async Task<IActionResult> CallApiPortalAsync()
         {
-            var result = await _apiService.GetAsync<object>(EServiceHost.Portal, "/v1/users");
+            var result = await _apiService.GetAsync<object>(CommonHelper.GetServiceUrl(EServiceHost.Portal), "/v1/users");
             return Ok(result);
         }
 
