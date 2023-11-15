@@ -49,7 +49,7 @@ namespace Common
                 { EServiceHost.Hangfire, "http://hangfireserver:5286" }
             };
 
-            if (!_baseUrls.ContainsKey(serviceHost))
+            if (_baseUrls.ContainsKey(serviceHost))
             {
                 var baseUrl = _baseUrls[serviceHost];
                 return baseUrl;
