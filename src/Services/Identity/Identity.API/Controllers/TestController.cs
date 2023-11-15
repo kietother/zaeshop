@@ -1,7 +1,6 @@
 using Common.Enums;
 using Common.Interfaces;
 using Common.Interfaces.Messaging;
-using Hangfire;
 using Identity.API.Attributes;
 using Microsoft.AspNetCore.Mvc;
 

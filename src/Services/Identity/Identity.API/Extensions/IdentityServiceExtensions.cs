@@ -23,6 +23,7 @@ namespace Identity.API.Extensions
         {
             services.AddDbContext<AppIdentityDbContext>(opt => opt.UseLazyLoadingProxies().UseSqlServer(config.GetConnectionString("IdentityConnection")));
             services.AddSingleton<ISystemClock, SystemClock>();
+            services.AddDataProtection();
 
             services.AddIdentityCore<User>(_ =>
             {
@@ -31,7 +32,8 @@ namespace Identity.API.Extensions
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<AppIdentityDbContext>()
             .AddSignInManager<SignInManager<User>>()
-            .AddRoleManager<RoleManager<IdentityRole>>();
+            .AddRoleManager<RoleManager<IdentityRole>>()
+            .AddDefaultTokenProviders();
 
             services.AddScoped<IApiService, ApiService>();
 
