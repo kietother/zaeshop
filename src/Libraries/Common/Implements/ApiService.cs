@@ -1,28 +1,13 @@
 using System.Text.Json;
-using Common.Enums;
 using Common.Interfaces;
 using RestSharp;
 
 namespace Common.Implements;
 public class ApiService : IApiService
 {
-    private readonly IDictionary<EServiceHost, string> _baseUrls;
-    private readonly IDictionary<EServiceHost, RestClient> _restClients;
-
-    public ApiService()
+    public async Task<TResponse?> GetAsync<TResponse>(string baseUrl, string endpoint, IDictionary<string, string>? queryParameters = null, IDictionary<string, string>? headers = null)
     {
-        _baseUrls = new Dictionary<EServiceHost, string>
-        {
-            { EServiceHost.Identity, "http://identity:5287" },
-            { EServiceHost.Portal, "http://portal:5288" }
-        };
-
-        _restClients = new Dictionary<EServiceHost, RestClient>();
-    }
-
-    public async Task<TResponse?> GetAsync<TResponse>(EServiceHost serviceHost, string endpoint, IDictionary<string, string>? queryParameters = null, IDictionary<string, string>? headers = null)
-    {
-        var client = GetRestClient(serviceHost);
+        var client = new RestClient(baseUrl);
         var request = new RestRequest(endpoint, Method.Get);
         AddHeaders(request, headers);
         AddQueryParameters(request, queryParameters);
@@ -35,10 +20,10 @@ public class ApiService : IApiService
         return response.Data;
     }
 
-    public async Task<TResponse?> PostAsync<TRequest, TResponse>(EServiceHost serviceHost, string endpoint, TRequest requestBody, IDictionary<string, string>? headers = null)
+    public async Task<TResponse?> PostAsync<TRequest, TResponse>(string baseUrl, string endpoint, TRequest requestBody, IDictionary<string, string>? headers = null)
         where TRequest : class
     {
-        var client = GetRestClient(serviceHost);
+        var client = new RestClient(baseUrl);
         var request = new RestRequest(endpoint, Method.Post);
         AddHeaders(request, headers);
         request.AddBody(JsonSerializer.Serialize(requestBody));
@@ -51,10 +36,10 @@ public class ApiService : IApiService
         return response.Data;
     }
 
-    public async Task<TResponse?> PutAsync<TRequest, TResponse>(EServiceHost serviceHost, string endpoint, TRequest requestBody, IDictionary<string, string>? headers = null)
+    public async Task<TResponse?> PutAsync<TRequest, TResponse>(string baseUrl, string endpoint, TRequest requestBody, IDictionary<string, string>? headers = null)
         where TRequest : class
     {
-        var client = GetRestClient(serviceHost);
+        var client = new RestClient(baseUrl);
         var request = new RestRequest(endpoint, Method.Put);
         AddHeaders(request, headers);
         request.AddBody(JsonSerializer.Serialize(requestBody));
@@ -67,9 +52,9 @@ public class ApiService : IApiService
         return response.Data;
     }
 
-    public async Task<TResponse?> DeleteAsync<TResponse>(EServiceHost serviceHost, string endpoint, IDictionary<string, string>? headers = null)
+    public async Task<TResponse?> DeleteAsync<TResponse>(string baseUrl, string endpoint, IDictionary<string, string>? headers = null)
     {
-        var client = GetRestClient(serviceHost);
+        var client = new RestClient(baseUrl);
         var request = new RestRequest(endpoint, Method.Delete);
         AddHeaders(request, headers);
 
@@ -79,17 +64,6 @@ public class ApiService : IApiService
             return default;
         }
         return response.Data;
-    }
-
-    private RestClient GetRestClient(EServiceHost serviceHost)
-    {
-        if (!_restClients.ContainsKey(serviceHost))
-        {
-            var baseUrl = _baseUrls[serviceHost];
-            _restClients[serviceHost] = new RestClient(baseUrl);
-        }
-
-        return _restClients[serviceHost];
     }
 
     private static void AddHeaders(RestRequest request, IDictionary<string, string>? headers)

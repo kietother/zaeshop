@@ -188,7 +188,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
             }
 
             // Sync to portal
-            var resultApi = await _apiService.PostAsync<SyncUserFromIdentityRequestModel, SyncUserFromIdentityResponseModel>(EServiceHost.Portal, "/v1/users", new SyncUserFromIdentityRequestModel
+            var resultApi = await _apiService.PostAsync<SyncUserFromIdentityRequestModel, SyncUserFromIdentityResponseModel>(CommonHelper.GetServiceUrl(EServiceHost.Portal), "/v1/users", new SyncUserFromIdentityRequestModel
             {
                 IdentityId = user.Id,
                 FullName = user.FullName
