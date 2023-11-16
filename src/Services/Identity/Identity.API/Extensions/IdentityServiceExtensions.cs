@@ -55,6 +55,7 @@ namespace Identity.API.Extensions
 
             // Identity registers publishers for MassTransit
             services.AddScoped<ISendMailPublisher, SendMailPublisher>();
+            services.AddScoped<IServiceLogPublisher, ServiceLogPublisher>();
 
             // configure DI for application services
             services.AddScoped<IJwtService, JwtService>();

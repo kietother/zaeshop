@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 using Amazon;
 using Amazon.S3;
 using Common.Implements;
@@ -18,6 +19,8 @@ using Portal.Infrastructure.Helpers;
 using Portal.Infrastructure.Implements.External;
 using Portal.Infrastructure.Implements.Services;
 using Portal.Infrastructure.SeedWork;
+using Raven.Client.Documents;
+using Serilog;
 
 namespace HangFireServer.Extensions;
 public static class PortalServiceExtensions
@@ -86,7 +89,22 @@ public static class PortalServiceExtensions
             new EmailMockupService(x.GetRequiredService<ILogger<EmailMockupService>>(), options)
         );
         #endregion
-        
+
+        #region System Log
+        var ravenStore = new DocumentStore
+        {
+            Urls = new string?[] { config.GetSection("RavenDbSettings").GetValue<string>("ConnectionUrl") },
+            Database = config.GetSection("RavenDbSettings").GetValue<string>("DatabaseName"),
+            Certificate = new X509Certificate2(config.GetSection("RavenDbSettings").GetValue<string>("CertificatePath")!)
+        };
+        ravenStore.Initialize();
+
+        var logger = new LoggerConfiguration()
+            .WriteTo.RavenDB(ravenStore)
+            .CreateLogger();
+        Log.Logger = logger;
+        #endregion
+
         return services;
     }
 }
