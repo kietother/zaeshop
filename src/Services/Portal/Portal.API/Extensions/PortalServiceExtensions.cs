@@ -60,6 +60,7 @@ public static class PortalServiceExtensions
         // Portal registers publishers for MassTransit
         services.AddScoped<IHelloWorldPublisher, HelloWorldPublisher>();
         services.AddScoped<ISendMailPublisher, SendMailPublisher>();
+        services.AddScoped<IServiceLogPublisher, ServiceLogPublisher>();
 
         // Inject Services
         services.AddScoped<IApiService, ApiService>();
