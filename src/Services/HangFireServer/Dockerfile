@@ -14,7 +14,8 @@ COPY --from=build /app/out .
 RUN addgroup --system --gid 5678 appgroup && \
     adduser --system --uid 5678 --gid 5678 appuser && \
     mkdir -p /app/Certificates && \
-    chown -R appuser:appgroup /app/Certificates
+    chown root:root /app/Certificates && \
+    chmod -R a+rx /app/Certificates
 USER appuser
 
 # Configure listening port and run
