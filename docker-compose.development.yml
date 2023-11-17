@@ -21,8 +21,6 @@ services:
       - 5286:5286
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    volumes:
-      - ./Certificates/ASPNET Certificate.pfx:/app/Certificates/ASPNET Certificate.pfx
     networks:
       - mynetwork
   identity:
