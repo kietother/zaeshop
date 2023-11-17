@@ -12,7 +12,9 @@ COPY --from=build /app/out .
 
 # Non-root user for security
 RUN addgroup --system --gid 5678 appgroup && \
-    adduser --system --uid 5678 --gid 5678 appuser
+    adduser --system --uid 5678 --gid 5678 appuser && \
+    mkdir -p /app/Certificates && \
+    chown -R appuser:appgroup /app/Certificates
 USER appuser
 
 # Configure listening port and run
