@@ -2,6 +2,7 @@ using Common;
 using Common.Enums;
 using Common.Interfaces;
 using Common.Interfaces.Messaging;
+using Common.Shared.Models.Logs;
 using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
@@ -22,6 +23,7 @@ namespace Portal.API.Controllers
         private readonly IAmazonS3Service _amazonS3Service;
         private readonly IHelloWorldPublisher _helloWorldSender;
         private readonly ISendMailPublisher _sendMailPublisher;
+        private readonly IServiceLogPublisher _serviceLogPublisher;
 
         public TestController(
             IUnitOfWork unitOfWork,
@@ -29,7 +31,8 @@ namespace Portal.API.Controllers
             IApiService apiService,
             IAmazonS3Service amazonS3Service,
             IHelloWorldPublisher helloWorldSender,
-            ISendMailPublisher sendMailPublisher)
+            ISendMailPublisher sendMailPublisher,
+            IServiceLogPublisher serviceLogPublisher)
         {
             _unitOfWork = unitOfWork;
             _backgroundJobClient = backgroundJobClient;
@@ -37,6 +40,7 @@ namespace Portal.API.Controllers
             _amazonS3Service = amazonS3Service;
             _helloWorldSender = helloWorldSender;
             _sendMailPublisher = sendMailPublisher;
+            _serviceLogPublisher = serviceLogPublisher;
         }
 
         [HttpGet]
@@ -127,6 +131,20 @@ namespace Portal.API.Controllers
                 CcEmails = ccEmails?.Split(',').ToList()
             };
             await _sendMailPublisher.SendMailAsync(message);
+            return Ok();
+        }
+
+        [HttpPost("service-log")]
+        public async Task<IActionResult> CreateServiceLog(string eventName, string description)
+        {
+            await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
+            {
+                LogLevel = ELogLevel.Information,
+                EventName = eventName,
+                ServiceName = "Portal",
+                Environment = "Test",
+                Description = description
+            });
             return Ok();
         }
     }

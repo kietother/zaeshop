@@ -85,3 +85,17 @@ Docker
 CodeGeeX
 Simple React Sinppets
 VSCode React Fefactor
+
+#RavenDb Certification
+Root Project
+(Docker)
+Certificates/ASPNET Certificate.pfx
+
+HangfireServer
+(Debug - dotnet)
+Certificates/ASPNET Certificate.pfx
+
+Host
+Root folder
+Certificates/ASPNET Certificate.pfx
+like as envoy folder
