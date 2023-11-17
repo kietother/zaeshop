@@ -91,11 +91,14 @@ public static class PortalServiceExtensions
         #endregion
 
         #region System Log
+        using var client = new HttpClient();
+        byte[] ravenCertificate = client.GetByteArrayAsync(config.GetSection("RavenDbSettings").GetValue<string>("CertificateUrl")!).Result;
+
         var ravenStore = new DocumentStore
         {
             Urls = new string?[] { config.GetSection("RavenDbSettings").GetValue<string>("ConnectionUrl") },
             Database = config.GetSection("RavenDbSettings").GetValue<string>("DatabaseName"),
-            Certificate = new X509Certificate2(config.GetSection("RavenDbSettings").GetValue<string>("CertificatePath")!)
+            Certificate = new X509Certificate2(ravenCertificate)
         };
         ravenStore.Initialize();
 
