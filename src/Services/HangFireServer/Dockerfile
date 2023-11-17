@@ -11,12 +11,10 @@ WORKDIR /app
 COPY --from=build /app/out .
 
 # Non-root user for security
-RUN addgroup --system --gid 5678 appgroup && \
-    adduser --system --uid 5678 --gid 5678 appuser && \
-    mkdir -p /app/Certificates && \
-    chown root:root /app/Certificates && \
-    chmod -R a+rx /app/Certificates
-USER appuser
+# Temporary user and group that we use system role insteads to read file certificates
+# RUN addgroup --system --gid 5678 appgroup && \
+#     adduser --system --uid 5678 --gid 5678 appuser && \
+# USER appuser
 
 # Configure listening port and run
 ENV ASPNETCORE_URLS=http://+:5286
