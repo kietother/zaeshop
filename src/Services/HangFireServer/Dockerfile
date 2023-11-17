@@ -9,6 +9,7 @@ RUN dotnet publish "src/Services/HangFireServer/HangFireServer.csproj" -c Releas
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/out .
+RUN chown -R appuser:appgroup /app
 
 # Non-root user for security
 RUN addgroup --system --gid 5678 appgroup && \
