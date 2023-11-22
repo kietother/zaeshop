@@ -1,5 +1,6 @@
 using Common;
 using Common.Models;
+using Elastic.Clients.Elasticsearch;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.AlbumModels;
@@ -13,14 +14,18 @@ namespace Portal.Infrastructure.Implements.Business.Services
         private readonly IGenericRepository<Album> _repository;
         private readonly IGenericRepository<AlbumAlertMessage> _albumAlertMessageRepository;
         private readonly IGenericRepository<ContentType> _contentTypeRepository;
+        private readonly ElasticsearchClient _elasticsearchClient;
+        private readonly string _albumIndex = "album-index";
 
         public AlbumService(
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ElasticsearchClient elasticsearchClient)
         {
             _unitOfWork = unitOfWork;
             _repository = unitOfWork.Repository<Album>();
             _albumAlertMessageRepository = unitOfWork.Repository<AlbumAlertMessage>();
             _contentTypeRepository = unitOfWork.Repository<ContentType>();
+            _elasticsearchClient = elasticsearchClient;
         }
 
         public async Task<ServiceResponse<AlbumResponseModel>> CreateAsync(AlbumRequestModel requestModel)
@@ -222,7 +227,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 { "SortDirection", request.SortDirection }
             };
             var result = await _unitOfWork.QueryAsync<AlbumPagingResponse>("Album_All_Paging", parameters);
-            
+
             var record = result.Find(o => o.IsTotalRecord);
             if (record == null)
             {
@@ -239,6 +244,30 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 RowNum = record.RowNum,
                 Data = result
             });
+        }
+
+        public async Task<ServiceResponse<PagingCommonResponse<AlbumPagingResponse>>> GetPagingByELKAsync(PagingCommonRequest request)
+        {
+            // Generate a code get by _elasticsearchClient
+            var searchResponse = await _elasticsearchClient.SearchAsync<AlbumPagingResponse>(s => s
+                .Index(_albumIndex)
+                .Query(q => q
+                    .Match(m => m
+                        .Field(f => f.Title)
+                        .Query(request.SearchTerm ?? string.Empty)
+                    )
+                )
+                .From(request.PageNumber)
+                .Size(request.PageSize)
+            );
+
+            var result = new PagingCommonResponse<AlbumPagingResponse>
+            {
+                RowNum = searchResponse.Total,
+                Data = searchResponse.Documents.ToList()
+            };
+
+            return new ServiceResponse<PagingCommonResponse<AlbumPagingResponse>>(result);
         }
     }
 }
