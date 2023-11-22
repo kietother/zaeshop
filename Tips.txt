@@ -79,7 +79,7 @@ Postman
 SonarLint
 Git Graph
 Docker
-CodeGeeX
+Codeium - Instead of CodeGeeX
 Simple React Sinppets
 VSCode React Fefactor
 
