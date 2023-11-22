@@ -14,13 +14,25 @@ namespace HangFireServer.Messaging.Comsumers
             switch (serviceLogMessage.LogLevel)
             {
                 case ELogLevel.Information:
-                    Log.Logger.Information(JsonSerializer.Serialize(serviceLogMessage));
+                    Log.Logger.Information(
+                        "[{@Environment} {@ServiceName}] {@EventName} - {@Description} - Detail: {@Message}", 
+                        serviceLogMessage.Environment,
+                        serviceLogMessage.ServiceName, serviceLogMessage.EventName,
+                        serviceLogMessage.Description, serviceLogMessage);
                     break;
                 case ELogLevel.Warning:
-                    Log.Logger.Warning(JsonSerializer.Serialize(serviceLogMessage));
+                    Log.Logger.Warning("[{@Environment} {@ServiceName}] {@EventName} - {@Description} - Detail: {@Message}", 
+                        serviceLogMessage.Environment,
+                        serviceLogMessage.ServiceName, serviceLogMessage.EventName,
+                        serviceLogMessage.Description, serviceLogMessage);
                     break;
                 case ELogLevel.Error:
-                    Log.Logger.Error(JsonSerializer.Serialize(serviceLogMessage));
+                    Log.Logger.Error(
+                        "[{@Environment} {@ServiceName}] {@EventName} - {@Description} - Detail: {@Message}", 
+                        serviceLogMessage.Environment,
+                        serviceLogMessage.ServiceName, serviceLogMessage.EventName,
+                        serviceLogMessage.Description,
+                        serviceLogMessage);
                     break;
             }
             // Cheat warning async/await

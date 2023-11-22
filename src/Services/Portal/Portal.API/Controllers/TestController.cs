@@ -139,11 +139,11 @@ namespace Portal.API.Controllers
         }
 
         [HttpPost("service-log")]
-        public async Task<IActionResult> CreateServiceLog(string eventName, string description)
+        public async Task<IActionResult> CreateServiceLog(string eventName, string description, ELogLevel? logLevel)
         {
             await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
             {
-                LogLevel = ELogLevel.Information,
+                LogLevel = logLevel ?? ELogLevel.Information,
                 EventName = eventName,
                 ServiceName = "Portal",
                 Environment = "Test",
