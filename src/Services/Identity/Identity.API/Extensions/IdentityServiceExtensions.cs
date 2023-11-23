@@ -1,6 +1,5 @@
 using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Infrastructure;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Common.Interfaces;
@@ -22,8 +21,8 @@ namespace Identity.API.Extensions
           IConfiguration config)
         {
             services.AddDbContext<AppIdentityDbContext>(opt => opt.UseLazyLoadingProxies().UseSqlServer(config.GetConnectionString("IdentityConnection")));
-            services.AddSingleton<ISystemClock, SystemClock>();
             services.AddDataProtection();
+            services.AddSingleton(TimeProvider.System);
 
             services.AddIdentityCore<User>(_ =>
             {
