@@ -96,7 +96,7 @@ public static class PortalServiceExtensions
 
         var ravenStore = new DocumentStore
         {
-            Urls = new string?[] { config.GetSection("RavenDbSettings").GetValue<string>("ConnectionUrl") },
+            Urls = [config.GetSection("RavenDbSettings").GetValue<string>("ConnectionUrl")],
             Database = config.GetSection("RavenDbSettings").GetValue<string>("DatabaseName"),
             Certificate = new X509Certificate2(ravenCertificate)
         };
