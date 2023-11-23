@@ -1,6 +1,6 @@
 using Common;
 using Common.Models;
-using Elastic.Clients.Elasticsearch;
+using Nest;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.AlbumModels;
@@ -14,18 +14,18 @@ namespace Portal.Infrastructure.Implements.Business.Services
         private readonly IGenericRepository<Album> _repository;
         private readonly IGenericRepository<AlbumAlertMessage> _albumAlertMessageRepository;
         private readonly IGenericRepository<ContentType> _contentTypeRepository;
-        private readonly ElasticsearchClient _elasticsearchClient;
+        private readonly ElasticClient _elasticClient;
         private readonly string _albumIndex = "album-index";
 
         public AlbumService(
             IUnitOfWork unitOfWork,
-            ElasticsearchClient elasticsearchClient)
+            ElasticClient elasticClient)
         {
             _unitOfWork = unitOfWork;
             _repository = unitOfWork.Repository<Album>();
             _albumAlertMessageRepository = unitOfWork.Repository<AlbumAlertMessage>();
             _contentTypeRepository = unitOfWork.Repository<ContentType>();
-            _elasticsearchClient = elasticsearchClient;
+            _elasticClient = elasticClient;
         }
 
         public async Task<ServiceResponse<AlbumResponseModel>> CreateAsync(AlbumRequestModel requestModel)
@@ -249,15 +249,24 @@ namespace Portal.Infrastructure.Implements.Business.Services
         public async Task<ServiceResponse<PagingCommonResponse<AlbumPagingResponse>>> GetPagingByELKAsync(PagingCommonRequest request)
         {
             // Generate a code get by _elasticsearchClient
-            var searchResponse = await _elasticsearchClient.SearchAsync<AlbumPagingResponse>(s => s
+            var searchResponse = await _elasticClient.SearchAsync<AlbumPagingResponse>(s => s
                 .Index(_albumIndex)
                 .Query(q => q
-                    .Match(m => m
-                        .Field(f => f.Title)
-                        .Query(request.SearchTerm ?? string.Empty)
+                    .Bool(b => b
+                        .Should(sh => sh
+                            .Prefix(p => p
+                                .Field(f => f.Title)
+                                .Value(request.SearchTerm ?? string.Empty)
+                            ),
+                            sh => sh
+                            .Prefix(p => p
+                                .Field(f => f.Description)
+                                .Value(request.SearchTerm ?? string.Empty)
+                            )
+                        )
                     )
                 )
-                .From(request.PageNumber)
+                .From((request.PageNumber - 1) * request.PageSize)
                 .Size(request.PageSize)
             );
 

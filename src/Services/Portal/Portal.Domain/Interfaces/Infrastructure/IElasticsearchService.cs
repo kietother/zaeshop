@@ -8,7 +8,8 @@ namespace Portal.Domain.Interfaces.Infrastructure
         Task<bool> CreateIndexAsync();
         Task<bool> DeleteIndexAsync();
         Task ResetIndexes();
-        Task UpdateDocumentAsync(AlbumDocument albumDocument);
-        Task BulkUpdateDocumenstAsync(List<AlbumDocument> albumDocuments);
+        Task IndexDocumentAsync(AlbumDocument albumDocument);
+        Task IndexManyDocumenstAsync(List<AlbumDocument> albumDocuments);
+        Task<List<AlbumDocument>> GetDocumentsAsync();
     }
 }

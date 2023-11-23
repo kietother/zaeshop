@@ -1,5 +1,4 @@
-using Elastic.Clients.Elasticsearch;
-using Elastic.Transport;
+using Nest;
 
 namespace Portal.API.Extensions
 {
@@ -11,10 +10,10 @@ namespace Portal.API.Extensions
             var elkAccessKey = configuration.GetSection("ElkSettings").GetValue<string>("AccessKey")!;
             var elkAccessSecrect = configuration.GetSection("ElkSettings").GetValue<string>("SecretKey")!;
             
-            var elkSettings = new ElasticsearchClientSettings(new Uri(elkCloudUrl))
-                                .Authentication(new BasicAuthentication(elkAccessKey, elkAccessSecrect));
+            var elkSettings = new ConnectionSettings(new Uri(elkCloudUrl))
+                                .BasicAuthentication(elkAccessKey, elkAccessSecrect);
                                 
-            services.AddSingleton(x => new ElasticsearchClient(elkSettings));
+            services.AddSingleton(x => new ElasticClient(elkSettings));
         }
     }
 }

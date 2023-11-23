@@ -1,9 +1,7 @@
 using Common.Enums;
 using Common.Interfaces.Messaging;
 using Common.Shared.Models.Logs;
-using Elastic.Clients.Elasticsearch;
-using Elastic.Clients.Elasticsearch.Core.Bulk;
-using Elastic.Clients.Elasticsearch.IndexManagement;
+using Nest;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.Interfaces.Infrastructure;
 using Portal.Domain.Models.AlbumModels;
@@ -14,16 +12,16 @@ namespace Portal.Infrastructure.Implements.Infrastructure
     public class ElasticsearchService : IElasticsearchService
     {
         private readonly string _albumIndex = "album-index";
-        private readonly ElasticsearchClient _elasticsearchClient;
+        private readonly ElasticClient _elasticClient;
         private readonly IServiceLogPublisher _serviceLogPublisher;
         private readonly IUnitOfWork _unitOfWork;
 
         public ElasticsearchService(
-            ElasticsearchClient elasticsearchClient,
+            ElasticClient elasticClient,
             IServiceLogPublisher serviceLogPublisher,
             IUnitOfWork unitOfWork)
         {
-            _elasticsearchClient = elasticsearchClient;
+            _elasticClient = elasticClient;
             _serviceLogPublisher = serviceLogPublisher;
             _unitOfWork = unitOfWork;
         }
@@ -43,21 +41,20 @@ namespace Portal.Infrastructure.Implements.Infrastructure
             }).ToList();
 
             // Create if index not found
-            var result = await _elasticsearchClient.Indices.ExistsAsync(_albumIndex);
+            var result = await _elasticClient.Indices.ExistsAsync(_albumIndex);
             if (!result.Exists)
             {
                 await CreateIndexAsync();
             }
 
-            await BulkUpdateDocumenstAsync(albumnDocuments);
+            await IndexManyDocumenstAsync(albumnDocuments);
         }
 
         public async Task<bool> CreateIndexAsync()
         {
-            var createIndexRequest = new CreateIndexRequest(_albumIndex);
-            var createIndexResponse = await _elasticsearchClient.Indices.CreateAsync(createIndexRequest);
+            var createIndexResponse = await _elasticClient.Indices.CreateAsync(_albumIndex);
 
-            if (!createIndexResponse.IsValidResponse)
+            if (!createIndexResponse.IsValid)
             {
                 await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
                 {
@@ -70,15 +67,13 @@ namespace Portal.Infrastructure.Implements.Infrastructure
                 return false;
             }
 
-            return createIndexResponse.IsValidResponse;
+            return createIndexResponse.IsValid;
         }
 
         public async Task<bool> DeleteIndexAsync()
         {
-            var deleteIndexRequest = new DeleteIndexRequest(_albumIndex);
-            var deleteIndexResponse = await _elasticsearchClient.Indices.DeleteAsync(deleteIndexRequest);
-
-            if (!deleteIndexResponse.IsValidResponse)
+            var deleteIndexResponse = await _elasticClient.Indices.DeleteAsync(_albumIndex);
+            if (!deleteIndexResponse.IsValid)
             {
                 await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
                 {
@@ -91,7 +86,7 @@ namespace Portal.Infrastructure.Implements.Infrastructure
                 return false;
             }
 
-            return deleteIndexResponse.IsValidResponse;
+            return deleteIndexResponse.IsValid;
         }
 
         public async Task ResetIndexes()
@@ -100,11 +95,10 @@ namespace Portal.Infrastructure.Implements.Infrastructure
             await CreateIndexAsync();
         }
 
-        public async Task UpdateDocumentAsync(AlbumDocument albumDocument)
+        public async Task IndexDocumentAsync(AlbumDocument albumDocument)
         {
-            var bulkOperation = new BulkUpdateOperation<object, object>(albumDocument.Id, albumDocument);
-            var bulkResponse = await _elasticsearchClient.BulkAsync(b => b.Update(bulkOperation));
-            if (bulkResponse.Errors)
+            var response = await _elasticClient.IndexAsync(new IndexRequest<AlbumDocument>(albumDocument, _albumIndex));
+            if (!response.IsValid)
             {
                 await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
                 {
@@ -112,22 +106,15 @@ namespace Portal.Infrastructure.Implements.Infrastructure
                     EventName = "[ELK] UpdateDocumentAsync",
                     ServiceName = "Portal",
                     Environment = "Local",
-                    Description = bulkResponse.DebugInformation
+                    Description = response.DebugInformation
                 });
             }
         }
 
-        public async Task BulkUpdateDocumenstAsync(List<AlbumDocument> albumDocuments)
+        public async Task IndexManyDocumenstAsync(List<AlbumDocument> albumDocuments)
         {
-            var bulkAll = new List<BulkOperation>();
-            foreach (var album in albumDocuments)
-            {
-                var bulkOperation = new BulkUpdateOperation<object, object>(album.Id, album);
-                bulkAll.Add(bulkOperation);
-            }
-
-            var bulkResponse = await _elasticsearchClient.BulkAsync(b => b.UpdateMany(bulkAll));
-            if (bulkResponse.Errors)
+            var response = await _elasticClient.IndexManyAsync(albumDocuments, _albumIndex);
+            if (!response.IsValid)
             {
                 await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
                 {
@@ -135,9 +122,23 @@ namespace Portal.Infrastructure.Implements.Infrastructure
                     EventName = "[ELK] BulkUpdateDocumenstAsync",
                     ServiceName = "Portal",
                     Environment = "Local",
-                    Description = bulkResponse.DebugInformation
+                    Description = response.DebugInformation
                 });
             }
+        }
+
+        public async Task<List<AlbumDocument>> GetDocumentsAsync()
+        {
+            var searchResponse = await _elasticClient.SearchAsync<AlbumDocument>(s => s
+                .Index(_albumIndex)
+            );
+
+            if (searchResponse.IsValid)
+            {
+                return [.. searchResponse.Documents];
+            }
+
+            return [];
         }
     }
 }

@@ -165,5 +165,12 @@ namespace Portal.API.Controllers
             await _elasticsearchService.ResetIndexes();
             return Ok();
         }
+
+        [HttpGet("elasticsearch")]
+        public async Task<IActionResult> GetElasticsearchSyncAlbumsAsync()
+        {
+            var response = await _elasticsearchService.GetDocumentsAsync();
+            return Ok(response);
+        }
     }
 }
