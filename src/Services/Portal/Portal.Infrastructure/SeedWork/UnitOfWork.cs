@@ -21,11 +21,12 @@ public class UnitOfWork : IUnitOfWork
         repositories = new Hashtable();
     }
 
-    public virtual void Dispose()
+    /// <summary>
+    /// Disposes the context and suppresses the finalizer for the current object.
+    /// </summary>
+    public void Dispose()
     {
         context.Dispose();
-        // Call informs the garbage collector that the finalizer (destructor) for 
-        // the current object does not need to be executed.
         GC.SuppressFinalize(this);
     }
 
@@ -81,7 +82,11 @@ public class UnitOfWork : IUnitOfWork
 
     public async Task CommitTransactionAsync(IDbContextTransaction? transaction)
     {
-        if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+        if (transaction == null)
+        {
+            ArgumentNullException.ThrowIfNull(nameof(transaction));
+            return;
+        }
         if (transaction != _currentTransaction) throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
 
         try

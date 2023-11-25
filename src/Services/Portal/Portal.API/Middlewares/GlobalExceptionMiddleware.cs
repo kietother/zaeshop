@@ -1,5 +1,5 @@
 using System.Net;
-using System.Text.Json;
+using Common;
 using Common.Enums;
 using Common.Interfaces.Messaging;
 using Common.Shared.Models.Logs;
@@ -36,9 +36,7 @@ namespace Portal.API.Middlewares
                     new ApiResponse((int)HttpStatusCode.InternalServerError, ex.Message);
 
                 // 3. Convert Json to cammel case
-                var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-
-                var json = JsonSerializer.Serialize(response, options);
+                var json = JsonSerializationHelper.Serialize(response);
 
                 // 4. Log exption exact bug.
                 using var reader = new StreamReader(context.Request.Body);

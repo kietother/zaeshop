@@ -44,9 +44,9 @@ namespace Identity.API.Attributes
             else
             {
                 // check role
-                if (_roles.Any())
+                if (_roles.Count > 0)
                 {
-                    if (roles?.Any() == true)
+                    if (roles?.Count > 0)
                     {
                         var hasRole = _roles.Exists(r => roles.Contains(r.ToString()));
                         if (!hasRole)

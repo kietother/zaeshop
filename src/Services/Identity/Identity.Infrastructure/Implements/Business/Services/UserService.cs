@@ -118,7 +118,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
             }
 
             // Update role
-            if (userModel.Roles?.Any() == true)
+            if (userModel.Roles?.Count > 0)
             {
                 var allRoles = _roleManager.Roles.ToList();
                 var dbRoles = allRoles.ConvertAll(o => o.Name);

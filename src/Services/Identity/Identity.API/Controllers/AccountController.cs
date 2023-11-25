@@ -127,7 +127,7 @@ namespace Identity.API.Controllers
         public async Task<IActionResult> ForgotPasswordAsync(ForgotPasswordRequest model)
         {
             var errorResult = ErrorResult.Create();
-            var origin = Request.Headers["origin"].ToString();
+            var origin = Request.Headers.Origin.ToString();
             await _accountService.ForgotPasswordAsync(model, origin, errorResult);
 
             if (!string.IsNullOrEmpty(errorResult.Description))
@@ -173,7 +173,7 @@ namespace Identity.API.Controllers
         private void SetTokenCookie(string? token, string? expiresOnUtc)
         {
             bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
-            string referer = Request.Headers["Referer"].ToString();
+            string referer = Request.Headers.Referer.ToString();
 
             // append cookie with refresh token to the http response
             var cookieOptions = new CookieOptions
@@ -207,8 +207,8 @@ namespace Identity.API.Controllers
         private string? IpAddress()
         {
             // get source ip address for the current request
-            if (Request.Headers.ContainsKey("X-Forwarded-For"))
-                return Request.Headers["X-Forwarded-For"];
+            if (Request.Headers.TryGetValue("X-Forwarded-For", out Microsoft.Extensions.Primitives.StringValues value))
+                return value;
             else
                 return HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString();
         }

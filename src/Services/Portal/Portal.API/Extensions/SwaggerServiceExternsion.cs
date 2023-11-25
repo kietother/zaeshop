@@ -4,6 +4,8 @@ namespace Portal.API.Extensions
 {
     public static class SwaggerServiceExternsion
     {
+        private static readonly string[] value = ["Bearer"];
+
         public static IServiceCollection AddSwaggerServices(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
@@ -25,7 +27,7 @@ namespace Portal.API.Extensions
                            };
 
                            c.AddSecurityDefinition("Bearer", securitySchema);
-                           var securityRequirement = new OpenApiSecurityRequirement { { securitySchema, new[] { "Bearer" } } };
+                           var securityRequirement = new OpenApiSecurityRequirement { { securitySchema, value } };
                            c.AddSecurityRequirement(securityRequirement);
                        });
 

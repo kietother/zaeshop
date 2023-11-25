@@ -86,7 +86,7 @@ public static class PortalServiceExtensions
             MailFrom = appSettingsConfig.GetValue<string>("EmailFrom"),
         };
         services.AddScoped<IEmailService>(x =>
-            new EmailMockupService(x.GetRequiredService<ILogger<EmailMockupService>>(), options)
+            new EmailMockupService(options)
         );
         #endregion
 
