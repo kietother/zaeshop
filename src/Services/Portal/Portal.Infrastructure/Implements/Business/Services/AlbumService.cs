@@ -41,7 +41,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
 
             List<string>? contentTypeNames = null;
-            if (requestModel.ContentTypeIds?.Any() == true)
+            if (requestModel.ContentTypeIds?.Count > 0)
             {
                 // Check Db same as request ids
                 contentTypeNames = await _contentTypeRepository.GetQueryable()
@@ -62,7 +62,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 AlbumAlertMessageId = requestModel.AlbumAlertMessageId
             };
 
-            if (requestModel.ContentTypeIds?.Any() == true)
+            if (requestModel.ContentTypeIds?.Count > 0)
             {
                 entity.AlbumContentTypes = requestModel.ContentTypeIds.ConvertAll(id => new AlbumContentType
                 {
@@ -112,7 +112,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
 
             List<string>? contentTypeNames = null;
-            if (requestModel.ContentTypeIds?.Any() == true)
+            if (requestModel.ContentTypeIds?.Count > 0)
             {
                 // Check Db same as request ids
                 contentTypeNames = await _contentTypeRepository.GetQueryable()
@@ -131,7 +131,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             existingAlbum.AlbumAlertMessageId = requestModel.AlbumAlertMessageId;
 
             // Create or Update ContentType
-            if (requestModel.ContentTypeIds?.Any() == true)
+            if (requestModel.ContentTypeIds?.Count > 0)
             {
                 foreach (var contentTypeId in requestModel.ContentTypeIds)
                 {

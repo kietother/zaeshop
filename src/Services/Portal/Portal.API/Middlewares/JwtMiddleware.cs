@@ -14,7 +14,7 @@ namespace Portal.API.Middlewares
 
         public async Task Invoke(HttpContext context, IJwtService jwtService)
         {
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split("Bearer ").LastOrDefault();
+            var token = context.Request.Headers.Authorization.FirstOrDefault()?.Split("Bearer ").LastOrDefault();
             if (!string.IsNullOrWhiteSpace(token))
             {
                 var userInfoModel = jwtService.ValidateJwtToken(token);
@@ -27,7 +27,7 @@ namespace Portal.API.Middlewares
                     if (!string.IsNullOrEmpty(userInfoModel.FullName))
                         claimsIdentity.AddClaim(new Claim(ClaimTypes.GivenName, userInfoModel.FullName));
 
-                    if (userInfoModel.Roles?.Any() == true)
+                    if (userInfoModel.Roles?.Count > 0)
                         claimsIdentity.AddClaims(userInfoModel.Roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
                     // Create ClaimsPrincipal and set it to HttpContext.User

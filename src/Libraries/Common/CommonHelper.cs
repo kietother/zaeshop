@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Reflection;
+using System.Text.Json;
 using Common.Enums;
 
 namespace Common
@@ -42,20 +43,38 @@ namespace Common
 
         public static string GetServiceUrl(EServiceHost serviceHost)
         {
-            var _baseUrls = new Dictionary<EServiceHost, string>
+            var baseUrls = new Dictionary<EServiceHost, string>
             {
                 { EServiceHost.Identity, "http://identity:5287" },
                 { EServiceHost.Portal, "http://portal:5288" },
                 { EServiceHost.Hangfire, "http://hangfireserver:5286" }
             };
 
-            if (_baseUrls.ContainsKey(serviceHost))
-            {
-                var baseUrl = _baseUrls[serviceHost];
-                return baseUrl;
-            }
+            return baseUrls.TryGetValue(serviceHost, out string? baseUrl) ? baseUrl! : string.Empty;
+        }
+    }
 
-            return string.Empty;
+    public static class JsonSerializationHelper
+    {
+        private static readonly JsonSerializerOptions s_writeOptions = new()
+        {
+            WriteIndented = false,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
+        private static readonly JsonSerializerOptions s_readOptions = new()
+        {
+            AllowTrailingCommas = false
+        };
+
+        public static string Serialize<T>(T value)
+        {
+            return JsonSerializer.Serialize(value, s_writeOptions);
+        }
+
+        public static T? Deserialize<T>(string json)
+        {
+            return JsonSerializer.Deserialize<T>(json, s_readOptions);
         }
     }
 }

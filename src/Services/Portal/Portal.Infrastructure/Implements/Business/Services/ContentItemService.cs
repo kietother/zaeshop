@@ -88,13 +88,13 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
             // Check when new collection - before create then update
             var contentItems = await _contentItemRepository.GetQueryable().Where(x => x.CollectionId == collectionId).ToListAsync();
-            if (!contentItems.Any())
+            if (contentItems == null || contentItems.Count == 0)
             {
                 return new ServiceResponse<bool>("error_content_type_empty");
             }
 
             // Update exists content item by id
-            if (model.ExistsItems?.Any() == true)
+            if (model.ExistsItems?.Count > 0)
             {
                 foreach (var item in model.ExistsItems)
                 {
@@ -116,7 +116,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
 
             // Build and Upload to image services
-            if (model.Items?.Any() == true)
+            if (model.Items?.Count > 0)
             {
                 var amazonBulkUploadModels = model.Items.Where(o => !string.IsNullOrEmpty(o.FileName) && o.FileData != null).Select(x => new ImageUploadRequestModel
                 {
@@ -155,17 +155,14 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 }
             }
 
-            if (deleteContentItems.Any())
-            {
-                _contentItemRepository.DeleteRange(deleteContentItems);
-            }
+            _contentItemRepository.DeleteRange(deleteContentItems);
 
-            if (updateContentItems.Any())
+            if (updateContentItems.Count > 0)
             {
                 _contentItemRepository.UpdateRange(updateContentItems);
             }
 
-            if (createContentItems.Any())
+            if (createContentItems.Count > 0)
             {
                 _contentItemRepository.AddRange(createContentItems);
             }

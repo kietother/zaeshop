@@ -9,7 +9,10 @@ https://code-maze.com/csharp-testing-time-dependent-code-with-timeprovider/
 
 Install Dotnet Unbutu
 https://learn.microsoft.com/en-us/dotnet/core/install/linux-scripted-manual
+sudo rm -rf /home/codespace/.dotnet/
 ./dotnet-install.sh --channel 8.0
+sudo apt-get update && \
+  sudo apt-get install -y dotnet-sdk-8.0
 
 Project
 https://code.visualstudio.com/docs/containers/docker-compose
