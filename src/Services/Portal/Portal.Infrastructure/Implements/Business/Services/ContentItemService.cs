@@ -41,7 +41,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
 
             // Check if Collection has any content item, that should be update instead create
-            var isExistingContentItems = existingCollection.ContentItems.Any();
+            var isExistingContentItems = existingCollection.ContentItems.Count > 0;
             if (isExistingContentItems)
             {
                 return new ServiceResponse<bool>("error_content_type_not_empty");

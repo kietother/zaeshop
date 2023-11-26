@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Portal.Domain.SeedWork;
 
 namespace Portal.Infrastructure.SeedWork;
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork : IUnitOfWork, IDisposable
 {
     private readonly ApplicationDbContext context;
     private readonly Hashtable repositories;
@@ -21,14 +21,24 @@ public class UnitOfWork : IUnitOfWork
         repositories = new Hashtable();
     }
 
-    /// <summary>
-    /// Disposes the context and suppresses the finalizer for the current object.
-    /// </summary>
+    #region Disposes the context and suppresses the finalizer for the current object.
+    private bool _disposed = false;
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed && disposing)
+        {
+            context.Dispose();
+        }
+        _disposed = true;
+    }
+
     public void Dispose()
     {
-        context.Dispose();
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
+    #endregion
 
     [DebuggerStepThrough]
     public IGenericRepository<TEntity> Repository<TEntity>() where TEntity : Entity
