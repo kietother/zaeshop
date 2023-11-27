@@ -33,8 +33,8 @@ namespace Portal.Domain.Models.AlbumModels
         public string? AlbumAlertMessageName { get; set; }
 
         public string? ContentTypes { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime? UpdatedDate { get; set; }
+        public DateTime CreatedOnUtc { get; set; }
+        public DateTime? UpdatedOnUtc { get; set; }
 
         [JsonIgnore]
         public long RowNum { get; set; }

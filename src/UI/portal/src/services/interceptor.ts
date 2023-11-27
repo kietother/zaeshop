@@ -2,6 +2,9 @@ import axios from "axios";
 import { loginFailure, loginSuccess, logout } from "../store/reducers/authSlice";
 import { store } from "../store";
 import { identityServer } from "./baseUrls";
+import ServerResponse from "../models/common/ServerResponse";
+import { toast } from "react-toastify";
+import i18n from "../utils/i18n";
 
 const dispatch = store.dispatch;
 const axiosApiInstance = axios.create({
@@ -23,25 +26,36 @@ axiosApiInstance.interceptors.response.use(response => {
 }, async (error) => {
     const originalRequest = error.config;
 
-    if (error.response.status === 401) {
-        if (!originalRequest._retry) {
-            originalRequest._retry = true;
-            try {
-                const response = await axios.post(identityServer + "/api/account/refresh-token", {}, {
-                    withCredentials: true
-                });
-                dispatch(loginSuccess({ data: response.data, token: response.data.jwtToken }));
-                axiosApiInstance.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
-                return axiosApiInstance(originalRequest);
+    switch (error.response.status) {
+        case 400:
+            const serverResponse = error.response.data as ServerResponse<any>;
+            if (serverResponse.isSuccess && serverResponse.errorMessage) {
+                toast.error(i18n.t(serverResponse.errorMessage));
             }
-            catch (err: any) {
-                dispatch(loginFailure(err.response.data));
-                return error;
+            break;
+        case 401:
+            if (!originalRequest._retry) {
+                originalRequest._retry = true;
+                try {
+                    const response = await axios.post(identityServer + "/api/account/refresh-token", {}, {
+                        withCredentials: true
+                    });
+                    dispatch(loginSuccess({ data: response.data, token: response.data.jwtToken }));
+                    axiosApiInstance.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
+                    return axiosApiInstance(originalRequest);
+                }
+                catch (err: any) {
+                    dispatch(loginFailure(err.response.data));
+                    return error;
+                }
             }
-        }
-        else {
-            dispatch(logout());
-        }
+            else {
+                dispatch(logout());
+            }
+            break;
+        case 500:
+            toast.error(i18n.t("toast.some_thing_is_wrong"));
+            break;
     }
     return error;
 });
