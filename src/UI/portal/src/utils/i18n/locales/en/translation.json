@@ -1,10 +1,29 @@
 {
+    "error_album_already_exists": "Album already exists",
+    "error_album_alert_message_not_found": "Album alert message not found",
+    "error_album_content_type_not_found": "Album content type not found",
+    "error_album_not_found": "Album not found",
+    "toast": {
+        "please_wait": "Please wait...",
+        "login_sucessfully": "Login Sucessfully",
+        "logout_sucessfully": "Logout Sucessfully",
+        "some_thing_is_wrong": "Some Thing Is Wrong",
+        "user_or_password_is_incorrect": "User or Password is incorrect"
+    },
     "navbar": {
         "title": "Notifications",
         "profile": "Profile",
         "logout": "Logout",
         "english": "English",
         "vietnamese": "Vietnamese"
+    },
+    "login": {
+        "let_get_started_metrica": "Let's Get Started CMS",
+        "sign_in_to_continue_to_cms": "Sign in to continue to CMS.",
+        "username": "Username",
+        "username_is_required": "Username is required.",
+        "password": "Password",
+        "password_is_required": "Password is required."
     },
     "user": {
         "title": "Users Management",
@@ -39,21 +58,6 @@
         "confirm_password_is_required": "Confirm password is required.",
         "role": "Role"
     },
-    "toast": {
-        "please_wait": "Please wait...",
-        "login_sucessfully": "Login Sucessfully",
-        "logout_sucessfully": "Logout Sucessfully",
-        "some_thing_is_wrong": "Some Thing Is Wrong",
-        "user_or_password_is_incorrect": "User or Password is incorrect"
-    },
-    "login": {
-        "let_get_started_metrica": "Let's Get Started CMS",
-        "sign_in_to_continue_to_cms": "Sign in to continue to CMS.",
-        "username": "Username",
-        "username_is_required": "Username is required.",
-        "password": "Password",
-        "password_is_required": "Password is required."
-    },
     "role": {
         "title": "Role Management",
         "title_detail": "Role Details",
@@ -68,6 +72,25 @@
             "create_role": "Create Role",
             "update_role": "Update role",
             "delete_role": "Delete Role"
+        }
+    },
+    "album": {
+        "title": "Album Management",
+        "title_detail": "Album Details",
+        "id": "ID",
+        "album_title": "Title",
+        "album_description": "Description",
+        "album_content_types": "Content types",
+        "album_alert_message": "Alert message",
+        "created_on":"Created On",
+        "updated_on": "Updated On",
+        "action": "Action",
+        "add_new": "Add New",
+        "album_title_is_required": "Album title is required.",
+        "modal": {
+            "create_album": "Create Album",
+            "update_album": "Update Album",
+            "delete_album": "Delete Album"
         }
     }
 }
