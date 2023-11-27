@@ -97,7 +97,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
 
             // Validate
-            if (await DoesTitleExistAsync(requestModel.Title))
+            if (existingAlbum.Title != requestModel.Title && await DoesTitleExistAsync(requestModel.Title))
             {
                 return new ServiceResponse<AlbumResponseModel>("error_album_already_exists");
             }
@@ -143,16 +143,16 @@ namespace Portal.Infrastructure.Implements.Business.Services
                             ContentTypeId = contentTypeId
                         });
                     }
-                    else
-                    {
-                        // remove exists
-                        existingAlbum.AlbumContentTypes.Remove(existingAlbumContentType);
-                    }
+                }
+
+                foreach (var existingNotExistContentType in existingAlbum.AlbumContentTypes.Where(x => !requestModel.ContentTypeIds.Contains(x.ContentTypeId)).ToList())
+                {
+                    existingAlbum.AlbumContentTypes.Remove(existingNotExistContentType);
                 }
             }
             else
             {
-                foreach (var existingAlbumContentType in existingAlbum.AlbumContentTypes)
+                foreach (var existingAlbumContentType in existingAlbum.AlbumContentTypes.ToList())
                 {
                     existingAlbum.AlbumContentTypes.Remove(existingAlbumContentType);
                 }
@@ -222,7 +222,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 { "SortDirection", request.SortDirection }
             };
             var result = await _unitOfWork.QueryAsync<AlbumPagingResponse>("Album_All_Paging", parameters);
-            
+
             var record = result.Find(o => o.IsTotalRecord);
             if (record == null)
             {

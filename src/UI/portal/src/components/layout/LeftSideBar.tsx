@@ -134,6 +134,11 @@ const LeftSideBar: React.FC = () => {
                                     Role Management
                                 </Link>
                             </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/albums">
+                                    Album Management
+                                </Link>
+                            </li>
                         </ul>
                         {/*end nav*/}
                     </div>

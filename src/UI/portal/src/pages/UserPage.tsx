@@ -14,7 +14,7 @@ import DeleteUser from '../components/user/DeleteUser';
 import { v4 as uuidv4 } from 'uuid';
 
 const UserPage: React.FC = () => {
-    const [modalIsOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const [actionGrid, setActionGrid] = useState(ActionTypeGrid.CREATE);
 
     const [t] = useTranslation();
@@ -193,7 +193,7 @@ const UserPage: React.FC = () => {
                 {/* end page content */}
             </div>
             <ModalCommon
-                props={{ modalIsOpen, openModal, closeModal, user }}
+                props={{ modalIsOpen: isOpen, openModal, closeModal, user }}
                 Component={BodyModal(actionGrid)}
             />
         </>
