@@ -9,6 +9,7 @@ import ModalCommon from "../components/shared/ModalCommon";
 import Pagination from "../components/shared/Pagination";
 import { v4 as uuidv4 } from 'uuid';
 import dayjs from "dayjs";
+import CreateAlbum from "../components/album/CreateAlbum";
 
 const AlbumPage: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -45,15 +46,17 @@ const AlbumPage: React.FC = () => {
     }
 
     const BodyModal = useCallback((actionGrid: ActionTypeGrid) => {
-        // switch (actionGrid) {
-        //     case ActionTypeGrid.CREATE:
-        //         return CreateUser;
-        //     case ActionTypeGrid.EDIT:
-        //         return UpdateUser;
-        //     case ActionTypeGrid.DELETE:
-        //         return DeleteUser;
-        // }
-        return React.Fragment;
+        switch (actionGrid) {
+            case ActionTypeGrid.CREATE:
+                return CreateAlbum;
+            // case ActionTypeGrid.EDIT:
+            //     return UpdateUser;
+            // case ActionTypeGrid.DELETE:
+            //     return DeleteUser;
+            default:
+                return React.Fragment;
+        }
+
     }, []);
 
     return (
