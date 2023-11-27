@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Portal.Domain.SeedWork;
-public interface IUnitOfWork : IDisposable
+public interface IUnitOfWork
 {
     IGenericRepository<TEntity> Repository<TEntity>() where TEntity : Entity;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
