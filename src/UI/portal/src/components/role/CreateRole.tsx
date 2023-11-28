@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import RoleCreateRequestModel from '../../models/role/RoleCreateRequestModel';
 import classNames from 'classnames';
 import { createRole } from '../../store/thunks/roleThunk';
+import { toast } from 'react-toastify';
 
 type CreateRoleProps = {
     closeModal: (isReload?: boolean) => void;
@@ -27,7 +28,15 @@ const CreateRole: React.FC<CreateRoleProps> = ({ closeModal }) => {
     });
 
     const onSubmit = async (roleCreateRequestModel: RoleCreateRequestModel) => {
+        const toastId = toast.loading(t("toast.please_wait"), {
+            hideProgressBar: true
+        });
         await createRole(roleCreateRequestModel)(dispatch);
+
+        toast.update(toastId, {
+            render: t("toast.create_sucessfully"), type: toast.TYPE.SUCCESS, isLoading: false,
+            autoClose: 2000
+        });
         closeModal(true);
     };
 

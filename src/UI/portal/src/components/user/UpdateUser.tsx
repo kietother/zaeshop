@@ -11,6 +11,7 @@ import DropDownOption from '../../models/common/DropDownOption';
 import { StoreState } from '../../store';
 import Role from '../../models/role/Role';
 import { getAllRoles } from '../../store/thunks/roleThunk';
+import { toast } from 'react-toastify';
 
 type UpdateUserProps = {
     user: User;
@@ -51,10 +52,18 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
     });
 
     const onSubmit = async (userUpdateRequestModel: UserUpdateRequestModel) => {
+        const toastId = toast.loading(t("toast.please_wait"), {
+            hideProgressBar: true
+        });
         await updateUser(user.id, {
             ...userUpdateRequestModel,
             roles: selectedOptions?.map(option => option.value)
         })(dispatch);
+
+        toast.update(toastId, {
+            render: t("toast.update_sucessfully"), type: toast.TYPE.SUCCESS, isLoading: false,
+            autoClose: 2000
+        });
         closeModal(true);
     };
 

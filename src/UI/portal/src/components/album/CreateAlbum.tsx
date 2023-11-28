@@ -76,6 +76,7 @@ const CreateAlbum: React.FC<CreateAlbumProps> = ({ closeModal }) => {
             });
             
             closeModal(true);
+            return;
         }
         toast.done(toastId);
     }

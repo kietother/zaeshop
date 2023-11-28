@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import User from '../../models/user/User';
 import { deleteUser } from '../../store/thunks/userThunk';
+import { toast } from 'react-toastify';
 
 type DeleteUserProps = {
     user: User;
@@ -16,7 +17,15 @@ const DeleteUser: React.FC<DeleteUserProps> = ({ user, closeModal }) => {
     const dispatch = useDispatch();
 
     const onDeleteUser = async () => {
+        const toastId = toast.loading(t("toast.please_wait"), {
+            hideProgressBar: true
+        });
         await deleteUser(user.id)(dispatch);
+        
+        toast.update(toastId, {
+            render: t("toast.delete_sucessfully"), type: toast.TYPE.SUCCESS, isLoading: false,
+            autoClose: 2000
+        });
         closeModal(true);
     }
 
