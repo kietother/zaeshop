@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { StoreState, useAppDispatch } from '../store';
-import { getAlbumsPagingAsyncThunk } from "../store/reducers/albumSlice";
+import { getAlbumsPagingAsyncThunk, getAlbumAlertMessagesAsyncThunk, getAllContentTypesAsyncThunk } from "../store/reducers/albumSlice";
 import AlbumPagingResponse from "../models/album/AlbumPagingResponse";
 import { ActionTypeGrid } from "../models/enums/ActionTypeGrid";
 import { useTranslation } from "react-i18next";
@@ -23,14 +23,14 @@ const AlbumPage: React.FC = () => {
     const albums = useMemo(() => albumState.albums, [albumState.albums]);
     const [album, setAlbum] = useState<AlbumPagingResponse>(albums[0] || null);
 
-    console.log(albums);
-
     // Paging
     const [pageIndex, setPageIndex] = useState(1);
     const [pageSize, setPageSize] = useState(5);
 
     useEffect(() => {
-        dispatch(getAlbumsPagingAsyncThunk({ pageIndex, pageSize }));
+        dispatch(getAlbumsPagingAsyncThunk({ pageNumber: pageIndex, pageSize }));
+        dispatch(getAllContentTypesAsyncThunk());
+        dispatch(getAlbumAlertMessagesAsyncThunk())
     }, [dispatch, pageIndex, pageSize]);
 
     const openModal = (actionGrid: ActionTypeGrid, album?: AlbumPagingResponse) => {
@@ -41,7 +41,10 @@ const AlbumPage: React.FC = () => {
         setIsOpen(true);
     }
 
-    const closeModal = () => {
+    const closeModal = (isReload?: boolean) => {
+        if (isReload) {
+            dispatch(getAlbumsPagingAsyncThunk({ pageNumber: pageIndex, pageSize }));
+        }
         setIsOpen(false);
     }
 

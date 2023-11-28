@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Identity.API.Controllers;
 using Identity.API.Extensions;
 using Identity.API.HealthCheck;
@@ -12,7 +13,11 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 builder.Services.AddHealthChecks().AddCheck<SampleHealthCheck>("sample");
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -1,5 +1,5 @@
 export default interface PagingRequest {
-    pageIndex: number;
+    pageNumber: number;
     pageSize: number;
     searchTerm?: string;
     sortColumn?: string;

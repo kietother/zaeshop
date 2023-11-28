@@ -45,8 +45,8 @@ BEGIN
 			   a.UpdatedOnUtc
         FROM dbo.Album a
 			LEFT JOIN dbo.AlbumAlertMessage aam ON aam.Id = a.AlbumAlertMessageId
-			JOIN dbo.AlbumContentType act ON act.AlbumId = a.Id
-			JOIN dbo.ContentType ct ON ct.Id = act.ContentTypeId
+			LEFT JOIN dbo.AlbumContentType act ON act.AlbumId = a.Id
+			LEFT JOIN dbo.ContentType ct ON ct.Id = act.ContentTypeId
 		WHERE (ISNULL(@searchTerm, '') = '' OR 
 			(a.Title LIKE '' + @searchTerm + '%') OR
 			(a.Description LIKE '' + @searchTerm + '%')

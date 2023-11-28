@@ -32,8 +32,7 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
     }, [roles]);
 
     useEffect(() => {
-        getAllRoles()(dispatch).then(() => {
-        });
+        getAllRoles()(dispatch);
     }, [dispatch]);
 
     useEffect(() => {
@@ -136,6 +135,8 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
                                         </label>
                                         <div className="col-sm-10">
                                             <Select
+                                                className="basic-multi-select"
+                                                classNamePrefix="select"
                                                 options={rolesDropDown}
                                                 value={selectedOptions}
                                                 onChange={onHandleChange}

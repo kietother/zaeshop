@@ -8,7 +8,11 @@
         "login_sucessfully": "Login Sucessfully",
         "logout_sucessfully": "Logout Sucessfully",
         "some_thing_is_wrong": "Some Thing Is Wrong",
-        "user_or_password_is_incorrect": "User or Password is incorrect"
+        "you_can_not_access_feature": "You can not access feature",
+        "user_or_password_is_incorrect": "User or Password is incorrect",
+        "create_sucessfully": "Create Sucessfully",
+        "update_sucessfully": "Update Sucessfully",
+        "delete_sucessfully": "Delete Sucessfully"
     },
     "navbar": {
         "title": "Notifications",
@@ -82,7 +86,7 @@
         "album_description": "Description",
         "album_content_types": "Content types",
         "album_alert_message": "Alert message",
-        "created_on":"Created On",
+        "created_on": "Created On",
         "updated_on": "Updated On",
         "action": "Action",
         "add_new": "Add New",
@@ -90,7 +94,12 @@
         "modal": {
             "create_album": "Create Album",
             "update_album": "Update Album",
-            "delete_album": "Delete Album"
+            "delete_album": "Delete Album",
+            "title": "Title",
+            "title_is_required": "Title is required.",
+            "description": "Description",
+            "alert_message": "Alert Message",
+            "content_types": "Content Types"
         }
     }
 }
