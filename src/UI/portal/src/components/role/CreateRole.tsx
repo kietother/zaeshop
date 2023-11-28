@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import { createRole } from '../../store/thunks/roleThunk';
 
 type CreateRoleProps = {
-    closeModal: () => void;
+    closeModal: (isReload?: boolean) => void;
 };
 
 
@@ -28,7 +28,7 @@ const CreateRole: React.FC<CreateRoleProps> = ({ closeModal }) => {
 
     const onSubmit = async (roleCreateRequestModel: RoleCreateRequestModel) => {
         await createRole(roleCreateRequestModel)(dispatch);
-        closeModal();
+        closeModal(true);
     };
 
     return (
@@ -52,7 +52,7 @@ const CreateRole: React.FC<CreateRoleProps> = ({ closeModal }) => {
                                     className="btn-close"
                                     data-bs-dismiss="modal"
                                     aria-label="Close"
-                                    onClick={closeModal}
+                                    onClick={() => closeModal()}
                                 />
                             </div>
                             {/*end modal-header*/}
@@ -87,7 +87,7 @@ const CreateRole: React.FC<CreateRoleProps> = ({ closeModal }) => {
                                     type="button"
                                     className="btn btn-de-secondary btn-sm"
                                     data-bs-dismiss="modal"
-                                    onClick={closeModal}
+                                    onClick={() => closeModal()}
                                 >
                                     {t('user.modal.close')}
                                 </button>

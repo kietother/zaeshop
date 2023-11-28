@@ -1,5 +1,5 @@
 export default interface AlbumAlertMessage {
-    id: string
+    id: number;
     name: string,
     description?: string
 }

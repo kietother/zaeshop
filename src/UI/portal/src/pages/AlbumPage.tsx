@@ -8,8 +8,10 @@ import { useTranslation } from "react-i18next";
 import ModalCommon from "../components/shared/ModalCommon";
 import Pagination from "../components/shared/Pagination";
 import { v4 as uuidv4 } from 'uuid';
-import dayjs from "dayjs";
+import dayjsCustom from "../utils/dayjs/dayjs-custom";
 import CreateAlbum from "../components/album/CreateAlbum";
+import UpdateAlbum from "../components/album/UpdateAlbum";
+import DeleteAlbum from "../components/album/DeleteAlbum";
 
 const AlbumPage: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -52,12 +54,10 @@ const AlbumPage: React.FC = () => {
         switch (actionGrid) {
             case ActionTypeGrid.CREATE:
                 return CreateAlbum;
-            // case ActionTypeGrid.EDIT:
-            //     return UpdateUser;
-            // case ActionTypeGrid.DELETE:
-            //     return DeleteUser;
-            default:
-                return React.Fragment;
+            case ActionTypeGrid.EDIT:
+                return UpdateAlbum;
+            case ActionTypeGrid.DELETE:
+                return DeleteAlbum;
         }
 
     }, []);
@@ -126,8 +126,8 @@ const AlbumPage: React.FC = () => {
                                                             <td>{album.title}</td>
                                                             <td>{album.description}</td>
                                                             <td>{album.contentTypes}</td>
-                                                            <td>{dayjs(album.createdOnUtc).format('DD-MM-YYYY HH:mm')}</td>
-                                                            <td>{album.updatedOnUtc && dayjs(album.updatedOnUtc).format('DD-MM-YYYY HH:mm')}</td>
+                                                            <td>{dayjsCustom.utc(album.createdOnUtc).local().format('DD-MM-YYYY HH:mm')}</td>
+                                                            <td>{album.updatedOnUtc && dayjsCustom.utc(album.updatedOnUtc).local().format('DD-MM-YYYY HH:mm')}</td>
                                                             <td>
                                                                 <button className="btn"
                                                                     onClick={() => openModal(ActionTypeGrid.EDIT, album)}>

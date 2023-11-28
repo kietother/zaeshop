@@ -1,22 +1,24 @@
-import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import AlbumRequestModel from "../../models/album/AlbumRequestModel";
-import { createAlbum } from "../../services/album/albumService";
-import classNames from "classnames";
-import { useSelector } from "react-redux";
-import { StoreState } from "../../store";
-import { useMemo, useState } from "react";
-import DropDownOption from "../../models/common/DropDownOption";
-import ContentType from "../../models/content-type/ContentType";
-import AlbumAlertMessage from "../../models/album-alert-mesage/AlbumAlertMessage";
+import React, { useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+import { updateAlbum } from '../../services/album/albumService';
+import { StoreState } from '../../store';
+import DropDownOption from '../../models/common/DropDownOption';
+import ContentType from '../../models/content-type/ContentType';
+import AlbumRequestModel from '../../models/album/AlbumRequestModel';
+import AlbumPagingResponse from '../../models/album/AlbumPagingResponse';
 import Select from 'react-select';
-import { toast } from "react-toastify";
+import classNames from 'classnames';
+import AlbumAlertMessage from '../../models/album-alert-mesage/AlbumAlertMessage';
 
-type CreateAlbumProps = {
+type UpdateAlbumProps = {
+    album: AlbumPagingResponse,
     closeModal: (isReload?: boolean) => void;
-};
+}
 
-const CreateAlbum: React.FC<CreateAlbumProps> = ({ closeModal }) => {
+const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
     const [t] = useTranslation();
     const { albumAlertMessages, contentTypes } = useSelector((state: StoreState) => state.album);
 
@@ -37,9 +39,18 @@ const CreateAlbum: React.FC<CreateAlbumProps> = ({ closeModal }) => {
         }));
     }, [albumAlertMessages]);
 
+    const contentTypeIds = useMemo((): number[] => {
+        const listContentTypeIds = album?.contentTypeIds?.split(',').map(item => Number(item)) ?? [];
+        return listContentTypeIds;
+    }, [album.contentTypeIds])
+
     // Use to build model
-    const [albumAlertMessageSelectedOption, setAlbumAlertMessageSelectedOption] = useState<DropDownOption<number> | null>(null);
-    const [contentTypesSelectedOptions, setContentTypesSelectedOptions] = useState<DropDownOption<number>[] | null>([]);
+    const [albumAlertMessageSelectedOption, setAlbumAlertMessageSelectedOption] = useState<DropDownOption<number> | null>(
+        albumAlertMessageDropDown.find(item => Number(item.value) === album.albumAlertMessageId) ?? null
+    );
+    const [contentTypesSelectedOptions, setContentTypesSelectedOptions] = useState<DropDownOption<number>[] | null>(
+        contentTypesDropDown.filter(item => contentTypeIds.includes(item.value))
+    );
 
     const onChangeAlbumAlertMessageSelectedOption = (selectedOption: DropDownOption<number> | null) => {
         setAlbumAlertMessageSelectedOption(selectedOption);
@@ -49,14 +60,14 @@ const CreateAlbum: React.FC<CreateAlbumProps> = ({ closeModal }) => {
         setContentTypesSelectedOptions(selectedOptions);
     }
 
-    // Forms
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm<AlbumRequestModel>({
         defaultValues: {
-            title: ''
+            title: album.title,
+            description: album.description
         }
     });
 
@@ -64,21 +75,22 @@ const CreateAlbum: React.FC<CreateAlbumProps> = ({ closeModal }) => {
         const toastId = toast.loading(t("toast.please_wait"), {
             hideProgressBar: true
         });
-        const response = await createAlbum({
+        const response = await updateAlbum(album.id, {
             ...albumRequestModel,
             albumAlertMessageId: albumAlertMessageSelectedOption ? Number(albumAlertMessageSelectedOption.value) : undefined,
             contentTypeIds: contentTypesSelectedOptions?.map(option => Number(option.value))
         });
         if (response.status === 200) {
             toast.update(toastId, {
-                render: t("toast.create_sucessfully"), type: toast.TYPE.SUCCESS, isLoading: false,
+                render: t("toast.update_sucessfully"),
+                type: toast.TYPE.SUCCESS,
                 autoClose: 2000
             });
-            
+
             closeModal(true);
         }
         toast.done(toastId);
-    }
+    };
 
     return (
         <>
@@ -94,7 +106,7 @@ const CreateAlbum: React.FC<CreateAlbumProps> = ({ closeModal }) => {
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h6 className="modal-title m-0" id="exampleModalDefaultLogin">
-                                    {t('album.modal.create_album')}
+                                    {t('album.modal.update_album')}
                                 </h6>
                                 <button
                                     type="button"
@@ -198,7 +210,7 @@ const CreateAlbum: React.FC<CreateAlbumProps> = ({ closeModal }) => {
             </div>
             {/*end modal*/}
         </>
-    )
+    );
 }
 
-export default CreateAlbum;
+export default UpdateAlbum;

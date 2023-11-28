@@ -40,7 +40,10 @@ const RolePage: React.FC = () => {
         setIsOpen(true);
     }
 
-    const closeModal = () => {
+    const closeModal = (isReload?: boolean) => {
+        if (isReload) {
+            getRoles(pageIndex, pageSize)(dispatch);
+        }
         setIsOpen(false);
     }
 

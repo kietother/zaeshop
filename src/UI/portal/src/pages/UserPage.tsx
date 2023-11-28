@@ -41,7 +41,10 @@ const UserPage: React.FC = () => {
         setIsOpen(true);
     }
 
-    const closeModal = () => {
+    const closeModal = (isReload?: boolean) => {
+        if (isReload) {
+            getUsers(pageIndex, pageSize)(dispatch);
+        }
         setIsOpen(false);
     }
 

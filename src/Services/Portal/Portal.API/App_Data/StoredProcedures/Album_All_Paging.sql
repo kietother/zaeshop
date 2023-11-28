@@ -40,6 +40,7 @@ BEGIN
 			   aam.Name AS [AlbumAlertMessageName],
 			   aam.Description AS [AlbumAlertMessageDescription],
 			   a.IsPublic,
+			  STRING_AGG(ct.Id, ', ') WITHIN GROUP(ORDER BY ct.Name) AS [ContentTypeIds],
                STRING_AGG(ct.Name, ', ') WITHIN GROUP(ORDER BY ct.Name) AS [ContentTypes],
 			   a.CreatedOnUtc,
 			   a.UpdatedOnUtc
@@ -69,6 +70,7 @@ BEGIN
 		 NULL [AlbumAlertMessageName],
 		 NULL [AlbumAlertMessageDescription],
 		 0 IsPublic,
+		 NULL [ContentTypeIds],
 		 NULL [ContentTypes],
 		 GETDATE() CreatedOnUtc,
 		 NULL UpdatedOnUtc,

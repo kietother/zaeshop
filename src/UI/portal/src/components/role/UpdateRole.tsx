@@ -9,7 +9,7 @@ import classNames from "classnames";
 
 type UpdateRoleProps = {
     role: Role;
-    closeModal: () => void;
+    closeModal: (isReload?: boolean) => void;
 };
 
 const UpdateRole: React.FC<UpdateRoleProps> = ({ role, closeModal }) => {
@@ -28,7 +28,7 @@ const UpdateRole: React.FC<UpdateRoleProps> = ({ role, closeModal }) => {
 
     const onSubmit = async (roleUpdateRequestModel: RoleUpdateRequestModel) => {
         await updateRole(role.id, roleUpdateRequestModel)(dispatch);
-        closeModal();
+        closeModal(true);
     };
     return (
         <>
@@ -52,7 +52,7 @@ const UpdateRole: React.FC<UpdateRoleProps> = ({ role, closeModal }) => {
                                     className="btn-close"
                                     data-bs-dismiss="modal"
                                     aria-label="Close"
-                                    onClick={closeModal}
+                                    onClick={() => closeModal()}
                                 />
                             </div>
                             {/*end modal-header*/}
@@ -87,7 +87,7 @@ const UpdateRole: React.FC<UpdateRoleProps> = ({ role, closeModal }) => {
                                     type="button"
                                     className="btn btn-de-secondary btn-sm"
                                     data-bs-dismiss="modal"
-                                    onClick={closeModal}
+                                    onClick={() => closeModal()}
                                 >
                                     {t('user.modal.close')}
                                 </button>

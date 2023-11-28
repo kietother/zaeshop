@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Common.Interfaces;
 using Common.Models.Redis;
 using Microsoft.Extensions.Caching.Distributed;
@@ -24,7 +23,7 @@ namespace Common.Implements
             var value = _cache.GetString(key);
             if (value != null)
             {
-                return JsonSerializer.Deserialize<T>(value);
+                return JsonSerializationHelper.Deserialize<T>(value);
             }
 
             return default;
@@ -35,7 +34,7 @@ namespace Common.Implements
             var value = await _cache.GetStringAsync(key);
             if (value != null)
             {
-                return JsonSerializer.Deserialize<T>(value);
+                return JsonSerializationHelper.Deserialize<T>(value);
             }
 
             return default;
@@ -49,7 +48,7 @@ namespace Common.Implements
 
         public void Set<T>(string key, T value, int expiration)
         {
-            _cache.SetString(key, JsonSerializer.Serialize(value), new DistributedCacheEntryOptions
+            _cache.SetString(key, JsonSerializationHelper.Serialize(value), new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(expiration),
                 SlidingExpiration = TimeSpan.FromMinutes(expiration)
@@ -58,7 +57,7 @@ namespace Common.Implements
 
         public async Task SetAsync<T>(string key, T value, int expiration)
         {
-            await _cache.SetStringAsync(key, JsonSerializer.Serialize(value), new DistributedCacheEntryOptions
+            await _cache.SetStringAsync(key, JsonSerializationHelper.Serialize(value), new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(expiration),
                 SlidingExpiration = TimeSpan.FromMinutes(expiration)

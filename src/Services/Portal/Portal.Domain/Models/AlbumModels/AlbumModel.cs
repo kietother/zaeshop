@@ -32,6 +32,7 @@ namespace Portal.Domain.Models.AlbumModels
         public int? AlbumAlertMessageId { get; set; }
         public string? AlbumAlertMessageName { get; set; }
 
+        public string? ContentTypeIds { get; set; }
         public string? ContentTypes { get; set; }
         public DateTime CreatedOnUtc { get; set; }
         public DateTime? UpdatedOnUtc { get; set; }

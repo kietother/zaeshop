@@ -1,5 +1,5 @@
 export default interface ContentType {
-    id: string
+    id: number;
     name: string,
     description?: string
 }

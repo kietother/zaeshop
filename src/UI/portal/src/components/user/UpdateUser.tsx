@@ -14,18 +14,18 @@ import { getAllRoles } from '../../store/thunks/roleThunk';
 
 type UpdateUserProps = {
     user: User;
-    closeModal: () => void;
+    closeModal: (isReload?: boolean) => void;
 };
 
 const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
     const dispatch = useDispatch();
     const [t] = useTranslation();
-    const [selectedOptions, setSelectedOptions] = useState<DropDownOption[]>([]);
+    const [selectedOptions, setSelectedOptions] = useState<DropDownOption<string>[]>([]);
 
     const roles = useSelector((state: StoreState) => state.role.roles);
-    const rolesDropDown = useMemo((): DropDownOption[] => {
+    const rolesDropDown = useMemo((): DropDownOption<string>[] => {
         if (!roles) return [];
-        return roles.map((role: Role): DropDownOption => ({
+        return roles.map((role: Role): DropDownOption<string> => ({
             value: role.name ?? '',
             label: role.name ?? ''
         }));
@@ -55,7 +55,7 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
             ...userUpdateRequestModel,
             roles: selectedOptions?.map(option => option.value)
         })(dispatch);
-        closeModal();
+        closeModal(true);
     };
 
     const onHandleChange = (selectedOption: any) => {
@@ -84,7 +84,7 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
                                     className="btn-close"
                                     data-bs-dismiss="modal"
                                     aria-label="Close"
-                                    onClick={closeModal}
+                                    onClick={() => closeModal()}
                                 />
                             </div>
                             {/*end modal-header*/}
@@ -152,7 +152,7 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ user, closeModal }) => {
                                     type="button"
                                     className="btn btn-de-secondary btn-sm"
                                     data-bs-dismiss="modal"
-                                    onClick={closeModal}
+                                    onClick={() => closeModal()}
                                 >
                                     {t('user.modal.close')}
                                 </button>
