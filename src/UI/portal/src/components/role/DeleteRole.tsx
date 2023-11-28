@@ -3,6 +3,7 @@ import Role from "../../models/role/Role";
 import { useDispatch } from "react-redux";
 import { deleteRole } from "../../store/thunks/roleThunk";
 import dayjs from "dayjs";
+import { toast } from "react-toastify";
 
 type DeleteRoleProps = {
     role: Role;
@@ -15,7 +16,15 @@ const DeleteRole: React.FC<DeleteRoleProps> = ({ role, closeModal }) => {
     const dispatch = useDispatch();
 
     const onDelete = async () => {
+        const toastId = toast.loading(t("toast.please_wait"), {
+            hideProgressBar: true
+        });
         await deleteRole(role.id)(dispatch);
+
+        toast.update(toastId, {
+            render: t("toast.delete_sucessfully"), type: toast.TYPE.SUCCESS, isLoading: false,
+            autoClose: 2000
+        });
         closeModal(true);
     }
 

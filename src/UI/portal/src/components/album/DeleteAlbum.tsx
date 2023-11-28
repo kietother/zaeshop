@@ -26,6 +26,7 @@ const DeleteAlbum: React.FC<DeleteAlbumProps> = ({ album, closeModal }) => {
             });
 
             closeModal(true);
+            return;
         }
         toast.done(toastId);
     }

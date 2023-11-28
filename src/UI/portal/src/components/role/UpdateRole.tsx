@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { updateRole } from "../../store/thunks/roleThunk";
 import classNames from "classnames";
+import { toast } from "react-toastify";
 
 type UpdateRoleProps = {
     role: Role;
@@ -27,7 +28,15 @@ const UpdateRole: React.FC<UpdateRoleProps> = ({ role, closeModal }) => {
     });
 
     const onSubmit = async (roleUpdateRequestModel: RoleUpdateRequestModel) => {
+        const toastId = toast.loading(t("toast.please_wait"), {
+            hideProgressBar: true
+        });
         await updateRole(role.id, roleUpdateRequestModel)(dispatch);
+
+        toast.update(toastId, {
+            render: t("toast.update_sucessfully"), type: toast.TYPE.SUCCESS, isLoading: false,
+            autoClose: 2000
+        });
         closeModal(true);
     };
     return (

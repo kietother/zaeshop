@@ -83,11 +83,13 @@ const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
         if (response.status === 200) {
             toast.update(toastId, {
                 render: t("toast.update_sucessfully"),
+                isLoading: false,
                 type: toast.TYPE.SUCCESS,
                 autoClose: 2000
             });
 
             closeModal(true);
+            return;
         }
         toast.done(toastId);
     };

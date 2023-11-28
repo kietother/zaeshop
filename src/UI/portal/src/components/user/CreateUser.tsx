@@ -5,6 +5,7 @@ import UserCreateRequestModel from '../../models/user/UserCreateRequestModel';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import classNames from 'classnames';
+import { toast } from 'react-toastify';
 
 type CreateUserProps = {
     closeModal: (isReload?: boolean) => void;
@@ -30,7 +31,15 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
     });
 
     const onSubmit = async (userCreateRequestModel: UserCreateRequestModel) => {
+        const toastId = toast.loading(t("toast.please_wait"), {
+            hideProgressBar: true
+        });
         await createUser(userCreateRequestModel)(dispatch);
+
+        toast.update(toastId, {
+            render: t("toast.create_sucessfully"), type: toast.TYPE.SUCCESS, isLoading: false,
+            autoClose: 2000
+        });
         closeModal(true);
     };
 
