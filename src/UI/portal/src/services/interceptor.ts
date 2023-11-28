@@ -27,13 +27,18 @@ axiosApiInstance.interceptors.response.use(response => {
     const originalRequest = error.config;
 
     switch (error.response.status) {
-        case 400:
+        case 400: {
             const serverResponse = error.response.data as ServerResponse<any>;
-            if (serverResponse.isSuccess && serverResponse.errorMessage) {
-                toast.error(i18n.t(serverResponse.errorMessage));
+            if (!serverResponse.isSuccess && serverResponse.errorMessage) {
+                toast.dismiss();
+                toast.error(i18n.t(serverResponse.errorMessage), {
+                    hideProgressBar: true,
+                    autoClose: 2000
+                });
             }
             break;
-        case 401:
+        }
+        case 401: {
             if (!originalRequest._retry) {
                 originalRequest._retry = true;
                 try {
@@ -53,9 +58,20 @@ axiosApiInstance.interceptors.response.use(response => {
                 dispatch(logout());
             }
             break;
-        case 500:
+        }
+        case 403: {
+            toast.dismiss();
+            toast.error(i18n.t("toast.you_can_not_access_feature"), {
+                hideProgressBar: true,
+                autoClose: 2000
+            });
+            break;
+        }
+        case 500: {
+            toast.dismiss();
             toast.error(i18n.t("toast.some_thing_is_wrong"));
             break;
+        }
     }
     return error;
 });

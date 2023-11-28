@@ -13,7 +13,7 @@ import DeleteRole from '../components/role/DeleteRole';
 import UpdateRole from '../components/role/UpdateRole';
 
 const RolePage: React.FC = () => {
-    const [modalIsOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const [actionGrid, setActionGrid] = useState(ActionTypeGrid.CREATE);
 
     const [t] = useTranslation();
@@ -40,7 +40,10 @@ const RolePage: React.FC = () => {
         setIsOpen(true);
     }
 
-    const closeModal = () => {
+    const closeModal = (isReload?: boolean) => {
+        if (isReload) {
+            getRoles(pageIndex, pageSize)(dispatch);
+        }
         setIsOpen(false);
     }
 
@@ -182,7 +185,7 @@ const RolePage: React.FC = () => {
                 {/* end page content */}
             </div>
             <ModalCommon
-                props={{ modalIsOpen, openModal, closeModal, role }}
+                props={{ modalIsOpen: isOpen, openModal, closeModal, role }}
                 Component={BodyModal(actionGrid)}
             />
         </>

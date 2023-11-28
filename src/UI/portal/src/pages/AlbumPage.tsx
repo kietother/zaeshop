@@ -1,49 +1,51 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import dayjs from 'dayjs';
-import { StoreState } from '../store';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUsers } from '../store/thunks/userThunk';
-import ModalCommon from '../components/shared/ModalCommon';
-import CreateUser from '../components/user/CreateUser';
-import { ActionTypeGrid } from '../models/enums/ActionTypeGrid';
-import UpdateUser from '../components/user/UpdateUser';
-import User from '../models/user/User';
-import { useTranslation } from 'react-i18next';
-import Pagination from '../components/shared/Pagination';
-import DeleteUser from '../components/user/DeleteUser';
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import { StoreState, useAppDispatch } from '../store';
+import { getAlbumsPagingAsyncThunk, getAlbumAlertMessagesAsyncThunk, getAllContentTypesAsyncThunk } from "../store/reducers/albumSlice";
+import AlbumPagingResponse from "../models/album/AlbumPagingResponse";
+import { ActionTypeGrid } from "../models/enums/ActionTypeGrid";
+import { useTranslation } from "react-i18next";
+import ModalCommon from "../components/shared/ModalCommon";
+import Pagination from "../components/shared/Pagination";
 import { v4 as uuidv4 } from 'uuid';
+import dayjsCustom from "../utils/dayjs/dayjs-custom";
+import CreateAlbum from "../components/album/CreateAlbum";
+import UpdateAlbum from "../components/album/UpdateAlbum";
+import DeleteAlbum from "../components/album/DeleteAlbum";
 
-const UserPage: React.FC = () => {
+const AlbumPage: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [actionGrid, setActionGrid] = useState(ActionTypeGrid.CREATE);
 
     const [t] = useTranslation();
 
-    const userState = useSelector((state: StoreState) => state.user);
-    const dispatch = useDispatch();
+    const albumState = useSelector((state: StoreState) => state.album);
+    const dispatch = useAppDispatch();
 
-    const users = useMemo(() => userState.users, [userState.users]);
-    const [user, setUser] = useState<User>(users[0] || null);
+    const albums = useMemo(() => albumState.albums, [albumState.albums]);
+    const [album, setAlbum] = useState<AlbumPagingResponse>(albums[0] || null);
 
     // Paging
     const [pageIndex, setPageIndex] = useState(1);
     const [pageSize, setPageSize] = useState(5);
 
     useEffect(() => {
-        getUsers(pageIndex, pageSize)(dispatch);
+        dispatch(getAlbumsPagingAsyncThunk({ pageNumber: pageIndex, pageSize }));
+        dispatch(getAllContentTypesAsyncThunk());
+        dispatch(getAlbumAlertMessagesAsyncThunk())
     }, [dispatch, pageIndex, pageSize]);
 
-    const openModal = (actionGrid: ActionTypeGrid, user?: User) => {
+    const openModal = (actionGrid: ActionTypeGrid, album?: AlbumPagingResponse) => {
         setActionGrid(actionGrid);
-        if (user) {
-            setUser(user);
+        if (album) {
+            setAlbum(album);
         }
         setIsOpen(true);
     }
 
     const closeModal = (isReload?: boolean) => {
         if (isReload) {
-            getUsers(pageIndex, pageSize)(dispatch);
+            dispatch(getAlbumsPagingAsyncThunk({ pageNumber: pageIndex, pageSize }));
         }
         setIsOpen(false);
     }
@@ -51,12 +53,13 @@ const UserPage: React.FC = () => {
     const BodyModal = useCallback((actionGrid: ActionTypeGrid) => {
         switch (actionGrid) {
             case ActionTypeGrid.CREATE:
-                return CreateUser;
+                return CreateAlbum;
             case ActionTypeGrid.EDIT:
-                return UpdateUser;
+                return UpdateAlbum;
             case ActionTypeGrid.DELETE:
-                return DeleteUser;
+                return DeleteAlbum;
         }
+
     }, []);
 
     return (
@@ -79,10 +82,10 @@ const UserPage: React.FC = () => {
                                                 <a href="crm-contacts.html#">CMS</a>
                                             </li>
                                             {/*end nav-item*/}
-                                            <li className="breadcrumb-item active">Users</li>
+                                            <li className="breadcrumb-item active">Albums</li>
                                         </ol>
                                     </div>
-                                    <h4 className="page-title">{t("user.title")}</h4>
+                                    <h4 className="page-title">{t("album.title")}</h4>
                                 </div>
                                 {/*end page-title-box*/}
                             </div>
@@ -95,7 +98,7 @@ const UserPage: React.FC = () => {
                                     <div className="card-header">
                                         <div className="row align-items-center">
                                             <div className="col">
-                                                <h4 className="card-title">{t('user.title_detail')}</h4>
+                                                <h4 className="card-title">{t('album.title_detail')}</h4>
                                             </div>
                                             {/*end col*/}
                                         </div>{" "}
@@ -107,40 +110,31 @@ const UserPage: React.FC = () => {
                                             <table className="table">
                                                 <thead>
                                                     <tr>
-                                                        <th>{t('user.id')}</th>
-                                                        <th>{t('user.full_name')}</th>
-                                                        <th>{t('user.username')}</th>
-                                                        <th>{t('user.email')}</th>
-                                                        <th>{t('user.email_confirmed')}</th>
-                                                        <th>{t('user.created_on')}</th>
-                                                        <th>{t('user.roles')}</th>
-                                                        <th>{t('user.action')}</th>
+                                                        <th>{t('album.id')}</th>
+                                                        <th>{t('album.album_title')}</th>
+                                                        <th>{t('album.album_description')}</th>
+                                                        <th>{t('album.album_content_types')}</th>
+                                                        <th>{t('album.created_on')}</th>
+                                                        <th>{t('album.updated_on')}</th>
+                                                        <th>{t('album.action')}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {users.map((user) => (
+                                                    {albums.map((album) => (
                                                         <tr key={uuidv4()}>
-                                                            <td>{user.id}
-                                                                {dayjs().diff(dayjs(user.createdOnUtc), 'day') > 0 && dayjs().diff(dayjs(user.createdOnUtc), 'day') < 7
-                                                                    && <span className="badge bg-soft-success">New</span>}
-                                                            </td>
-                                                            <td>{user.fullName}</td>
-                                                            <td>{user.userName}</td>
-                                                            <td>{user.email}</td>
-                                                            <td>{user.emailConfirmed ? "Yes" : "No"}</td>
-                                                            <td>{dayjs(user.createdOnUtc).format('DD-MM-YYYY HH:mm')}</td>
-                                                            <td>
-                                                                {user?.roles?.split(',').map(role => (
-                                                                    <span key={uuidv4()} className="badge bg-soft-primary">{role}</span>
-                                                                ))}
-                                                            </td>
+                                                            <td>{album.id}</td>
+                                                            <td>{album.title}</td>
+                                                            <td>{album.description}</td>
+                                                            <td>{album.contentTypes}</td>
+                                                            <td>{dayjsCustom.utc(album.createdOnUtc).local().format('DD-MM-YYYY HH:mm')}</td>
+                                                            <td>{album.updatedOnUtc && dayjsCustom.utc(album.updatedOnUtc).local().format('DD-MM-YYYY HH:mm')}</td>
                                                             <td>
                                                                 <button className="btn"
-                                                                    onClick={() => openModal(ActionTypeGrid.EDIT, user)}>
+                                                                    onClick={() => openModal(ActionTypeGrid.EDIT, album)}>
                                                                     <i className="fa-solid fa-pen text-secondary font-16"></i>
                                                                 </button>
                                                                 <button className="btn"
-                                                                    onClick={() => openModal(ActionTypeGrid.DELETE, user)}>
+                                                                    onClick={() => openModal(ActionTypeGrid.DELETE, album)}>
                                                                     <i className="fa-solid fa-trash text-secondary font-16"></i>
                                                                 </button>
                                                             </td>
@@ -172,7 +166,7 @@ const UserPage: React.FC = () => {
                                                 <nav aria-label="...">
                                                     <Pagination
                                                         pageIndex={pageIndex}
-                                                        totalCounts={userState.totalRecords}
+                                                        totalCounts={albumState.totalRecords}
                                                         pageSize={pageSize}
                                                         onPageChange={page => setPageIndex(page)} />
                                                     {/*end pagination*/}
@@ -196,11 +190,11 @@ const UserPage: React.FC = () => {
                 {/* end page content */}
             </div>
             <ModalCommon
-                props={{ modalIsOpen: isOpen, openModal, closeModal, user }}
+                props={{ modalIsOpen: isOpen, openModal, closeModal, album }}
                 Component={BodyModal(actionGrid)}
             />
         </>
     );
 };
 
-export default UserPage;
+export default AlbumPage;

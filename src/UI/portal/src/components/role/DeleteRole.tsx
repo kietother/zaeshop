@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 
 type DeleteRoleProps = {
     role: Role;
-    closeModal: () => void;
+    closeModal: (isReload?: boolean) => void;
 };
 
 const DeleteRole: React.FC<DeleteRoleProps> = ({ role, closeModal }) => {
@@ -16,7 +16,7 @@ const DeleteRole: React.FC<DeleteRoleProps> = ({ role, closeModal }) => {
 
     const onDelete = async () => {
         await deleteRole(role.id)(dispatch);
-        closeModal();
+        closeModal(true);
     }
 
     return (
@@ -40,7 +40,7 @@ const DeleteRole: React.FC<DeleteRoleProps> = ({ role, closeModal }) => {
                             className="btn-close"
                             data-bs-dismiss="modal"
                             aria-label="Close"
-                            onClick={closeModal}
+                            onClick={() => closeModal()}
                         />
                     </div>
                     {/*end modal-header*/}
@@ -67,7 +67,7 @@ const DeleteRole: React.FC<DeleteRoleProps> = ({ role, closeModal }) => {
                             type="button"
                             className="btn btn-de-secondary btn-sm"
                             data-bs-dismiss="modal"
-                            onClick={closeModal}
+                            onClick={() => closeModal()}
                         >
                             {t('user.modal.close')}
                         </button>

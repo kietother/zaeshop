@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import classNames from 'classnames';
 
 type CreateUserProps = {
-    closeModal: () => void;
+    closeModal: (isReload?: boolean) => void;
 };
 
 const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
@@ -31,7 +31,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
 
     const onSubmit = async (userCreateRequestModel: UserCreateRequestModel) => {
         await createUser(userCreateRequestModel)(dispatch);
-        closeModal();
+        closeModal(true);
     };
 
     return (
@@ -55,7 +55,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                                     className="btn-close"
                                     data-bs-dismiss="modal"
                                     aria-label="Close"
-                                    onClick={closeModal}
+                                    onClick={() => closeModal()}
                                 />
                             </div>
                             {/*end modal-header*/}
@@ -184,7 +184,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ closeModal }) => {
                                     type="button"
                                     className="btn btn-de-secondary btn-sm"
                                     data-bs-dismiss="modal"
-                                    onClick={closeModal}
+                                    onClick={() => closeModal()}
                                 >
                                     {t('user.modal.close')}
                                 </button>

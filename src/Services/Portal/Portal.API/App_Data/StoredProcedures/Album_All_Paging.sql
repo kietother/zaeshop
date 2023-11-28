@@ -37,16 +37,17 @@ BEGIN
 			   a.Title,
 			   a.Description,
 			   a.AlbumAlertMessageId,
-			   aam.Name AS [AlbumContentTypeName],
-			   aam.Description AS [AlbumContentTypeDescription],
+			   aam.Name AS [AlbumAlertMessageName],
+			   aam.Description AS [AlbumAlertMessageDescription],
 			   a.IsPublic,
+			  STRING_AGG(ct.Id, ', ') WITHIN GROUP(ORDER BY ct.Name) AS [ContentTypeIds],
                STRING_AGG(ct.Name, ', ') WITHIN GROUP(ORDER BY ct.Name) AS [ContentTypes],
 			   a.CreatedOnUtc,
 			   a.UpdatedOnUtc
         FROM dbo.Album a
-			JOIN dbo.AlbumAlertMessage aam ON aam.Id = a.AlbumAlertMessageId
-			JOIN dbo.AlbumContentType act ON act.AlbumId = a.Id
-			JOIN dbo.ContentType ct ON ct.Id = act.ContentTypeId
+			LEFT JOIN dbo.AlbumAlertMessage aam ON aam.Id = a.AlbumAlertMessageId
+			LEFT JOIN dbo.AlbumContentType act ON act.AlbumId = a.Id
+			LEFT JOIN dbo.ContentType ct ON ct.Id = act.ContentTypeId
 		WHERE (ISNULL(@searchTerm, '') = '' OR 
 			(a.Title LIKE '' + @searchTerm + '%') OR
 			(a.Description LIKE '' + @searchTerm + '%')
@@ -66,9 +67,10 @@ BEGIN
 		 NULL Title,
 		 NULL Description,
 		 0 AlbumAlertMessageId,
-		 NULL [AlbumContentTypeName],
-		 NULL [AlbumContentTypeDescription],
+		 NULL [AlbumAlertMessageName],
+		 NULL [AlbumAlertMessageDescription],
 		 0 IsPublic,
+		 NULL [ContentTypeIds],
 		 NULL [ContentTypes],
 		 GETDATE() CreatedOnUtc,
 		 NULL UpdatedOnUtc,
