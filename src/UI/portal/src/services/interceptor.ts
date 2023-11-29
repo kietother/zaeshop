@@ -1,10 +1,25 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { loginFailure, loginSuccess, logout } from "../store/reducers/authSlice";
 import { store } from "../store";
 import { identityServer } from "./baseUrls";
 import ServerResponse from "../models/common/ServerResponse";
 import { toast } from "react-toastify";
 import i18n from "../utils/i18n";
+
+let refreshTokenAsyncFunc: Promise<AxiosResponse<any, any> | null> | undefined;
+const refreshTokenAsync = async () => {
+    try {
+        const response = await axios.post(identityServer + "/api/account/refresh-token", {}, {
+            withCredentials: true
+        });
+        dispatch(loginSuccess({ data: response.data, token: response.data.jwtToken }));
+        return response;
+    }
+    catch (err: any) {
+        dispatch(loginFailure(err.response.data));
+        return null;
+    }
+}
 
 const dispatch = store.dispatch;
 const axiosApiInstance = axios.create({
@@ -41,18 +56,21 @@ axiosApiInstance.interceptors.response.use(response => {
         case 401: {
             if (!originalRequest._retry) {
                 originalRequest._retry = true;
-                try {
-                    const response = await axios.post(identityServer + "/api/account/refresh-token", {}, {
-                        withCredentials: true
-                    });
-                    dispatch(loginSuccess({ data: response.data, token: response.data.jwtToken }));
-                    axiosApiInstance.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
-                    return axiosApiInstance(originalRequest);
+
+                // Handling refresh token for multiple requests
+                // First request (token is expried) will be handled by refreshTokenAsyncFunc
+                // Other request will be used same of refreshTokenAsyncFunc by first request and all of them will be awaited util refreshTokenAsyncFunc complete
+                // Retry All request with axiosApiInstance.request(originalRequest);
+                if (!refreshTokenAsyncFunc) {
+                    refreshTokenAsyncFunc = refreshTokenAsync();
                 }
-                catch (err: any) {
-                    dispatch(loginFailure(err.response.data));
+                const refreshTokenResult = await refreshTokenAsyncFunc;
+
+                if (!refreshTokenResult) {
                     return error;
                 }
+                axiosApiInstance.defaults.headers.common['Authorization'] = 'Bearer ' + refreshTokenResult.data.jwtToken;
+                return await axiosApiInstance.request(originalRequest);
             }
             else {
                 dispatch(logout());

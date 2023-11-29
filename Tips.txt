@@ -106,3 +106,6 @@ Host
 Root folder
 Certificates/ASPNET Certificate.pfx
 like as envoy folder
+
+Axios interceptor for refresh token when you have multiple parallel requests.
+https://andreyka26.com/handling-refreshing-token-on-multiple-requests-using-react
