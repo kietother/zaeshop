@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import { StoreState } from '../store';
+import { StoreState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUsers } from '../store/thunks/userThunk';
-import ModalCommon from '../components/shared/ModalCommon';
-import CreateUser from '../components/user/CreateUser';
-import { ActionTypeGrid } from '../models/enums/ActionTypeGrid';
-import UpdateUser from '../components/user/UpdateUser';
-import User from '../models/user/User';
+import { getUsers } from '../../store/thunks/userThunk';
+import ModalCommon from '../../components/shared/ModalCommon';
+import CreateUser from '../../components/user/CreateUser';
+import { ActionTypeGrid } from '../../models/enums/ActionTypeGrid';
+import UpdateUser from '../../components/user/UpdateUser';
+import User from '../../models/user/User';
 import { useTranslation } from 'react-i18next';
-import Pagination from '../components/shared/Pagination';
-import DeleteUser from '../components/user/DeleteUser';
+import Pagination from '../../components/shared/Pagination';
+import DeleteUser from '../../components/user/DeleteUser';
 import { v4 as uuidv4 } from 'uuid';
 
 const UserPage: React.FC = () => {

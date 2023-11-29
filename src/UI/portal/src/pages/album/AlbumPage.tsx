@@ -1,48 +1,52 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import ModalCommon from '../components/shared/ModalCommon';
-import { ActionTypeGrid } from '../models/enums/ActionTypeGrid';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { StoreState } from '../store';
-import Role from '../models/role/Role';
-import Pagination from '../components/shared/Pagination';
-import { getRoles } from '../store/thunks/roleThunk';
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import { StoreState, useAppDispatch } from '../../store';
+import { getAlbumsPagingAsyncThunk, getAlbumAlertMessagesAsyncThunk, getAllContentTypesAsyncThunk } from "../../store/reducers/albumSlice";
+import AlbumPagingResponse from "../../models/album/AlbumPagingResponse";
+import { ActionTypeGrid } from "../../models/enums/ActionTypeGrid";
+import { useTranslation } from "react-i18next";
+import ModalCommon from "../../components/shared/ModalCommon";
+import Pagination from "../../components/shared/Pagination";
 import { v4 as uuidv4 } from 'uuid';
-import CreateRole from '../components/role/CreateRole';
-import DeleteRole from '../components/role/DeleteRole';
-import UpdateRole from '../components/role/UpdateRole';
+import dayjsCustom from "../../utils/dayjs/dayjs-custom";
+import CreateAlbum from "../../components/album/CreateAlbum";
+import UpdateAlbum from "../../components/album/UpdateAlbum";
+import DeleteAlbum from "../../components/album/DeleteAlbum";
+import { Link } from "react-router-dom";
 
-const RolePage: React.FC = () => {
+const AlbumPage: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [actionGrid, setActionGrid] = useState(ActionTypeGrid.CREATE);
 
     const [t] = useTranslation();
 
-    const roleState = useSelector((state: StoreState) => state.role);
-    const dispatch = useDispatch();
+    const albumState = useSelector((state: StoreState) => state.album);
+    const dispatch = useAppDispatch();
 
-    const roles = useMemo(() => roleState.roles, [roleState.roles]);
-    const [role, setRole] = useState<Role>(roles[0] || null);
+    const albums = useMemo(() => albumState.albums, [albumState.albums]);
+    const [album, setAlbum] = useState<AlbumPagingResponse>(albums[0] || null);
 
     // Paging
     const [pageIndex, setPageIndex] = useState(1);
     const [pageSize, setPageSize] = useState(5);
 
     useEffect(() => {
-        getRoles(pageIndex, pageSize)(dispatch);
+        dispatch(getAlbumsPagingAsyncThunk({ pageNumber: pageIndex, pageSize }));
+        dispatch(getAllContentTypesAsyncThunk());
+        dispatch(getAlbumAlertMessagesAsyncThunk())
     }, [dispatch, pageIndex, pageSize]);
 
-    const openModal = (actionGrid: ActionTypeGrid, role?: Role) => {
+    const openModal = (actionGrid: ActionTypeGrid, album?: AlbumPagingResponse) => {
         setActionGrid(actionGrid);
-        if (role) {
-            setRole(role);
+        if (album) {
+            setAlbum(album);
         }
         setIsOpen(true);
     }
 
     const closeModal = (isReload?: boolean) => {
         if (isReload) {
-            getRoles(pageIndex, pageSize)(dispatch);
+            dispatch(getAlbumsPagingAsyncThunk({ pageNumber: pageIndex, pageSize }));
         }
         setIsOpen(false);
     }
@@ -50,14 +54,13 @@ const RolePage: React.FC = () => {
     const BodyModal = useCallback((actionGrid: ActionTypeGrid) => {
         switch (actionGrid) {
             case ActionTypeGrid.CREATE:
-                return CreateRole;
+                return CreateAlbum;
             case ActionTypeGrid.EDIT:
-                return UpdateRole;
+                return UpdateAlbum;
             case ActionTypeGrid.DELETE:
-                return DeleteRole;
-            default:
-                return React.Fragment;
+                return DeleteAlbum;
         }
+
     }, []);
 
     return (
@@ -80,10 +83,10 @@ const RolePage: React.FC = () => {
                                                 <a href="crm-contacts.html#">CMS</a>
                                             </li>
                                             {/*end nav-item*/}
-                                            <li className="breadcrumb-item active">Users</li>
+                                            <li className="breadcrumb-item active">Albums</li>
                                         </ol>
                                     </div>
-                                    <h4 className="page-title">{t("role.title")}</h4>
+                                    <h4 className="page-title">{t("album.title")}</h4>
                                 </div>
                                 {/*end page-title-box*/}
                             </div>
@@ -96,7 +99,7 @@ const RolePage: React.FC = () => {
                                     <div className="card-header">
                                         <div className="row align-items-center">
                                             <div className="col">
-                                                <h4 className="card-title">{t('role.title_detail')}</h4>
+                                                <h4 className="card-title">{t('album.title_detail')}</h4>
                                             </div>
                                             {/*end col*/}
                                         </div>{" "}
@@ -108,28 +111,35 @@ const RolePage: React.FC = () => {
                                             <table className="table">
                                                 <thead>
                                                     <tr>
-                                                        <th>{t('role.id')}</th>
-                                                        <th>{t('role.name')}</th>
-                                                        <th>{t('role.normalized_name')}</th>
-                                                        <th>{t('role.users')}</th>
-                                                        <th>{t('role.action')}</th>
+                                                        <th>{t('album.id')}</th>
+                                                        <th>{t('album.album_title')}</th>
+                                                        <th>{t('album.album_description')}</th>
+                                                        <th>{t('album.album_content_types')}</th>
+                                                        <th>{t('album.created_on')}</th>
+                                                        <th>{t('album.updated_on')}</th>
+                                                        <th>{t('album.action')}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {roles.map((role) => (
+                                                    {albums.map((album) => (
                                                         <tr key={uuidv4()}>
-                                                            <td>{role.id}
+                                                            <td>
+                                                                <Link className="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" 
+                                                                    to={`${album.id}`}>{album.id}
+                                                                </Link>
                                                             </td>
-                                                            <td>{role.name}</td>
-                                                            <td>{role.normalizedName}</td>
-                                                            <td>{role.users}</td>
+                                                            <td>{album.title}</td>
+                                                            <td>{album.description}</td>
+                                                            <td>{album.contentTypes}</td>
+                                                            <td>{dayjsCustom.utc(album.createdOnUtc).local().format('DD-MM-YYYY HH:mm')}</td>
+                                                            <td>{album.updatedOnUtc && dayjsCustom.utc(album.updatedOnUtc).local().format('DD-MM-YYYY HH:mm')}</td>
                                                             <td>
                                                                 <button className="btn"
-                                                                    onClick={() => openModal(ActionTypeGrid.EDIT, role)}>
+                                                                    onClick={() => openModal(ActionTypeGrid.EDIT, album)}>
                                                                     <i className="fa-solid fa-pen text-secondary font-16"></i>
                                                                 </button>
                                                                 <button className="btn"
-                                                                    onClick={() => openModal(ActionTypeGrid.DELETE, role)}>
+                                                                    onClick={() => openModal(ActionTypeGrid.DELETE, album)}>
                                                                     <i className="fa-solid fa-trash text-secondary font-16"></i>
                                                                 </button>
                                                             </td>
@@ -142,7 +152,7 @@ const RolePage: React.FC = () => {
                                             <div className="col">
                                                 <button className="btn btn-outline-light btn-sm px-4"
                                                     onClick={() => openModal(ActionTypeGrid.CREATE)}>
-                                                    + {t('role.add_new')}
+                                                    + {t('user.add_new')}
                                                 </button>
                                             </div>
                                             <div className="col">
@@ -161,7 +171,7 @@ const RolePage: React.FC = () => {
                                                 <nav aria-label="...">
                                                     <Pagination
                                                         pageIndex={pageIndex}
-                                                        totalCounts={roleState.totalRecords}
+                                                        totalCounts={albumState.totalRecords}
                                                         pageSize={pageSize}
                                                         onPageChange={page => setPageIndex(page)} />
                                                     {/*end pagination*/}
@@ -185,11 +195,11 @@ const RolePage: React.FC = () => {
                 {/* end page content */}
             </div>
             <ModalCommon
-                props={{ modalIsOpen: isOpen, openModal, closeModal, role }}
+                props={{ modalIsOpen: isOpen, openModal, closeModal, album }}
                 Component={BodyModal(actionGrid)}
             />
         </>
     );
 };
 
-export default RolePage;
+export default AlbumPage;

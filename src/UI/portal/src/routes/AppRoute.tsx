@@ -1,16 +1,17 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Navbar from "../components/layout/Navbar";
-import UserPage from "../pages/UserPage";
-import RegisterPage from "../pages/RegisterPage";
-import LoginPage from "../pages/LoginPage";
+import UserPage from "../pages/user/UserPage";
+import RegisterPage from "../pages/auth/RegisterPage";
+import LoginPage from "../pages/auth/LoginPage";
 import LeftSideBar from "../components/layout/LeftSideBar";
 import RightSideBar from "../components/layout/RightSideBar";
 import Footer from "../components/layout/Footer";
 import NotFoundPage from "../pages/NotFoundPage";
 import { ToastContainer } from "react-toastify";
-import RolePage from "../pages/RolePage";
-import AlbumPage from "../pages/AlbumPage";
+import RolePage from "../pages/user/RolePage";
+import AlbumPage from "../pages/album/AlbumPage";
+import AlbumDetailCollectionPage from "../pages/album/AlbumDetailCollectionPage";
 
 const AppRoute: React.FC = () => (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
@@ -34,6 +35,7 @@ const MainComponent: React.FC = () => {
                 <Route path="/users" Component={UserPage} />;
                 <Route path="/roles" Component={RolePage} />;
                 <Route path="/albums" Component={AlbumPage} />;
+                <Route path="/albums/:albumId" Component={AlbumDetailCollectionPage} />;
                 <Route path="*" Component={NotFoundPage} />;
             </Routes>
             <Footer />

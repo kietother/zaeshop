@@ -101,5 +101,8 @@
             "alert_message": "Alert Message",
             "content_types": "Content Types"
         }
+    },
+    "album_detail": {
+        "title_detail": "Album Detail"
     }
 }
