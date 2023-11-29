@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Portal.Domain.Enums;
 
 namespace Portal.Domain.Models.AlbumModels
 {
@@ -10,6 +11,8 @@ namespace Portal.Domain.Models.AlbumModels
         public string? Description { get; set; }
         public int? AlbumAlertMessageId { get; set; }
         public List<int>? ContentTypeIds { get; set; }
+
+        public bool? IsPublic { get; set; }
     }
 
     public class AlbumResponseModel
@@ -17,9 +20,17 @@ namespace Portal.Domain.Models.AlbumModels
         public int Id { get; set; }
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
+
+        public int? AlbumAlertMessageId { get; set; }
         public string? AlbumAlertMessageName { get; set; }
+
+        public List<int>? ContentTypeIds { get; set; }
         public string? ContentTypeNames { get; set; }
+
         public DateTime CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+
+        public bool IsPublic { get; set; }
     }
 
     public class AlbumPagingResponse
@@ -42,5 +53,18 @@ namespace Portal.Domain.Models.AlbumModels
 
         [JsonIgnore]
         public bool IsTotalRecord { get; set; }
+    }
+
+    public class AlbumExtraInfoModel
+    {
+        public int? Id { get; set; }
+
+        public string? AlternativeName { get; set; }
+        public string? Type { get; set; }
+        public EAlbumStatus AlbumStatus { get; set; }
+        public string? ReleaseYear { get; set; }
+        public string? AuthorNames { get; set; }
+        public string? ArtitstNames { get; set; }
+        public string? Tags { get; set; }
     }
 }

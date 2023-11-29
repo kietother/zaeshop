@@ -73,5 +73,38 @@ namespace Portal.API.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync(int id)
+        {
+            var response = await _albumService.GetByIdAsync(id);
+
+            if (!response.IsSuccess)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
+        [HttpGet("{id}/extra-info")]
+        public async Task<IActionResult> GetExtraInfoByIdAsync(int id)
+        {
+            var response = await _albumService.GetExtraInfoByIdAsync(id);
+
+            if (!response.IsSuccess)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
+        [HttpPut("{id}/extra-info")]
+        public async Task<IActionResult> UpdateExtraInfoByIdAsync(int id, AlbumExtraInfoModel model)
+        {
+            var response = await _albumService.UpdateExtraInfoByIdAsync(id, model);
+
+            if (!response.IsSuccess)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
     }
 }

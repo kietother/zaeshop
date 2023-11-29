@@ -62,6 +62,11 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 AlbumAlertMessageId = requestModel.AlbumAlertMessageId
             };
 
+            if (requestModel.IsPublic.HasValue)
+            {
+                entity.IsPublic = requestModel.IsPublic.Value;
+            }
+
             if (requestModel.ContentTypeIds?.Count > 0)
             {
                 entity.AlbumContentTypes = requestModel.ContentTypeIds.ConvertAll(id => new AlbumContentType
@@ -129,6 +134,11 @@ namespace Portal.Infrastructure.Implements.Business.Services
             existingAlbum.Title = requestModel.Title;
             existingAlbum.Description = requestModel.Description;
             existingAlbum.AlbumAlertMessageId = requestModel.AlbumAlertMessageId;
+
+            if (requestModel.IsPublic.HasValue)
+            {
+                existingAlbum.IsPublic = requestModel.IsPublic.Value;
+            }
 
             // Create or Update ContentType
             if (requestModel.ContentTypeIds?.Count > 0)
@@ -239,6 +249,78 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 RowNum = record.RowNum,
                 Data = result
             });
+        }
+
+        public async Task<ServiceResponse<AlbumResponseModel>> GetByIdAsync(int id)
+        {
+            var album = await _repository.GetByIdAsync(id);
+            if (album == null)
+            {
+                return new ServiceResponse<AlbumResponseModel>("error_album_not_found");
+            }
+
+            var albumResponse = new AlbumResponseModel
+            {
+                Id = album.Id,
+                Title = album.Title,
+                Description = album.Description,
+                AlbumAlertMessageId = album.AlbumAlertMessageId,
+                AlbumAlertMessageName = album.AlbumAlertMessage?.Name,
+                ContentTypeIds = album.AlbumContentTypes?.Select(x => x.ContentTypeId).ToList(),
+                // Set other properties as needed
+                CreatedDate = album.CreatedOnUtc,
+                UpdatedDate = album.UpdatedOnUtc,
+                IsPublic = album.IsPublic
+            };
+
+            return new ServiceResponse<AlbumResponseModel>(albumResponse);
+        }
+
+        public async Task<ServiceResponse<AlbumExtraInfoModel>> GetExtraInfoByIdAsync(int id)
+        {
+            var album = await _repository.GetByIdAsync(id);
+            if (album == null)
+            {
+                return new ServiceResponse<AlbumExtraInfoModel>("error_album_not_found");
+            }
+
+            var albumResponse = new AlbumExtraInfoModel
+            {
+                Id = album.Id,
+                AlternativeName = album.AlternativeName,
+                Type = album.Type,
+                AlbumStatus = album.AlbumStatus,
+                ReleaseYear = album.ReleaseYear,
+                AuthorNames = album.AuthorNames,
+                ArtitstNames = album.ArtitstNames,
+                Tags = album.Tags,
+            };
+
+            return new ServiceResponse<AlbumExtraInfoModel>(albumResponse);
+        }
+
+        public async Task<ServiceResponse<AlbumExtraInfoModel>> UpdateExtraInfoByIdAsync(int id, AlbumExtraInfoModel requestModel)
+        {
+            var album = await _repository.GetByIdAsync(id);
+            if (album == null)
+            {
+                return new ServiceResponse<AlbumExtraInfoModel>("error_album_not_found");
+            }
+
+            // Update fields
+            album.AlternativeName = requestModel.AlternativeName;
+            album.Type = requestModel.Type;
+            album.AlbumStatus = requestModel.AlbumStatus;
+            album.ReleaseYear = requestModel.ReleaseYear;
+            album.AuthorNames = requestModel.AuthorNames;
+            album.ArtitstNames = requestModel.ArtitstNames;
+            album.Tags = requestModel.Tags;
+
+            // Save changes
+            await _unitOfWork.SaveChangesAsync();
+
+            requestModel.Id = album.Id;
+            return new ServiceResponse<AlbumExtraInfoModel>(requestModel);
         }
     }
 }
