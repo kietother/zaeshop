@@ -103,6 +103,10 @@
         }
     },
     "album_detail": {
-        "title_detail": "Album Detail"
+        "title_detail": "Album Detail",
+        "is_public": "Is Public",
+        "extra_info": "Album Extra Infomation",
+        "button_save": "Save",
+        "button_cancel": "Cancel"
     }
 }
