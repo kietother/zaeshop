@@ -100,13 +100,22 @@
             "description": "Description",
             "alert_message": "Alert Message",
             "content_types": "Content Types"
-        }
+        },
+        "ongoing": "Ongoing",
+        "completed": "Completed"
     },
     "album_detail": {
         "title_detail": "Album Detail",
         "is_public": "Is Public",
         "extra_info": "Album Extra Infomation",
         "button_save": "Save",
-        "button_cancel": "Cancel"
+        "button_cancel": "Cancel",
+        "alternative_name": "Alternative Name",
+        "type": "Type",
+        "album_status": "Status",
+        "release_year": "Release Year",
+        "author_names": "Author Names",
+        "artist_names": "Artist Names",
+        "tags": "Tags"
     }
 }

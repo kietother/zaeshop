@@ -64,7 +64,7 @@ namespace Portal.Domain.Models.AlbumModels
         public EAlbumStatus AlbumStatus { get; set; }
         public string? ReleaseYear { get; set; }
         public string? AuthorNames { get; set; }
-        public string? ArtitstNames { get; set; }
+        public string? ArtistNames { get; set; }
         public string? Tags { get; set; }
     }
 }

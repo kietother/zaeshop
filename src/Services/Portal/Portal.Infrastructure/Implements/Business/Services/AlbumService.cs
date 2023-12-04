@@ -292,7 +292,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 AlbumStatus = album.AlbumStatus,
                 ReleaseYear = album.ReleaseYear,
                 AuthorNames = album.AuthorNames,
-                ArtitstNames = album.ArtitstNames,
+                ArtistNames = album.ArtitstNames,
                 Tags = album.Tags,
             };
 
@@ -313,7 +313,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             album.AlbumStatus = requestModel.AlbumStatus;
             album.ReleaseYear = requestModel.ReleaseYear;
             album.AuthorNames = requestModel.AuthorNames;
-            album.ArtitstNames = requestModel.ArtitstNames;
+            album.ArtitstNames = requestModel.ArtistNames;
             album.Tags = requestModel.Tags;
 
             // Save changes

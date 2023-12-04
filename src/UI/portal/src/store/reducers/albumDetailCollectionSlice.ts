@@ -8,7 +8,7 @@ import { portalServer } from "../../services/baseUrls";
 // Thunks
 const getAlbumDetailAsyncThunk = createAsyncThunk<
     ServerResponse<AlbumDetail>,
-    { id: number },
+    { id: string | undefined },
     { rejectValue: string }
 >('albumDetailCollection/getAlbumDetail', async (model, thunkApi) => {
     const response = await axiosApiInstance.get<ServerResponse<AlbumDetail>>(portalServer + `/api/album/${model.id}`);
@@ -17,7 +17,7 @@ const getAlbumDetailAsyncThunk = createAsyncThunk<
 
 const getAlbumExtraInfoAsyncThunk = createAsyncThunk<
     ServerResponse<AlbumExtraInfo>,
-    { id: number },
+    { id: string | undefined },
     { rejectValue: string }
 >('albumDetailCollection/getAlbumExtraInfo', async (model, thunkApi) => {
     const response = await axiosApiInstance.get<ServerResponse<AlbumExtraInfo>>(portalServer + `/api/album/${model.id}/extra-info`);
