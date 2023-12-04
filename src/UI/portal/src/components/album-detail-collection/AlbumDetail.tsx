@@ -71,15 +71,18 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
         formState: { errors },
         reset
     } = useForm<AlbumDetailRequest>({
-        defaultValues: {
-            title: albumDetail?.title,
-            description: albumDetail?.description,
-            albumAlertMessageId: albumDetail?.albumAlertMessageId,
-            contentTypeIds: contentTypeIds,
-            createdOnUtc: albumDetail?.createdOnUtc,
-            updatedOnUtc: albumDetail?.updatedOnUtc,
-            isPublic: albumDetail?.isPublic
-        }
+        values: useMemo((): AlbumDetailRequest => {
+            setAlbumAlertMessageSelectedOption(albumAlertMessageDropDown.find(item => Number(item.value) === albumDetail?.albumAlertMessageId) ?? null);
+            setContentTypesSelectedOptions(contentTypesDropDown.filter(item => contentTypeIds.includes(item.value)));
+
+            return {
+                title: albumDetail?.title ?? "",
+                description: albumDetail?.description,
+                createdOnUtc: albumDetail?.createdOnUtc ?? new Date(),
+                updatedOnUtc: albumDetail?.updatedOnUtc,
+                isPublic: albumDetail?.isPublic ?? false
+            };
+        }, [albumDetail, contentTypeIds, albumAlertMessageDropDown, contentTypesDropDown])
     });
 
     const onSubmit = async (albumRequestModel: AlbumDetailRequest) => {
@@ -94,6 +97,8 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
                 contentTypeIds: contentTypesSelectedOptions?.map(option => Number(option.value))
             });
             if (response.status === 200) {
+                dispatch(getAlbumDetailAsyncThunk({ id: Number(id) }));
+
                 toast.update(toastId, {
                     render: t("toast.update_sucessfully"),
                     isLoading: false,
@@ -195,10 +200,10 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
                                             {...register("description")}
                                         />
                                         <div className={classNames("invalid-feedback", {
-                                                "d-inline": errors.title
-                                            })}>
-                                                <p>{t('album.modal.title_is_required')}</p>
-                                            </div>
+                                            "d-inline": errors.title
+                                        })}>
+                                            <p>{t('album.modal.title_is_required')}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
