@@ -19,7 +19,7 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(getAlbumDetailAsyncThunk({ id: Number(id) }));
+        dispatch(getAlbumDetailAsyncThunk({ id }));
         dispatch(getAllContentTypesAsyncThunk());
         dispatch(getAlbumAlertMessagesAsyncThunk());
     }, [dispatch, id]);
@@ -91,13 +91,13 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
         });
 
         if (albumDetail) {
-            const response = await updateAlbumDetail(albumDetail.id, {
+            const response = await updateAlbumDetail(id, {
                 ...albumRequestModel,
                 albumAlertMessageId: albumAlertMessageSelectedOption ? Number(albumAlertMessageSelectedOption.value) : undefined,
                 contentTypeIds: contentTypesSelectedOptions?.map(option => Number(option.value))
             });
             if (response.status === 200) {
-                dispatch(getAlbumDetailAsyncThunk({ id: Number(id) }));
+                dispatch(getAlbumDetailAsyncThunk({ id }));
 
                 toast.update(toastId, {
                     render: t("toast.update_sucessfully"),
@@ -112,7 +112,7 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
         toast.done(toastId);
     };
 
-    const cancelForm = () => {
+    const onReset = () => {
         setAlbumAlertMessageSelectedOption(albumAlertMessageDropDown.find(item => Number(item.value) === albumDetail?.albumAlertMessageId) ?? null);
         setContentTypesSelectedOptions(contentTypesDropDown.filter(item => contentTypeIds.includes(item.value)));
 
@@ -185,6 +185,11 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
                                             type="text"
                                             {...register("title", { required: true })}
                                         />
+                                        <div className={classNames("invalid-feedback", {
+                                            "d-inline": errors.title
+                                        })}>
+                                            <p>{t('album.modal.title_is_required')}</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="mb-3 row">
@@ -199,11 +204,6 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
                                             type="email"
                                             {...register("description")}
                                         />
-                                        <div className={classNames("invalid-feedback", {
-                                            "d-inline": errors.title
-                                        })}>
-                                            <p>{t('album.modal.title_is_required')}</p>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -258,7 +258,7 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
                             <button
                                 type="button"
                                 className="btn btn-light"
-                                onClick={cancelForm}
+                                onClick={onReset}
                             >
                                 {t('album_detail.button_cancel')}
                             </button>

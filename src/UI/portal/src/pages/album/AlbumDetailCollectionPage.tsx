@@ -37,7 +37,7 @@ const AlbumDetailCollectionPage: React.FC = () => {
                     </div>
                     {/* end page title end breadcrumb */}
                     <AlbumDetail id={albumId} />
-                    <AlbumExtraInfo />
+                    <AlbumExtraInfo id={albumId} />
                     {/* container */}
                 </div>
                 {/* end page content */}
