@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import LoginModel from "../models/auth/LoginModel";
-import { login } from "../store/thunks/authThunk";
+import LoginModel from "../../models/auth/LoginModel";
+import { login } from "../../store/thunks/authThunk";
 import { useDispatch, useSelector } from "react-redux";
-import { StoreState } from "../store";
+import { StoreState } from "../../store";
 import { useForm } from "react-hook-form";
 import classNames from 'classnames';
 import { useTranslation } from "react-i18next";

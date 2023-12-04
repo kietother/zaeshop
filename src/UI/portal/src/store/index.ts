@@ -4,13 +4,15 @@ import authSlice from './reducers/authSlice'
 import roleSlice from './reducers/roleSlice'
 import albumSlice from './reducers/albumSlice'
 import { useDispatch } from 'react-redux'
+import albumDetailCollectionSlice from './reducers/albumDetailCollectionSlice'
 
 export const store = configureStore({
   reducer: {
     user: userSlice,
     auth: authSlice,
     role: roleSlice,
-    album: albumSlice
+    album: albumSlice,
+    albumDetailCollection: albumDetailCollectionSlice
   }
 })
 
