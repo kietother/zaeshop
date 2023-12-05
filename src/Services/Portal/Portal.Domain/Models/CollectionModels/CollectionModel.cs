@@ -59,8 +59,8 @@ namespace Portal.Domain.Models.CollectionModels
         public string? ExtendName { get; set; }
         public string? Description { get; set; }
 
-        public DateTime CreatedDate { get; set; }
-        public DateTime? UpdatedDate { get; set; }
+        public DateTime CreatedOnUtc { get; set; }
+        public DateTime? UpdatedOnUtc { get; set; }
 
         [JsonIgnore]
         public long RowNum { get; set; }

@@ -4,6 +4,10 @@ import AlbumExtraInfo from "../../models/album-detail-collection/AlbumExtraInfo"
 import ServerResponse from "../../models/common/ServerResponse";
 import axiosApiInstance from "../../services/interceptor";
 import { portalServer } from "../../services/baseUrls";
+import CollectionPagingResponse from "../../models/album-detail-collection/CollectionPagingResponse";
+import { PagingResponse } from "../../models/common/PagingResponse";
+import CollectionPagingRequest from "../../models/album-detail-collection/CollectionPagingRequest";
+import { AxiosRequestConfig } from "axios";
 
 // Thunks
 const getAlbumDetailAsyncThunk = createAsyncThunk<
@@ -24,9 +28,23 @@ const getAlbumExtraInfoAsyncThunk = createAsyncThunk<
     return response.data;
 });
 
+const getCollectionPagingAsyncThunk = createAsyncThunk<
+    ServerResponse<PagingResponse<CollectionPagingResponse>>,
+    CollectionPagingRequest,
+    { rejectValue: string }
+>('albumDetailCollection/getCollectionPaging', async (model, thunkApi) => {
+    const config: AxiosRequestConfig<CollectionPagingRequest> = {
+        params: model
+    };
+    const response = await axiosApiInstance.get<ServerResponse<PagingResponse<CollectionPagingResponse>>>(portalServer + `/api/collection`, config);
+    return response.data;
+});
+
 interface AlbumDetailCollectionState {
     albumDetail: AlbumDetail | null;
     albumExtraInfo: AlbumExtraInfo | null;
+    collections: CollectionPagingResponse[];
+    totalRecords: number;
     loading: boolean;
     error: string | null;
 }
@@ -34,6 +52,8 @@ interface AlbumDetailCollectionState {
 const initialState: AlbumDetailCollectionState = {
     albumDetail: null,
     albumExtraInfo: null,
+    collections: [],
+    totalRecords: 0,
     loading: false,
     error: null
 };
@@ -79,9 +99,28 @@ export const albumDetailCollectionSlice = createSlice({
             state.loading = false;
             state.error = action.error.message ?? null;
         });
+
+        // getCollectionPagingAsyncThunk
+        builder.addCase(getCollectionPagingAsyncThunk.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        });
+
+        builder.addCase(getCollectionPagingAsyncThunk.fulfilled, (state, action) => {
+            state.loading = false;
+            if (action.payload?.data) {
+                state.collections = action.payload.data.data;
+                state.totalRecords = action.payload.data.rowNum;
+            }
+        });
+
+        builder.addCase(getCollectionPagingAsyncThunk.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message ?? null;
+        });
     }
 });
 
-export { getAlbumDetailAsyncThunk, getAlbumExtraInfoAsyncThunk };
+export { getAlbumDetailAsyncThunk, getAlbumExtraInfoAsyncThunk, getCollectionPagingAsyncThunk };
 
 export default albumDetailCollectionSlice.reducer;

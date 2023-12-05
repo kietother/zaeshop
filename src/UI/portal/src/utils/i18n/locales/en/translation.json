@@ -116,6 +116,16 @@
         "release_year": "Release Year",
         "author_names": "Author Names",
         "artist_names": "Artist Names",
-        "tags": "Tags"
+        "tags": "Tags",
+        "title_collection": "Collections",
+        "id": "ID",
+        "title" : "Title",
+        "album_title": "Album Title",
+        "volume": "Volume",
+        "extend_name": "Extend Name",
+        "description": "Description",
+        "created_on": "Created On",
+        "updated_on": "Updated On",
+        "action": "Action"
     }
 }
