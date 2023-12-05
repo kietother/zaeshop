@@ -12,6 +12,9 @@ import { getCollectionPagingAsyncThunk } from "../../store/reducers/albumDetailC
 import { v4 as uuidv4 } from 'uuid';
 import dayjsCustom from "../../utils/dayjs/dayjs-custom";
 import ModalCommon from "../../components/shared/ModalCommon";
+import CreateCollection from "../../components/album-detail-collection/CreateCollection";
+import UpdateCollection from "../../components/album-detail-collection/UpdateCollection";
+import DeleteCollection from "../../components/album-detail-collection/DeleteCollection";
 
 const AlbumDetailCollectionPage: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -51,15 +54,14 @@ const AlbumDetailCollectionPage: React.FC = () => {
     }
 
     const BodyModal = useCallback((actionGrid: ActionTypeGrid) => {
-        // switch (actionGrid) {
-        //     case ActionTypeGrid.CREATE:
-        //         return CreateAlbum;
-        //     case ActionTypeGrid.EDIT:
-        //         return UpdateAlbum;
-        //     case ActionTypeGrid.DELETE:
-        //         return DeleteAlbum;
-        // }
-        return React.Fragment;
+        switch (actionGrid) {
+            case ActionTypeGrid.CREATE:
+                return CreateCollection;
+            case ActionTypeGrid.EDIT:
+                return UpdateCollection;
+            case ActionTypeGrid.DELETE:
+                return DeleteCollection;
+        }
     }, []);
 
     return (
@@ -198,7 +200,7 @@ const AlbumDetailCollectionPage: React.FC = () => {
                 </div>
             </div>
             <ModalCommon
-                props={{ modalIsOpen: isOpen, openModal, closeModal, collection }}
+                props={{ modalIsOpen: isOpen, openModal, closeModal, collection, albumId }}
                 Component={BodyModal(actionGrid)}
             />
         </>

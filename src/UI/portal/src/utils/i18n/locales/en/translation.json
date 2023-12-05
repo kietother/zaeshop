@@ -119,13 +119,20 @@
         "tags": "Tags",
         "title_collection": "Collections",
         "id": "ID",
-        "title" : "Title",
+        "title": "Title",
         "album_title": "Album Title",
         "volume": "Volume",
         "extend_name": "Extend Name",
         "description": "Description",
         "created_on": "Created On",
         "updated_on": "Updated On",
-        "action": "Action"
+        "action": "Action",
+        "modal": {
+            "create_collection": "Create Collection",
+            "update_collection": "Update Collection",
+            "delete_collection": "Delete Collection"
+        },
+        "title_is_required": "Title is required.",
+        "volume_is_invalid": "Volume is numberic, at least 0."
     }
 }

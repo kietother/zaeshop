@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { StoreState, useAppDispatch } from "../../store";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { getAlbumExtraInfoAsyncThunk } from "../../store/reducers/albumDetailCollectionSlice";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
@@ -262,4 +262,4 @@ const AlbumExtraInfo: React.FC<{ id: string | undefined }> = ({ id }) => {
     );
 }
 
-export default AlbumExtraInfo;
+export default React.memo(AlbumExtraInfo);

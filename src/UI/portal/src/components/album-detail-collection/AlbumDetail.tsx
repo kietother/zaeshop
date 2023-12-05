@@ -1,3 +1,4 @@
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { StoreState, useAppDispatch } from "../../store";
 import { useSelector } from "react-redux";
@@ -274,4 +275,4 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
     );
 }
 
-export default AlbumDetail;
+export default React.memo(AlbumDetail);
