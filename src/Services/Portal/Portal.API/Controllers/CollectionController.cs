@@ -76,7 +76,6 @@ namespace Portal.API.Controllers
 
         [HttpGet]
         [Route("{id}/content-items")]
-        [RedisCache(5)]
         public async Task<IActionResult> GetContentItems(int id)
         {
             var result = await _collectionService.GetContentItemsAsync(id);

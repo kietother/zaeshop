@@ -21,7 +21,7 @@ const CotentItemPage: React.FC = () => {
 
     return (
         <>
-            <ContentItemBlankUpload />
+            <ContentItemBlankUpload id={collectionId} />
         </>
     );
 }
