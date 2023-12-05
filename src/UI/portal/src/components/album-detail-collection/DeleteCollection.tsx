@@ -66,7 +66,7 @@ const DeleteCollection: React.FC<DeleteCollectionProps> = ({ closeModal, collect
                                     {/*end col*/}
                                     <div className="col-lg-9">
                                         <h5>{t('user.modal.are_you_sure')}</h5>
-                                        <span className="badge bg-soft-secondary">{t('album.modal.delete_album')}</span>
+                                        <span className="badge bg-soft-secondary">{t('album_detail.modal.delete_collection')}</span>
                                         <small className="text-muted ml-2">{dayjsCustom.utc().local().format('DD/MM/YYYY')}</small>
                                     </div>
                                     {/*end col*/}

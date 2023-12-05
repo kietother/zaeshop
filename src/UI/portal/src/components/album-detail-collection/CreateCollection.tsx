@@ -24,7 +24,6 @@ const CreateCollection: React.FC<CreateCollectionProps> = ({ closeModal, albumId
             title: '',
             description: '',
             extendName: '',
-            volume: 0
         }
     });
 
