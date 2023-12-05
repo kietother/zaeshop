@@ -1,7 +1,3 @@
 {
-    "dotnet.defaultSolution": "src/eshop-container.sln",
-    "sonarlint.connectedMode.project": {
-        "connectionId": "kietdev1",
-        "projectKey": "kietdev1_zaeshop"
-    }
+    "dotnet.defaultSolution": "src/eshop-container.sln"
 }

@@ -233,7 +233,7 @@ const Navbar: React.FC = () => {
                             </div>
                             {/* All*/}
                             <a
-                                href="javascript:void(0);"
+                                href="#"
                                 className="dropdown-item text-center text-primary"
                             >
                                 View all <i className="fi-arrow-right" />

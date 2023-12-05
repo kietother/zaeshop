@@ -84,7 +84,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 return new ServiceResponse<CollectionResponseModel>("error_album_not_found");
             }
 
-            var isExistsTitle = await _repository.GetQueryable().AnyAsync(x => x.Title == requestModel.Title && x.AlbumId == requestModel.AlbumId);
+            var isExistsTitle = await _repository.GetQueryable().AnyAsync(x => x.Title == requestModel.Title && x.Id != id && x.AlbumId == requestModel.AlbumId);
             if (isExistsTitle)
             {
                 return new ServiceResponse<CollectionResponseModel>("error_collection_title_exists");
@@ -185,7 +185,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 { "AlbumId", request.AlbumId }
             };
             var result = await _unitOfWork.QueryAsync<CollectionPagingResponse>("Collection_All_Paging", parameters);
-            
+
             var record = result.Find(o => o.IsTotalRecord);
             if (record == null)
             {
