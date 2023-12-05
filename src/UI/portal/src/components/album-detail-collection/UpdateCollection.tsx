@@ -37,7 +37,7 @@ const UpdateCollection: React.FC<UpdateCollectionProps> = ({ closeModal, albumId
         await updateCollection(collection.id, collectionRequestModel);
 
         toast.update(toastId, {
-            render: t("toast.create_sucessfully"), type: toast.TYPE.SUCCESS, isLoading: false,
+            render: t("toast.update_sucessfully"), type: toast.TYPE.SUCCESS, isLoading: false,
             autoClose: 2000
         });
         closeModal(true);
