@@ -5,6 +5,7 @@ import roleSlice from './reducers/roleSlice'
 import albumSlice from './reducers/albumSlice'
 import { useDispatch } from 'react-redux'
 import albumDetailCollectionSlice from './reducers/albumDetailCollectionSlice'
+import contentItemSlice from './reducers/ContentItemSlice'
 
 export const store = configureStore({
   reducer: {
@@ -12,7 +13,8 @@ export const store = configureStore({
     auth: authSlice,
     role: roleSlice,
     album: albumSlice,
-    albumDetailCollection: albumDetailCollectionSlice
+    albumDetailCollection: albumDetailCollectionSlice,
+    contentItem: contentItemSlice
   }
 })
 

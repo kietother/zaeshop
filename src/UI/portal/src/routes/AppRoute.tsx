@@ -12,6 +12,7 @@ import { ToastContainer } from "react-toastify";
 import RolePage from "../pages/user/RolePage";
 import AlbumPage from "../pages/album/AlbumPage";
 import AlbumDetailCollectionPage from "../pages/album/AlbumDetailCollectionPage";
+import ContentItemPage from "../pages/album/ContentItemPage";
 
 const AppRoute: React.FC = () => (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
@@ -36,6 +37,7 @@ const MainComponent: React.FC = () => {
                 <Route path="/roles" Component={RolePage} />;
                 <Route path="/albums" Component={AlbumPage} />;
                 <Route path="/albums/:albumId" Component={AlbumDetailCollectionPage} />;
+                <Route path="/collections/:collectionId" Component={ContentItemPage} />;
                 <Route path="*" Component={NotFoundPage} />;
             </Routes>
             <Footer />
