@@ -129,7 +129,7 @@ const AlbumDetailCollectionPage: React.FC = () => {
                                                         <tr key={uuidv4()}>
                                                             <td>
                                                                 <Link className="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                                                                    to={`${collection.id}`}>{collection.id}
+                                                                    to={`/collections/${collection.id}`}>{collection.id}
                                                                 </Link>
                                                             </td>
                                                             <td>{collection.title}</td>

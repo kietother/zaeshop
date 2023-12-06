@@ -76,7 +76,6 @@ namespace Portal.API.Controllers
 
         [HttpGet]
         [Route("{id}/content-items")]
-        [RedisCache(5)]
         public async Task<IActionResult> GetContentItems(int id)
         {
             var result = await _collectionService.GetContentItemsAsync(id);
@@ -90,7 +89,6 @@ namespace Portal.API.Controllers
 
         [HttpPost]
         [Route("{id}/content-items")]
-        [RequestSizeLimit(1024 * 1024)]
         public IActionResult CreateContentItems([FromRoute] int id, [FromForm] List<IFormFile> files)
         {
             // Validate and get data
@@ -117,7 +115,6 @@ namespace Portal.API.Controllers
 
         [HttpPut]
         [Route("{id}/content-items")]
-        [RequestSizeLimit(1024 * 1024)]
         public IActionResult UpdateContentItems([FromRoute] int id, [FromBody] ContentItemUpdateRequestModel updateRequestModel)
         {
             _backgroundJobClient.Enqueue<IContentItemService>(x => x.UpdateContentItemsAsync(id, updateRequestModel));

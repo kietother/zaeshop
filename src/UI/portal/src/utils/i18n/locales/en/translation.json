@@ -12,7 +12,9 @@
         "user_or_password_is_incorrect": "User or Password is incorrect",
         "create_sucessfully": "Create Sucessfully",
         "update_sucessfully": "Update Sucessfully",
-        "delete_sucessfully": "Delete Sucessfully"
+        "delete_sucessfully": "Delete Sucessfully",
+        "please_select_at_least_one_file_to_upload": "Please select at least one file to upload",
+        "create_inprogress_sucessfully": "Upload is in progress in the background. Please refresh the page to see the updated status."
     },
     "navbar": {
         "title": "Notifications",
@@ -134,5 +136,17 @@
         },
         "title_is_required": "Title is required.",
         "volume_is_invalid": "Volume is numberic, at least 0."
+    },
+    "content_item": {
+        "title": "Upload images",
+        "description": "Your so fresh input file — Default version",
+        "upload_button": "Upload",
+        "reset": "Reset",
+        "bulk_upload_button": "Save Changes",
+        "confirm_delete_item": "Are you sure remove? This cannot be restored. But we can reset your changes.",
+        "confirm_delete_all": "Are you sure remove all? This cannot be restored.",
+        "update_image": "Update Image",
+        "order_by": "Order by",
+        "is_public":"Is Public"
     }
 }
