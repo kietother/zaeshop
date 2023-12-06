@@ -1,4 +1,4 @@
-import { ActualFileObject, FilePondFile, FilePondInitialFile } from "filepond";
+import { ActualFileObject, FilePondFile } from "filepond";
 import React, { useState } from "react";
 import { FilePond } from "react-filepond";
 import { useTranslation } from "react-i18next";
@@ -105,7 +105,7 @@ const ContentItemBlankUpload: React.FC<ContentItemBlankUploadProps> = ({ id }: C
                                                 files={files}
                                                 onupdatefiles={onUpdateFiles}
                                                 allowMultiple={true}
-                                                maxFiles={3}
+                                                maxFiles={100}
                                                 name="files"
                                                 labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
                                             />
