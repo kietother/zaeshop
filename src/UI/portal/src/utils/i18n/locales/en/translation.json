@@ -144,6 +144,9 @@
         "reset": "Reset",
         "bulk_upload_button": "Save Changes",
         "confirm_delete_item": "Are you sure remove? This cannot be restored. But we can reset your changes.",
-        "confirm_delete_all": "Are you sure remove all? This cannot be restored."
+        "confirm_delete_all": "Are you sure remove all? This cannot be restored.",
+        "update_image": "Update Image",
+        "order_by": "Order by",
+        "is_public":"Is Public"
     }
 }
