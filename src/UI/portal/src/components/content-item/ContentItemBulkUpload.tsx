@@ -32,8 +32,7 @@ const ContentItemBulkUpload: React.FC<ContentItemBulkUploadProps> = ({ id, conte
 
     useEffect(() => {
         if (!contentItems) return;
-
-        const exsitsItems = contentItems.map(item => {
+        const exsitsItems = [...contentItems].sort((a, b) => a.orderBy - b.orderBy).map(item => {
             return {
                 id: item.id,
                 fileName: item.name,
@@ -55,8 +54,10 @@ const ContentItemBulkUpload: React.FC<ContentItemBulkUploadProps> = ({ id, conte
                 const base64File = await convertFileToBase64(file);
 
                 existsItem.fileName = file.name;
-                existsItem.base64File = base64File?.split(',')[1];
+                existsItem.base64File = base64File;
             }
+
+            setContentItemBulkUploadItems([...contentItemBulkUploadItems.filter(item => item.id !== id), existsItem].sort((a, b) => a.orderBy - b.orderBy));
         }
     }
 
@@ -73,7 +74,7 @@ const ContentItemBulkUpload: React.FC<ContentItemBulkUploadProps> = ({ id, conte
             return {
                 id: item.id,
                 fileName: item.fileName,
-                base64File: item.base64File,
+                base64File: item.base64File?.split(',')[1],
                 isPublic: false,
                 orderBy: item.orderBy
             };
@@ -116,7 +117,7 @@ const ContentItemBulkUpload: React.FC<ContentItemBulkUploadProps> = ({ id, conte
 
     const onReset = () => {
         setFiles([]);
-        setContentItemBulkUploadItems(contentItems.map(item => {
+        setContentItemBulkUploadItems([...contentItems].sort((a, b) => a.orderBy - b.orderBy).map(item => {
             return {
                 id: item.id,
                 fileName: item.name,
@@ -223,6 +224,14 @@ const ContentItemBulkUpload: React.FC<ContentItemBulkUploadProps> = ({ id, conte
                                         maxFiles={100}
                                         name="files"
                                         labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+                                        beforeAddFile={(file) => {
+                                            return new Promise((resolve) => {
+                                                if (!file.fileType.includes('image/')) {
+                                                    resolve(false);
+                                                }
+                                                resolve(true);
+                                            })
+                                        }}
                                     />
                                 </div>
                                 <div className="row">
@@ -230,6 +239,7 @@ const ContentItemBulkUpload: React.FC<ContentItemBulkUploadProps> = ({ id, conte
                                         {contentItemBulkUploadItems.map((item) => (
                                             <ContentItemBulkUploadItem
                                                 key={uuidv4()}
+                                                contentItemBulkUploadItemModel={item}
                                                 contentItem={contentItems.find(contentItem => contentItem.id === item.id)!}
                                                 updateExistItem={updateExistItem}
                                                 deleteExistItem={deleteExistItem}

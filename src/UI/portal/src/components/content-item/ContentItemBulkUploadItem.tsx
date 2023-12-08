@@ -7,9 +7,11 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { FilePond } from "react-filepond";
+import { ContentItemBulkUploadItemModel } from "../../models/content-item/ContentItemBulkUploadModel";
 
 type ContentItemBulkUploadItemProps = {
     contentItem: ContentItemModel;
+    contentItemBulkUploadItemModel: ContentItemBulkUploadItemModel;
     updateExistItem: (id: number, isPublic: boolean, orderBy: number, file?: ActualFileObject) => Promise<void>;
     deleteExistItem: (id: number) => void;
 }
@@ -120,6 +122,14 @@ const ContentItemBlankUploadItemDialog: React.FC<ContentItemBlankUploadItemDialo
                                         maxFiles={1}
                                         name="files"
                                         labelIdle='Drag & Drop your file or <span class="filepond--label-action">Browse</span>'
+                                        beforeAddFile={(file) => {
+                                            return new Promise((resolve) => {
+                                                if (!file.fileType.includes('image/')) {
+                                                    resolve(false);
+                                                }
+                                                resolve(true);
+                                            })
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -148,7 +158,7 @@ const ContentItemBlankUploadItemDialog: React.FC<ContentItemBlankUploadItemDialo
     );
 }
 
-const ContentItemBlankUploadItem: React.FC<ContentItemBulkUploadItemProps> = ({ contentItem, updateExistItem, deleteExistItem }) => {
+const ContentItemBlankUploadItem: React.FC<ContentItemBulkUploadItemProps> = ({ contentItem, contentItemBulkUploadItemModel, updateExistItem, deleteExistItem }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const openModal = () => setIsOpen(true);
@@ -158,7 +168,7 @@ const ContentItemBlankUploadItem: React.FC<ContentItemBulkUploadItemProps> = ({ 
         <>
             <li className="list-group-item">
                 <LazyLoadImage
-                    src={contentItem.displayUrl}
+                    src={contentItemBulkUploadItemModel.base64File ?? contentItem.displayUrl}
                     alt={contentItem.name}
                     className="rounded d-block mx-auto"
                 />
@@ -170,6 +180,7 @@ const ContentItemBlankUploadItem: React.FC<ContentItemBulkUploadItemProps> = ({ 
                     onClick={() => deleteExistItem(contentItem.id)}>
                     <i className="fa-solid fa-trash text-danger font-16"></i>
                 </button>
+                <span className="ms-2 float-end text-muted">{contentItemBulkUploadItemModel.orderBy}</span>
             </li>
             <ModalCommon
                 props={{ modalIsOpen: isOpen, openModal, closeModal, contentItem, updateExistItem }}
