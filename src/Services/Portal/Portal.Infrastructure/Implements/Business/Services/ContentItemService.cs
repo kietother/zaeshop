@@ -96,6 +96,29 @@ namespace Portal.Infrastructure.Implements.Business.Services
             // Update exists content item by id
             if (model.ExistsItems?.Count > 0)
             {
+                // Items have changed image, re-upload and replace name and url
+                var amazonBulkUploadModels = model.ExistsItems.Where(o => !string.IsNullOrEmpty(o.FileName) && o.FileData != null).Select(x => new ImageUploadRequestModel
+                {
+                    FileName = x.FileName!,
+                    ImageData = x.FileData!,
+                    OrderBy = x.OrderBy,
+                    IsPublic = x.IsPublic
+                }).ToList();
+
+                var result = await _amazonS3Service.BulkUploadImagesAsync(amazonBulkUploadModels, $"{existingCollection.Album.Title}/{existingCollection.Title}");
+                foreach (var item in result)
+                {
+                    var reUploadItem = model.ExistsItems.Find(x => x.FileName == item.FileName);
+                    var contentItem = contentItems.Find(x => x.Id == reUploadItem?.Id);
+                    if (contentItem != null)
+                    {
+                        contentItem.Name = item.FileName;
+                        contentItem.OriginalUrl = item.AbsoluteUrl;
+                        contentItem.DisplayUrl = item.AbsoluteUrl;
+                        contentItem.RelativeUrl = item.RelativeUrl;
+                    }
+                }
+
                 foreach (var item in model.ExistsItems)
                 {
                     var contentItem = contentItems.Find(x => x.Id == item.Id);
@@ -129,29 +152,15 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 var result = await _amazonS3Service.BulkUploadImagesAsync(amazonBulkUploadModels, $"{existingCollection.Album.Title}/{existingCollection.Title}");
                 foreach (var newItem in result)
                 {
-                    var contentItem = contentItems.Find(x => x.Name == newItem.FileName);
-                    if (contentItem != null)
+                    createContentItems.Add(new ContentItem
                     {
-                        contentItem.Name = newItem.FileName;
-                        contentItem.OriginalUrl = newItem.AbsoluteUrl;
-                        contentItem.DisplayUrl = newItem.AbsoluteUrl;
-                        contentItem.RelativeUrl = newItem.RelativeUrl;
-                        contentItem.OrderBy = newItem.OrderBy;
-
-                        updateContentItems.Add(contentItem);
-                    }
-                    else
-                    {
-                        createContentItems.Add(new ContentItem
-                        {
-                            CollectionId = collectionId,
-                            Name = newItem.FileName,
-                            OriginalUrl = newItem.AbsoluteUrl,
-                            DisplayUrl = newItem.AbsoluteUrl,
-                            RelativeUrl = newItem.RelativeUrl,
-                            OrderBy = newItem.OrderBy
-                        });
-                    }
+                        CollectionId = collectionId,
+                        Name = newItem.FileName,
+                        OriginalUrl = newItem.AbsoluteUrl,
+                        DisplayUrl = newItem.AbsoluteUrl,
+                        RelativeUrl = newItem.RelativeUrl,
+                        OrderBy = newItem.OrderBy
+                    });
                 }
             }
 
