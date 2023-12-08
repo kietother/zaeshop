@@ -120,6 +120,14 @@ const ContentItemBlankUploadItemDialog: React.FC<ContentItemBlankUploadItemDialo
                                         maxFiles={1}
                                         name="files"
                                         labelIdle='Drag & Drop your file or <span class="filepond--label-action">Browse</span>'
+                                        beforeAddFile={(file) => {
+                                            return new Promise((resolve) => {
+                                                if (!file.fileType.includes('image/')) {
+                                                    resolve(false);
+                                                }
+                                                resolve(true);
+                                            })
+                                        }}
                                     />
                                 </div>
                             </div>

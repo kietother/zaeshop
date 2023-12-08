@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { StoreState, useAppDispatch } from "../../store";
 import { getContentItemsAsyncThunk } from "../../store/reducers/ContentItemSlice";
@@ -8,7 +7,6 @@ import ContentItemBlankUpload from "../../components/content-item/ContentItemBla
 import ContentItemBulkUpload from "../../components/content-item/ContentItemBulkUpload";
 
 const CotentItemPage: React.FC = () => {
-    const [t] = useTranslation();
     const { collectionId } = useParams();
 
     const dispatch = useAppDispatch();

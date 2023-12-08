@@ -222,7 +222,15 @@ const ContentItemBulkUpload: React.FC<ContentItemBulkUploadProps> = ({ id, conte
                                         allowMultiple={true}
                                         maxFiles={100}
                                         name="files"
-                                        labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+                                        labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'                                  
+                                        beforeAddFile={(file) => {
+                                            return new Promise((resolve) => {
+                                                if (!file.fileType.includes('image/')) {
+                                                    resolve(false);
+                                                }
+                                                resolve(true);
+                                            })
+                                        }}               
                                     />
                                 </div>
                                 <div className="row">
