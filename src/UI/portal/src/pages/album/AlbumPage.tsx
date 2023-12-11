@@ -109,6 +109,11 @@ const AlbumPage: React.FC = () => {
                                     <div className="card-body">
                                         <div className="table-responsive">
                                             <table className="table">
+                                                {!albumState.loading && <caption className="pt-2 pb-0">{t('paging.caption', {
+                                                    start: ((pageIndex - 1) * pageSize) + 1,
+                                                    end: ((pageIndex - 1) * pageSize) + albumState.albums.length,
+                                                    total: albumState.totalRecords
+                                                })}</caption>}
                                                 <thead>
                                                     <tr>
                                                         <th>{t('album.id')}</th>
@@ -124,7 +129,7 @@ const AlbumPage: React.FC = () => {
                                                     {albums.map((album) => (
                                                         <tr key={uuidv4()}>
                                                             <td>
-                                                                <Link className="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" 
+                                                                <Link className="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
                                                                     to={`${album.id}`}>{album.id}
                                                                 </Link>
                                                             </td>

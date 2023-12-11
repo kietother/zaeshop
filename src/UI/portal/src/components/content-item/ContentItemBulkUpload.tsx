@@ -186,10 +186,9 @@ const ContentItemBulkUpload: React.FC<ContentItemBulkUploadProps> = ({ id, conte
                         <div className="card">
                             <div className="card-header">
                                 <div className="form-group mb-3">
-                                    <h4 className="card-title">Basic Example</h4>
+                                    <h3 className="card-title">{t('content_item.bulk_upload_title')}</h3>
                                     <p className="text-muted mb-0">
-                                        List groups are a flexible and powerful component for displaying a
-                                        series of content.
+                                        {t('content_item.bulk_upload_description')}
                                     </p>
                                 </div>
                                 <div className="form-group mb-1">

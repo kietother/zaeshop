@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using Portal.API.Controllers;
 using Portal.API.Extensions;
 using Portal.API.Middlewares;
@@ -29,7 +30,11 @@ builder.Services.AddSwaggerServices();
 builder.Services.AddCors();
 builder.Services.AddGrpc().AddJsonTranscoding();
 builder.Services.AddGrpcReflection();
-
+builder.Services.AddResponseCompression(options =>
+{
+    options.Providers.Add<BrotliCompressionProvider>();
+    options.Providers.Add<GzipCompressionProvider>();
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

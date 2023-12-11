@@ -23,6 +23,11 @@
         "english": "English",
         "vietnamese": "Vietnamese"
     },
+    "paging": {
+        "previous": "Previous",
+        "next": "Next",
+        "caption": "Showing {{start}} to {{end}} of {{total}} entries"
+    },
     "login": {
         "let_get_started_metrica": "Let's Get Started CMS",
         "sign_in_to_continue_to_cms": "Sign in to continue to CMS.",
@@ -147,6 +152,8 @@
         "confirm_delete_all": "Are you sure remove all? This cannot be restored.",
         "update_image": "Update Image",
         "order_by": "Order by",
-        "is_public":"Is Public"
+        "is_public":"Is Public",
+        "bulk_upload_title": "Bulk Upload",
+        "bulk_upload_description": "Save time by batch uploading all your product images in one go with our easy bulk uploader tool supporting up to 100 photos per upload."
     }
 }
