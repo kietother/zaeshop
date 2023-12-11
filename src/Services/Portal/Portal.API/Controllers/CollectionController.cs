@@ -89,6 +89,8 @@ namespace Portal.API.Controllers
 
         [HttpPost]
         [Route("{id}/content-items")]
+        [EnableRouteResponseCompression]
+        [RequestSizeLimit(160_000_000)] // Limit approximately ~150MB
         public IActionResult CreateContentItems([FromRoute] int id, [FromForm] List<IFormFile> files)
         {
             // Validate and get data
@@ -115,6 +117,8 @@ namespace Portal.API.Controllers
 
         [HttpPut]
         [Route("{id}/content-items")]
+        [EnableRouteResponseCompression]
+        [RequestSizeLimit(160_000_000)] // Limit approximately ~150MB
         public IActionResult UpdateContentItems([FromRoute] int id, [FromBody] ContentItemUpdateRequestModel updateRequestModel)
         {
             _backgroundJobClient.Enqueue<IContentItemService>(x => x.UpdateContentItemsAsync(id, updateRequestModel));

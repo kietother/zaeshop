@@ -23,7 +23,7 @@ const AlbumDetailCollectionPage: React.FC = () => {
     const [t] = useTranslation();
     const { albumId } = useParams();
 
-    const { collections, totalRecords } = useSelector((state: StoreState) => state.albumDetailCollection);
+    const { collections, totalRecords, loading } = useSelector((state: StoreState) => state.albumDetailCollection);
     const [collection, setCollection] = useState<CollectionPagingResponse>(collections[0] || null);
 
     const dispatch = useAppDispatch();
@@ -112,6 +112,11 @@ const AlbumDetailCollectionPage: React.FC = () => {
                                     <div className="card-body">
                                         <div className="table-responsive">
                                             <table className="table">
+                                                {!loading && <caption className="pt-2 pb-0">{t('paging.caption', {
+                                                    start: ((pageIndex - 1) * pageSize) + 1,
+                                                    end: ((pageIndex - 1) * pageSize) + collections.length,
+                                                    total: totalRecords
+                                                })}</caption>}
                                                 <thead>
                                                     <tr>
                                                         <th>{t('album_detail.id')}</th>

@@ -105,6 +105,11 @@ const UserPage: React.FC = () => {
                                     <div className="card-body">
                                         <div className="table-responsive">
                                             <table className="table">
+                                                {!userState.loading && <caption className="pt-2 pb-0">{t('paging.caption', {
+                                                    start: ((pageIndex - 1) * pageSize) + 1,
+                                                    end: ((pageIndex - 1) * pageSize) + userState.users.length,
+                                                    total: userState.totalRecords
+                                                })}</caption>}
                                                 <thead>
                                                     <tr>
                                                         <th>{t('user.id')}</th>
