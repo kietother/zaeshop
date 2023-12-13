@@ -15,6 +15,7 @@ import ModalCommon from "../../components/shared/ModalCommon";
 import CreateCollection from "../../components/album-detail-collection/CreateCollection";
 import UpdateCollection from "../../components/album-detail-collection/UpdateCollection";
 import DeleteCollection from "../../components/album-detail-collection/DeleteCollection";
+import { useDebounce } from "use-debounce";
 
 const AlbumDetailCollectionPage: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -31,12 +32,14 @@ const AlbumDetailCollectionPage: React.FC = () => {
     // Paging
     const [pageIndex, setPageIndex] = useState(1);
     const [pageSize, setPageSize] = useState(5);
+    const [search, setSearch] = useState<string>('');
+    const [debouncedSearchValue] = useDebounce(search, 500);
 
     useEffect(() => {
         if (albumId && Number(albumId)) {
-            dispatch(getCollectionPagingAsyncThunk({ pageNumber: pageIndex, pageSize, albumId: Number(albumId) }));
+            dispatch(getCollectionPagingAsyncThunk({ pageNumber: pageIndex, pageSize, albumId: Number(albumId), searchTerm: debouncedSearchValue?.trim() }));
         }
-    }, [dispatch, albumId, pageIndex, pageSize]);
+    }, [dispatch, albumId, pageIndex, pageSize, debouncedSearchValue]);
 
     const openModal = (actionGrid: ActionTypeGrid, collection?: CollectionPagingResponse) => {
         setActionGrid(actionGrid);
@@ -111,7 +114,16 @@ const AlbumDetailCollectionPage: React.FC = () => {
                                     {/*end card-header*/}
                                     <div className="card-body">
                                         <div className="table-responsive">
-                                            <table className="table">
+                                            <div className="">
+                                                <input
+                                                    type="search"
+                                                    name="search"
+                                                    className="form-control top-search mb-0"
+                                                    placeholder={t('album_detail.search_placeholder')}
+                                                    onChange={(e) => setSearch(e.target.value)}
+                                                />
+                                            </div>
+                                            <table className="table table-hover">
                                                 {!loading && <caption className="pt-2 pb-0">{t('paging.caption', {
                                                     start: ((pageIndex - 1) * pageSize) + 1,
                                                     end: ((pageIndex - 1) * pageSize) + collections.length,

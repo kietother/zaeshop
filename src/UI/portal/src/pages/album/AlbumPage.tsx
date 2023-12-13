@@ -13,6 +13,7 @@ import CreateAlbum from "../../components/album/CreateAlbum";
 import UpdateAlbum from "../../components/album/UpdateAlbum";
 import DeleteAlbum from "../../components/album/DeleteAlbum";
 import { Link } from "react-router-dom";
+import { useDebounce } from "use-debounce";
 
 const AlbumPage: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -29,12 +30,17 @@ const AlbumPage: React.FC = () => {
     // Paging
     const [pageIndex, setPageIndex] = useState(1);
     const [pageSize, setPageSize] = useState(5);
+    const [search, setSearch] = useState<string>('');
+    const [debouncedSearchValue] = useDebounce(search, 500);
 
     useEffect(() => {
-        dispatch(getAlbumsPagingAsyncThunk({ pageNumber: pageIndex, pageSize }));
         dispatch(getAllContentTypesAsyncThunk());
         dispatch(getAlbumAlertMessagesAsyncThunk())
-    }, [dispatch, pageIndex, pageSize]);
+    }, [dispatch]);
+
+    useEffect(() => {
+        dispatch(getAlbumsPagingAsyncThunk({ pageNumber: pageIndex, pageSize, searchTerm: debouncedSearchValue?.trim() }));
+    }, [dispatch, pageIndex, pageSize, debouncedSearchValue]);
 
     const openModal = (actionGrid: ActionTypeGrid, album?: AlbumPagingResponse) => {
         setActionGrid(actionGrid);
@@ -108,7 +114,16 @@ const AlbumPage: React.FC = () => {
                                     {/*end card-header*/}
                                     <div className="card-body">
                                         <div className="table-responsive">
-                                            <table className="table">
+                                            <div className="">
+                                                <input
+                                                    type="search"
+                                                    name="search"
+                                                    className="form-control top-search mb-0"
+                                                    placeholder={t('album.search_placeholder')}
+                                                    onChange={(e) => setSearch(e.target.value)}
+                                                />
+                                            </div>
+                                            <table className="table table-hover">
                                                 {!albumState.loading && <caption className="pt-2 pb-0">{t('paging.caption', {
                                                     start: ((pageIndex - 1) * pageSize) + 1,
                                                     end: ((pageIndex - 1) * pageSize) + albumState.albums.length,

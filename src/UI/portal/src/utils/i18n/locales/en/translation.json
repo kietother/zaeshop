@@ -109,7 +109,8 @@
             "content_types": "Content Types"
         },
         "ongoing": "Ongoing",
-        "completed": "Completed"
+        "completed": "Completed",
+        "search_placeholder": "Search title or description..."
     },
     "album_detail": {
         "title_detail": "Album Detail",
@@ -140,7 +141,8 @@
             "delete_collection": "Delete Collection"
         },
         "title_is_required": "Title is required.",
-        "volume_is_invalid": "Volume is numberic, at least 0."
+        "volume_is_invalid": "Volume is numberic, at least 0.",
+        "search_placeholder": "Search title, description, extend name..."
     },
     "content_item": {
         "title": "Upload images",

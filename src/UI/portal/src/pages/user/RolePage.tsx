@@ -105,7 +105,7 @@ const RolePage: React.FC = () => {
                                     {/*end card-header*/}
                                     <div className="card-body">
                                         <div className="table-responsive">
-                                            <table className="table">
+                                            <table className="table table-hover">
                                                 {!roleState.loading && <caption className="pt-2 pb-0">{t('paging.caption', {
                                                     start: ((pageIndex - 1) * pageSize) + 1,
                                                     end: ((pageIndex - 1) * pageSize) + roleState.roles.length,

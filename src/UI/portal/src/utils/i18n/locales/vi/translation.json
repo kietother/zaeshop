@@ -1,10 +1,40 @@
 {
+    "error_album_already_exists": "Album đã tồn tại",
+    "error_album_alert_message_not_found": "Không tìm thấy thông báo của Album",
+    "error_album_content_type_not_found": "Không tìm thấy loại nội dung của Album",
+    "error_album_not_found": "Không tìm thấy Album",
+    "toast": {
+        "please_wait": "Vui lòng đợi...",
+        "login_sucessfully": "Đăng nhập thành công",
+        "logout_sucessfully": "Đăng xuất thành công",
+        "some_thing_is_wrong": "Có điều gì đó không đúng",
+        "you_can_not_access_feature": "Bạn không thể truy cập tính năng này",
+        "user_or_password_is_incorrect": "Tên người dùng hoặc mật khẩu không chính xác",
+        "create_sucessfully": "Tạo thành công",
+        "update_sucessfully": "Cập nhật thành công",
+        "delete_sucessfully": "Xóa thành công",
+        "please_select_at_least_one_file_to_upload": "Vui lòng chọn ít nhất một tệp để tải lên",
+        "create_inprogress_sucessfully": "Đang tải lên trong quá trình nền. Vui lòng làm mới trang để xem trạng thái cập nhật."
+    },
     "navbar": {
         "title": "Thông báo",
         "profile": "Hồ sơ",
         "logout": "Đăng xuất",
         "english": "Tiếng Anh",
         "vietnamese": "Tiếng Việt"
+    },
+    "paging": {
+        "previous": "Trước",
+        "next": "Tiếp theo",
+        "caption": "Hiển thị {{start}} đến {{end}} trong tổng số {{total}} mục"
+    },
+    "login": {
+        "let_get_started_metrica": "Bắt đầu với Trang quản trị CMS",
+        "sign_in_to_continue_to_cms": "Đăng nhập để tiếp tục vào Trang quản trị CMS.",
+        "username": "Tên người dùng",
+        "username_is_required": "Tên người dùng là bắt buộc.",
+        "password": "Mật khẩu",
+        "password_is_required": "Mật khẩu là bắt buộc."
     },
     "user": {
         "title": "Quản lý Người dùng",
@@ -17,16 +47,16 @@
         "created_on": "Ngày tạo",
         "roles": "Vai trò",
         "action": "Hành động",
-        "add_new": "Thêm",
+        "add_new": "Thêm mới",
         "previous": "Trước",
         "next": "Tiếp theo",
         "modal": {
             "delete": "Xóa",
             "close": "Đóng",
-            "create_user": "Tạo Người dùng",
-            "update_user": "Cập nhật Người dùng",
-            "delete_user": "Xóa Người dùng",
-            "are_you_sure": "Bạn có chắc chắn muốn xóa Người dùng này không?",
+            "create_user": "Tạo người dùng",
+            "update_user": "Cập nhật người dùng",
+            "delete_user": "Xóa người dùng",
+            "are_you_sure": "Bạn chắc chứ?",
             "save_changes": "Lưu thay đổi"
         },
         "password": "Mật khẩu",
@@ -38,21 +68,6 @@
         "password_did_not_match": "Mật khẩu không khớp",
         "confirm_password_is_required": "Xác nhận mật khẩu là bắt buộc.",
         "role": "Vai trò"
-    },
-    "toast": {
-        "please_wait": "Vui lòng đợi...",
-        "login_sucessfully": "Đăng nhập thành công",
-        "logout_sucessfully": "Đăng xuất thành công",
-        "some_thing_is_wrong": "Có gì đó không đúng",
-        "user_or_password_is_incorrect": "Người dùng hoặc mật khẩu không chính xác"
-    },
-    "login": {
-        "let_get_started_metrica": "Bắt đầu với Trang quản trị CMS",
-        "sign_in_to_continue_to_cms": "Đăng nhập để tiếp tục vào Trang quản trị CMS.",
-        "username": "Tên người dùng",
-        "username_is_required": "Tên người dùng là bắt buộc.",
-        "password": "Mật khẩu",
-        "password_is_required": "Mật khẩu là bắt buộc."
     },
     "role": {
         "title": "Quản lý Vai trò",
@@ -69,5 +84,78 @@
             "update_role": "Cập nhật Vai trò",
             "delete_role": "Xóa Vai trò"
         }
+    },
+    "album": {
+        "title": "Quản lý Album",
+        "title_detail": "Chi tiết Album",
+        "id": "ID",
+        "album_title": "Tiêu đề",
+        "album_description": "Mô tả",
+        "album_content_types": "Loại nội dung",
+        "album_alert_message": "Thông báo",
+        "created_on": "Ngày tạo",
+        "updated_on": "Ngày cập nhật",
+        "action": "Hành động",
+        "add_new": "Thêm mới",
+        "album_title_is_required": "Tiêu đề Album là bắt buộc.",
+        "modal": {
+            "create_album": "Tạo Album",
+            "update_album": "Cập nhật Album",
+            "delete_album": "Xóa Album",
+            "title": "Tiêu đề",
+            "title_is_required": "Tiêu đề là bắt buộc.",
+            "description": "Mô tả",
+            "alert_message": "Thông báo",
+            "content_types": "Loại nội dung"
+        },
+        "ongoing": "Đang tiến hành",
+        "completed": "Đã hoàn thành",
+        "search_placeholder": "Tìm kiếm tiêu đề hoặc mô tả..."
+    },
+    "album_detail": {
+        "title_detail": "Chi tiết Album",
+        "is_public": "Có công khai",
+        "extra_info": "Thông tin bổ sung của Album",
+        "button_save": "Lưu",
+        "button_cancel": "Hủy",
+        "alternative_name": "Tên thay thế",
+        "type": "Loại",
+        "album_status": "Trạng thái",
+        "release_year": "Năm phát hành",
+        "author_names": "Tên tác giả",
+        "artist_names": "Tên nghệ sĩ",
+        "tags": "Thẻ",
+        "title_collection": "Bộ sưu tập",
+        "id": "ID",
+        "title": "Tiêu đề",
+        "album_title": "Tiêu đề Album",
+        "volume": "Âm lượng",
+        "extend_name": "Tên mở rộng",
+        "description": "Mô tả",
+        "created_on": "Ngày tạo",
+        "updated_on": "Ngày cập nhật",
+        "action": "Hành động",
+        "modal": {
+            "create_collection": "Tạo Bộ sưu tập",
+            "update_collection": "Cập nhật Bộ sưu tập",
+            "delete_collection": "Xóa Bộ sưu tập"
+        },
+        "title_is_required": "Tiêu đề là bắt buộc.",
+        "volume_is_invalid": "Âm lượng là số, ít nhất là 0.",
+        "search_placeholder": "Tìm kiếm tiêu đề, mô tả, tên mở rộng..."
+    },
+    "content_item": {
+        "title": "Tải lên hình ảnh",
+        "description": "Tệp đầu vào của bạn rất mới mẻ - Phiên bản mặc định",
+        "upload_button": "Tải lên",
+        "reset": "Đặt lại",
+        "bulk_upload_button": "Lưu thay đổi",
+        "confirm_delete_item": "Bạn chắc chứ muốn xóa? Hành động này không thể khôi phục. Nhưng chúng tôi có thể đặt lại thay đổi của bạn.",
+        "confirm_delete_all": "Bạn chắc chứ muốn xóa tất cả? Hành động này không thể khôi phục.",
+        "update_image": "Cập nhật ảnh",
+        "order_by": "Sắp xếp theo",
+        "is_public":"Có công khai",
+        "bulk_upload_title": "Tải lên hàng loạt",
+        "bulk_upload_description": "Tiết kiệm thời gian bằng cách tải lên hàng loạt tất cả các hình ảnh sản phẩm của bạn trong một lần với công cụ tải lên hàng loạt dễ sử dụng của chúng tôi hỗ trợ lên đến 100 ảnh mỗi lần tải lên."
     }
 }
