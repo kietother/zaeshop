@@ -118,7 +118,7 @@ const AlbumPage: React.FC = () => {
                                                 <input
                                                     type="search"
                                                     name="search"
-                                                    className="form-control top-search mb-0"
+                                                    className="form-control top-search mb-2"
                                                     placeholder={t('album.search_placeholder')}
                                                     onChange={(e) => setSearch(e.target.value)}
                                                 />

@@ -168,6 +168,10 @@ const ContentItemBlankUploadItem: React.FC<ContentItemBulkUploadItemProps> = ({ 
         <>
             <li className="list-group-item">
                 <LazyLoadImage
+                    style={{
+                        maxWidth: "100%",
+                        height: "auto",
+                    }}
                     src={contentItemBulkUploadItemModel.base64File ?? contentItem.displayUrl}
                     alt={contentItem.name}
                     className="rounded d-block mx-auto"
