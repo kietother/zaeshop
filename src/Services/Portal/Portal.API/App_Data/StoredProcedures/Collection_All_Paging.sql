@@ -48,8 +48,9 @@ BEGIN
 			JOIN dbo.Album a ON a.Id = c.AlbumId
 		WHERE a.Id = @albumId AND 
 		(ISNULL(@searchTerm, '') = '' OR 
-			(c.Title LIKE '' + @searchTerm + '%') OR
-			(c.Description LIKE '' + @searchTerm + '%')
+			(c.Title LIKE '%' + @searchTerm + '%') OR
+			(c.Description LIKE '' + @searchTerm + '%') OR
+			(c.ExtendName LIKE '' + @searchTerm + '%')
 		)
 	)
     SELECT COUNT_BIG(1) AS RowNum,

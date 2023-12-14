@@ -228,6 +228,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             {
                 { "PageNumber", request.PageNumber },
                 { "PageSize", request.PageSize },
+                { "SearchTerm", request.SearchTerm },
                 { "SortColumn", request.SortColumn },
                 { "SortDirection", request.SortDirection }
             };

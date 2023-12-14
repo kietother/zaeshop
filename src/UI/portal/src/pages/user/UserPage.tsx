@@ -104,7 +104,7 @@ const UserPage: React.FC = () => {
                                     {/*end card-header*/}
                                     <div className="card-body">
                                         <div className="table-responsive">
-                                            <table className="table">
+                                            <table className="table table-hover">
                                                 {!userState.loading && <caption className="pt-2 pb-0">{t('paging.caption', {
                                                     start: ((pageIndex - 1) * pageSize) + 1,
                                                     end: ((pageIndex - 1) * pageSize) + userState.users.length,
