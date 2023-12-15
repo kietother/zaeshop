@@ -10,6 +10,8 @@ import '../public/assets/css/app.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
+import Header from './components/layout/Header'
+import Footer from './components/layout/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,7 +27,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className + " sticky-header"}>{children}</body>
+      <body className={inter.className + " sticky-header"}>
+        {/* Back To Top Start */}
+        <a href="home-3.html#main-wrapper" id="backto-top" className="back-to-top">
+          <i className="fas fa-angle-double-up" />
+        </a>
+        {/* Back To Top End */}
+        {/* Main Wrapper Start */}
+        <div className="main-wrapper" id="main-wrapper">
+          <Header />
+          {children}
+          <Footer />
+        </div>f
+      </body>
       <Script src="/assets/js/vendor/jquery-3.6.0.min.js" />
       <Script src="/assets/js/vendor/bootstrap.min.js" />
       <Script src="/assets/js/vendor/imagesloaded.pkgd.min.js" />
