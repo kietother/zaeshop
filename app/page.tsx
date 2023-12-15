@@ -133,7 +133,7 @@ export default function Home() {
             <div className="row">
               <div className="col-lg-3 col-sm-6 col-12">
                 <div className="anime-blog">
-                  <Link href={"/comic"}>
+                  <Link href={"/truyen-tranh"}>
                     <img src="assets/media/manga/manga-img-2.png" alt="" />
                   </Link>
                   <div className="d-flex justify-content-between">
