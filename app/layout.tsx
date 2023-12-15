@@ -1,6 +1,15 @@
+// Import CSS
+import './globals.css'
+import '../public/assets/css/vendor/bootstrap.min.css'
+import '../public/assets/css/vendor/font-awesome.css'
+import '../public/assets/css/vendor/slick.css'
+import '../public/assets/css/vendor/slick-theme.css'
+import '../public/assets/css/vendor/sal.css'
+import '../public/assets/css/app.css'
+
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import './globals.css'
+import Script from 'next/script'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +25,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className + " sticky-header"}>{children}</body>
+      <Script src="/assets/js/vendor/jquery-3.6.0.min.js" />
+      <Script src="/assets/js/vendor/bootstrap.min.js" />
+      <Script src="/assets/js/vendor/imagesloaded.pkgd.min.js" />
+      <Script src="/assets/js/vendor/slick.min.js" />
+      <Script src="/assets/js/vendor/jquery.countdown.min.js" />
+      <Script src="/assets/js/vendor/jquery-appear.js" />
+      <Script src="/assets/js/vendor/sal.js" />
+      <Script src="/assets/js/app.js" />
     </html>
   )
 }
