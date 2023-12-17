@@ -14,7 +14,7 @@ export const config = {
   }
 
 const routeMapper: { [key: string]: string } = {
-    '/truyen-tranh': '/comic',
+    '/truyen-tranh': '/comics',
 };
 
 export default async function middleware(request: NextRequest) {

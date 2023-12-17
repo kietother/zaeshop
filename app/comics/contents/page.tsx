@@ -1,324 +1,88 @@
-export default function Comic() {
+export default function Content() {
     return (
         <>
             {/*=====================================*/}
             {/*=      Breadcrumb Area Start        =*/}
             {/*=====================================*/}
-            <section className="breadcrumb sec-mar">
+            <section className="breadcrumb ">
                 <div className="container">
                     <div className="breadcrumb-content">
                         <ul>
                             <li>
-                                <a href="home.html">Home</a>
+                                <a href="https://uiparadox.co.uk/templates/animeloop/demo/index.html">
+                                    Home
+                                </a>
                             </li>
                             <li>
                                 <a href="home-3.html">All Manga</a>
                             </li>
                             <li>
-                                <a className="active">Solo Leveling</a>
+                                <a href="manga-detail.html">Solo Leveling</a>
+                            </li>
+                            <li>
+                                <a className="active">Chapter 1</a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </section>
             {/*=====================================*/}
-            {/*=         video Area Start          =*/}
+            {/*=        Chapter Area Start       	=*/}
             {/*=====================================*/}
-            <section className="video sec-mar">
+            <section className="chapter sec-mar">
                 <div className="container">
-                    <div className="row">
-                        <div className="col-lg-9 col-12">
-                            <div className="row">
-                                <div className="col-lg-6 col-md-7 col-12">
-                                    <div className="trailer-box">
-                                        <img
-                                            src="assets/media/manga/manga-img-1.png"
-                                            alt=""
-                                            className="image"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="col-lg-6 col-md-5 col-12">
-                                    <div className="trailer-content">
-                                        <h2>Solo Leveling</h2>
-                                        <p className="light-text">Chapter 179</p>
-                                        <div className="dropdown">
-                                            <button
-                                                type="button"
-                                                className="dropdown-toggle"
-                                                data-bs-toggle="dropdown"
-                                            >
-                                                <svg
-                                                    width={32}
-                                                    height={22}
-                                                    viewBox="0 0 32 22"
-                                                    fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <rect
-                                                        x="0.145264"
-                                                        y="0.00012207"
-                                                        width="21.4395"
-                                                        height="2.68125"
-                                                        rx="1.34062"
-                                                        fill="#999999"
-                                                    />
-                                                    <rect
-                                                        x="0.145264"
-                                                        y="7.41272"
-                                                        width="21.4395"
-                                                        height="2.68125"
-                                                        rx="1.34062"
-                                                        fill="#999999"
-                                                    />
-                                                    <rect
-                                                        x="0.145264"
-                                                        y="14.8258"
-                                                        width="16.4914"
-                                                        height="2.68125"
-                                                        rx="1.34062"
-                                                        fill="#999999"
-                                                    />
-                                                    <path
-                                                        d="M19.8784 16.0712C19.8784 15.4163 20.4093 14.8854 21.0642 14.8854H30.2463C30.9011 14.8854 31.432 15.4163 31.432 16.0712C31.432 16.7261 30.9011 17.257 30.2463 17.257H21.0642C20.4093 17.257 19.8784 16.7261 19.8784 16.0712Z"
-                                                        fill="#999999"
-                                                    />
-                                                    <path
-                                                        d="M25.6552 22.0001C25.0171 22.0001 24.4999 21.4828 24.4999 20.8447V11.2977C24.4999 10.6596 25.0171 10.1423 25.6552 10.1423C26.2933 10.1423 26.8106 10.6596 26.8106 11.2977V20.8447C26.8106 21.4828 26.2933 22.0001 25.6552 22.0001Z"
-                                                        fill="#999999"
-                                                    />
-                                                </svg>
-                                            </button>
-                                            <ul className="dropdown-menu bg-color-black pt-3 pb-3 ps-3 pe-3">
-                                                <li>
-                                                    <a href="manga-detail.html" className="none">
-                                                        <i className="fa fa-check" /> Watch Later{" "}
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="manga-detail.html">
-                                                        <i className="fas fa-plus" /> Add to Playlist{" "}
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <h3>Plot Summary</h3>
-                                        <p>
-                                            At vero eos et accusamus et iusto odio dignissimos ducimus qui
-                                            blanditiis praesentium voluptatum deleniti atque corrupti quos
-                                            dolores et quas molestias excepturi sint occaecati cupiditate
-                                            non provident, similique sunt in culpa qui officia deserunt
-                                            mollitia animi, id est laborum et dolorum fuga. Et harum
-                                            quidem rerum facilis est et expedita distinctio.
-                                        </p>
-                                        <div className="d-flex pt-4">
-                                            <a
-                                                href="manga-content.html"
-                                                className="anime-btn btn-dark border-change me-3"
-                                            >
-                                                READ FIRST
-                                            </a>
-                                            <a href="manga-content.html" className="anime-btn btn-dark">
-                                                READ LAST
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div className="heading style-1">
+                        <h2>Solo Leveling</h2>
+                        <span>Chapter 179</span>
+                    </div>
+                    <div className="d-flex justify-content-between mb-4">
+                        <div className="left">
+                            <a
+                                href="manga-content.html"
+                                className="anime-btn btn-dark border-change dropdown-toggle"
+                                id="country"
+                                data-bs-toggle="dropdown"
+                                data-bs-auto-close="outside"
+                                aria-expanded="false"
+                            >
+                                CHAPTER 1
+                                <span>
+                                    <i className="fa fa-chevron-down" />
+                                </span>
+                            </a>
+                            <ul className="dropdown-menu" aria-labelledby="country">
+                                <li>
+                                    <a href="manga-content.html"> chapter 1 </a>
+                                </li>
+                                <li>
+                                    <a href="manga-content.html"> chapter 2 </a>
+                                </li>
+                                <li>
+                                    <a href="manga-content.html"> chapter 3 </a>
+                                </li>
+                                <li>
+                                    <a href="manga-content.html"> chapter 4 </a>
+                                </li>
+                                <li>
+                                    <a href="manga-content.html"> chapter 5 </a>
+                                </li>
+                            </ul>
                         </div>
-                        <div className="col-lg-3 col-sm-6 col-12">
-                            <div className="trailer-content">
-                                <h3>Manga Detail</h3>
-                                <p>
-                                    <span>Author:</span> <b>Bones</b>
-                                </p>
-                                <p>
-                                    <span>Artist:</span> <b>Bones</b>
-                                </p>
-                                <p>
-                                    <span>Date of release:</span> Jan 15, 2023
-                                </p>
-                                <p>
-                                    <span>Status:</span> <b>Completed</b>
-                                </p>
-                                <p>
-                                    <span>Genre:</span> Action, School, Shounen
-                                </p>
-                                <p>
-                                    <span>Country:</span> Japan
-                                </p>
-                                <p>
-                                    <span>Scores:</span> 2.53 by 4,405 reviews
-                                </p>
-                                <p>
-                                    <span>Views:</span> 18,284
-                                </p>
-                            </div>
+                        <div className="right">
+                            <a href="manga-content.html" className="anime-btn btn-dark">
+                                PREVIOUS
+                            </a>
+                            <a
+                                href="manga-content.html"
+                                className="anime-btn btn-dark border-change ms-1"
+                            >
+                                NEXT
+                            </a>
                         </div>
                     </div>
-                </div>
-            </section>
-            {/*=====================================*/}
-            {/*=         Release Area Start         =*/}
-            {/*=====================================*/}
-            <section className="relese sec-mar">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-8 col-md-12 col-sm-12">
-                            <h3 className="small-title">Manga Releases</h3>
-                            <h5>
-                                Chapter 179 <span>Sunday 01 Jan 2023</span>
-                            </h5>
-                            <hr />
-                            <h5>
-                                Chapter 178 <span>Sunday 02 Jan 2023</span>
-                            </h5>
-                            <hr />
-                            <h5>
-                                Chapter 177 <span>Monday 03 Jan 2023</span>
-                            </h5>
-                            <hr />
-                            <h5>
-                                Chapter 176 <span>Tuesday 04 Jan 2023</span>
-                            </h5>
-                            <hr />
-                            <h5>
-                                Chapter 175 <span>Wednesday 05 Jan 2023</span>
-                            </h5>
-                            <hr />
-                            <h5>
-                                Chapter 174 <span>Thursday 06 Jan 2023</span>
-                            </h5>
-                            <hr />
-                            <h5>
-                                Chapter 173 <span>Friday 07 Jan 2023</span>
-                            </h5>
-                            <hr />
-                            <h5>
-                                Chapter 172 <span>Saturday 08 Jan 2023</span>
-                            </h5>
-                            <hr />
-                            <h5>
-                                Chapter 171 <span>Sunday 09 Jan 2023</span>
-                            </h5>
-                            <hr />
-                            <h5>
-                                Chapter 170 <span>Monday 10 Jan 2023</span>
-                            </h5>
-                            <hr />
-                            <h5>
-                                Chapter 169 <span>Tuesday 11 Jan 2023</span>
-                            </h5>
-                            <hr />
-                            <div className="text-center">
-                                <a href="manga-detail.html#" className="relese-btn">
-                                    Show More
-                                </a>
-                            </div>
-                            <hr />
-                        </div>
-                        <div className="col-lg-4 col-md-6 col-sm-8 offset-lg-0 offset-md-3 offset-sm-2 mt-lg-0 mt-3">
-                            <h3 className="small-title">Top Rated Manga</h3>
-                            <div className="anime-box bg-color-black">
-                                <a href="manga-detail.html">
-                                    <div className="row m-0">
-                                        <div className="p-0 col-4">
-                                            <img src="assets/media/manga-sm-img/manga-img-7.png" alt="" />
-                                        </div>
-                                        <div className="p-0 col-8">
-                                            <div className="anime-blog">
-                                                <p>86</p>
-                                                <p className="text">Chapter 129</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div className="anime-box bg-color-black">
-                                <a href="manga-detail.html">
-                                    <div className="row m-0">
-                                        <div className="p-0 col-4">
-                                            <img src="assets/media/manga-sm-img/manga-img-8.png" alt="" />
-                                        </div>
-                                        <div className="p-0 col-8">
-                                            <div className="anime-blog">
-                                                <p>Re-Zero</p>
-                                                <p className="text">Chapter 169</p>
-                                                <p className="ms-2 me-0 text-box active">18+</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div className="anime-box bg-color-black">
-                                <a href="manga-detail.html">
-                                    <div className="row m-0">
-                                        <div className="p-0 col-4">
-                                            <img src="assets/media/manga-sm-img/manga-img-9.png" alt="" />
-                                        </div>
-                                        <div className="p-0 col-8">
-                                            <div className="anime-blog">
-                                                <p>Tokyo Ghoul</p>
-                                                <p className="text">Chapter 279</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div className="anime-box bg-color-black">
-                                <a href="manga-detail.html">
-                                    <div className="row m-0">
-                                        <div className="p-0 col-4">
-                                            <img
-                                                src="assets/media/manga-sm-img/manga-img-10.png"
-                                                alt=""
-                                            />
-                                        </div>
-                                        <div className="p-0 col-8">
-                                            <div className="anime-blog">
-                                                <p>Sword Art Online</p>
-                                                <p className="text">Chapter 223</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div className="anime-box bg-color-black">
-                                <a href="manga-detail.html">
-                                    <div className="row m-0">
-                                        <div className="p-0 col-4">
-                                            <img
-                                                src="assets/media/manga-sm-img/manga-img-11.png"
-                                                alt=""
-                                            />
-                                        </div>
-                                        <div className="p-0 col-8">
-                                            <div className="anime-blog">
-                                                <p>Sword Art Online: Alicization</p>
-                                                <p className="text">Chapter 94</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div className="anime-box bg-color-black">
-                                <a href="manga-detail.html">
-                                    <div className="row m-0">
-                                        <div className="p-0 col-4">
-                                            <img
-                                                src="assets/media/manga-sm-img/manga-img-12.png"
-                                                alt=""
-                                            />
-                                        </div>
-                                        <div className="p-0 col-8">
-                                            <div className="anime-blog">
-                                                <p>One Piece</p>
-                                                <p className="text">Chapter 1016</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
+                    <div className="row pt-4">
+                        <div className="chapter-image col-lg-10 offset-lg-1 col-12 offset-0">
+                            <img src="assets/media/chapter/image-1.png" alt="" />
                         </div>
                     </div>
                 </div>
@@ -347,7 +111,7 @@ export default function Comic() {
                                     </a>
                                 </div>
                                 <div className="col-lg-11 col-10">
-                                    <form action="manga-detail.html">
+                                    <form action="manga-content.html">
                                         <div className="input-group form-group footer-email-box">
                                             <input
                                                 className="form-control"
@@ -379,10 +143,10 @@ export default function Comic() {
                                             blanditiis praesentium voluptatum deleniti atque corrupti quos
                                             dolores et quas molestias.
                                         </p>
-                                        <a href="manga-detail.html" className="comment-btn">
+                                        <a href="manga-content.html" className="comment-btn">
                                             <i className="fa fa-thumbs-up" />
                                         </a>
-                                        <a href="manga-detail.html" className="comment-btn">
+                                        <a href="manga-content.html" className="comment-btn">
                                             <i className="fa fa-thumbs-down" />
                                         </a>
                                         <button
@@ -431,10 +195,10 @@ export default function Comic() {
                                             blanditiis praesentium voluptatum deleniti atque corrupti quos
                                             dolores et quas molestias.
                                         </p>
-                                        <a href="manga-detail.html" className="comment-btn">
+                                        <a href="manga-content.html" className="comment-btn">
                                             <i className="fa fa-thumbs-up" />
                                         </a>
-                                        <a href="manga-detail.html" className="comment-btn">
+                                        <a href="manga-content.html" className="comment-btn">
                                             <i className="fa fa-thumbs-down" />
                                         </a>
                                         <button
@@ -469,7 +233,7 @@ export default function Comic() {
                                     </div>
                                 </div>
                                 <a
-                                    href="manga-detail.html#"
+                                    href="manga-content.html#"
                                     className="accordion-button comment-btn active"
                                     data-bs-toggle="collapse"
                                     data-bs-target="#reply"
@@ -503,10 +267,10 @@ export default function Comic() {
                                                             ducimus qui blanditiis praesentium voluptatum deleniti
                                                             atque corrupti quos dolores et quas molestias.
                                                         </p>
-                                                        <a href="manga-detail.html" className="comment-btn">
+                                                        <a href="manga-content.html" className="comment-btn">
                                                             <i className="fa fa-thumbs-up" />
                                                         </a>
-                                                        <a href="manga-detail.html" className="comment-btn">
+                                                        <a href="manga-content.html" className="comment-btn">
                                                             <i className="fa fa-thumbs-down" />
                                                         </a>
                                                         <button
@@ -559,10 +323,10 @@ export default function Comic() {
                                                             ducimus qui blanditiis praesentium voluptatum deleniti
                                                             atque corrupti quos dolores et quas molestias.
                                                         </p>
-                                                        <a href="manga-detail.html" className="comment-btn">
+                                                        <a href="manga-content.html" className="comment-btn">
                                                             <i className="fa fa-thumbs-up" />
                                                         </a>
-                                                        <a href="manga-detail.html" className="comment-btn">
+                                                        <a href="manga-content.html" className="comment-btn">
                                                             <i className="fa fa-thumbs-down" />
                                                         </a>
                                                         <button
@@ -615,10 +379,10 @@ export default function Comic() {
                                                             ducimus qui blanditiis praesentium voluptatum deleniti
                                                             atque corrupti quos dolores et quas molestias.
                                                         </p>
-                                                        <a href="manga-detail.html" className="comment-btn">
+                                                        <a href="manga-content.html" className="comment-btn">
                                                             <i className="fa fa-thumbs-up" />
                                                         </a>
-                                                        <a href="manga-detail.html" className="comment-btn">
+                                                        <a href="manga-content.html" className="comment-btn">
                                                             <i className="fa fa-thumbs-down" />
                                                         </a>
                                                         <button
@@ -723,7 +487,7 @@ export default function Comic() {
                                                     </div>
                                                 </div>
                                                 <a
-                                                    href="manga-detail.html#"
+                                                    href="manga-content.html#"
                                                     className="accordion-button comment-btn active"
                                                     data-bs-toggle="collapse"
                                                     data-bs-target="#more"
@@ -751,10 +515,10 @@ export default function Comic() {
                                             blanditiis praesentium voluptatum deleniti atque corrupti quos
                                             dolores et quas molestias.
                                         </p>
-                                        <a href="manga-detail.html" className="comment-btn">
+                                        <a href="manga-content.html" className="comment-btn">
                                             <i className="fa fa-thumbs-up" />
                                         </a>
-                                        <a href="manga-detail.html" className="comment-btn">
+                                        <a href="manga-content.html" className="comment-btn">
                                             <i className="fa fa-thumbs-down" />
                                         </a>
                                         <button
@@ -789,7 +553,7 @@ export default function Comic() {
                                     </div>
                                 </div>
                                 <a
-                                    href="manga-detail.html#"
+                                    href="manga-content.html#"
                                     className="accordion-button comment-btn active"
                                     data-bs-toggle="collapse"
                                     data-bs-target="#reply20"
@@ -822,10 +586,10 @@ export default function Comic() {
                                                             ducimus qui blanditiis praesentium voluptatum deleniti
                                                             atque corrupti quos dolores et quas molestias.
                                                         </p>
-                                                        <a href="manga-detail.html" className="comment-btn">
+                                                        <a href="manga-content.html" className="comment-btn">
                                                             <i className="fa fa-thumbs-up" />
                                                         </a>
-                                                        <a href="manga-detail.html" className="comment-btn">
+                                                        <a href="manga-content.html" className="comment-btn">
                                                             <i className="fa fa-thumbs-down" />
                                                         </a>
                                                         <button
@@ -879,10 +643,10 @@ export default function Comic() {
                                                             ducimus qui blanditiis praesentium voluptatum deleniti
                                                             atque corrupti quos dolores et quas molestias.
                                                         </p>
-                                                        <a href="manga-detail.html" className="comment-btn">
+                                                        <a href="manga-content.html" className="comment-btn">
                                                             <i className="fa fa-thumbs-up" />
                                                         </a>
-                                                        <a href="manga-detail.html" className="comment-btn">
+                                                        <a href="manga-content.html" className="comment-btn">
                                                             <i className="fa fa-thumbs-down" />
                                                         </a>
                                                         <button
@@ -936,10 +700,10 @@ export default function Comic() {
                                                             ducimus qui blanditiis praesentium voluptatum deleniti
                                                             atque corrupti quos dolores et quas molestias.
                                                         </p>
-                                                        <a href="manga-detail.html" className="comment-btn">
+                                                        <a href="manga-content.html" className="comment-btn">
                                                             <i className="fa fa-thumbs-up" />
                                                         </a>
-                                                        <a href="manga-detail.html" className="comment-btn">
+                                                        <a href="manga-content.html" className="comment-btn">
                                                             <i className="fa fa-thumbs-down" />
                                                         </a>
                                                         <button
@@ -979,7 +743,7 @@ export default function Comic() {
                                     </div>
                                 </div>
                                 <div className="text-center">
-                                    <a href="manga-detail.html#" className="comment-btn">
+                                    <a href="manga-content.html#" className="comment-btn">
                                         Load More Comment
                                     </a>
                                 </div>
