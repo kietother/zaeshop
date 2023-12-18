@@ -28,6 +28,11 @@ namespace Portal.Domain.AggregatesModel.AlbumAggregate
         [Column(TypeName = "varchar(350)")]
         public string? FriendlyName { get; set; }
 
+        #region Thumbnail
+        public string? ThumbnailUrl { get; set; }
+        public string? CdnThumbnailUrl { get; set; }
+        #endregion
+
         [JsonIgnore]
         public virtual ICollection<Collection> Collections { get; set; } = new List<Collection>();
 
