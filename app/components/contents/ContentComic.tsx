@@ -1,4 +1,17 @@
-export default function ContentComic() {
+import axios from 'axios';
+
+const getContent = async (comicid: string | null, contentid: string | null) => {
+    try {
+        const response = await axios.get<any>(`http://54.169.199.183:5288/api/client/ContentApp/comics/${comicid}/contents/${contentid}`);
+        return response.data.data;
+    }
+    catch {
+        return null;
+    }
+}
+
+export default async function ContentComic({ comicid, contentid }: { comicid: string | null, contentid: string | null }) {
+    const content = await getContent(comicid, contentid);
     return (
         <>
             {/*=====================================*/}
@@ -7,8 +20,8 @@ export default function ContentComic() {
             <section className="chapter sec-mar">
                 <div className="container">
                     <div className="heading style-1">
-                        <h2>Solo Leveling</h2>
-                        <span>Chapter 179</span>
+                        <h2>{content?.albumTitle}</h2>
+                        <span>{content?.title}</span>
                     </div>
                     <div className="d-flex justify-content-between mb-4">
                         <div className="left">
@@ -20,7 +33,7 @@ export default function ContentComic() {
                                 data-bs-auto-close="outside"
                                 aria-expanded="false"
                             >
-                                CHAPTER 1
+                                {content?.title}
                                 <span>
                                     <i className="fa fa-chevron-down" />
                                 </span>
@@ -56,9 +69,11 @@ export default function ContentComic() {
                         </div>
                     </div>
                     <div className="row pt-4">
-                        <div className="chapter-image col-lg-10 offset-lg-1 col-12 offset-0">
-                            <img src="assets/media/chapter/image-1.png" alt="" />
-                        </div>
+                        {content?.contentItems && content?.contentItems.map((item: any, index: number) => (
+                            <div className="chapter-image col-lg-10 offset-lg-1 col-12 offset-0" key={index}>
+                                <img src={item} alt="" />
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
