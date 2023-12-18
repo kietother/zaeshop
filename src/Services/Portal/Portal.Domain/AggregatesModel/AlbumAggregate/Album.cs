@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
 using Portal.Domain.Enums;
@@ -23,6 +24,9 @@ namespace Portal.Domain.AggregatesModel.AlbumAggregate
         #endregion
 
         public bool IsPublic { get; set; }
+        
+        [Column(TypeName = "varchar(350)")]
+        public string? FriendlyName { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<Collection> Collections { get; set; } = new List<Collection>();

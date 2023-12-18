@@ -30,6 +30,7 @@ namespace Portal.Domain.AggregatesModel.CollectionAggregate
         public int OrderBy { get; set; }
 
         public EContentItemType Type { get; set; }
+        public bool IsPublic { get; set; }
 
         [JsonIgnore]
         public virtual Collection Collection { get; set; } = null!;
