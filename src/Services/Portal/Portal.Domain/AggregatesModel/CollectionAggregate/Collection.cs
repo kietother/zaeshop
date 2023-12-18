@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.SeedWork;
@@ -14,6 +15,9 @@ namespace Portal.Domain.AggregatesModel.CollectionAggregate
         public string? Description { get; set; }
 
         public bool IsPublic { get; set; }
+
+        [Column(TypeName = "varchar(350)")]
+        public string? FriendlyName { get; set; }
 
         [JsonIgnore]
         public virtual Album Album { get; set; } = null!;
