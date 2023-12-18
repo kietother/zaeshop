@@ -35,7 +35,7 @@ namespace Portal.API.Controllers
                 IsPublic = x.IsPublic,
                 CreatedDate = x.CreatedOnUtc,
                 UpdatedDate = x.UpdatedOnUtc,
-                Contents = x.Collections.OrderByDescending(y => y.Title).Skip(5).Select(z => new ContentAppModel
+                Contents = x.Collections.OrderByDescending(y => y.Title).Take(5).Select(z => new ContentAppModel
                 {
                     Id = z.Id,
                     Title = z.Title,
@@ -73,7 +73,7 @@ namespace Portal.API.Controllers
                 IsPublic = comic.IsPublic,
                 CreatedDate = comic.CreatedOnUtc,
                 UpdatedDate = comic.UpdatedOnUtc,
-                Contents = comic.Collections.OrderByDescending(y => y.Title).Skip(5).Select(z => new ContentAppModel
+                Contents = comic.Collections.OrderByDescending(y => y.Title).Select(z => new ContentAppModel
                 {
                     Id = z.Id,
                     Title = z.Title,
