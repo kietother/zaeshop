@@ -1,3 +1,4 @@
+using Common;
 using Common.Models;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
@@ -25,6 +26,10 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
         public async Task<ServiceResponse<CollectionResponseModel>> CreateAsync(CollectionRequestModel requestModel)
         {
+            requestModel.Title = requestModel.Title.Trim();
+            requestModel.Description = requestModel.Description?.Trim();
+            requestModel.ExtendName = requestModel.ExtendName?.Trim();
+
             var existingAlbum = await _albumRepository.GetByIdAsync(requestModel.AlbumId);
             if (existingAlbum == null)
             {
@@ -45,7 +50,8 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 AlbumId = requestModel.AlbumId,
                 Volume = requestModel.Volume,
                 ExtendName = requestModel.ExtendName,
-                Description = requestModel.Description
+                Description = requestModel.Description,
+                FriendlyName = CommonHelper.GenerateFriendlyName(requestModel.Title)
             };
 
             // Add the entity to the repository and save changes
@@ -70,6 +76,10 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
         public async Task<ServiceResponse<CollectionResponseModel>> UpdateAsync(int id, CollectionRequestModel requestModel)
         {
+            requestModel.Title = requestModel.Title.Trim();
+            requestModel.Description = requestModel.Description?.Trim();
+            requestModel.ExtendName = requestModel.ExtendName?.Trim();
+
             // Retrieve the existing collection entity by ID
             var existingEntity = await _repository.GetByIdAsync(id);
             if (existingEntity == null)
@@ -96,6 +106,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             existingEntity.Volume = requestModel.Volume;
             existingEntity.ExtendName = requestModel.ExtendName;
             existingEntity.Description = requestModel.Description;
+            existingEntity.FriendlyName = CommonHelper.GenerateFriendlyName(requestModel.Title);
 
             // Update the entity in the repository and save changes
             _repository.Update(existingEntity);

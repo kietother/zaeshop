@@ -1,5 +1,7 @@
 using System.ComponentModel;
+using System.Globalization;
 using System.Reflection;
+using System.Text;
 using System.Text.Json;
 using Common.Enums;
 
@@ -51,6 +53,34 @@ namespace Common
             };
 
             return baseUrls.TryGetValue(serviceHost, out string? baseUrl) ? baseUrl! : string.Empty;
+        }
+
+        public static string RemoveVietnameseCharacters(string text)
+        {
+            string normalized = text.Normalize(NormalizationForm.FormD);
+            var result = new StringBuilder();
+
+            foreach (char c in normalized)
+            {
+                if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                {
+                    result.Append(c);
+                }
+            }
+
+            return result.ToString().Normalize(NormalizationForm.FormC);
+        }
+
+        public static string? GenerateFriendlyName(string? name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return null;
+            }
+
+            // Remove all accents and make the string lower case
+            var normalizedName = RemoveVietnameseCharacters(name);
+            return normalizedName.ToLower().Replace(" ", "-");
         }
     }
 

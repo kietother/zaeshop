@@ -25,6 +25,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
         public async Task<ServiceResponse<AlbumResponseModel>> CreateAsync(AlbumRequestModel requestModel)
         {
+            requestModel.Title = requestModel.Title.Trim();
+            requestModel.Description = requestModel.Description?.Trim();
+
             // Validate
             if (await DoesTitleExistAsync(requestModel.Title))
             {
@@ -59,7 +62,8 @@ namespace Portal.Infrastructure.Implements.Business.Services
             {
                 Title = requestModel.Title,
                 Description = requestModel.Description,
-                AlbumAlertMessageId = requestModel.AlbumAlertMessageId
+                AlbumAlertMessageId = requestModel.AlbumAlertMessageId,
+                FriendlyName = CommonHelper.GenerateFriendlyName(requestModel.Title)
             };
 
             if (requestModel.IsPublic.HasValue)
@@ -94,6 +98,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
         public async Task<ServiceResponse<AlbumResponseModel>> UpdateAsync(int id, AlbumRequestModel requestModel)
         {
+            requestModel.Title = requestModel.Title.Trim();
+            requestModel.Description = requestModel.Description?.Trim();
+
             // Get existing entity
             var existingAlbum = await _repository.GetByIdAsync(id);
             if (existingAlbum == null)
@@ -134,6 +141,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             existingAlbum.Title = requestModel.Title;
             existingAlbum.Description = requestModel.Description;
             existingAlbum.AlbumAlertMessageId = requestModel.AlbumAlertMessageId;
+            existingAlbum.FriendlyName = CommonHelper.GenerateFriendlyName(requestModel.Title);
 
             if (requestModel.IsPublic.HasValue)
             {
