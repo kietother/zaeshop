@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function PopularComic() {
@@ -17,7 +18,7 @@ export default function PopularComic() {
                         <div className="col-lg-3 col-sm-6 col-12">
                             <div className="anime-blog">
                                 <Link href={"/truyen-tranh"}>
-                                    <img src="assets/media/manga/manga-img-2.png" alt="" />
+                                    <img src="/assets/media/manga/manga-img-2.png" alt="" />
                                 </Link>
                                 <div className="d-flex justify-content-between">
                                     <p className="text">Chapter 179</p>
@@ -90,7 +91,7 @@ export default function PopularComic() {
                         <div className="col-lg-3 col-sm-6 col-12">
                             <div className="anime-blog">
                                 <a href="manga-detail.html">
-                                    <img src="assets/media/manga/manga-img-1.png" alt="" />
+                                    <img src="/assets/media/manga/manga-img-1.png" alt="" />
                                 </a>
                                 <div className="d-flex justify-content-between">
                                     <p className="text">Chapter 179</p>
@@ -163,7 +164,7 @@ export default function PopularComic() {
                         <div className="col-lg-3 col-sm-6 col-12">
                             <div className="anime-blog">
                                 <a href="manga-detail.html">
-                                    <img src="assets/media/manga/manga-img-3.png" alt="" />
+                                    <img src="/assets/media/manga/manga-img-3.png" alt="" />
                                 </a>
                                 <div className="d-flex justify-content-between">
                                     <p className="text">Chapter 179</p>
@@ -236,7 +237,7 @@ export default function PopularComic() {
                         <div className="col-lg-3 col-sm-6 col-12">
                             <div className="anime-blog">
                                 <a href="manga-detail.html">
-                                    <img src="assets/media/manga/manga-img-4.png" alt="" />
+                                    <img src="/assets/media/manga/manga-img-4.png" alt="" />
                                 </a>
                                 <div className="d-flex justify-content-between">
                                     <p className="text">Chapter 179</p>
@@ -309,7 +310,7 @@ export default function PopularComic() {
                         <div className="col-lg-3 col-sm-6 col-12">
                             <div className="anime-blog">
                                 <a href="manga-detail.html">
-                                    <img src="assets/media/manga/manga-img-5.png" alt="" />
+                                    <img src="/assets/media/manga/manga-img-5.png" alt="" />
                                 </a>
                                 <div className="d-flex justify-content-between">
                                     <p className="text">Chapter 179</p>
@@ -382,7 +383,7 @@ export default function PopularComic() {
                         <div className="col-lg-3 col-sm-6 col-12">
                             <div className="anime-blog">
                                 <a href="manga-detail.html">
-                                    <img src="assets/media/manga/manga-img-6.png" alt="" />
+                                    <img src="/assets/media/manga/manga-img-6.png" alt="" />
                                 </a>
                                 <div className="d-flex justify-content-between">
                                     <p className="text">Chapter 179</p>
@@ -455,7 +456,7 @@ export default function PopularComic() {
                         <div className="col-lg-3 col-sm-6 col-12">
                             <div className="anime-blog">
                                 <a href="manga-detail.html">
-                                    <img src="assets/media/manga/manga-img-7.png" alt="" />
+                                    <img src="/assets/media/manga/manga-img-7.png" alt="" />
                                 </a>
                                 <div className="d-flex justify-content-between">
                                     <p className="text">Chapter 179</p>
@@ -528,7 +529,7 @@ export default function PopularComic() {
                         <div className="col-lg-3 col-sm-6 col-12">
                             <div className="anime-blog">
                                 <a href="manga-detail.html">
-                                    <img src="assets/media/manga/manga-img-8.png" alt="" />
+                                    <img src="/assets/media/manga/manga-img-8.png" alt="" />
                                 </a>
                                 <div className="d-flex justify-content-between">
                                     <p className="text">Chapter 179</p>

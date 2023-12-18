@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Comment() {
     return (
         <>
@@ -21,7 +23,7 @@ export default function Comment() {
                             <div className="row">
                                 <div className="col-lg-1 col-2">
                                     <a href="profile.html">
-                                        <img src="assets/media/comment/comment-img.png" alt="" />
+                                        <img src="/assets/media/comment/comment-img.png" alt="" />
                                     </a>
                                 </div>
                                 <div className="col-lg-11 col-10">
@@ -44,7 +46,7 @@ export default function Comment() {
                                 <div className="row">
                                     <div className="col-lg-1 col-2">
                                         <a href="profile.html">
-                                            <img src="assets/media/comment/comment-img-2.png" alt="" />
+                                            <img src="/assets/media/comment/comment-img-2.png" alt="" />
                                         </a>
                                     </div>
                                     <div className="col-lg-11 col-10">
@@ -80,7 +82,7 @@ export default function Comment() {
                                                 <div className="d-flex pt-3">
                                                     <a href="profile.html">
                                                         <img
-                                                            src="assets/media/comment/comment-img-sm-2.png"
+                                                            src="/assets/media/comment/comment-img-sm-2.png"
                                                             alt=""
                                                         />
                                                     </a>
@@ -97,7 +99,7 @@ export default function Comment() {
                                 <div className="row">
                                     <div className="col-lg-1 col-2">
                                         <a href="profile.html">
-                                            <img src="assets/media/comment/comment-img-3.png" alt="" />
+                                            <img src="/assets/media/comment/comment-img-3.png" alt="" />
                                         </a>
                                     </div>
                                     <div className="col-lg-11 col-10">
@@ -132,7 +134,7 @@ export default function Comment() {
                                                 <div className="d-flex pt-3">
                                                     <a href="profile.html">
                                                         <img
-                                                            src="assets/media/comment/comment-img-sm-1.png"
+                                                            src="/assets/media/comment/comment-img-sm-1.png"
                                                             alt=""
                                                         />
                                                     </a>
@@ -167,7 +169,7 @@ export default function Comment() {
                                                 <div className="d-inline-flex align-items-start">
                                                     <a href="profile.html">
                                                         <img
-                                                            src="assets/media/comment/comment-img-sm-1.png"
+                                                            src="/assets/media/comment/comment-img-sm-1.png"
                                                             alt=""
                                                         />
                                                     </a>
@@ -203,7 +205,7 @@ export default function Comment() {
                                                             <div className="card card-body">
                                                                 <div className="d-flex pt-3">
                                                                     <img
-                                                                        src="assets/media/comment/comment-img-sm-2.png"
+                                                                        src="/assets/media/comment/comment-img-sm-2.png"
                                                                         alt=""
                                                                     />
                                                                     <input type="text" placeholder="Add a reply" />
@@ -223,7 +225,7 @@ export default function Comment() {
                                                 <div className="d-inline-flex align-items-start">
                                                     <a href="profile.html">
                                                         <img
-                                                            src="assets/media/comment/comment-img-sm-3.png"
+                                                            src="/assets/media/comment/comment-img-sm-3.png"
                                                             alt=""
                                                         />
                                                     </a>
@@ -259,7 +261,7 @@ export default function Comment() {
                                                             <div className="card card-body">
                                                                 <div className="d-flex pt-3">
                                                                     <img
-                                                                        src="assets/media/comment/comment-img-sm-1.png"
+                                                                        src="/assets/media/comment/comment-img-sm-1.png"
                                                                         alt=""
                                                                     />
                                                                     <input type="text" placeholder="Add a reply" />
@@ -279,7 +281,7 @@ export default function Comment() {
                                                 <div className="d-inline-flex align-items-start">
                                                     <a href="profile.html">
                                                         <img
-                                                            src="assets/media/comment/comment-img-sm-4.png"
+                                                            src="/assets/media/comment/comment-img-sm-4.png"
                                                             alt=""
                                                         />
                                                     </a>
@@ -315,7 +317,7 @@ export default function Comment() {
                                                             <div className="card card-body">
                                                                 <div className="d-flex pt-3">
                                                                     <img
-                                                                        src="assets/media/comment/comment-img-sm-3.png"
+                                                                        src="/assets/media/comment/comment-img-sm-3.png"
                                                                         alt=""
                                                                     />
                                                                     <input type="text" placeholder="Add a reply" />
@@ -341,7 +343,7 @@ export default function Comment() {
                                                         <div className="d-inline-flex align-items-start">
                                                             <a href="profile.html">
                                                                 <img
-                                                                    src="assets/media/comment/comment-img-sm-2.png"
+                                                                    src="/assets/media/comment/comment-img-sm-2.png"
                                                                     alt=""
                                                                 />
                                                             </a>
@@ -378,7 +380,7 @@ export default function Comment() {
                                                                     <div className="card card-body">
                                                                         <div className="d-flex pt-3">
                                                                             <img
-                                                                                src="assets/media/comment/comment-img-sm-1.png"
+                                                                                src="/assets/media/comment/comment-img-sm-1.png"
                                                                                 alt=""
                                                                             />
                                                                             <input
@@ -417,7 +419,7 @@ export default function Comment() {
                                 <div className="row">
                                     <div className="col-lg-1 col-2">
                                         <a href="profile.html">
-                                            <img src="assets/media/comment/comment-img-4.png" alt="" />
+                                            <img src="/assets/media/comment/comment-img-4.png" alt="" />
                                         </a>
                                     </div>
                                     <div className="col-lg-11 col-10">
@@ -452,7 +454,7 @@ export default function Comment() {
                                                 <div className="d-flex pt-3">
                                                     <a href="profile.html">
                                                         <img
-                                                            src="assets/media/comment/comment-img-sm-1.png"
+                                                            src="/assets/media/comment/comment-img-sm-1.png"
                                                             alt=""
                                                         />
                                                     </a>
@@ -486,7 +488,7 @@ export default function Comment() {
                                                 <div className="d-inline-flex align-items-start">
                                                     <a href="profile.html">
                                                         <img
-                                                            src="assets/media/comment/comment-img-sm-3.png"
+                                                            src="/assets/media/comment/comment-img-sm-3.png"
                                                             alt=""
                                                         />
                                                     </a>
@@ -523,7 +525,7 @@ export default function Comment() {
                                                             <div className="card card-body">
                                                                 <div className="d-flex pt-3">
                                                                     <img
-                                                                        src="assets/media/comment/comment-img-sm-2.png"
+                                                                        src="/assets/media/comment/comment-img-sm-2.png"
                                                                         alt=""
                                                                     />
                                                                     <input type="text" placeholder="Add a reply" />
@@ -543,7 +545,7 @@ export default function Comment() {
                                                 <div className="d-inline-flex align-items-start">
                                                     <a href="profile.html">
                                                         <img
-                                                            src="assets/media/comment/comment-img-sm-1.png"
+                                                            src="/assets/media/comment/comment-img-sm-1.png"
                                                             alt=""
                                                         />
                                                     </a>
@@ -580,7 +582,7 @@ export default function Comment() {
                                                             <div className="card card-body">
                                                                 <div className="d-flex pt-3">
                                                                     <img
-                                                                        src="assets/media/comment/comment-img-sm-1.png"
+                                                                        src="/assets/media/comment/comment-img-sm-1.png"
                                                                         alt=""
                                                                     />
                                                                     <input type="text" placeholder="Add a reply" />
@@ -600,7 +602,7 @@ export default function Comment() {
                                                 <div className="d-inline-flex align-items-start">
                                                     <a href="profile.html">
                                                         <img
-                                                            src="assets/media/comment/comment-img-sm-3.png"
+                                                            src="/assets/media/comment/comment-img-sm-3.png"
                                                             alt=""
                                                         />
                                                     </a>
@@ -637,7 +639,7 @@ export default function Comment() {
                                                             <div className="card card-body">
                                                                 <div className="d-flex pt-3">
                                                                     <img
-                                                                        src="assets/media/comment/comment-img-sm-2.png"
+                                                                        src="/assets/media/comment/comment-img-sm-2.png"
                                                                         alt=""
                                                                     />
                                                                     <input type="text" placeholder="Add a reply" />
@@ -670,7 +672,7 @@ export default function Comment() {
                                 <a href="streaming-season.html">
                                     <div className="row m-0">
                                         <div className="p-0 col-2">
-                                            <img src="assets/media/anime-sm-img/anime-img-7.png" alt="" />
+                                            <img src="/assets/media/anime-sm-img/anime-img-7.png" alt="" />
                                         </div>
                                         <div className="p-0 col-9">
                                             <div className="anime-blog">
@@ -689,7 +691,7 @@ export default function Comment() {
                                 <a href="streaming-season.html">
                                     <div className="row m-0">
                                         <div className="p-0 col-2">
-                                            <img src="assets/media/anime-sm-img/anime-img-8.png" alt="" />
+                                            <img src="/assets/media/anime-sm-img/anime-img-8.png" alt="" />
                                         </div>
                                         <div className="p-0 col-9">
                                             <div className="anime-blog">
@@ -709,7 +711,7 @@ export default function Comment() {
                                 <a href="streaming-season.html">
                                     <div className="row m-0">
                                         <div className="p-0 col-2">
-                                            <img src="assets/media/anime-sm-img/anime-img-9.png" alt="" />
+                                            <img src="/assets/media/anime-sm-img/anime-img-9.png" alt="" />
                                         </div>
                                         <div className="p-0 col-9">
                                             <div className="anime-blog">
@@ -729,7 +731,7 @@ export default function Comment() {
                                     <div className="row m-0">
                                         <div className="p-0 col-2">
                                             <img
-                                                src="assets/media/anime-sm-img/anime-img-10.png"
+                                                src="/assets/media/anime-sm-img/anime-img-10.png"
                                                 alt=""
                                             />
                                         </div>
@@ -751,7 +753,7 @@ export default function Comment() {
                                     <div className="row m-0">
                                         <div className="p-0 col-2">
                                             <img
-                                                src="assets/media/anime-sm-img/anime-img-11.png"
+                                                src="/assets/media/anime-sm-img/anime-img-11.png"
                                                 alt=""
                                             />
                                         </div>
@@ -773,7 +775,7 @@ export default function Comment() {
                                     <div className="row m-0">
                                         <div className="p-0 col-2">
                                             <img
-                                                src="assets/media/anime-sm-img/anime-img-12.png"
+                                                src="/assets/media/anime-sm-img/anime-img-12.png"
                                                 alt=""
                                             />
                                         </div>

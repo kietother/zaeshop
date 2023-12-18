@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function BannerComic() {
     return (
         <>
@@ -30,12 +32,12 @@ export default function BannerComic() {
                                 </div>
                                 <div className="col-lg-7 col-sm-7 col-12 ">
                                     <img
-                                        src="assets/media/banner/banner-img-4.png"
+                                        src="/assets/media/banner/banner-img-4.png"
                                         className="dignole-img show-img"
                                         alt=""
                                     />
                                     <img
-                                        src="assets/media/banner/banner-img-7.png"
+                                        src="/assets/media/banner/banner-img-7.png"
                                         className="dignole-img hide-img"
                                         alt=""
                                     />
@@ -46,12 +48,12 @@ export default function BannerComic() {
                             <div className="row">
                                 <div className="col-lg-7 col-sm-7 col-12">
                                     <img
-                                        src="assets/media/banner/banner-img-5.png"
+                                        src="/assets/media/banner/banner-img-5.png"
                                         className="dignole-img show-img"
                                         alt=""
                                     />
                                     <img
-                                        src="assets/media/banner/banner-img-8.png"
+                                        src="/assets/media/banner/banner-img-8.png"
                                         className="dignole-img hide-img"
                                         alt=""
                                     />
@@ -103,12 +105,12 @@ export default function BannerComic() {
                                 </div>
                                 <div className="col-lg-7 col-sm-7 col-12">
                                     <img
-                                        src="assets/media/banner/banner-img-6.png"
+                                        src="/assets/media/banner/banner-img-6.png"
                                         className="dignole-img show-img"
                                         alt=""
                                     />
                                     <img
-                                        src="assets/media/banner/banner-img-9.png"
+                                        src="/assets/media/banner/banner-img-9.png"
                                         className="dignole-img hide-img"
                                         alt=""
                                     />

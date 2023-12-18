@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Footer() {
     return (
         <footer className="footer">
@@ -7,7 +9,7 @@ export default function Footer() {
                         <div className="col-lg-5 col-sm-12 col-12">
                             <div className="footer-widget">
                                 <a href="home.html">
-                                    <img alt="" src="assets/media/logo.png" />
+                                    <img alt="" src="/assets/media/logo.png" />
                                 </a>
                                 <p className="mt-2 mb-5">
                                     Lorem ipsum dolor sit, amet consectetur <br /> adipisicing
@@ -20,22 +22,22 @@ export default function Footer() {
                                 <ul className="social-icons">
                                     <li>
                                         <a href="home-3.html">
-                                            <img alt="" src="assets/media/footer/reddit.png" />
+                                            <img alt="" src="/assets/media/footer/reddit.png" />
                                         </a>
                                     </li>
                                     <li>
                                         <a href="home-3.html">
-                                            <img alt="" src="assets/media/footer/discord.png" />
+                                            <img alt="" src="/assets/media/footer/discord.png" />
                                         </a>
                                     </li>
                                     <li>
                                         <a href="home-3.html">
-                                            <img alt="" src="assets/media/footer/instagram.png" />
+                                            <img alt="" src="/assets/media/footer/instagram.png" />
                                         </a>
                                     </li>
                                     <li>
                                         <a href="home-3.html">
-                                            <img alt="" src="assets/media/footer/twitter.png" />
+                                            <img alt="" src="/assets/media/footer/twitter.png" />
                                         </a>
                                     </li>
                                 </ul>

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Image from 'next/image';
 
 const getContent = async (comicid: string | null, contentid: string | null) => {
     try {

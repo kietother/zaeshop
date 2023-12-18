@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Header() {
     return (
         <header className="header style-1">
@@ -5,7 +7,7 @@ export default function Header() {
                 {/* Start Mainmanu Nav */}
                 <nav className="navbar navbar-expand-lg">
                     <a className="navbar-brand" href="home.html">
-                        <img src="assets/media/logo.png" alt="" />
+                        <img src="/assets/media/logo.png" alt="" />
                     </a>
                     <button
                         className="navbar-toggler"

@@ -1,6 +1,6 @@
 // Import CSS
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './globals.css'
-import '../public/assets/css/vendor/bootstrap.min.css'
 import '../public/assets/css/vendor/font-awesome.css'
 import '../public/assets/css/vendor/slick.css'
 import '../public/assets/css/vendor/slick-theme.css'
@@ -38,10 +38,10 @@ export default function RootLayout({
           <Header />
           {children}
           <Footer />
-        </div>f
+        </div>
       </body>
       <Script src="/assets/js/vendor/jquery-3.6.0.min.js" />
-      <Script src="/assets/js/vendor/bootstrap.min.js" />
+      <Script src="bootstrap/dist/js/bootstrap.bundle.min.js" />
       <Script src="/assets/js/vendor/imagesloaded.pkgd.min.js" />
       <Script src="/assets/js/vendor/slick.min.js" />
       <Script src="/assets/js/vendor/jquery.countdown.min.js" />

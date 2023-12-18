@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function RecentlyUploadedComic() {
     return (
         <>
@@ -13,7 +15,7 @@ export default function RecentlyUploadedComic() {
                         <div className="col-lg-3 col-sm-6 col-12">
                             <div className="anime-blog">
                                 <a href="manga-detail.html">
-                                    <img src="assets/media/manga/manga-img-9.png" alt="" />
+                                    <img src="/assets/media/manga/manga-img-9.png" alt="" />
                                 </a>
                                 <div className="d-flex justify-content-between">
                                     <p className="text">Chapter 179</p>
@@ -86,7 +88,7 @@ export default function RecentlyUploadedComic() {
                         <div className="col-lg-3 col-sm-6 col-12">
                             <div className="anime-blog">
                                 <a href="manga-detail.html">
-                                    <img src="assets/media/manga/manga-img-10.png" alt="" />
+                                    <img src="/assets/media/manga/manga-img-10.png" alt="" />
                                 </a>
                                 <div className="d-flex justify-content-between">
                                     <p className="text">Chapter 179</p>
@@ -159,7 +161,7 @@ export default function RecentlyUploadedComic() {
                         <div className="col-lg-3 col-sm-6 col-12">
                             <div className="anime-blog">
                                 <a href="manga-detail.html">
-                                    <img src="assets/media/manga/manga-img-11.png" alt="" />
+                                    <img src="/assets/media/manga/manga-img-11.png" alt="" />
                                 </a>
                                 <div className="d-flex justify-content-between">
                                     <p className="text">Chapter 179</p>
@@ -232,7 +234,7 @@ export default function RecentlyUploadedComic() {
                         <div className="col-lg-3 col-sm-6 col-12">
                             <div className="anime-blog">
                                 <a href="manga-detail.html">
-                                    <img src="assets/media/manga/manga-img-12.png" alt="" />
+                                    <img src="/assets/media/manga/manga-img-12.png" alt="" />
                                 </a>
                                 <div className="d-flex justify-content-between">
                                     <p className="text">Chapter 179</p>

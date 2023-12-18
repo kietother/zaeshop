@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function TopAreaComic() {
     return (
         <>
@@ -14,7 +16,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-1.png"
+                                                src="/assets/media/manga-sm-img/manga-img-1.png"
                                                 alt=""
                                             />
                                         </div>
@@ -32,7 +34,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-2.png"
+                                                src="/assets/media/manga-sm-img/manga-img-2.png"
                                                 alt=""
                                             />
                                         </div>
@@ -50,7 +52,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-3.png"
+                                                src="/assets/media/manga-sm-img/manga-img-3.png"
                                                 alt=""
                                             />
                                         </div>
@@ -68,7 +70,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-4.png"
+                                                src="/assets/media/manga-sm-img/manga-img-4.png"
                                                 alt=""
                                             />
                                         </div>
@@ -86,7 +88,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-5.png"
+                                                src="/assets/media/manga-sm-img/manga-img-5.png"
                                                 alt=""
                                             />
                                         </div>
@@ -105,7 +107,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-6.png"
+                                                src="/assets/media/manga-sm-img/manga-img-6.png"
                                                 alt=""
                                             />
                                         </div>
@@ -126,7 +128,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-7.png"
+                                                src="/assets/media/manga-sm-img/manga-img-7.png"
                                                 alt=""
                                             />
                                         </div>
@@ -144,7 +146,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-8.png"
+                                                src="/assets/media/manga-sm-img/manga-img-8.png"
                                                 alt=""
                                             />
                                         </div>
@@ -163,7 +165,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-9.png"
+                                                src="/assets/media/manga-sm-img/manga-img-9.png"
                                                 alt=""
                                             />
                                         </div>
@@ -181,7 +183,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-10.png"
+                                                src="/assets/media/manga-sm-img/manga-img-10.png"
                                                 alt=""
                                             />
                                         </div>
@@ -199,7 +201,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-11.png"
+                                                src="/assets/media/manga-sm-img/manga-img-11.png"
                                                 alt=""
                                             />
                                         </div>
@@ -217,7 +219,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-12.png"
+                                                src="/assets/media/manga-sm-img/manga-img-12.png"
                                                 alt=""
                                             />
                                         </div>
@@ -238,7 +240,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-7.png"
+                                                src="/assets/media/manga-sm-img/manga-img-7.png"
                                                 alt=""
                                             />
                                         </div>
@@ -256,7 +258,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-8.png"
+                                                src="/assets/media/manga-sm-img/manga-img-8.png"
                                                 alt=""
                                             />
                                         </div>
@@ -275,7 +277,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-9.png"
+                                                src="/assets/media/manga-sm-img/manga-img-9.png"
                                                 alt=""
                                             />
                                         </div>
@@ -293,7 +295,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-10.png"
+                                                src="/assets/media/manga-sm-img/manga-img-10.png"
                                                 alt=""
                                             />
                                         </div>
@@ -311,7 +313,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-11.png"
+                                                src="/assets/media/manga-sm-img/manga-img-11.png"
                                                 alt=""
                                             />
                                         </div>
@@ -329,7 +331,7 @@ export default function TopAreaComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-12.png"
+                                                src="/assets/media/manga-sm-img/manga-img-12.png"
                                                 alt=""
                                             />
                                         </div>

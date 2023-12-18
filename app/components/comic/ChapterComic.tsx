@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function ChapterComic() {
     return (
         <>
@@ -66,7 +68,7 @@ export default function ChapterComic() {
                                 <a href="manga-detail.html">
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
-                                            <img src="assets/media/manga-sm-img/manga-img-7.png" alt="" />
+                                            <img src="/assets/media/manga-sm-img/manga-img-7.png" alt="" />
                                         </div>
                                         <div className="p-0 col-8">
                                             <div className="anime-blog">
@@ -81,7 +83,7 @@ export default function ChapterComic() {
                                 <a href="manga-detail.html">
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
-                                            <img src="assets/media/manga-sm-img/manga-img-8.png" alt="" />
+                                            <img src="/assets/media/manga-sm-img/manga-img-8.png" alt="" />
                                         </div>
                                         <div className="p-0 col-8">
                                             <div className="anime-blog">
@@ -97,7 +99,7 @@ export default function ChapterComic() {
                                 <a href="manga-detail.html">
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
-                                            <img src="assets/media/manga-sm-img/manga-img-9.png" alt="" />
+                                            <img src="/assets/media/manga-sm-img/manga-img-9.png" alt="" />
                                         </div>
                                         <div className="p-0 col-8">
                                             <div className="anime-blog">
@@ -113,7 +115,7 @@ export default function ChapterComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-10.png"
+                                                src="/assets/media/manga-sm-img/manga-img-10.png"
                                                 alt=""
                                             />
                                         </div>
@@ -131,7 +133,7 @@ export default function ChapterComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-11.png"
+                                                src="/assets/media/manga-sm-img/manga-img-11.png"
                                                 alt=""
                                             />
                                         </div>
@@ -149,7 +151,7 @@ export default function ChapterComic() {
                                     <div className="row m-0">
                                         <div className="p-0 col-4">
                                             <img
-                                                src="assets/media/manga-sm-img/manga-img-12.png"
+                                                src="/assets/media/manga-sm-img/manga-img-12.png"
                                                 alt=""
                                             />
                                         </div>
