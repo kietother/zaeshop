@@ -11,7 +11,9 @@ namespace Portal.Infrastructure.EntityConfigurations.CollectionAggregate
             builder.HasKey(x => x.Id);
 
             builder.HasOne(x => x.Album).WithMany(y => y.Collections).HasForeignKey(z => z.AlbumId);
-            builder.HasIndex(x => x.FriendlyName).IsUnique();
+            builder.HasIndex(x => new { x.AlbumId, x.FriendlyName })
+                .HasDatabaseName("UC_AlbumId_FriendlyName")
+                .IsUnique();
         }
     }
 }
