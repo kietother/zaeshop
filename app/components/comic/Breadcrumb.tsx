@@ -9,10 +9,12 @@ export default function Breadcrumb() {
                     <div className="breadcrumb-content">
                         <ul>
                             <li>
-                                <a href="home.html">Home</a>
+                                <a href="/">
+                                    Trang chủ
+                                </a>
                             </li>
                             <li>
-                                <a href="home-3.html">All Manga</a>
+                                <a href="/truyen-tranh">Truyện tranh</a>
                             </li>
                             <li>
                                 <a className="active">Solo Leveling</a>
