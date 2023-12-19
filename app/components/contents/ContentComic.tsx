@@ -69,9 +69,9 @@ export default async function ContentComic({ comicid, contentid }: { comicid: st
                             </a>
                         </div>
                     </div>
-                    <div className="row mx-auto pt-4">
+                    <div className="row text-center pt-4">
                         {content?.contentItems && content?.contentItems.map((item: any, index: number) => (
-                            <ContentComicItem key={index} imageUrl={item.imageUrl} />
+                            <ContentComicItem key={index} imageUrl={item} />
                         ))}
                     </div>
                 </div>
