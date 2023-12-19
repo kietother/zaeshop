@@ -1,18 +1,7 @@
-import axios from 'axios';
+import ContentResponse from '@/app/models/contents/ContentResponse';
 import ContentComicItem from './ContentComicItem';
 
-const getContent = async (comicid: string | null, contentid: string | null) => {
-    try {
-        const response = await axios.get<any>(`http://54.169.199.183:5288/api/client/ContentApp/comics/${comicid}/contents/${contentid}`);
-        return response.data.data;
-    }
-    catch {
-        return null;
-    }
-}
-
-export default async function ContentComic({ comicid, contentid }: { comicid: string | null, contentid: string | null }) {
-    const content = await getContent(comicid, contentid);
+export default async function ContentComic({ content }: { content?: ContentResponse | null}) {
     return (
         <>
             {/*=====================================*/}

@@ -1,4 +1,6 @@
-export default function Breadcrumb() {
+import ContentResponse from "@/app/models/contents/ContentResponse";
+
+export default function Breadcrumb({ content }: { content?: ContentResponse | null }) {
     return (
         <>
             {/*=====================================*/}
@@ -9,18 +11,18 @@ export default function Breadcrumb() {
                     <div className="breadcrumb-content">
                         <ul>
                             <li>
-                                <a href="https://uiparadox.co.uk/templates/animeloop/demo/index.html">
-                                    Home
+                                <a href="/">
+                                    Trang chủ
                                 </a>
                             </li>
                             <li>
-                                <a href="home-3.html">All Manga</a>
+                                <a href="/truyen-tranh">Truyện tranh</a>
                             </li>
                             <li>
-                                <a href="manga-detail.html">Solo Leveling</a>
+                                <a href={`/truyen-tranh/${content?.albumFriendlyName}`}>{content?.albumTitle}</a>
                             </li>
                             <li>
-                                <a className="active">Chapter 1</a>
+                                <a className="active">{content?.title}</a>
                             </li>
                         </ul>
                     </div>

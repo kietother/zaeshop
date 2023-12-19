@@ -1,12 +1,27 @@
 import Breadcrumb from "@/app/components/contents/Breadcrumb";
 import ContentComic from "@/app/components/contents/ContentComic";
 import Comment from "@/app/components/contents/Comment";
+import axios from "axios";
+import ContentResponse from "@/app/models/contents/ContentResponse";
+import ServerResponse from "@/app/models/common/ServerResponse";
 
-export default function Content({ params }: { params: { comicid: string | null, contentid: string | null } }) {
+const getContent = async (comicid: string | null, contentid: string | null) => {
+    try {
+        const response = await axios.get<ServerResponse<ContentResponse>>(`http://54.169.199.183:5288/api/client/ContentApp/comics/${comicid}/contents/${contentid}`);
+        return response.data.data;
+    }
+    catch {
+        return null;
+    }
+}
+
+export default async function Content({ params }: { params: { comicid: string | null, contentid: string | null } }) {
+    const content = await getContent(params.comicid, params.contentid);
+
     return (
         <>
-            <Breadcrumb />
-            <ContentComic comicid={params.comicid} contentid={params.contentid} />
+            <Breadcrumb content={content} />
+            <ContentComic content={content} />
             <Comment />
         </>
     );
