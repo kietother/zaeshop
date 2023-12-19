@@ -17,7 +17,7 @@ export default function Header() {
                     >
                         <i className="fas fa-bars" />
                     </button>
-                    <div className="navbar-collapse" id="mynavbar">
+                    <div className="collapsed navbar-collapse collapse" id="mynavbar">
                         <ul className="navbar-nav ms-auto mainmenu">
                             <li className="menu-item-has-children">
                                 <a href="home.html">Anime</a>

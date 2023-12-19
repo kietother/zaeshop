@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Image from 'next/image';
+import ContentComicItem from './ContentComicItem';
 
 const getContent = async (comicid: string | null, contentid: string | null) => {
     try {
@@ -69,11 +69,9 @@ export default async function ContentComic({ comicid, contentid }: { comicid: st
                             </a>
                         </div>
                     </div>
-                    <div className="row pt-4">
+                    <div className="row mx-auto pt-4">
                         {content?.contentItems && content?.contentItems.map((item: any, index: number) => (
-                            <div className="chapter-image col-lg-10 offset-lg-1 col-12 offset-0" key={index}>
-                                <img src={item} alt="" />
-                            </div>
+                            <ContentComicItem key={index} imageUrl={item.imageUrl} />
                         ))}
                     </div>
                 </div>
