@@ -21,6 +21,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet]
+        [RedisCache(5)]
         public async Task<IActionResult> GetAsync()
         {
             var comics = await _albumRepository.GetAllAsync();
@@ -55,6 +56,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("{friendlyName}")]
+        [RedisCache(5)]
         public async Task<IActionResult> GetByIdAsync(string friendlyName)
         {
             var comic = await _albumRepository.GetQueryable().FirstOrDefaultAsync(o => o.FriendlyName == friendlyName);
