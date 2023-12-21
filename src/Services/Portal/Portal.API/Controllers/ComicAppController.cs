@@ -46,6 +46,7 @@ namespace Portal.API.Controllers
                     IsPublic = z.IsPublic,
                     AlbumId = z.AlbumId,
                     AlbumTitle = x.Title,
+                    AlbumFriendlyName = x.FriendlyName,
                     Description = z.Description,
                     ExtendName = z.ExtendName,
                     Volume = z.Volume
@@ -85,6 +86,7 @@ namespace Portal.API.Controllers
                     IsPublic = z.IsPublic,
                     AlbumId = z.AlbumId,
                     AlbumTitle = comic.Title,
+                    AlbumFriendlyName = comic.FriendlyName,
                     Description = z.Description,
                     ExtendName = z.ExtendName,
                     Volume = z.Volume

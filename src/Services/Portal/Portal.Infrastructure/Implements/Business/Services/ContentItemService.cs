@@ -105,7 +105,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                     IsPublic = x.IsPublic
                 }).ToList();
 
-                var result = await _amazonS3Service.BulkUploadImagesAsync(amazonBulkUploadModels, $"{existingCollection.Album.Title}/{existingCollection.Title}");
+                var result = await _amazonS3Service.BulkUploadImagesAsync(amazonBulkUploadModels, $"{existingCollection.Album.FriendlyName}/{existingCollection.FriendlyName}");
                 foreach (var item in result)
                 {
                     var reUploadItem = model.ExistsItems.Find(x => x.FileName == item.FileName);
