@@ -9,7 +9,7 @@ namespace Portal.Infrastructure.Implements.External
     public class AmazonS3Service : IAmazonS3Service
     {
         private readonly IAmazonS3 _s3Client;
-        private readonly string _bucketName = "upload-images-service";
+        private readonly string _bucketName = "s3.codegota.me";
 
         public AmazonS3Service(IAmazonS3 s3Client)
         {

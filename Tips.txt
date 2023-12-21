@@ -25,6 +25,7 @@ https://stackoverflow.com/questions/57846127/what-are-the-differences-between-ap
 https://stackoverflow.com/questions/58344227/unable-to-resolve-service-for-isystemclock-while-attempting-to-activate-security
 https://www.pintonista.com/running-postgres-and-pgadmin-with-docker-compose/
 https://learn.microsoft.com/en-us/ef/core/querying/related-data/lazy
+https://stackoverflow.com/questions/70333681/for-an-amazon-s3-bucket-deployment-from-github-how-do-i-fix-the-error-accesscont
 
 .gitpod.yml
 image: gitpod/workspace-dotnet

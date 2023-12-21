@@ -54,7 +54,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 ImageData = x.Data
             }).ToList();
 
-            var result = await _amazonS3Service.BulkUploadImagesAsync(amazonBulkUploadModels, $"{existingCollection.Album.Title}/{existingCollection.Title}");
+            var result = await _amazonS3Service.BulkUploadImagesAsync(amazonBulkUploadModels, $"{existingCollection.Album.FriendlyName}/{existingCollection.FriendlyName}");
 
             // Store database
             var addItems = result.Select((x, index) => new ContentItem
@@ -62,7 +62,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 CollectionId = collectionId,
                 Name = x.FileName,
                 OriginalUrl = x.AbsoluteUrl,
-                DisplayUrl = x.AbsoluteUrl,
+                DisplayUrl = $"https://s3.codegota.me/{x.RelativeUrl}",
                 RelativeUrl = x.RelativeUrl,
                 OrderBy = index
             }).OrderBy(x => x.OrderBy).ToList();
@@ -105,7 +105,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                     IsPublic = x.IsPublic
                 }).ToList();
 
-                var result = await _amazonS3Service.BulkUploadImagesAsync(amazonBulkUploadModels, $"{existingCollection.Album.Title}/{existingCollection.Title}");
+                var result = await _amazonS3Service.BulkUploadImagesAsync(amazonBulkUploadModels, $"{existingCollection.Album.FriendlyName}/{existingCollection.FriendlyName}");
                 foreach (var item in result)
                 {
                     var reUploadItem = model.ExistsItems.Find(x => x.FileName == item.FileName);

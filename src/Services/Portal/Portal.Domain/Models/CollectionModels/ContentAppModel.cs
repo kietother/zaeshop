@@ -7,6 +7,7 @@ namespace Portal.Domain.Models.CollectionModels
 
         public int AlbumId { get; set; }
         public string? AlbumTitle { get; set; }
+        public string? AlbumFriendlyName { get; set; }
 
         public int? Volume { get; set; }
         public string? ExtendName { get; set; }

@@ -46,6 +46,7 @@ namespace Portal.API.Controllers
                 IsPublic = collection.IsPublic,
                 AlbumId = collection.AlbumId,
                 AlbumTitle = collection.Album?.Title,
+                AlbumFriendlyName = collection.Album?.FriendlyName,
                 Description = collection.Description,
                 ExtendName = collection.ExtendName,
                 Volume = collection.Volume,
