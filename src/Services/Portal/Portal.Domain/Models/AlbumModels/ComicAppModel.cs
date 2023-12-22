@@ -1,3 +1,4 @@
+using Portal.Domain.Enums;
 using Portal.Domain.Models.CollectionModels;
 
 namespace Portal.Domain.Models.AlbumModels
@@ -9,6 +10,20 @@ namespace Portal.Domain.Models.AlbumModels
         public string? Description { get; set; }
         public string? AlbumAlertMessageName { get; set; }
         public string? ContentTypeNames { get; set; }
+
+        #region Comic Extra info
+        public string? AlternativeName { get; set; }
+        public string? Type { get; set; }
+        public EAlbumStatus AlbumStatus { get; set; }
+        public string? ReleaseYear { get; set; }
+        public string? AuthorNames { get; set; }
+        public string? ArtitstNames { get; set; }
+        public string? Tags { get; set; }
+        #endregion
+
+        #region Thumbnail
+        public string? ThumbnailUrl { get; set; }
+        #endregion
 
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }

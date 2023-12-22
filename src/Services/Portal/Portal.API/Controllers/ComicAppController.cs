@@ -76,6 +76,14 @@ namespace Portal.API.Controllers
                 IsPublic = comic.IsPublic,
                 CreatedDate = comic.CreatedOnUtc,
                 UpdatedDate = comic.UpdatedOnUtc,
+                AlternativeName = comic.AlternativeName,
+                Type = comic.Type,
+                AlbumStatus = comic.AlbumStatus,
+                ReleaseYear = comic.ReleaseYear,
+                AuthorNames = comic.AuthorNames,
+                ArtitstNames = comic.ArtitstNames,
+                Tags = comic.Tags,
+                ThumbnailUrl = comic.CdnThumbnailUrl,
                 Contents = comic.Collections.OrderByDescending(y => y.Title).Select(z => new ContentAppModel
                 {
                     Id = z.Id,
