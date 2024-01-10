@@ -1,4 +1,4 @@
-name: Portal Web Pipeline
+name: CMS Development Pipeline
 on:
   push:
     branches:

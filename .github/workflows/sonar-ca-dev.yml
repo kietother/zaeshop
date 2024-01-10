@@ -1,9 +1,8 @@
-name: SonarCloud
+name: SonarCloud Development
 on:
   push:
     branches:
       - main
-      - production
   pull_request:
     types: [opened, synchronize, reopened]
 permissions:
