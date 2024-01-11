@@ -21,12 +21,20 @@ type CreateAlbumProps = {
 
 const CreateAlbum: React.FC<CreateAlbumProps> = ({ closeModal }) => {
     const [t] = useTranslation();
-    const [files, setFiles] = useState<(ActualFileObject)[]>([]);
+
+    const [thumbnailFiles, setThumbnailFiles] = useState<(ActualFileObject)[]>([]);
+    const [backgroundFiles, setBackgroundFiles] = useState<(ActualFileObject)[]>([]);
+    
     const { albumAlertMessages, contentTypes } = useSelector((state: StoreState) => state.album);
 
     const onUpdateFiles = (filesPondFiles: FilePondFile[]) => {
         const files = filesPondFiles.map(item => item.file);
-        setFiles(files);
+        setThumbnailFiles(files);
+    }
+
+    const onUpdateBackgroundFiles = (filesPondFiles: FilePondFile[]) => {
+        const files = filesPondFiles.map(item => item.file);
+        setBackgroundFiles(files);
     }
 
     // Dropdown options
@@ -80,11 +88,18 @@ const CreateAlbum: React.FC<CreateAlbumProps> = ({ closeModal }) => {
             contentTypeIds: contentTypesSelectedOptions?.map(option => Number(option.value)),
         };
 
-        if (files.length > 0) {
-            const base64File = await convertFileToBase64(files[0]);
+        if (thumbnailFiles.length > 0) {
+            const base64File = await convertFileToBase64(thumbnailFiles[0]);
 
-            request.fileName = files[0].name;
+            request.fileName = thumbnailFiles[0].name;
             request.base64File = base64File?.split(',')[1];
+        }
+
+        if (backgroundFiles.length > 0) {
+            const base64File = await convertFileToBase64(backgroundFiles[0]);
+
+            request.fileNameOriginal = backgroundFiles[0].name;
+            request.base64FileOriginal = base64File?.split(',')[1];
         }
 
         const response = await createAlbum(request);
@@ -194,9 +209,34 @@ const CreateAlbum: React.FC<CreateAlbumProps> = ({ closeModal }) => {
                                         </div>
                                     </div>
                                     <div className="mb-3 row">
+                                        <label
+                                            className="col-sm-2 col-form-label text-end">
+                                            {t('album.modal.thumbnail')}
+                                        </label>
                                         <FilePond
-                                            files={files}
+                                            files={thumbnailFiles}
                                             onupdatefiles={onUpdateFiles}
+                                            maxFiles={1}
+                                            name="files"
+                                            labelIdle='Drag & Drop your file or <span class="filepond--label-action">Browse</span>'
+                                            beforeAddFile={(file) => {
+                                                return new Promise((resolve) => {
+                                                    if (!file.fileType.includes('image/')) {
+                                                        resolve(false);
+                                                    }
+                                                    resolve(true);
+                                                })
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="mb-3 row">
+                                        <label
+                                            className="col-sm-2 col-form-label text-end">
+                                            {t('album.modal.background')}
+                                        </label>
+                                        <FilePond
+                                            files={backgroundFiles}
+                                            onupdatefiles={onUpdateBackgroundFiles}
                                             maxFiles={1}
                                             name="files"
                                             labelIdle='Drag & Drop your file or <span class="filepond--label-action">Browse</span>'

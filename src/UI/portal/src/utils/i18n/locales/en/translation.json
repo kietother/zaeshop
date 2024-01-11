@@ -107,7 +107,8 @@
             "description": "Description",
             "alert_message": "Alert Message",
             "content_types": "Content Types",
-            "thumbnail": "Thumbnail"
+            "thumbnail": "Thumbnail",
+            "background": "Background"
         },
         "ongoing": "Ongoing",
         "completed": "Completed",

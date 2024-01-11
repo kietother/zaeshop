@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 const LeftSideBar: React.FC = () => {
     return (
         <div className="leftbar-tab-menu">
+            <div className="main-icon-menu">
+            </div>
+            {/*end main-icon-menu*/}
             <div className="main-menu-inner">
                 <div className="menu-body navbar-vertical tab-content" data-simplebar="">
                     <div

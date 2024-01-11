@@ -219,6 +219,11 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
                 existingAlbum.ThumbnailUrl = result.AbsoluteUrl;
                 existingAlbum.CdnThumbnailUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
+            } else if (requestModel.IsUpdateThumbnail) {
+                existingAlbum.ThumbnailUrl = null;
+                existingAlbum.CdnThumbnailUrl = null;
+
+                // Feature we should remove image no longer use
             }
 
             // We can upload background
@@ -232,6 +237,12 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
                 existingAlbum.OriginalUrl = result.AbsoluteUrl;
                 existingAlbum.CdnOriginalUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
+            }
+            else if (requestModel.IsUpdateOriginalUrl) {
+                existingAlbum.OriginalUrl = null;
+                existingAlbum.CdnThumbnailUrl = null;
+
+                // Feature we should remove image no longer use
             }
 
             // Update

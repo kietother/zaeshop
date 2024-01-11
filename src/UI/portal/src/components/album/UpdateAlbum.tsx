@@ -1,3 +1,4 @@
+import './UpdateAlbum.css';
 import React, { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -23,18 +24,34 @@ type UpdateAlbumProps = {
 
 const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
     const [t] = useTranslation();
-    const [files, setFiles] = useState<(ActualFileObject)[]>([]);
+    const [thumbnailFiles, setThumbnailFiles] = useState<(ActualFileObject)[]>([]);
+    const [backgroundFiles, setBackgroundFiles] = useState<(ActualFileObject)[]>([]);
+
     const [isUpdateThumbnail, setIsUpdateThumbnail] = useState<boolean>(false);
+    const [isUpdateOriginalUrl, setIsUpdateOriginalUrl] = useState<boolean>(false);
+
     const { albumAlertMessages, contentTypes } = useSelector((state: StoreState) => state.album);
 
     const onUpdateFiles = (filesPondFiles: FilePondFile[]) => {
         const files = filesPondFiles.map(item => item.file);
-        setFiles(files);
+        setThumbnailFiles(files);
         setIsUpdateThumbnail(true);
     }
 
-    const onChangeImage = () => {
+    const onUpdateBackgroundFiles = (filesPondFiles: FilePondFile[]) => {
+        const files = filesPondFiles.map(item => item.file);
+        setBackgroundFiles(files);
+        setIsUpdateOriginalUrl(true);
+    }
+
+    const onChangeImageThumbnail = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setIsUpdateThumbnail(true);
+        event.preventDefault();
+    }
+
+    const onChangeImageBackground = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        setIsUpdateOriginalUrl(true);
+        event.preventDefault();
     }
 
     // Dropdown options
@@ -95,14 +112,22 @@ const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
             ...albumRequestModel,
             albumAlertMessageId: albumAlertMessageSelectedOption ? Number(albumAlertMessageSelectedOption.value) : undefined,
             contentTypeIds: contentTypesSelectedOptions?.map(option => Number(option.value)),
-            isUpdateThumbnail
+            isUpdateThumbnail,
+            isUpdateOriginalUrl
         };
 
-        if (files.length > 0) {
-            const base64File = await convertFileToBase64(files[0]);
+        if (thumbnailFiles.length > 0) {
+            const base64File = await convertFileToBase64(thumbnailFiles[0]);
 
-            request.fileName = files[0].name;
+            request.fileName = thumbnailFiles[0].name;
             request.base64File = base64File?.split(',')[1];
+        }
+
+        if (backgroundFiles.length > 0) {
+            const base64File = await convertFileToBase64(backgroundFiles[0]);
+
+            request.fileNameOriginal = backgroundFiles[0].name;
+            request.base64FileOriginal = base64File?.split(',')[1];
         }
 
         const response = await updateAlbum(album.id, request);
@@ -215,33 +240,63 @@ const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
                                         </div>
                                     </div>
 
-                                    <div className="mb-3 row">
+                                    <div className="mb-3 row text-center">
                                         <label
                                             className="col-sm-2 col-form-label text-end">
                                             {t('album.modal.thumbnail')}
                                         </label>
-                                        {album?.cdnThumbnailUrl &&
+                                        {album?.cdnThumbnailUrl && !isUpdateThumbnail &&
                                             <div>
                                                 <img src={album?.cdnThumbnailUrl} alt={t('album.modal.thumbnail')}
                                                     style={{
                                                         maxWidth: "100%",
-                                                        height: "auto",
+                                                        height: "auto"
                                                     }} />
-                                                <button className="btn" onChange={onChangeImage}>
-                                                    <i className="ri-close-circle-line text-muted"
-                                                        style={{
-                                                            position: 'absolute',
-                                                            left: "12px",
-                                                            top: '2px',
-                                                            fontSize: '1.4rem',
-                                                            cursor: 'pointer'
-                                                        }}></i>
+                                                <button type='button' onClick={(event) => onChangeImageThumbnail(event)} className='btn'>
+                                                    <i className="fa-solid fa-circle-xmark text-danger font-16 icon-remove-image"                                         
+                                                    ></i>
                                                 </button>
                                             </div>
                                         }
-                                        {!album?.cdnThumbnailUrl && <FilePond
-                                            files={files}
+                                        {(!album?.cdnThumbnailUrl || isUpdateThumbnail) && <FilePond
+                                            files={thumbnailFiles}
                                             onupdatefiles={onUpdateFiles}
+                                            maxFiles={1}
+                                            name="files"
+                                            labelIdle='Drag & Drop your file or <span class="filepond--label-action">Browse</span>'
+                                            beforeAddFile={(file) => {
+                                                return new Promise((resolve) => {
+                                                    if (!file.fileType.includes('image/')) {
+                                                        resolve(false);
+                                                    }
+                                                    resolve(true);
+                                                })
+                                            }}
+                                        />
+                                        }
+                                    </div>
+
+                                    <div className="mb-3 row text-center">
+                                        <label
+                                            className="col-sm-2 col-form-label text-end">
+                                            {t('album.modal.background')}
+                                        </label>
+                                        {album?.cdnOriginUrl && !isUpdateOriginalUrl &&
+                                            <div>
+                                                <img src={album?.cdnThumbnailUrl} alt={t('album.modal.thumbnail')}
+                                                    style={{
+                                                        maxWidth: "100%",
+                                                        height: "auto"
+                                                    }} />
+                                                <button type='button' onClick={(event) => onChangeImageBackground(event)} className='btn'>
+                                                    <i className="fa-solid fa-circle-xmark text-danger font-16 icon-remove-image"                                         
+                                                    ></i>
+                                                </button>
+                                            </div>
+                                        }
+                                        {(!album?.cdnOriginUrl || isUpdateOriginalUrl) && <FilePond
+                                            files={backgroundFiles}
+                                            onupdatefiles={onUpdateBackgroundFiles}
                                             maxFiles={1}
                                             name="files"
                                             labelIdle='Drag & Drop your file or <span class="filepond--label-action">Browse</span>'
