@@ -1,3 +1,4 @@
+import './UpdateAlbum.css';
 import React, { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -33,8 +34,9 @@ const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
         setIsUpdateThumbnail(true);
     }
 
-    const onChangeImage = () => {
+    const onChangeImage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setIsUpdateThumbnail(true);
+        event.preventDefault();
     }
 
     // Dropdown options
@@ -215,31 +217,25 @@ const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
                                         </div>
                                     </div>
 
-                                    <div className="mb-3 row">
+                                    <div className="mb-3 row text-center">
                                         <label
                                             className="col-sm-2 col-form-label text-end">
                                             {t('album.modal.thumbnail')}
                                         </label>
-                                        {album?.cdnThumbnailUrl &&
+                                        {album?.cdnThumbnailUrl && !isUpdateThumbnail &&
                                             <div>
                                                 <img src={album?.cdnThumbnailUrl} alt={t('album.modal.thumbnail')}
                                                     style={{
                                                         maxWidth: "100%",
-                                                        height: "auto",
+                                                        height: "auto"
                                                     }} />
-                                                <button className="btn" onChange={onChangeImage}>
-                                                    <i className="ri-close-circle-line text-muted"
-                                                        style={{
-                                                            position: 'absolute',
-                                                            left: "12px",
-                                                            top: '2px',
-                                                            fontSize: '1.4rem',
-                                                            cursor: 'pointer'
-                                                        }}></i>
+                                                <button type='button' onClick={(event) => onChangeImage(event)} className='btn'>
+                                                    <i className="fa-solid fa-circle-xmark text-danger font-16 icon-remove-image"                                         
+                                                    ></i>
                                                 </button>
                                             </div>
                                         }
-                                        {!album?.cdnThumbnailUrl && <FilePond
+                                        {(!album?.cdnThumbnailUrl || isUpdateThumbnail) && <FilePond
                                             files={files}
                                             onupdatefiles={onUpdateFiles}
                                             maxFiles={1}
