@@ -91,7 +91,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 {
                     FileName = requestModel.FileName,
                     ImageData = requestModel.FileData
-                });
+                }, entity.FriendlyName);
 
                 entity.ThumbnailUrl = result.AbsoluteUrl;
                 entity.CdnThumbnailUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
@@ -201,7 +201,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 {
                     FileName = requestModel.FileName,
                     ImageData = requestModel.FileData
-                });
+                }, existingAlbum.FriendlyName);
 
                 existingAlbum.ThumbnailUrl = result.AbsoluteUrl;
                 existingAlbum.CdnThumbnailUrl = $"https://s3.codegota.me/{result.RelativeUrl}";

@@ -76,7 +76,7 @@ BEGIN
 		 NULL [ContentTypes],
 		 GETDATE() CreatedOnUtc,
 		 NULL UpdatedOnUtc,
-		 null [a.CdnThumbnailUrl],
+		 null [CdnThumbnailUrl],
 		1 AS IsTotalRecord
     FROM FilteredData
     UNION
