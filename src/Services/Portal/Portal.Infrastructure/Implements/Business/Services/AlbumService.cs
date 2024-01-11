@@ -240,7 +240,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
             else if (requestModel.IsUpdateOriginalUrl) {
                 existingAlbum.OriginalUrl = null;
-                existingAlbum.CdnOriginalUrl = null;
+                existingAlbum.CdnThumbnailUrl = null;
 
                 // Feature we should remove image no longer use
             }

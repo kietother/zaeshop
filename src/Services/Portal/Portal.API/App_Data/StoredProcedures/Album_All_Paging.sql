@@ -44,7 +44,8 @@ BEGIN
                STRING_AGG(ct.Name, ', ') WITHIN GROUP(ORDER BY ct.Name) AS [ContentTypes],
 			   a.CreatedOnUtc,
 			   a.UpdatedOnUtc,
-			   a.CdnThumbnailUrl
+			   a.CdnThumbnailUrl,
+			   a.CdnOriginUrl
         FROM dbo.Album a
 			LEFT JOIN dbo.AlbumAlertMessage aam ON aam.Id = a.AlbumAlertMessageId
 			LEFT JOIN dbo.AlbumContentType act ON act.AlbumId = a.Id
@@ -62,7 +63,8 @@ BEGIN
 			   a.IsPublic,
 			   a.CreatedOnUtc,
 			   a.UpdatedOnUtc,
-			   a.CdnThumbnailUrl
+			   a.CdnThumbnailUrl,
+			   a.CdnOriginUrl
 	)
     SELECT COUNT_BIG(1) AS RowNum,
 		 0 Id,
@@ -77,6 +79,7 @@ BEGIN
 		 GETDATE() CreatedOnUtc,
 		 NULL UpdatedOnUtc,
 		 null [CdnThumbnailUrl],
+		 null [CdnOriginUrl]
 		1 AS IsTotalRecord
     FROM FilteredData
     UNION
