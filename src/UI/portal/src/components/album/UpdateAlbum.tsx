@@ -281,9 +281,9 @@ const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
                                             className="col-sm-2 col-form-label text-end">
                                             {t('album.modal.background')}
                                         </label>
-                                        {album?.cdnOriginUrl && !isUpdateOriginalUrl &&
+                                        {album?.cdnOriginalUrl && !isUpdateOriginalUrl &&
                                             <div>
-                                                <img src={album?.cdnThumbnailUrl} alt={t('album.modal.thumbnail')}
+                                                <img src={album?.cdnOriginalUrl} alt={t('album.modal.thumbnail')}
                                                     style={{
                                                         maxWidth: "100%",
                                                         height: "auto"
@@ -294,7 +294,7 @@ const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
                                                 </button>
                                             </div>
                                         }
-                                        {(!album?.cdnOriginUrl || isUpdateOriginalUrl) && <FilePond
+                                        {(!album?.cdnOriginalUrl || isUpdateOriginalUrl) && <FilePond
                                             files={backgroundFiles}
                                             onupdatefiles={onUpdateBackgroundFiles}
                                             maxFiles={1}

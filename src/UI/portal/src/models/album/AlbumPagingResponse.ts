@@ -9,5 +9,5 @@ export default interface AlbumPagingResponse {
     createdOnUtc: Date;
     updatedOnUtc?: Date;
     cdnThumbnailUrl?: string;
-    cdnOriginUrl?: string;
+    cdnOriginalUrl?: string;
 }
