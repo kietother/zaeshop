@@ -276,7 +276,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 ContentTypeNames = string.Join(", ", x.AlbumContentTypes.Select(y => y.ContentType.Name)),
                 CreatedDate = x.CreatedOnUtc,
                 CdnThumbnailUrl = x.CdnThumbnailUrl,
-                CdnOriginUrl = x.CdnOriginalUrl
+                CdnOriginalUrl = x.CdnOriginalUrl
             }).ToList();
 
             return new ServiceResponse<List<AlbumResponseModel>>(response);
@@ -352,7 +352,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 UpdatedDate = album.UpdatedOnUtc,
                 IsPublic = album.IsPublic,
                 CdnThumbnailUrl = album.CdnThumbnailUrl,
-                CdnOriginUrl = album.CdnOriginalUrl
+                CdnOriginalUrl = album.CdnOriginalUrl
             };
 
             return new ServiceResponse<AlbumResponseModel>(albumResponse);

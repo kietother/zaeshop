@@ -40,7 +40,7 @@ namespace Portal.Domain.Models.AlbumModels
 
         public bool IsPublic { get; set; }
         public string? CdnThumbnailUrl { get; set; }
-        public string? CdnOriginUrl { get; set; }
+        public string? CdnOriginalUrl { get; set; }
     }
 
     public class AlbumPagingResponse
@@ -59,7 +59,7 @@ namespace Portal.Domain.Models.AlbumModels
         public DateTime? UpdatedOnUtc { get; set; }
 
         public string? CdnThumbnailUrl { get; set; }
-        public string? CdnOriginUrl { get; set; }
+        public string? CdnOriginalUrl { get; set; }
 
         [JsonIgnore]
         public long RowNum { get; set; }
