@@ -18,12 +18,16 @@ export const authOptions: AuthOptions = {
         maxAge: 60 * 60 * 24 * 30, // 30 Days
     },
     callbacks: {
-        async signIn({ user, account, profile, email, credentials }) {
+        async signIn({ user }) {
             console.log('googleId', user?.id);
             console.log('fullName', user?.name);
             console.log('email', user?.name);
             console.log('avatar', user?.image);
             return true;
+        },
+        async session({ session, token }) {
+            session.user.token = token;
+            return session;
         }
     }
 };

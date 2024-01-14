@@ -1,5 +1,6 @@
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
+import LogoutButton from "./LogoutButton";
 
 export default async function Header() {
     const session = await getServerSession(authOptions);
@@ -10,7 +11,7 @@ export default async function Header() {
             <div className="container">
                 {/* Start Mainmanu Nav */}
                 <nav className="navbar navbar-expand-lg">
-                    <a className="navbar-brand" href="home.html">
+                    <a className="navbar-brand" href="/">
                         <img src="/assets/media/logo.png" alt="" />
                     </a>
                     <button
@@ -149,9 +150,10 @@ export default async function Header() {
                                     style={{ width: 55 }}
                                     alt="Avatar"
                                 />
-                                <a href="profile/{session.user?.id}" className="anime-btn btn-dark">
+                                <a href="/profile" className="anime-btn btn-dark border-change me-2">
                                     {session.user?.name}
                                 </a>
+                                <LogoutButton />
                             </div>
                         )}
                     </div>
