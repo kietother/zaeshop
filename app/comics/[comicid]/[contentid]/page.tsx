@@ -7,7 +7,7 @@ import ServerResponse from "@/app/models/common/ServerResponse";
 
 const getContent = async (comicid: string | null, contentid: string | null) => {
     try {
-        const response = await axios.get<ServerResponse<ContentResponse>>(`http://54.169.199.183:5288/api/client/ContentApp/comics/${comicid}/contents/${contentid}`);
+        const response = await axios.get<ServerResponse<ContentResponse>>(process.env.API_URL + `/api/client/ContentApp/comics/${comicid}/contents/${contentid}`);
         return response.data.data;
     }
     catch {
