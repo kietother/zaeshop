@@ -3,6 +3,7 @@ using Common;
 using Common.Enums;
 using Common.Interfaces;
 using Common.Interfaces.Messaging;
+using Common.Models;
 using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Domain.Business.Interfaces.Services;
 using Identity.Domain.Interfaces.Infrastructure;
@@ -415,5 +416,49 @@ namespace Identity.Infrastructure.Implements.Business.Services
             });
         }
         #endregion
+
+        public async Task<ServiceResponse<AuthenticateResponse>> ClientAuthenticateAsync(ClientAuthenticateRequest model)
+        {
+            // check providerAccountId and email in database
+            // if not then create a new user
+            var user = await _context.Users.FirstOrDefaultAsync(o => o.ProviderAccountId == model.ProviderAccountId || o.Email == model.Email);
+            if (user == null)
+            {
+                user = new User
+                {
+                    UserName = model.Email.Split('@').FirstOrDefault(),
+                    Email = model.Email,
+                    FullName = model.Name,
+                    ProviderAccountId = model.ProviderAccountId,
+                    VerificationToken = GenerateVerificationToken(),
+                    CreatedOnUtc = DateTime.UtcNow
+                };
+
+                // Create account
+                var result = await _userManager.CreateAsync(user);
+                if (!result.Succeeded)
+                {
+                    return new ServiceResponse<AuthenticateResponse>(string.Join(", ", result.Errors.Select(o => o.Description)));
+                }
+
+                // Sync to portal
+                var resultApi = await _apiService.PostAsync<SyncUserFromIdentityRequestModel, SyncUserFromIdentityResponseModel>(CommonHelper.GetServiceUrl(EServiceHost.Portal), "/v1/users", new SyncUserFromIdentityRequestModel
+                {
+                    IdentityId = user.Id,
+                    FullName = user.FullName
+                });
+
+                if (resultApi != null && !resultApi.IsSuccess)
+                {
+                    await _userManager.DeleteAsync(user);
+                    return new ServiceResponse<AuthenticateResponse>(resultApi.Message ?? string.Empty);
+                }
+            }
+
+            // Token expries in 30 days
+            var expirationInMinutes = 60 * 24 * 30;
+            var jwtToken = _jwtService.GenerateJwtToken(user, expirationInMinutes);
+            return new ServiceResponse<AuthenticateResponse>(new AuthenticateResponse(user, jwtToken));
+        }
     }
 }

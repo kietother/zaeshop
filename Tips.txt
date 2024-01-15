@@ -61,6 +61,7 @@ dotnet new sln --name FooBar
 dotnet new classlib
 dotnet sln solution.sln add --solution-folder foo1\foo2\foo3 bar.csproj
 dotnet add reference ../Api/MyApiProject.csproj
+https://stackoverflow.com/questions/57066856/command-dotnet-ef-not-found
 
 dotnet ef migrations add InitialCreate -p Identity.Infrastructure.csproj -c AppIdentityDbContext -s ../Identity.API/Identity.API.csproj  --verbose
 dotnet ef migrations add InitialCreate -p Identity.Infrastructure.csproj  -s ../Identity.API/Identity.API.csproj  --verbose

@@ -86,6 +86,17 @@ namespace Identity.API.Controllers
             return Ok(user.UserTokens);
         }
 
+        [AllowAnonymous]
+        [HttpPost("client-authenticate")]
+        public async Task<IActionResult> ClientAuthenticateAsync([FromBody] ClientAuthenticateRequest request)
+        {
+            var response = await _accountService.ClientAuthenticateAsync(request);
+            if (!response.IsSuccess)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterRequestModel model)
