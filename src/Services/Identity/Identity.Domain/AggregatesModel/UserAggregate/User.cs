@@ -15,6 +15,8 @@ namespace Identity.Domain.AggregatesModel.UserAggregate
         public DateTime? ResetPasswordTokenExpiresOnUtc { get; set; }
         public DateTime? ResetPasswordOnUtc { get; set; }
 
+        public string? ProviderAccountId { get; set; }
+
         public DateTime CreatedOnUtc { get; set; }
         public DateTime? UpdatedOnUtc { get; set; }
 
