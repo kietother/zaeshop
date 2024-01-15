@@ -1,12 +1,17 @@
-import Image from "next/image";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import LogoutButton from "./LogoutButton";
 
-export default function Header() {
+export default async function Header() {
+    const session = await getServerSession(authOptions);
+    const isLogined = !!session;
+
     return (
         <header className="header style-1">
             <div className="container">
                 {/* Start Mainmanu Nav */}
                 <nav className="navbar navbar-expand-lg">
-                    <a className="navbar-brand" href="home.html">
+                    <a className="navbar-brand" href="/">
                         <img src="/assets/media/logo.png" alt="" />
                     </a>
                     <button
@@ -125,17 +130,32 @@ export default function Header() {
                                 />
                             </div>
                         </form>
-                        <div className="d-flex right-nav">
-                            <a
-                                href="signup.html"
-                                className="anime-btn btn-dark border-change me-3"
-                            >
-                                SIGN UP
-                            </a>
-                            <a href="login.html" className="anime-btn btn-dark">
-                                LOG IN
-                            </a>
-                        </div>
+                        {!isLogined ? (
+                            <div className="d-flex right-nav">
+                                <a
+                                    href="signup.html"
+                                    className="anime-btn btn-dark border-change me-3"
+                                >
+                                    SIGN UP
+                                </a>
+                                <a href="login" className="anime-btn btn-dark">
+                                    LOG IN
+                                </a>
+                            </div>
+                        ) : (
+                            <div className="d-flex right-nav">
+                                <img
+                                    src={session.user?.image ?? ''}
+                                    className="rounded-circle shadow-4 px-2"
+                                    style={{ width: 55 }}
+                                    alt="Avatar"
+                                />
+                                <a href="/profile" className="anime-btn btn-dark border-change me-2">
+                                    {session.user?.name}
+                                </a>
+                                <LogoutButton />
+                            </div>
+                        )}
                     </div>
                 </nav>
             </div>
