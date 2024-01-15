@@ -121,7 +121,7 @@ export default async function Header() {
                                     style={{ width: 55 }}
                                     alt="Avatar"
                                 />
-                                <a href="/pages/profile" className="anime-btn btn-dark border-change me-2">
+                                <a href="/profile" className="anime-btn btn-dark border-change me-2">
                                     {session.user?.name}
                                 </a>
                                 <LogoutButton />
