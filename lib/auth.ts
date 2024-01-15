@@ -2,6 +2,7 @@ import { AuthOptions } from "next-auth";
 import GoogleProvider from 'next-auth/providers/google';
 import getAxiosInstance from "./axios";
 import ServerResponse from "@/app/models/common/ServerResponse";
+import ClientAuthenticateResponse from "@/app/models/auth/ClientAuthenticateResponse";
 
 export const authOptions: AuthOptions = {
     providers: [
@@ -21,14 +22,15 @@ export const authOptions: AuthOptions = {
     },
     callbacks: {
         async signIn({ user }) {
-            const response = await getAxiosInstance(process.env.IDENTITY_API_URL).post<ServerResponse<any>>('api/account/client-authenticate', {
+            const response = await getAxiosInstance(process.env.IDENTITY_API_URL).post<ServerResponse<ClientAuthenticateResponse>>('api/account/client-authenticate', {
                 providerAccountId: user?.id,
                 name: user?.name,
                 email: user?.email,
                 image: user?.image
             });
             if (response.status === 200) {
-                user.apiToken = response.data.data.jwtToken
+                user.name = response.data.data?.fullName;
+                user.apiToken = response.data.data?.jwtToken;
                 return true;
             }
             return false;
