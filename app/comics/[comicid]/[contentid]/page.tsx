@@ -7,7 +7,7 @@ import ServerResponse from "@/app/models/common/ServerResponse";
 
 const getContent = async (comicid: string | null, contentid: string | null) => {
     try {
-        const response = await axios.get<ServerResponse<ContentResponse>>(process.env.API_URL + `/api/client/ContentApp/comics/${comicid}/contents/${contentid}`);
+        const response = await axios.get<ServerResponse<ContentResponse>>(process.env.PORTAL_API_URL + `/api/client/ContentApp/comics/${comicid}/contents/${contentid}`);
         return response.data.data;
     }
     catch {
@@ -17,7 +17,6 @@ const getContent = async (comicid: string | null, contentid: string | null) => {
 
 export default async function Content({ params }: { params: { comicid: string | null, contentid: string | null } }) {
     const content = await getContent(params.comicid, params.contentid);
-
     return (
         <>
             <Breadcrumb content={content} />
