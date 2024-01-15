@@ -14,5 +14,6 @@ namespace Identity.Domain.Business.Interfaces.Services
         Task<UserRegisterResponseModel?> UpdateAsync(string id, UserUpdateRequestModel userModel, ErrorResult errorResult);
         Task<PagingCommonResponse<UserPaging>> GetPagingAsync(int pageNumber, int pageSize);
         Task<PagingCommonResponse<RolePaging>> GetRolesPagingAsync(int pageNumber, int pageSize);
+        Task<User?> GetByProviderAccountIdAsync(string providerAccountId);
     }
 }

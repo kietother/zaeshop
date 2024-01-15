@@ -213,5 +213,11 @@ namespace Identity.Infrastructure.Implements.Business.Services
                 Data = result
             };
         }
+
+        public async Task<User?> GetByProviderAccountIdAsync(string providerAccountId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(o => o.ProviderAccountId == providerAccountId);
+            return user;
+        }
     }
 }
