@@ -1,4 +1,12 @@
 import axios, { CreateAxiosDefaults } from "axios";
+import * as AxiosLogger from 'axios-logger';
+
+AxiosLogger.setGlobalConfig({
+    dateFormat: 'yyyy-mm-dd HH:MM:ss',
+    status: true,
+    statusText: true,
+    params: true
+});
 
 const getAxiosInstance = (baseURL?: string, token?: string | null) => {
     const config: CreateAxiosDefaults<any> | undefined = {
@@ -12,6 +20,12 @@ const getAxiosInstance = (baseURL?: string, token?: string | null) => {
     }
 
     const axiosApiInstance = axios.create(config);
+
+    if (process.env.ENVIRONMENT?.toLowerCase() === 'local') {
+        axiosApiInstance.interceptors.request.use(AxiosLogger.requestLogger, AxiosLogger.errorLogger);
+        axiosApiInstance.interceptors.response.use(AxiosLogger.responseLogger, AxiosLogger.errorLogger);
+    }
+
     return axiosApiInstance;
 }
 
