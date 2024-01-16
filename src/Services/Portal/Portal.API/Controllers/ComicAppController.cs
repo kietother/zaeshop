@@ -102,7 +102,7 @@ namespace Portal.API.Controllers
 
             return Ok(result);
         }
-        int GetChapterNumber(string title)
+        private int GetChapterNumber(string title)
         {
             var match = Regex.Match(title, @"\d+");
             return match.Success ? int.Parse(match.Value) : int.MaxValue;
