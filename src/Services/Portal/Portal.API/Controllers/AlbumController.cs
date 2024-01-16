@@ -8,7 +8,6 @@ namespace Portal.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class AlbumController : ControllerBase
     {
         private readonly IAlbumService _albumService;
@@ -18,6 +17,7 @@ namespace Portal.API.Controllers
             _albumService = albumService;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(AlbumRequestModel model)
         {
@@ -29,6 +29,7 @@ namespace Portal.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, AlbumRequestModel model)
         {
@@ -52,6 +53,7 @@ namespace Portal.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -65,7 +67,7 @@ namespace Portal.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetPagingAsync([FromQuery] PagingCommonRequest request)
-        {
+        {   
             var response = await _albumService.GetPagingAsync(request);
 
             if (!response.IsSuccess)
@@ -96,6 +98,7 @@ namespace Portal.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpPut("{id}/extra-info")]
         public async Task<IActionResult> UpdateExtraInfoByIdAsync(int id, AlbumExtraInfoModel model)
         {
