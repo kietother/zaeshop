@@ -5344,3 +5344,7 @@ input:focus,
     width: 50% !important;
   }
 }
+.text-avt{
+  font-size: 12px;
+  padding-top: 8% !important;
+}

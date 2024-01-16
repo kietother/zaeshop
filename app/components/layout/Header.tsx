@@ -59,7 +59,7 @@ export default async function Header() {
                                 </ul>
                             </li>
                             <li className="menu-item-has-children">
-                                <a href="search">Advanced Search</a>
+                                <a href="search">Explore</a>
                             </li>
                             <li className="menu-item-has-children">
                                 <a
@@ -118,10 +118,10 @@ export default async function Header() {
                                 <img
                                     src={session.user?.image ?? ''}
                                     className="rounded-circle shadow-4 px-2"
-                                    style={{ width: 55 }}
+                                    style={{ height: 55 }}
                                     alt="Avatar"
                                 />
-                                <a href="/profile" className="anime-btn btn-dark border-change me-2">
+                                <a href="/profile" className="anime-btn btn-dark border-change me-2 text-avt">
                                     {session.user?.name}
                                 </a>
                                 <LogoutButton />

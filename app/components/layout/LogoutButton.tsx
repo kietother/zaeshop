@@ -10,7 +10,7 @@ export default function LogoutButton() {
 
     return (
         <button className="anime-btn btn-dark" onClick={onSignOut}>
-            Logout
+                <i className="fa fa-sign-out" />
         </button>
     );
 }
