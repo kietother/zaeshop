@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using Common.Enums;
 
 namespace Common
@@ -105,6 +106,18 @@ namespace Common
         public static T? Deserialize<T>(string json)
         {
             return JsonSerializer.Deserialize<T>(json, s_readOptions);
+        }
+    }
+
+    public static partial class RegexHelper
+    {
+        [GeneratedRegex(@"\d+")]
+        private static partial Regex DigitRegex();
+
+        public static int GetChapterNumber(string title)
+        {
+            var match = DigitRegex().Match(title);
+            return match.Success ? int.Parse(match.Value) : int.MaxValue;
         }
     }
 }

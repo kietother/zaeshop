@@ -3,7 +3,13 @@ CREATE OR ALTER PROCEDURE Album_All_Paging
     @pageSize INT,
 	@searchTerm NVARCHAR(MAX) = null,
 	@sortColumn VARCHAR(100) = null,
-	@sortDirection varchar(4) = 'ASC'
+	@sortDirection varchar(4) = 'ASC',
+	@firstChar VARCHAR(100) = null,
+	@language VARCHAR(20) = null,
+	@country VARCHAR(100) = null,
+	@genre VARCHAR(100) = null,
+	@status BIT = 0,
+	@year INT
 AS
 BEGIN
     SET NOCOUNT ON;

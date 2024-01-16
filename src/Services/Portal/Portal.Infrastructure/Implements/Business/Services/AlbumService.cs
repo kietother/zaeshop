@@ -301,7 +301,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             return await _repository.GetQueryable().AnyAsync(x => x.Title == title);
         }
 
-        public async Task<ServiceResponse<PagingCommonResponse<AlbumPagingResponse>>> GetPagingAsync(PagingCommonRequest request)
+        public async Task<ServiceResponse<PagingCommonResponse<AlbumPagingResponse>>> GetPagingAsync(PagingCommonRequest request, FilterAdvanced filter)
         {
             var parameters = new Dictionary<string, object?>
             {
@@ -309,7 +309,13 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 { "PageSize", request.PageSize },
                 { "SearchTerm", request.SearchTerm },
                 { "SortColumn", request.SortColumn },
-                { "SortDirection", request.SortDirection }
+                { "SortDirection", request.SortDirection },
+                { "FirstChar", filter.FirstChar },
+                { "Language", filter.Language },
+                { "Country", filter.Country },
+                { "Genre", filter.Genre },
+                { "Status", filter.Status },
+                { "Year", filter.Year }
             };
             var result = await _unitOfWork.QueryAsync<AlbumPagingResponse>("Album_All_Paging", parameters);
 
