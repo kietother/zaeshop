@@ -97,15 +97,10 @@ namespace Portal.API.Controllers
                     AlbumId = z.AlbumId,
                     AlbumTitle = comic.Title,
                     AlbumFriendlyName = comic.FriendlyName
-                }).OrderBy(x => GetChapterNumber(x.Title)).ToList()
+                }).OrderBy(x => CommonHelper.GetChapterNumber(x.Title)).ToList()
             });
 
             return Ok(result);
-        }
-        private int GetChapterNumber(string title)
-        {
-            var match = Regex.Match(title, @"\d+");
-            return match.Success ? int.Parse(match.Value) : int.MaxValue;
         }
     }
 }

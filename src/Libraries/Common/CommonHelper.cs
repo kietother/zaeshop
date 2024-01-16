@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using Common.Enums;
 
 namespace Common
@@ -81,6 +82,11 @@ namespace Common
             // Remove all accents and make the string lower case
             var normalizedName = RemoveVietnameseCharacters(name);
             return normalizedName.ToLower().Replace(" ", "-");
+        }
+        public static int GetChapterNumber(string title)
+        {
+            var match = Regex.Match(title, @"\d+");
+            return match.Success ? int.Parse(match.Value) : int.MaxValue;
         }
     }
 
