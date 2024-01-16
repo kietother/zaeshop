@@ -428,9 +428,10 @@ namespace Identity.Infrastructure.Implements.Business.Services
                 {
                     UserName = model.Email.Split('@').FirstOrDefault(),
                     Email = model.Email,
-                    FullName = model.Name,
+                    FullName = model.Name.Split(' ').FirstOrDefault() ?? string.Empty,
                     ProviderAccountId = model.ProviderAccountId,
-                    VerificationToken = GenerateVerificationToken(),
+                    // Flag to check Client registered
+                    IsClientRegistered = true,
                     CreatedOnUtc = DateTime.UtcNow
                 };
 
@@ -453,6 +454,14 @@ namespace Identity.Infrastructure.Implements.Business.Services
                     await _userManager.DeleteAsync(user);
                     return new ServiceResponse<AuthenticateResponse>(resultApi.Message ?? string.Empty);
                 }
+            }
+            else if (string.IsNullOrEmpty(user.ProviderAccountId))
+            {
+                user.ProviderAccountId = model.ProviderAccountId;
+                user.UpdatedOnUtc = DateTime.UtcNow;
+
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
             }
 
             // Token expries in 30 days

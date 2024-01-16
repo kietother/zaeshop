@@ -4,7 +4,9 @@ on:
     branches:
       - production
   pull_request:
-    types: [opened, reopened]
+    branches:
+      - production
+    types: [opened, synchronize, reopened]
 permissions:
   contents: write
   pull-requests: write
