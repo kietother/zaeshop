@@ -28,7 +28,7 @@ namespace Identity.Infrastructure.Implements.Infrastructure
             _userManager = userManager;
         }
 
-        public string GenerateJwtToken(User user)
+        public string GenerateJwtToken(User user, int expirationInMinutes = 15)
         {
             var roles = _userManager.GetRolesAsync(user).Result;
 
@@ -36,16 +36,18 @@ namespace Identity.Infrastructure.Implements.Infrastructure
             claimsIdentity.AddClaim(new Claim("id", user.Id));
             if (!string.IsNullOrEmpty(user.FullName))
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.GivenName, user.FullName));
+            if (!string.IsNullOrEmpty(user.ProviderAccountId))
+                claimsIdentity.AddClaim(new Claim("providerAccountId", user.ProviderAccountId));
             claimsIdentity.AddClaims(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
-            // generate token that is valid for 15 minutes
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = claimsIdentity,
-                Expires = DateTime.UtcNow.AddMinutes(15),
+                // Default CMS will only accept token in 15 minutes
+                Expires = DateTime.UtcNow.AddMinutes(expirationInMinutes),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
@@ -73,13 +75,15 @@ namespace Identity.Infrastructure.Implements.Infrastructure
                 var userId = jwtToken.Claims.First(x => x.Type == "id").Value;
                 var fullName = jwtToken.Claims.First(x => x.Type == "given_name").Value;
                 var roles = jwtToken.Claims.Where(x => x.Type == "role").Select(x => x.Value).ToList();
+                var providerAccountId = jwtToken.Claims.FirstOrDefault(x => x.Type == "providerAccountId")?.Value;
 
                 // return user id from JWT token if validation successful
                 var userInfomationTokenModel = new UserInfomationTokenModel
                 {
                     Id = userId,
                     FullName = fullName,
-                    Roles = roles
+                    Roles = roles,
+                    ProviderAccountId = providerAccountId
                 };
                 return userInfomationTokenModel;
             }

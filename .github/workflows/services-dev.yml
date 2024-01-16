@@ -1,10 +1,8 @@
-name: API Pipeline
-
+name: API Development Pipeline
 on:
   push:
     branches:
       - main
-
 jobs:
   pre-build:
     runs-on: ubuntu-latest

@@ -36,13 +36,15 @@ public class JwtService : IJwtService
             var userId = jwtToken.Claims.First(x => x.Type == "id").Value;
             var fullName = jwtToken.Claims.First(x => x.Type == "given_name").Value;
             var roles = jwtToken.Claims.Where(x => x.Type == "role").Select(x => x.Value).ToList();
+            var providerAccountId = jwtToken.Claims.FirstOrDefault(x => x.Type == "providerAccountId")?.Value;
 
             // return user id from JWT token if validation successful
             var userInfomationTokenModel = new UserInfomationTokenModel
             {
                 Id = userId,
                 FullName = fullName,
-                Roles = roles
+                Roles = roles,
+                ProviderAccountId = providerAccountId
             };
             return userInfomationTokenModel;
         }

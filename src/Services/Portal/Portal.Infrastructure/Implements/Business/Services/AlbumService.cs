@@ -2,7 +2,9 @@ using Common;
 using Common.Models;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.Interfaces.Business.Services;
+using Portal.Domain.Interfaces.External;
 using Portal.Domain.Models.AlbumModels;
+using Portal.Domain.Models.ImageUploadModels;
 using Portal.Domain.SeedWork;
 
 namespace Portal.Infrastructure.Implements.Business.Services
@@ -13,14 +15,17 @@ namespace Portal.Infrastructure.Implements.Business.Services
         private readonly IGenericRepository<Album> _repository;
         private readonly IGenericRepository<AlbumAlertMessage> _albumAlertMessageRepository;
         private readonly IGenericRepository<ContentType> _contentTypeRepository;
+        private readonly IAmazonS3Service _amazonS3Service;
 
         public AlbumService(
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IAmazonS3Service amazonS3Service)
         {
             _unitOfWork = unitOfWork;
             _repository = unitOfWork.Repository<Album>();
             _albumAlertMessageRepository = unitOfWork.Repository<AlbumAlertMessage>();
             _contentTypeRepository = unitOfWork.Repository<ContentType>();
+            _amazonS3Service = amazonS3Service;
         }
 
         public async Task<ServiceResponse<AlbumResponseModel>> CreateAsync(AlbumRequestModel requestModel)
@@ -77,6 +82,32 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 {
                     ContentTypeId = id
                 });
+            }
+
+            // We can upload thumbnail
+            if (!string.IsNullOrEmpty(requestModel.FileName) && requestModel.FileData != null)
+            {
+                var result = await _amazonS3Service.UploadImageAsync(new ImageUploadRequestModel
+                {
+                    FileName = requestModel.FileName,
+                    ImageData = requestModel.FileData
+                }, entity.FriendlyName);
+
+                entity.ThumbnailUrl = result.AbsoluteUrl;
+                entity.CdnThumbnailUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
+            }
+
+            // We can upload background
+            if (!string.IsNullOrEmpty(requestModel.FileNameOriginal) && requestModel.FileDataOriginal != null)
+            {
+                var result = await _amazonS3Service.UploadImageAsync(new ImageUploadRequestModel
+                {
+                    FileName = requestModel.FileNameOriginal,
+                    ImageData = requestModel.FileDataOriginal
+                }, entity.FriendlyName);
+
+                entity.OriginalUrl = result.AbsoluteUrl;
+                entity.CdnOriginalUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
             }
 
             _repository.Add(entity);
@@ -142,6 +173,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             existingAlbum.Description = requestModel.Description;
             existingAlbum.AlbumAlertMessageId = requestModel.AlbumAlertMessageId;
             existingAlbum.FriendlyName = CommonHelper.GenerateFriendlyName(requestModel.Title);
+            existingAlbum.OriginalUrl = requestModel.OriginalUrl;
 
             if (requestModel.IsPublic.HasValue)
             {
@@ -176,6 +208,43 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 }
             }
 
+            // We can upload thumbnail
+            if (requestModel.IsUpdateThumbnail && !string.IsNullOrEmpty(requestModel.FileName) && requestModel.FileData != null)
+            {
+                var result = await _amazonS3Service.UploadImageAsync(new ImageUploadRequestModel
+                {
+                    FileName = requestModel.FileName,
+                    ImageData = requestModel.FileData
+                }, existingAlbum.FriendlyName);
+
+                existingAlbum.ThumbnailUrl = result.AbsoluteUrl;
+                existingAlbum.CdnThumbnailUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
+            } else if (requestModel.IsUpdateThumbnail) {
+                existingAlbum.ThumbnailUrl = null;
+                existingAlbum.CdnThumbnailUrl = null;
+
+                // Feature we should remove image no longer use
+            }
+
+            // We can upload background
+            if (requestModel.IsUpdateOriginalUrl && !string.IsNullOrEmpty(requestModel.FileNameOriginal) && requestModel.FileDataOriginal != null)
+            {
+                var result = await _amazonS3Service.UploadImageAsync(new ImageUploadRequestModel
+                {
+                    FileName = requestModel.FileNameOriginal,
+                    ImageData = requestModel.FileDataOriginal
+                }, existingAlbum.FriendlyName);
+
+                existingAlbum.OriginalUrl = result.AbsoluteUrl;
+                existingAlbum.CdnOriginalUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
+            }
+            else if (requestModel.IsUpdateOriginalUrl) {
+                existingAlbum.OriginalUrl = null;
+                existingAlbum.CdnThumbnailUrl = null;
+
+                // Feature we should remove image no longer use
+            }
+
             // Update
             _repository.Update(existingAlbum);
             await _unitOfWork.SaveChangesAsync();
@@ -205,7 +274,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 Description = x.Description,
                 AlbumAlertMessageName = x.AlbumAlertMessage?.Name,
                 ContentTypeNames = string.Join(", ", x.AlbumContentTypes.Select(y => y.ContentType.Name)),
-                CreatedDate = x.CreatedOnUtc
+                CreatedDate = x.CreatedOnUtc,
+                CdnThumbnailUrl = x.CdnThumbnailUrl,
+                CdnOriginalUrl = x.CdnOriginalUrl
             }).ToList();
 
             return new ServiceResponse<List<AlbumResponseModel>>(response);
@@ -230,7 +301,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             return await _repository.GetQueryable().AnyAsync(x => x.Title == title);
         }
 
-        public async Task<ServiceResponse<PagingCommonResponse<AlbumPagingResponse>>> GetPagingAsync(PagingCommonRequest request)
+        public async Task<ServiceResponse<PagingCommonResponse<AlbumPagingResponse>>> GetPagingAsync(PagingCommonRequest request, FilterAdvanced filter)
         {
             var parameters = new Dictionary<string, object?>
             {
@@ -238,7 +309,13 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 { "PageSize", request.PageSize },
                 { "SearchTerm", request.SearchTerm },
                 { "SortColumn", request.SortColumn },
-                { "SortDirection", request.SortDirection }
+                { "SortDirection", request.SortDirection },
+                { "FirstChar", filter.FirstChar },
+                { "Language", filter.Language },
+                { "Country", filter.Country },
+                { "Genre", filter.Genre },
+                { "Status", filter.Status },
+                { "Year", filter.Year }
             };
             var result = await _unitOfWork.QueryAsync<AlbumPagingResponse>("Album_All_Paging", parameters);
 
@@ -279,7 +356,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 // Set other properties as needed
                 CreatedDate = album.CreatedOnUtc,
                 UpdatedDate = album.UpdatedOnUtc,
-                IsPublic = album.IsPublic
+                IsPublic = album.IsPublic,
+                CdnThumbnailUrl = album.CdnThumbnailUrl,
+                CdnOriginalUrl = album.CdnOriginalUrl
             };
 
             return new ServiceResponse<AlbumResponseModel>(albumResponse);

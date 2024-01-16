@@ -106,7 +106,9 @@
             "title_is_required": "Tiêu đề là bắt buộc.",
             "description": "Mô tả",
             "alert_message": "Thông báo",
-            "content_types": "Loại nội dung"
+            "content_types": "Loại nội dung",
+            "thumbnail": "Hình ảnh",
+            "background": "Hình ảnh nền"
         },
         "ongoing": "Đang tiến hành",
         "completed": "Đã hoàn thành",

@@ -33,5 +33,13 @@ namespace Identity.Domain.Models.Authenticates
             RefreshToken = userToken?.Token;
             ExpiresOnUtc = userToken?.ExpiresOnUtc;
         }
+
+         public AuthenticateResponse(User user, string? jwtToken)
+        {
+            Id = user.Id;
+            FullName = user.FullName;
+            UserName = user.UserName;
+            JwtToken = jwtToken;
+        }
     }
 }

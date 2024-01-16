@@ -3,7 +3,13 @@ CREATE OR ALTER PROCEDURE Album_All_Paging
     @pageSize INT,
 	@searchTerm NVARCHAR(MAX) = null,
 	@sortColumn VARCHAR(100) = null,
-	@sortDirection varchar(4) = 'ASC'
+	@sortDirection varchar(4) = 'ASC',
+	@firstChar VARCHAR(100) = null,
+	@language VARCHAR(20) = null,
+	@country VARCHAR(100) = null,
+	@genre VARCHAR(100) = null,
+	@status BIT = 0,
+	@year INT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -40,10 +46,13 @@ BEGIN
 			   aam.Name AS [AlbumAlertMessageName],
 			   aam.Description AS [AlbumAlertMessageDescription],
 			   a.IsPublic,
-			  STRING_AGG(ct.Id, ', ') WITHIN GROUP(ORDER BY ct.Name) AS [ContentTypeIds],
+			   STRING_AGG(ct.Id, ', ') WITHIN GROUP(ORDER BY ct.Name) AS [ContentTypeIds],
                STRING_AGG(ct.Name, ', ') WITHIN GROUP(ORDER BY ct.Name) AS [ContentTypes],
 			   a.CreatedOnUtc,
-			   a.UpdatedOnUtc
+			   a.UpdatedOnUtc,
+			   a.CdnThumbnailUrl,
+			   a.CdnOriginalUrl,
+			   a.FriendlyName -- Include the FriendlyName column
         FROM dbo.Album a
 			LEFT JOIN dbo.AlbumAlertMessage aam ON aam.Id = a.AlbumAlertMessageId
 			LEFT JOIN dbo.AlbumContentType act ON act.AlbumId = a.Id
@@ -60,7 +69,10 @@ BEGIN
 			   aam.Description,
 			   a.IsPublic,
 			   a.CreatedOnUtc,
-			   a.UpdatedOnUtc
+			   a.UpdatedOnUtc,
+			   a.CdnThumbnailUrl,
+			   a.CdnOriginalUrl,
+			   a.FriendlyName
 	)
     SELECT COUNT_BIG(1) AS RowNum,
 		 0 Id,
@@ -74,7 +86,10 @@ BEGIN
 		 NULL [ContentTypes],
 		 GETDATE() CreatedOnUtc,
 		 NULL UpdatedOnUtc,
-		1 AS IsTotalRecord
+		 null [CdnThumbnailUrl],
+		 null [CdnOriginalUrl],
+		 NULL FriendlyName,
+		 1 AS IsTotalRecord
     FROM FilteredData
     UNION
     SELECT *,
