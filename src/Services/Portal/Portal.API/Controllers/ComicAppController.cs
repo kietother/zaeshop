@@ -5,6 +5,7 @@ using Portal.API.Attributes;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.Models.AlbumModels;
 using Portal.Domain.Models.CollectionModels;
+using System.Text.RegularExpressions;
 
 namespace Portal.API.Controllers
 {
@@ -36,6 +37,7 @@ namespace Portal.API.Controllers
                 IsPublic = x.IsPublic,
                 CreatedDate = x.CreatedOnUtc,
                 UpdatedDate = x.UpdatedOnUtc,
+                CdnThumbnailUrl = x.CdnThumbnailUrl,
                 Contents = x.Collections.OrderByDescending(y => y.Title).Take(5).Select(z => new ContentAppModel
                 {
                     Id = z.Id,
@@ -84,7 +86,7 @@ namespace Portal.API.Controllers
                 ArtitstNames = comic.ArtitstNames,
                 Tags = comic.Tags,
                 ThumbnailUrl = comic.CdnThumbnailUrl,
-                Contents = comic.Collections.OrderByDescending(y => y.Title).Select(z => new ContentAppModel
+                Contents = comic.Collections.Select(z => new ContentAppModel
                 {
                     Id = z.Id,
                     Title = z.Title,
@@ -94,14 +96,16 @@ namespace Portal.API.Controllers
                     IsPublic = z.IsPublic,
                     AlbumId = z.AlbumId,
                     AlbumTitle = comic.Title,
-                    AlbumFriendlyName = comic.FriendlyName,
-                    Description = z.Description,
-                    ExtendName = z.ExtendName,
-                    Volume = z.Volume
-                }).ToList()
+                    AlbumFriendlyName = comic.FriendlyName
+                }).OrderBy(x => GetChapterNumber(x.Title)).ToList()
             });
 
             return Ok(result);
+        }
+        int GetChapterNumber(string title)
+        {
+            var match = Regex.Match(title, @"\d+");
+            return match.Success ? int.Parse(match.Value) : int.MaxValue;
         }
     }
 }

@@ -66,9 +66,9 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPagingAsync([FromQuery] PagingCommonRequest request)
+        public async Task<IActionResult> GetPagingAsync([FromQuery] PagingCommonRequest request, [FromQuery] FilterAdvanced filter)
         {   
-            var response = await _albumService.GetPagingAsync(request);
+            var response = await _albumService.GetPagingAsync(request, filter);
 
             if (!response.IsSuccess)
                 return BadRequest(response);
