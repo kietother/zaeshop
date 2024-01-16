@@ -83,11 +83,23 @@ namespace Common
             var normalizedName = RemoveVietnameseCharacters(name);
             return normalizedName.ToLower().Replace(" ", "-");
         }
-        public static int GetChapterNumber(string title)
+        public static async Task<int> GetChapterNumberAsync(string title, int timeoutMilliseconds)
         {
-            var match = Regex.Match(title, @"\d+");
-            return match.Success ? int.Parse(match.Value) : int.MaxValue;
+            var cancellationTokenSource = new CancellationTokenSource(timeoutMilliseconds);
+
+            try
+            {
+                var match = await Task.Run(() => Regex.Match(title, @"\d+"), cancellationTokenSource.Token);
+                return match.Success ? int.Parse(match.Value) : int.MaxValue;
+            }
+            catch (OperationCanceledException)
+            {
+                // Handle timeout
+                Console.WriteLine("Operation timed out.");
+                return int.MaxValue; // or throw a TimeoutException if needed
+            }
         }
+
     }
 
     public static class JsonSerializationHelper
