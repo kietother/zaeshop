@@ -83,23 +83,6 @@ namespace Common
             var normalizedName = RemoveVietnameseCharacters(name);
             return normalizedName.ToLower().Replace(" ", "-");
         }
-        public static async Task<int> GetChapterNumberAsync(string title, int timeoutMilliseconds)
-        {
-            var cancellationTokenSource = new CancellationTokenSource(timeoutMilliseconds);
-
-            try
-            {
-                var match = await Task.Run(() => Regex.Match(title, @"\d+"), cancellationTokenSource.Token);
-                return match.Success ? int.Parse(match.Value) : int.MaxValue;
-            }
-            catch (OperationCanceledException)
-            {
-                // Handle timeout
-                Console.WriteLine("Operation timed out.");
-                return int.MaxValue; // or throw a TimeoutException if needed
-            }
-        }
-
     }
 
     public static class JsonSerializationHelper
@@ -123,6 +106,18 @@ namespace Common
         public static T? Deserialize<T>(string json)
         {
             return JsonSerializer.Deserialize<T>(json, s_readOptions);
+        }
+    }
+
+    public static partial class RegexHelper
+    {
+        [GeneratedRegex(@"\d+")]
+        private static partial Regex DigitRegex();
+
+        public static int GetChapterNumber(string title)
+        {
+            var match = DigitRegex().Match(title);
+            return match.Success ? int.Parse(match.Value) : int.MaxValue;
         }
     }
 }

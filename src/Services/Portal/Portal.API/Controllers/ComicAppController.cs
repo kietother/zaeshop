@@ -5,7 +5,6 @@ using Portal.API.Attributes;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.Models.AlbumModels;
 using Portal.Domain.Models.CollectionModels;
-using System.Text.RegularExpressions;
 
 namespace Portal.API.Controllers
 {
@@ -97,7 +96,7 @@ namespace Portal.API.Controllers
                     AlbumId = z.AlbumId,
                     AlbumTitle = comic.Title,
                     AlbumFriendlyName = comic.FriendlyName
-                }).OrderBy(x => CommonHelper.GetChapterNumber(x.Title)).ToList()
+                }).OrderByDescending(x => RegexHelper.GetChapterNumber(x.Title)).ToList()
             });
 
             return Ok(result);
