@@ -1,7 +1,8 @@
 "use client"
+import PagingRequest from '@/app/models/paging/PagingRequest';
 import React from 'react';
 
-export function FilterComponent() {
+export function FilterComponent({ pagingParams, setPagingParams, filter, setFilter }: { pagingParams: PagingRequest, setPagingParams: any, filter: any, setFilter: any }) {
     return (
         <>
             {/* <!--=====================================-->
@@ -19,7 +20,9 @@ export function FilterComponent() {
                             <a href="list-view.html" className="anime-btn btn-dark active">All</a>
                         </li>
                         <li>
-                            <a href="#" className="anime-btn btn-dark">A</a>
+                            <button className="anime-btn btn-dark"
+                                type='button'
+                                onClick={() => setFilter({ ...filter, firstChar: 'A' })}>A</button>
                         </li>
                         <li>
                             <a href="list-view.html" className="anime-btn btn-dark">B</a>
