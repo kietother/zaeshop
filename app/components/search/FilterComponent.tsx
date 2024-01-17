@@ -13,16 +13,18 @@ const getTypes = async () => {
     }
 };
 
-export function FilterComponent({ pagingParams, setPagingParams, filter, setFilter }: { pagingParams: PagingRequest, setPagingParams: any, filter: any, setFilter: any }) {
+export function FilterComponent({ pagingParams, setPagingParams, filter, setFilter, setIsSubmitFilter }: { pagingParams: PagingRequest, setPagingParams: any, filter: any, setFilter: any, setIsSubmitFilter: any }) {
     const handleGenreChange = (genreId: string) => {
-        const selectedGenres = filter.selectedGenres || [];
+        const selectedGenres = filter.genre || [];
         const updatedGenres = selectedGenres.includes(genreId)
             ? selectedGenres.filter((id: any) => id !== genreId)
             : [...selectedGenres, genreId];
 
-        setFilter({ ...filter, selectedGenres: updatedGenres });
+        setFilter({ ...filter, genre: updatedGenres });
     };
-
+    const handleSubmitFilter = () => {
+        setIsSubmitFilter = !setIsSubmitFilter;
+    };
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const [contentTypes, setContentTypes] = useState<any>();
 
@@ -34,7 +36,6 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                 }
             })
             .catch(error => {
-                // Handle errors if needed
                 console.error('Error fetching types:', error);
             });
     }, []);
@@ -82,7 +83,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                                                 type="checkbox"
                                                 className="custom-control-input"
                                                 id={genre.id}
-                                                checked={filter.selectedGenres?.includes(genre.id)}
+                                                checked={filter.genre?.includes(genre.id)}
                                                 onChange={() => handleGenreChange(genre.id)}
                                             />
                                             <label className="custom-control-label" htmlFor={genre.id}>
@@ -426,7 +427,13 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                     </ul>
                     <ul className="filter-block">
                         <li className="mb-0">
-                            <a href="#" className="anime-btn btn-dark border-change">Filter Now</a>
+                            <button
+                                className={`anime-btn btn-dark border-change`}
+                                type='button'
+                                onClick={() => handleSubmitFilter()}
+                            >
+                                Filter Now
+                            </button>
                         </li>
                     </ul>
                 </div>

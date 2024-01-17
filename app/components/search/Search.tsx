@@ -19,6 +19,7 @@ const getAlbums = async (params: PagingRequest, filter: any) => {
 
 export default function Search() {
     const [albums, setAlbums] = useState();
+    const [isSubmitFilter, setIsSubmitFilter] = useState(false);
     const [pagingParams, setPagingParams] = useState<PagingRequest>({
         PageNumber: 1,
         PageSize: 12,
@@ -42,11 +43,11 @@ export default function Search() {
                 setAlbums(response.data);
             }
         });
-    }, [pagingParams, filter.firstChar]);
+    }, [pagingParams, filter.firstChar, isSubmitFilter]);
 
     return (
         <>
-            <FilterComponent pagingParams={pagingParams} setPagingParams={setPagingParams} filter={filter} setFilter={setFilter} />
+            <FilterComponent pagingParams={pagingParams} setPagingParams={setPagingParams} filter={filter} setFilter={setFilter} setIsSubmitFilter={setIsSubmitFilter} />
             <ComicSearchResult albums={albums} />
         </>
     );
