@@ -6,7 +6,9 @@ export default function LogoutButton() {
     const [isLoading, setIsLoading] = useState(false);
     const onSignOut = () => {
         setIsLoading(true);
-        signOut().then(() => setIsLoading(false));
+        signOut({
+            redirect: true
+        })
     };
 
     return (
