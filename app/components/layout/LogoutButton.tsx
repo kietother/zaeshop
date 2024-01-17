@@ -1,16 +1,20 @@
 'use client';
 import { signOut } from "next-auth/react";
+import { useState } from "react";
 
 export default function LogoutButton() {
+    const [isLoading, setIsLoading] = useState(false);
     const onSignOut = () => {
-        signOut({
-            redirect: true
-        });
+        setIsLoading(true);
+        signOut().then(() => setIsLoading(false));
     };
 
     return (
-        <button className="anime-btn btn-dark" onClick={onSignOut}>
+        <>
+            {isLoading && <div id="overlay-loading"></div>}
+            <button className="anime-btn btn-dark" onClick={onSignOut}>
                 <i className="fa fa-sign-out" />
-        </button>
+            </button>
+        </>
     );
 }

@@ -1,7 +1,6 @@
 'use client';
 import { signIn } from "next-auth/react";
 import { useState } from "react";
-import OverlayLoading from "../layout/OverlayLoading";
 
 export default function LoginButton() {
     const [isLoading, setIsLoading] = useState(false);
@@ -13,10 +12,11 @@ export default function LoginButton() {
 
     return (
         <>
-            {isLoading ? <OverlayLoading /> : <button className="hide-link" onClick={onSignIn}>
+            {isLoading && <div id="overlay-loading"></div>}
+            <button className="hide-link" onClick={onSignIn}>
                 <img src="assets/media/login/google.png" alt="" /> Continue with
                 Google
-            </button>}
+            </button>
         </>
     );
 }
