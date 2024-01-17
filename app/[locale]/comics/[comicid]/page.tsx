@@ -1,10 +1,10 @@
 import getAxiosInstance from "@/lib/axios";
-import Breadcrumb from "../../components/comic/Breadcrumb";
-import ChapterComic from "../../components/comic/ChapterComic";
-import CommentComic from "../../components/comic/CommentComic";
-import InfomationComic from "../../components/comic/InfomationComic";
-import ComicDetail from "@/app/models/comics/ComicDetail";
+import Breadcrumb from "../../../components/comic/Breadcrumb";
+import ChapterComic from "../../../components/comic/ChapterComic";
+import CommentComic from "../../../components/comic/CommentComic";
+import InfomationComic from "../../../components/comic/InfomationComic";
 import ServerResponse from "@/app/models/common/ServerResponse";
+import ComicDetail from "@/app/models/comics/ComicDetail";
 
 const getComic = async (comicid: string | null) => {
     try {

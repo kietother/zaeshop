@@ -1,5 +1,5 @@
 import ContentResponse from "@/app/models/contents/ContentResponse";
-import dayjs from "@/app/utils/dayjs/dayjs-custom";
+import dayjs from "@/lib/dayjs/dayjs-custom";
 
 export default function ChapterComic({ contents }: { contents?: ContentResponse[] | null }) {
     return (

@@ -1,7 +1,7 @@
 import axios from "axios";
-import ServerResponse from "../models/common/ServerResponse";
-import PagingRequest from "../models/paging/PagingRequest";
-import FilterComponent from "../components/contents/FilterComponent";
+import ServerResponse from "../../models/common/ServerResponse";
+import PagingRequest from "../../models/paging/PagingRequest";
+import FilterComponent from "../../components/contents/FilterComponent";
 
 const getAlbums = async (params: PagingRequest, filter: any) => {
     try {
