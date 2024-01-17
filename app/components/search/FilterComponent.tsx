@@ -2,11 +2,11 @@
 import ServerResponse from '@/app/models/common/ServerResponse';
 import PagingRequest from '@/app/models/paging/PagingRequest';
 import axios from 'axios';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
 const getTypes = async () => {
     try {
         const response = await axios.get<ServerResponse<any>>('http://localhost:5148' + '/api/contentType/all');
-        console.log(response.data)
         return response.data;
     } catch (error) {
         return null;
@@ -19,19 +19,26 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
         const updatedGenres = selectedGenres.includes(genreId)
             ? selectedGenres.filter((id: any) => id !== genreId)
             : [...selectedGenres, genreId];
-    
+
         setFilter({ ...filter, selectedGenres: updatedGenres });
     };
+
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let contentTypes: any[] | ServerResponse<any> | null = [];
-    getTypes()
-      .then(types => {
-        contentTypes = types;
-      })
-      .catch(error => {
-        // Handle errors if needed
-        console.error('Error fetching types:', error);
-      });
+    const [contentTypes, setContentTypes] = useState<any>();
+
+    useEffect(() => {
+        getTypes()
+            .then(response => {
+                if (response && response.data) {
+                    setContentTypes(response.data);
+                }
+            })
+            .catch(error => {
+                // Handle errors if needed
+                console.error('Error fetching types:', error);
+            });
+    }, []);
+
     return (
         <>
             {/* <!--=====================================-->
@@ -68,7 +75,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                                 Genre <span><i className="fa fa-chevron-down"></i></span>
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="genre">
-                            {contentTypes.map((genre: any) => (
+                                {contentTypes?.map((genre: any) => (
                                     <li key={genre.id}>
                                         <div className="custom-control custom-checkbox">
                                             <input
