@@ -31,13 +31,16 @@ export default function Search() {
         firstChar: '',
         genre: '',
         country: '',
-        year: null,
+        year: '',
         status: false,
         language: '',
         rating: '',
     });
 
     useEffect(() => {
+        //To Do
+        filter.genre = filter.genre.toString().replace(/^0,/, '');
+        filter.year = filter.year.toString().replace(/^0,/, '');
         getAlbums(pagingParams, filter).then((response) => {
             if (response && response.data) {
                 setAlbums(response.data);
@@ -47,7 +50,7 @@ export default function Search() {
 
     return (
         <>
-            <FilterComponent pagingParams={pagingParams} setPagingParams={setPagingParams} filter={filter} setFilter={setFilter} setIsSubmitFilter={setIsSubmitFilter} />
+            <FilterComponent pagingParams={pagingParams} setPagingParams={setPagingParams} filter={filter} setFilter={setFilter} setIsSubmitFilter={setIsSubmitFilter} isSubmitFilter={isSubmitFilter} />
             <ComicSearchResult albums={albums} />
         </>
     );
