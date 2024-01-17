@@ -1,8 +1,37 @@
 "use client"
+import ServerResponse from '@/app/models/common/ServerResponse';
 import PagingRequest from '@/app/models/paging/PagingRequest';
+import axios from 'axios';
 import React from 'react';
+const getTypes = async () => {
+    try {
+        const response = await axios.get<ServerResponse<any>>('http://localhost:5148' + '/api/contentType/all');
+        console.log(response.data)
+        return response.data;
+    } catch (error) {
+        return null;
+    }
+};
 
 export function FilterComponent({ pagingParams, setPagingParams, filter, setFilter }: { pagingParams: PagingRequest, setPagingParams: any, filter: any, setFilter: any }) {
+    const handleGenreChange = (genreId: string) => {
+        const selectedGenres = filter.selectedGenres || [];
+        const updatedGenres = selectedGenres.includes(genreId)
+            ? selectedGenres.filter((id: any) => id !== genreId)
+            : [...selectedGenres, genreId];
+    
+        setFilter({ ...filter, selectedGenres: updatedGenres });
+    };
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let contentTypes: any[] | ServerResponse<any> | null = [];
+    getTypes()
+      .then(types => {
+        contentTypes = types;
+      })
+      .catch(error => {
+        // Handle errors if needed
+        console.error('Error fetching types:', error);
+      });
     return (
         <>
             {/* <!--=====================================-->
@@ -10,92 +39,27 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
         <!--=====================================--> */}
             <section className="filter sec-mar">
                 <div className="container">
-                    <div className="heading style-1">
-                        <h2>Filter <span> <a href="grid-view.html"><i className="fal fa-th-large"></i></a> <a
-                            className="ms-2 me-2 active"><i className="fa fa-solid fa-list"></i></a> Showing 1 – 09 of 5000
-                            Results</span></h2>
-                    </div>
                     <ul className="filter-block">
                         <li>
-                            <a href="list-view.html" className="anime-btn btn-dark active">All</a>
-                        </li>
-                        <li>
-                            <button className="anime-btn btn-dark"
+                            <button
+                                className={`anime-btn btn-dark`}
                                 type='button'
-                                onClick={() => setFilter({ ...filter, firstChar: 'A' })}>A</button>
+                                onClick={() => setFilter({ ...filter, firstChar: '' })}
+                            >
+                                All
+                            </button>
                         </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">B</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">C</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">D</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">E</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">F</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">G</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">H</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">I</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">J</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">L</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">M</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">N</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">O</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">P</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">Q</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">R</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">S</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">T</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">U</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">V</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">W</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">X</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">Y</a>
-                        </li>
-                        <li>
-                            <a href="list-view.html" className="anime-btn btn-dark">Z</a>
-                        </li>
+                        {alphabet.split('').map((letter, index) => (
+                            <li key={index}>
+                                <button
+                                    className={`anime-btn btn-dark`}
+                                    type='button'
+                                    onClick={() => setFilter({ ...filter, firstChar: letter })}
+                                >
+                                    {letter}
+                                </button>
+                            </li>
+                        ))}
                     </ul>
                     <ul className="filter-block style-2">
                         <li>
@@ -104,296 +68,22 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                                 Genre <span><i className="fa fa-chevron-down"></i></span>
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="genre">
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre1" />
-                                        <label className="custom-control-label" htmlFor="genre1">Action</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre2" />
-                                        <label className="custom-control-label" htmlFor="genre2">Adventure</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre3" />
-                                        <label className="custom-control-label" htmlFor="genre3">Avant Grade</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre4" />
-                                        <label className="custom-control-label" htmlFor="genre4">Boys Love</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre5" />
-                                        <label className="custom-control-label" htmlFor="genre5">Comedy</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre6" />
-                                        <label className="custom-control-label" htmlFor="genre6">Demons</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre7" />
-                                        <label className="custom-control-label" htmlFor="genre7">Drama</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre8" />
-                                        <label className="custom-control-label" htmlFor="genre8">Ecchi</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre9" />
-                                        <label className="custom-control-label" htmlFor="genre9">Fantasy</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre10" />
-                                        <label className="custom-control-label" htmlFor="genre10">Girls Love</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre11" />
-                                        <label className="custom-control-label" htmlFor="genre11">Gourmet</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre12" />
-                                        <label className="custom-control-label" htmlFor="genre12">Harem</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre13" />
-                                        <label className="custom-control-label" htmlFor="genre13">Horror</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre14" />
-                                        <label className="custom-control-label" htmlFor="genre14">Isekai</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre15" />
-                                        <label className="custom-control-label" htmlFor="genre15">Iyashikei</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre16" />
-                                        <label className="custom-control-label" htmlFor="genre16">Josei</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre17" />
-                                        <label className="custom-control-label" htmlFor="genre17">Kids</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre18" />
-                                        <label className="custom-control-label" htmlFor="genre18">Magic</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre19" />
-                                        <label className="custom-control-label" htmlFor="genre19">Mahou Shoujo</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre20" />
-                                        <label className="custom-control-label" htmlFor="genre20">Martial Arts</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre21" />
-                                        <label className="custom-control-label" htmlFor="genre21">Mecha</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre22" />
-                                        <label className="custom-control-label" htmlFor="genre22">Military</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre23" />
-                                        <label className="custom-control-label" htmlFor="genre23">Music</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre24" />
-                                        <label className="custom-control-label" htmlFor="genre24">Mystery</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre25" />
-                                        <label className="custom-control-label" htmlFor="genre25">Parody</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre26" />
-                                        <label className="custom-control-label" htmlFor="genre26">Psychological</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre27" />
-                                        <label className="custom-control-label" htmlFor="genre27">Reverse Harem</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre28" />
-                                        <label className="custom-control-label" htmlFor="genre28">Romance</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre29" />
-                                        <label className="custom-control-label" htmlFor="genre29">School</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre30" />
-                                        <label className="custom-control-label" htmlFor="genre30">Sci-Fi</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre31" />
-                                        <label className="custom-control-label" htmlFor="genre31">Seinin</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre32" />
-                                        <label className="custom-control-label" htmlFor="genre32">Shoujo</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre41" />
-                                        <label className="custom-control-label" htmlFor="genre41">Shounen</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre33" />
-                                        <label className="custom-control-label" htmlFor="genre33">Slice of Life</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre34" />
-                                        <label className="custom-control-label" htmlFor="genre34">Space</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre35" />
-                                        <label className="custom-control-label" htmlFor="genre35">Sports</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre36" />
-                                        <label className="custom-control-label" htmlFor="genre36">Super Power</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre37" />
-                                        <label className="custom-control-label" htmlFor="genre37">Supernatural</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre38" />
-                                        <label className="custom-control-label" htmlFor="genre38">Suspense</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre39" />
-                                        <label className="custom-control-label" htmlFor="genre39">Thriller</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="genre40" />
-                                        <label className="custom-control-label" htmlFor="genre40">Vampire</label>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="list-view.html#" className="anime-btn btn-dark dropdown-toggle" id="country" data-bs-toggle="dropdown"
-                                data-bs-auto-close="outside" aria-expanded="false">
-                                Country <span><i className="fa fa-chevron-down"></i></span>
-                            </a>
-                            <ul className="dropdown-menu" aria-labelledby="country">
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="country5" />
-                                        <label className="custom-control-label" htmlFor="country5">America</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="country1" />
-                                        <label className="custom-control-label" htmlFor="country1">China</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="country4" />
-                                        <label className="custom-control-label" htmlFor="country4">France</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="country2" />
-                                        <label className="custom-control-label" htmlFor="country2">Japan</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="country3" />
-                                        <label className="custom-control-label" htmlFor="country3">Korea</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="country6" />
-                                        <label className="custom-control-label" htmlFor="country6">VietNam</label>
-                                    </div>
-                                </li>
+                            {contentTypes.map((genre: any) => (
+                                    <li key={genre.id}>
+                                        <div className="custom-control custom-checkbox">
+                                            <input
+                                                type="checkbox"
+                                                className="custom-control-input"
+                                                id={genre.id}
+                                                checked={filter.selectedGenres?.includes(genre.id)}
+                                                onChange={() => handleGenreChange(genre.id)}
+                                            />
+                                            <label className="custom-control-label" htmlFor={genre.id}>
+                                                {genre.name}
+                                            </label>
+                                        </div>
+                                    </li>
+                                ))}
                             </ul>
                         </li>
                         <li>

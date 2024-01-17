@@ -9,7 +9,7 @@ import { portalServer } from "@/lib/services/search/baseUrl";
 
 const getAlbums = async (params: PagingRequest, filter: any) => {
     try {
-        const response = await axios.get<ServerResponse<any>>(portalServer + '/api/album', {
+        const response = await axios.get<ServerResponse<any>>('http://localhost:5148' + '/api/album', {
             params: { ...params, ...filter },
         });
 
@@ -23,7 +23,7 @@ export default function Search() {
     const [albums, setAlbums] = useState();
     const [pagingParams, setPagingParams] = useState<PagingRequest>({
         PageNumber: 1,
-        PageSize: 2,
+        PageSize: 12,
         SearchTerm: '',
         SortColumn: '',
         SortDirection: 'asc'
@@ -42,7 +42,7 @@ export default function Search() {
         getAlbums(pagingParams, filter).then((data) => {
             setAlbums(data.data);
         });
-    }, [pagingParams, filter]);
+    }, [pagingParams, filter.firstChar]);
 
     return (
         <>
