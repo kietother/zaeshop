@@ -3,7 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from 'next/navigation';
 import dynamic from "next/dynamic";
 
-const DynamicLoginButton = dynamic(() => import("../components/login/LoginButton"), {
+const DynamicLoginButton = dynamic(() => import("../../components/login/LoginButton"), {
     ssr: false
 })
 
