@@ -1,6 +1,10 @@
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
-import LogoutButton from "./LogoutButton";
+import dynamic from 'next/dynamic'
+
+const DynamicLogoutButton = dynamic(() => import('./LogoutButton'), {
+    ssr: false
+});
 
 export default async function Header() {
     const session = await getServerSession(authOptions);
@@ -124,7 +128,7 @@ export default async function Header() {
                                 <a href="/profile" className="anime-btn btn-dark border-change me-2 text-avt">
                                     {session.user?.name}
                                 </a>
-                                <LogoutButton />
+                                <DynamicLogoutButton />
                             </div>
                         )}
                     </div>
