@@ -3,10 +3,11 @@ import ServerResponse from '@/app/models/common/ServerResponse';
 import PagingRequest from '@/app/models/paging/PagingRequest';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { portalServer } from "@/lib/services/search/baseUrl";
 
 const getTypes = async () => {
     try {
-        const response = await axios.get<ServerResponse<any>>('http://localhost:5148' + '/api/contentType/all');
+        const response = await axios.get<ServerResponse<any>>(portalServer + '/api/contentType/all');
         return response.data;
     } catch (error) {
         return null;
