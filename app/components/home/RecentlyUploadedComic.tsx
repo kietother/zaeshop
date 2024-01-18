@@ -1,6 +1,7 @@
 import Image from "next/image";
-
+import { useTranslations } from 'next-intl';
 export default function RecentlyUploadedComic() {
+    const t = useTranslations('home');
     return (
         <>
             {/*=====================================*/}
@@ -9,7 +10,7 @@ export default function RecentlyUploadedComic() {
             <section className="popular style-2  sec-mar">
                 <div className="container">
                     <div className="heading style-1">
-                        <h2>Recently Uploaded</h2>
+                        <h2> {t('recently_uploaded')}</h2>
                     </div>
                     <div className="row">
                         <div className="col-lg-3 col-sm-6 col-12 comic-element">

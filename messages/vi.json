@@ -2,6 +2,49 @@
     "header": {
         "following": "Theo dõi",
         "ranking": "Xếp hạng",
-        "top_all": "Tất cả"
+        "top_all": "Tất cả",
+        "top_year": "Theo năm",
+        "top_month": "Theo tháng",
+        "top_day": "Theo ngày",
+        "top_follow": "Lượng theo dõi",
+        "explore": "Duyệt",
+        "genre": "Thể loại",
+        "manga": "Truyện Nhật",
+        "manhwa": "Truyện Hàn Xẻng",
+        "manhua": "Truyện Khựa",
+        "comic": "Truyện Mỹ",
+        "bande_dessinée": "Truyện Pháp",
+        "all": "Tất cả",
+        "login": "Đăng nhập",
+        "search": "Tìm kiếm"
+    },
+    "search": {
+        "all": "Tất cả",
+        "genre": "Thể loại",
+        "search_list": "Danh sách tìm kiếm",
+        "year": "Năm",
+        "status": "Trạng thái",
+        "releasing": "Đang cập nhật",
+        "completed": "Hoàn thành",
+        "rating": "Đánh giá",
+        "stars": "Sao",
+        "star": "Sao",
+        "sort_by": "Sắp xếp",
+        "recently_updated": "Vừa cập nhật",
+        "release_date": "Ngày ra mắt",
+        "most_view": "Xem nhiều nhất",
+        "most_popular": "Phổ biến nhất",
+        "filter_now": "Lọc ngay"
+    },
+    "profile":{
+        "profile": "Hồ sơ cá nhân",
+        "upgrade_account": "Nâng cấp tài khoản",
+        "shortcut": "Lối tắt",
+        "read_history": "Lịch sử đọc truyện",
+        "following": "Đang theo dõi"
+    },
+    "home":{
+        "popular": "Truyện phổ biến",
+        "recently_uploaded": "Truyện vừa cập nhật"
     }
 }

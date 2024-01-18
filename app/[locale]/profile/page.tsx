@@ -1,8 +1,10 @@
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { getTranslations } from 'next-intl/server';
 
 export default async function Page() {
+    const t = await getTranslations('profile');
     const session = await getServerSession(authOptions);
     if (!session) {
         return redirect('/login');
@@ -18,10 +20,7 @@ export default async function Page() {
                     <div className="breadcrumb-content">
                         <ul>
                             <li>
-                                <a href="home.html">Anime</a>
-                            </li>
-                            <li>
-                                <a className="active">Profile</a>
+                                <a className="active">{t('profile')}</a>
                             </li>
                         </ul>
                     </div>
@@ -48,20 +47,16 @@ export default async function Page() {
                                         href="edit-profile.html"
                                         className="anime-btn btn-dark border-change"
                                     >
-                                        EDIT PROFILE
+                                        {t('upgrade_account')}
                                     </a>
                                 </div>
                             </div>
                         </div>
                         <div className="col-lg-3 offset-lg-0 col-sm-8 offset-sm-2 col-12">
                             <div className="profile-link bg-color-black">
-                                <h5>Important Links</h5>
-                                <a href="watch-history.html" className="pb-3">
-                                    My watch Hisorty
-                                </a>
-                                <h5>Playlists</h5>
-                                <a href="playlist.html">Watch Later</a>
-                                <a href="home.html">Sci-fi Anime</a>
+                                <h5>{t('shortcut')}</h5>
+                                <a href="playlist.html">{t('read_history')}</a>
+                                <a href="home.html">{t('following')}</a>
                             </div>
                         </div>
                     </div>

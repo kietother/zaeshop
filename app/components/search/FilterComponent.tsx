@@ -4,6 +4,7 @@ import PagingRequest from '@/app/models/paging/PagingRequest';
 import React, { useEffect, useState } from 'react';
 import { portalServer } from "@/lib/services/client/baseUrl";
 import axiosClientApiInstance from '@/lib/services/client/interceptor';
+import { useTranslations } from 'next-intl';
 
 const getTypes = async () => {
     try {
@@ -15,6 +16,8 @@ const getTypes = async () => {
 };
 
 export function FilterComponent({ pagingParams, setPagingParams, filter, setFilter, setIsSubmitFilter, isSubmitFilter }: { pagingParams: PagingRequest, setPagingParams: any, filter: any, setFilter: any, setIsSubmitFilter: any, isSubmitFilter: any }) {
+    const t = useTranslations('search');
+
     const years: any[] = Array.from({ length: 30 }, (_, index) => ({ id: `yr${index + 1}`, name: `${2023 - index}` }));
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const [contentTypes, setContentTypes] = useState<any>();
@@ -85,7 +88,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                                 type='button'
                                 onClick={() => setFilter({ ...filter, firstChar: '' })}
                             >
-                                All
+                                {t('all')}
                             </button>
                         </li>
                         {alphabet.split('').map((letter, index) => (
@@ -104,7 +107,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                         <li>
                             <a href="#" className="anime-btn btn-dark dropdown-toggle" id="genre" data-bs-toggle="dropdown"
                                 data-bs-auto-close="outside" aria-expanded="false">
-                                Genre <span><i className="fa fa-chevron-down"></i></span>
+                                {t('genre')} <span><i className="fa fa-chevron-down"></i></span>
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="genre">
                                 {contentTypes?.map((genre: any) => (
@@ -128,7 +131,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                         <li>
                             <a href="#" className="anime-btn btn-dark dropdown-toggle" id="year" data-bs-toggle="dropdown"
                                 data-bs-auto-close="outside" aria-expanded="false">
-                                Year <span><i className="fa fa-chevron-down"></i></span>
+                                {t('year')} <span><i className="fa fa-chevron-down"></i></span>
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="year">
                                 {years.map((year: any) => (
@@ -152,7 +155,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                         <li>
                             <a href="list-view.html#" className="anime-btn btn-dark dropdown-toggle" id="status" data-bs-toggle="dropdown"
                                 data-bs-auto-close="outside" aria-expanded="false">
-                                Status <span><i className="fa fa-chevron-down"></i></span>
+                                 {t('status')} <span><i className="fa fa-chevron-down"></i></span>
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="status">
                                 <li>
@@ -165,7 +168,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                                             onChange={() => handleStatusChange(false)}
                                         />
                                         <label className="custom-control-label" htmlFor="status2">
-                                            Releasing
+                                            {t('releasing')}
                                         </label>
                                     </div>
                                 </li>
@@ -179,7 +182,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                                             onChange={() => handleStatusChange(true)}
                                         />
                                         <label className="custom-control-label" htmlFor="status3">
-                                            Completed
+                                            {t('completed')}
                                         </label>
                                     </div>
                                 </li>
@@ -188,37 +191,37 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                         <li>
                             <a href="list-view.html#" className="anime-btn btn-dark dropdown-toggle" id="rating" data-bs-toggle="dropdown"
                                 data-bs-auto-close="outside" aria-expanded="false">
-                                Rating <span><i className="fa fa-chevron-down"></i></span>
+                                 {t('rating')} <span><i className="fa fa-chevron-down"></i></span>
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="rating">
                                 <li>
                                     <div className="custom-control custom-checkbox">
                                         <input type="checkbox" className="custom-control-input" id="rating1" />
-                                        <label className="custom-control-label" htmlFor="rating1">4-5 Stars</label>
+                                        <label className="custom-control-label" htmlFor="rating1">4-5 {t('stars')}</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div className="custom-control custom-checkbox">
                                         <input type="checkbox" className="custom-control-input" id="rating2" />
-                                        <label className="custom-control-label" htmlFor="rating2">3-4 Stars</label>
+                                        <label className="custom-control-label" htmlFor="rating2">3-4 {t('stars')}</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div className="custom-control custom-checkbox">
                                         <input type="checkbox" className="custom-control-input" id="rating3" />
-                                        <label className="custom-control-label" htmlFor="rating3">2-3 Stars</label>
+                                        <label className="custom-control-label" htmlFor="rating3">2-3 {t('stars')}</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div className="custom-control custom-checkbox">
                                         <input type="checkbox" className="custom-control-input" id="rating4" />
-                                        <label className="custom-control-label" htmlFor="rating4">1-2 Stars</label>
+                                        <label className="custom-control-label" htmlFor="rating4">1-2 {t('stars')}</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div className="custom-control custom-checkbox">
                                         <input type="checkbox" className="custom-control-input" id="rating5" />
-                                        <label className="custom-control-label" htmlFor="rating5">0-1 Star</label>
+                                        <label className="custom-control-label" htmlFor="rating5">0-1 {t('star')}</label>
                                     </div>
                                 </li>
                             </ul>
@@ -226,49 +229,37 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                         <li>
                             <a href="list-view.html#" className="anime-btn btn-dark dropdown-toggle" id="sort-by" data-bs-toggle="dropdown"
                                 data-bs-auto-close="outside" aria-expanded="false">
-                                Sort by <span><i className="fa fa-chevron-down"></i></span>
+                                {t('sort_by')} <span><i className="fa fa-chevron-down"></i></span>
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="sort-by">
                                 <li>
                                     <div className="custom-control custom-checkbox">
                                         <input type="checkbox" className="custom-control-input" id="sort1" />
-                                        <label className="custom-control-label" htmlFor="sort1">Recently updated</label>
+                                        <label className="custom-control-label" htmlFor="sort1">{t('recently_updated')}</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div className="custom-control custom-checkbox">
                                         <input type="checkbox" className="custom-control-input" id="sort2" />
-                                        <label className="custom-control-label" htmlFor="sort2">Release Date</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="sort3" />
-                                        <label className="custom-control-label" htmlFor="sort3">Trending</label>
+                                        <label className="custom-control-label" htmlFor="sort2">{t('release_date')}</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div className="custom-control custom-checkbox">
                                         <input type="checkbox" className="custom-control-input" id="sort4" />
-                                        <label className="custom-control-label" htmlFor="sort4">Rating</label>
+                                        <label className="custom-control-label" htmlFor="sort4">{t('rating')}</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div className="custom-control custom-checkbox">
                                         <input type="checkbox" className="custom-control-input" id="sort5" />
-                                        <label className="custom-control-label" htmlFor="sort5">Most Watched</label>
+                                        <label className="custom-control-label" htmlFor="sort5">{t('most_view')}</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div className="custom-control custom-checkbox">
                                         <input type="checkbox" className="custom-control-input" id="sort6" />
-                                        <label className="custom-control-label" htmlFor="sort6">Most Popular</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="sort7" />
-                                        <label className="custom-control-label" htmlFor="sort7">Number of Episodes</label>
+                                        <label className="custom-control-label" htmlFor="sort6">{t('most_popular')}</label>
                                     </div>
                                 </li>
                             </ul>
@@ -281,7 +272,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                                 type='button'
                                 onClick={() => handleSubmitFilter()}
                             >
-                                Filter Now
+                                {t('filter_now')}
                             </button>
                         </li>
                     </ul>

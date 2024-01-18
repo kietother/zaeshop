@@ -1,6 +1,9 @@
 import Search from "@/app/components/search/Search";
+import { useTranslations } from "next-intl";
 
-export default async function Page() {
+export default function Page() {
+    const t = useTranslations('search');
+
     return (
         <>
             {/* <!--=====================================-->
@@ -10,8 +13,7 @@ export default async function Page() {
                 <div className="container">
                     <div className="breadcrumb-content">
                         <ul>
-                            <li><a href="home.html">Anime</a></li>
-                            <li><a className="active">List</a></li>
+                            <li><a className="active">{t('search_list')}</a></li>
                         </ul>
                     </div>
                 </div>
