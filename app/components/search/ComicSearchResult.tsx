@@ -1,4 +1,5 @@
 "use client";
+import { useMemo } from 'react'
 
 export default function ComicSearchResult({ albums, pagingCount, setPagingParams, pagingParams }: { albums: any, pagingCount: any, setPagingParams: any, pagingParams: any }) {
     const pageSize = pagingParams.PageSize;
@@ -20,28 +21,28 @@ export default function ComicSearchResult({ albums, pagingCount, setPagingParams
             setPagingParams({ ...pagingParams, PageNumber: nextPage });
         }
     };
-    const renderPagination = () => {
+    const renderPagination = useMemo(() => {
         const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
         return (
             <ul className="pagination">
                 <li className="page-item">
-                    <a href="#" className="page-link arrow" aria-label="Previous" onClick={handlePrevClick}>
+                    <a className="hover page-link arrow" aria-label="Previous" onClick={handlePrevClick}>
                         <i className="fa fa-chevron-left"></i>
                     </a>
                 </li>
                 {pages.map((page) => (
-                    <li key={page} className="page-item">
-                        <a href="#" className={`page-link ${page === pagingParams.PageNumber ? 'active' : ''}`} onClick={() => handlePageClick(page)}>{page}</a>
+                    <li key={page} className="hover page-item">
+                        <a className={`page-link ${page === pagingParams.PageNumber ? 'active' : ''}`} onClick={() => handlePageClick(page)}>{page}</a>
                     </li>
                 ))}
                 <li className="page-item">
-                    <a href="#" className="page-link arrow" aria-label="Next" onClick={handleNextClick}>
+                    <a className="hover page-link arrow" aria-label="Next" onClick={handleNextClick}>
                         <i className="fa fa-chevron-right"></i>
                     </a>
                 </li>
             </ul>
         );
-    };
+    }, [pagingParams.PageNumber, totalPages]);
 
     return (
         <>
@@ -78,7 +79,7 @@ export default function ComicSearchResult({ albums, pagingCount, setPagingParams
                         ))}
                     </div>
                     <div className="pagination-wrape">
-                        {renderPagination()}
+                        {renderPagination}
                     </div>
                 </div>
             </section>
