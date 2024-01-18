@@ -1,13 +1,13 @@
 "use client"
 import ServerResponse from '@/app/models/common/ServerResponse';
 import PagingRequest from '@/app/models/paging/PagingRequest';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { portalServer } from "@/lib/services/client/baseUrl";
+import axiosClientApiInstance from '@/lib/services/client/interceptor';
 
 const getTypes = async () => {
     try {
-        const response = await axios.get<ServerResponse<any>>(portalServer + '/api/contentType/all');
+        const response = await axiosClientApiInstance.get<ServerResponse<any>>(portalServer + '/api/contentType/all');
         return response.data;
     } catch (error) {
         return null;
