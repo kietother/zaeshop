@@ -15,5 +15,9 @@
         "comic": "Truyện Mỹ",
         "bande_dessinée": "Truyện Pháp",
         "all": "Tất cả"
+    },
+    "search": {
+        "all": "Tất cả",
+        "genre": "Thể loại"
     }
 }

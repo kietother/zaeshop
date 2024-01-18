@@ -1,9 +1,10 @@
 "use client"
 import ServerResponse from '@/app/models/common/ServerResponse';
 import PagingRequest from '@/app/models/paging/PagingRequest';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { portalServer } from "@/lib/services/client/baseUrl";
 import axiosClientApiInstance from '@/lib/services/client/interceptor';
+import SearchContext from '../contexts/SearchContext';
 
 const getTypes = async () => {
     try {
@@ -15,6 +16,9 @@ const getTypes = async () => {
 };
 
 export function FilterComponent({ pagingParams, setPagingParams, filter, setFilter, setIsSubmitFilter, isSubmitFilter }: { pagingParams: PagingRequest, setPagingParams: any, filter: any, setFilter: any, setIsSubmitFilter: any, isSubmitFilter: any }) {
+    const context = useContext(SearchContext);
+    const translate = context ? context.translate : {};
+
     const years: any[] = Array.from({ length: 30 }, (_, index) => ({ id: `yr${index + 1}`, name: `${2023 - index}` }));
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const [contentTypes, setContentTypes] = useState<any>();
@@ -85,7 +89,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                                 type='button'
                                 onClick={() => setFilter({ ...filter, firstChar: '' })}
                             >
-                                All
+                                {translate['all']}
                             </button>
                         </li>
                         {alphabet.split('').map((letter, index) => (
@@ -104,7 +108,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                         <li>
                             <a href="#" className="anime-btn btn-dark dropdown-toggle" id="genre" data-bs-toggle="dropdown"
                                 data-bs-auto-close="outside" aria-expanded="false">
-                                Genre <span><i className="fa fa-chevron-down"></i></span>
+                                {translate['genre']} <span><i className="fa fa-chevron-down"></i></span>
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="genre">
                                 {contentTypes?.map((genre: any) => (

@@ -15,5 +15,9 @@
         "comic": "Comic",
         "bande_dessinée": "Bande Dessinée",
         "all":"All"
+    },
+    "search": {
+        "all": "All",
+        "genre": "Genre"
     }
 }

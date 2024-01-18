@@ -1,6 +1,9 @@
 import Search from "@/app/components/search/Search";
+import { useTranslations } from "next-intl";
 
-export default async function Page() {
+export default function Page() {
+    const t = useTranslations('search');
+
     return (
         <>
             {/* <!--=====================================-->
@@ -16,7 +19,10 @@ export default async function Page() {
                     </div>
                 </div>
             </section>
-            <Search />
+            <Search translate={{
+                all: t('all'),
+                genre: t('genre'),
+            }}/>
         </>
     );
 }
