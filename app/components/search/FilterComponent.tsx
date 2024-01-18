@@ -3,7 +3,7 @@ import ServerResponse from '@/app/models/common/ServerResponse';
 import PagingRequest from '@/app/models/paging/PagingRequest';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { portalServer } from "@/lib/services/search/baseUrl";
+import { portalServer } from "@/lib/services/client/baseUrl";
 
 const getTypes = async () => {
     try {

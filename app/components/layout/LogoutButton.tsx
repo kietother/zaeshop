@@ -8,6 +8,8 @@ export default function LogoutButton() {
         setIsLoading(true);
         signOut({
             redirect: true
+        }).then(() => {
+            localStorage.removeItem('token');
         })
     };
 

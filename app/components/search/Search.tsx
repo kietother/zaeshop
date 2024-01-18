@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import ComicSearchResult from "./ComicSearchResult";
 import FilterComponent from "./FilterComponent";
 import axios from "axios";
-import { portalServer } from "@/lib/services/search/baseUrl";
+import { portalServer } from "@/lib/services/client/baseUrl";
 
 const getAlbums = async (params: PagingRequest, filter: any) => {
     try {
