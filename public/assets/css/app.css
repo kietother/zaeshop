@@ -5350,7 +5350,7 @@ input:focus,
   padding-top: 8% !important;
 }
 .page-link.active {
-  color: var(--color-primary);
-  background: var(--color-black);
+  color: var(--color-primary) !important;
+  background: var(--color-black) !important;
 }
 

@@ -6,6 +6,7 @@ import ComicSearchResult from "./ComicSearchResult";
 import FilterComponent from "./FilterComponent";
 import { portalServer } from "@/lib/services/client/baseUrl";
 import axiosClientApiInstance from "@/lib/services/client/interceptor";
+import { getTranslations } from 'next-intl/server';
 
 const getAlbums = async (params: PagingRequest, filter: any) => {
     try {
@@ -24,7 +25,7 @@ export default function Search() {
     const [isSubmitFilter, setIsSubmitFilter] = useState(false);
     const [pagingParams, setPagingParams] = useState<PagingRequest>({
         PageNumber: 1,
-        PageSize: 2,
+        PageSize: 12,
         SearchTerm: '',
         SortColumn: '',
         SortDirection: 'asc'

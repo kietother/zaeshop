@@ -2,6 +2,18 @@
     "header": {
         "following": "Flowing",
         "ranking": "Ranking",
-        "top_all": "Top All"
+        "top_all": "Top All",
+        "top_year": "Top Year",
+        "top_month": "Top Month",
+        "top_day": "Top Day",
+        "top_follow": "Top Follow",
+        "explore": "Explore",
+        "genre": "Genre",
+        "manga": "Manga",
+        "manhwa": "Manhwa",
+        "manhua": "Manhua",
+        "comic": "Comic",
+        "bande_dessinée": "Bande Dessinée",
+        "all":"All"
     }
 }

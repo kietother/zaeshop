@@ -2,6 +2,18 @@
     "header": {
         "following": "Theo dõi",
         "ranking": "Xếp hạng",
-        "top_all": "Tất cả"
+        "top_all": "Tất cả",
+        "top_year": "Theo năm",
+        "top_month": "Theo tháng",
+        "top_day": "Theo ngày",
+        "top_follow": "Lượng theo dõi",
+        "explore": "Duyệt",
+        "genre": "Thể loại",
+        "manga": "Truyện Nhật",
+        "manhwa": "Truyện Hàn Xẻng",
+        "manhua": "Truyện Khựa",
+        "comic": "Truyện Mỹ",
+        "bande_dessinée": "Truyện Pháp",
+        "all": "Tất cả"
     }
 }

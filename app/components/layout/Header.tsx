@@ -45,30 +45,30 @@ export default async function Header() {
                                     data-bs-auto-close="outside"
                                     aria-expanded="false"
                                 >
-                                    Ranking
+                                    {t('ranking')}
                                 </a>
                                 <ul className="dropdown-menu" aria-labelledby="ranking">
                                     <li>
                                         <a href="manga-detail.html" className="active">
-                                            Top all
+                                            {t('top_all')}
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="home-2.html">Top year</a>
+                                        <a href="home-2.html">{t('top_year')}</a>
                                     </li>
                                     <li>
-                                        <a href="home-3.html">Top month</a>
+                                        <a href="home-3.html">{t('top_month')}</a>
                                     </li>
                                     <li>
-                                        <a href="streaming-season.html">Top day</a>
+                                        <a href="streaming-season.html">{t('top_day')}</a>
                                     </li>
                                     <li>
-                                        <a href="streaming-movie.html">Top follow</a>
+                                        <a href="streaming-movie.html">{t('top_follow')}</a>
                                     </li>
                                 </ul>
                             </li>
                             <li className="menu-item-has-children">
-                                <a href="/search">Explore</a>
+                                <a href="/search">{t('explore')}</a>
                             </li>
                             <li className="menu-item-has-children">
                                 <a
@@ -79,25 +79,25 @@ export default async function Header() {
                                     data-bs-auto-close="outside"
                                     aria-expanded="false"
                                 >
-                                    Genre
+                                    {t('genre')}
                                 </a>
                                 <ul className="dropdown-menu" aria-labelledby="types">
                                     <li>
                                         <a href="manga-detail.html" className="active">
-                                            Manga
+                                            {t('manga')}
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="home-2.html">Manhwa</a>
+                                        <a href="home-2.html">{t('manhwa')}</a>
                                     </li>
                                     <li>
-                                        <a href="home-3.html">Manhua</a>
+                                        <a href="home-3.html">{t('manhua')}</a>
                                     </li>
                                     <li>
-                                        <a href="streaming-season.html">Comic</a>
+                                        <a href="streaming-season.html">{t('comic')}</a>
                                     </li>
                                     <li>
-                                        <a href="streaming-movie.html">Bande Dessinée</a>
+                                        <a href="streaming-movie.html">{t('bande_dessinée')}</a>
                                     </li>
                                 </ul>
                             </li>
