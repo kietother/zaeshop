@@ -119,7 +119,7 @@ export default async function Header() {
                         {!isLogined ? (
                             <div className="d-flex right-nav">
                                 <a href="login" className="anime-btn btn-dark">
-                                    LOG IN
+                                    {t('login')}
                                 </a>
                             </div>
                         ) : (

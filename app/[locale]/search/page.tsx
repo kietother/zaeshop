@@ -13,8 +13,7 @@ export default function Page() {
                 <div className="container">
                     <div className="breadcrumb-content">
                         <ul>
-                            <li><a href="home.html">Anime</a></li>
-                            <li><a className="active">List</a></li>
+                            <li><a className="active">{t('search_list')}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -22,6 +21,8 @@ export default function Page() {
             <Search translate={{
                 all: t('all'),
                 genre: t('genre'),
+                year: t('year'),
+                status: t('status')
             }}/>
         </>
     );

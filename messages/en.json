@@ -14,10 +14,14 @@
         "manhua": "Manhua",
         "comic": "Comic",
         "bande_dessinée": "Bande Dessinée",
-        "all":"All"
+        "all":"All",
+        "login":"Login"
     },
     "search": {
         "all": "All",
-        "genre": "Genre"
+        "genre": "Genre",
+        "search_list": "Search List",
+        "year": "Year",
+        "status": "Status"
     }
 }

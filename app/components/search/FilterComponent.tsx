@@ -132,7 +132,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                         <li>
                             <a href="#" className="anime-btn btn-dark dropdown-toggle" id="year" data-bs-toggle="dropdown"
                                 data-bs-auto-close="outside" aria-expanded="false">
-                                Year <span><i className="fa fa-chevron-down"></i></span>
+                                {translate['year']} <span><i className="fa fa-chevron-down"></i></span>
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="year">
                                 {years.map((year: any) => (
@@ -156,7 +156,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                         <li>
                             <a href="list-view.html#" className="anime-btn btn-dark dropdown-toggle" id="status" data-bs-toggle="dropdown"
                                 data-bs-auto-close="outside" aria-expanded="false">
-                                Status <span><i className="fa fa-chevron-down"></i></span>
+                                 {translate['status']} <span><i className="fa fa-chevron-down"></i></span>
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="status">
                                 <li>

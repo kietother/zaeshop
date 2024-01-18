@@ -14,10 +14,14 @@
         "manhua": "Truyện Khựa",
         "comic": "Truyện Mỹ",
         "bande_dessinée": "Truyện Pháp",
-        "all": "Tất cả"
+        "all": "Tất cả",
+        "login": "Đăng nhập"
     },
     "search": {
         "all": "Tất cả",
-        "genre": "Thể loại"
+        "genre": "Thể loại",
+        "search_list": "Danh sách tìm kiếm",
+        "year": "Năm",
+        "status": "Trạng thái"
     }
 }
