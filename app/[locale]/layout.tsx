@@ -28,13 +28,14 @@ export default function RootLayout({
   children: React.ReactNode,
   params: any
 }) {
+  // Receive messages provided in `i18n.ts`
   const messages = useMessages();
 
   return (
     <html lang={locale}>
       <body className={inter.className + " sticky-header"}>
         {/* Back To Top Start */}
-        <a href="home-3.html#main-wrapper" id="backto-top" className="back-to-top">
+        <a id="backto-top" className="back-to-top">
           <i className="fas fa-angle-double-up" />
         </a>
         {/* Back To Top End */}

@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-
+import { useTranslations } from 'next-intl';
 export default function PopularComic() {
+    const t = useTranslations('home');
     return (
         <>
             {/*=====================================*/}
@@ -11,7 +12,7 @@ export default function PopularComic() {
                 <div className="container">
                     <div className="heading style-1">
                         <h2>
-                            Popular Manga<span>Sunday 01 Jan 2023</span>
+                            {t('popular')}<span>Sunday 01 Jan 2023</span>
                         </h2>
                     </div>
                     <div className="row">
