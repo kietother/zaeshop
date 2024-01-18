@@ -31,8 +31,8 @@ export default function ComicSearchResult({ albums, pagingCount, setPagingParams
                     </a>
                 </li>
                 {pages.map((page) => (
-                    <li key={page} className="hover page-item">
-                        <a className={`page-link ${page === pagingParams.PageNumber ? 'active' : ''}`} onClick={() => handlePageClick(page)}>{page}</a>
+                    <li key={page} className="page-item">
+                        <a className={`hover page-link ${page === pagingParams.PageNumber ? 'active' : ''}`} onClick={() => handlePageClick(page)}>{page}</a>
                     </li>
                 ))}
                 <li className="page-item">
