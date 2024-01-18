@@ -1,18 +1,23 @@
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import dynamic from 'next/dynamic'
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getLocale } from 'next-intl/server';
 import Initial from "./Initial";
 
 const DynamicLogoutButton = dynamic(() => import('./LogoutButton'), {
     ssr: false
 });
 
+const DynamicLanguageSwitcher = dynamic(() => import('./LanguageSwitcher'), {
+    ssr: false
+})
+
 export default async function Header() {
     const session = await getServerSession(authOptions);
     const isLogined = !!session;
 
     const t = await getTranslations('header');
+    const locale = await getLocale();
 
     return (
         <header className="header style-1">
@@ -100,6 +105,9 @@ export default async function Header() {
                                         <a href="streaming-movie.html">{t('bande_dessinée')}</a>
                                     </li>
                                 </ul>
+                            </li>
+                            <li className="menu-item-has-children">
+                                <DynamicLanguageSwitcher locale={locale} />
                             </li>
                         </ul>
                         <form action="list-view.html">

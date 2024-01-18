@@ -19,8 +19,7 @@ export default async function middleware(request: NextRequest) {
     defaultLocale: 'vi',
     locales,
     localePrefix,
-    pathnames,
-    localeDetection: false
+    pathnames
   });
   const response = handleI18nRouting(request);
   return response;
