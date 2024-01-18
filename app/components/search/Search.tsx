@@ -6,7 +6,6 @@ import ComicSearchResult from "./ComicSearchResult";
 import FilterComponent from "./FilterComponent";
 import { portalServer } from "@/lib/services/client/baseUrl";
 import axiosClientApiInstance from "@/lib/services/client/interceptor";
-import SearchContext from "../contexts/SearchContext";
 
 const getAlbums = async (params: PagingRequest, filter: any) => {
     try {
@@ -19,7 +18,7 @@ const getAlbums = async (params: PagingRequest, filter: any) => {
     }
 };
 
-export default function Search({ translate }: { translate: any }) {
+export default function Search() {
     const [albums, setAlbums] = useState();
     const [pagingCount, setPagingCount] = useState({});
     const [isSubmitFilter, setIsSubmitFilter] = useState(false);
@@ -55,9 +54,9 @@ export default function Search({ translate }: { translate: any }) {
     }, [pagingParams, filter.firstChar, isSubmitFilter]);
 
     return (
-        <SearchContext.Provider value={{ translate }}>
+        <>
             <FilterComponent pagingParams={pagingParams} setPagingParams={setPagingParams} filter={filter} setFilter={setFilter} setIsSubmitFilter={setIsSubmitFilter} isSubmitFilter={isSubmitFilter} />
             <ComicSearchResult albums={albums} pagingCount={pagingCount} setPagingParams={setPagingParams} pagingParams={pagingParams} />
-        </SearchContext.Provider>
+        </>
     );
 }

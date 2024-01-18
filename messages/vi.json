@@ -22,6 +22,7 @@
         "genre": "Thể loại",
         "search_list": "Danh sách tìm kiếm",
         "year": "Năm",
-        "status": "Trạng thái"
+        "status": "Trạng thái",
+        "releasing": "Thời gian ra mắt"
     }
 }

@@ -22,6 +22,7 @@
         "genre": "Genre",
         "search_list": "Search List",
         "year": "Year",
-        "status": "Status"
+        "status": "Status",
+        "releasing": "Releasing"
     }
 }

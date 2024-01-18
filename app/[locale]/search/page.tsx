@@ -18,12 +18,7 @@ export default function Page() {
                     </div>
                 </div>
             </section>
-            <Search translate={{
-                all: t('all'),
-                genre: t('genre'),
-                year: t('year'),
-                status: t('status')
-            }}/>
+            <Search />
         </>
     );
 }

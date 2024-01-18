@@ -1,10 +1,10 @@
 "use client"
 import ServerResponse from '@/app/models/common/ServerResponse';
 import PagingRequest from '@/app/models/paging/PagingRequest';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { portalServer } from "@/lib/services/client/baseUrl";
 import axiosClientApiInstance from '@/lib/services/client/interceptor';
-import SearchContext from '../contexts/SearchContext';
+import { useTranslations } from 'next-intl';
 
 const getTypes = async () => {
     try {
@@ -16,8 +16,7 @@ const getTypes = async () => {
 };
 
 export function FilterComponent({ pagingParams, setPagingParams, filter, setFilter, setIsSubmitFilter, isSubmitFilter }: { pagingParams: PagingRequest, setPagingParams: any, filter: any, setFilter: any, setIsSubmitFilter: any, isSubmitFilter: any }) {
-    const context = useContext(SearchContext);
-    const translate = context ? context.translate : {};
+    const t = useTranslations('search');
 
     const years: any[] = Array.from({ length: 30 }, (_, index) => ({ id: `yr${index + 1}`, name: `${2023 - index}` }));
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -89,7 +88,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                                 type='button'
                                 onClick={() => setFilter({ ...filter, firstChar: '' })}
                             >
-                                {translate['all']}
+                                {t('all')}
                             </button>
                         </li>
                         {alphabet.split('').map((letter, index) => (
@@ -108,7 +107,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                         <li>
                             <a href="#" className="anime-btn btn-dark dropdown-toggle" id="genre" data-bs-toggle="dropdown"
                                 data-bs-auto-close="outside" aria-expanded="false">
-                                {translate['genre']} <span><i className="fa fa-chevron-down"></i></span>
+                                {t('genre')} <span><i className="fa fa-chevron-down"></i></span>
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="genre">
                                 {contentTypes?.map((genre: any) => (
@@ -132,7 +131,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                         <li>
                             <a href="#" className="anime-btn btn-dark dropdown-toggle" id="year" data-bs-toggle="dropdown"
                                 data-bs-auto-close="outside" aria-expanded="false">
-                                {translate['year']} <span><i className="fa fa-chevron-down"></i></span>
+                                {t('year')} <span><i className="fa fa-chevron-down"></i></span>
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="year">
                                 {years.map((year: any) => (
@@ -156,7 +155,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                         <li>
                             <a href="list-view.html#" className="anime-btn btn-dark dropdown-toggle" id="status" data-bs-toggle="dropdown"
                                 data-bs-auto-close="outside" aria-expanded="false">
-                                 {translate['status']} <span><i className="fa fa-chevron-down"></i></span>
+                                 {t('status')} <span><i className="fa fa-chevron-down"></i></span>
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="status">
                                 <li>
@@ -169,7 +168,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                                             onChange={() => handleStatusChange(false)}
                                         />
                                         <label className="custom-control-label" htmlFor="status2">
-                                            Releasing
+                                            {t('releasing')}
                                         </label>
                                     </div>
                                 </li>
