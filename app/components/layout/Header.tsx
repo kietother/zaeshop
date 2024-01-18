@@ -2,6 +2,7 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import dynamic from 'next/dynamic'
 import { getTranslations } from 'next-intl/server';
+import Initial from "./Initial";
 
 const DynamicLogoutButton = dynamic(() => import('./LogoutButton'), {
     ssr: false
@@ -15,6 +16,7 @@ export default async function Header() {
 
     return (
         <header className="header style-1">
+            <Initial props={session} />
             <div className="container">
                 {/* Start Mainmanu Nav */}
                 <nav className="navbar navbar-expand-lg">
