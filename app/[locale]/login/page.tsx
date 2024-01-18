@@ -1,7 +1,11 @@
 import { getServerSession } from "next-auth";
-import LoginButton from "../components/login/LoginButton";
 import { authOptions } from "@/lib/auth";
 import { redirect } from 'next/navigation';
+import dynamic from "next/dynamic";
+
+const DynamicLoginButton = dynamic(() => import("../../components/login/LoginButton"), {
+    ssr: false
+})
 
 export default async function Login() {
     const session = await getServerSession(authOptions);
@@ -20,7 +24,7 @@ export default async function Login() {
                         <div className="login-content">
                             <img src="assets/media/icon/user.png" alt="" className="user-icon" />
                             <h3>Log in</h3>
-                            <LoginButton />
+                            <DynamicLoginButton />
                             <div className="custom-control custom-checkbox">
                                 <input
                                     type="checkbox"

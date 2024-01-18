@@ -1,10 +1,17 @@
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
-import LogoutButton from "./LogoutButton";
+import dynamic from 'next/dynamic'
+import { getTranslations } from 'next-intl/server';
+
+const DynamicLogoutButton = dynamic(() => import('./LogoutButton'), {
+    ssr: false
+});
 
 export default async function Header() {
     const session = await getServerSession(authOptions);
     const isLogined = !!session;
+
+    const t = await getTranslations('header');
 
     return (
         <header className="header style-1">
@@ -25,10 +32,10 @@ export default async function Header() {
                     <div className="collapsed navbar-collapse collapse" id="mynavbar">
                         <ul className="navbar-nav ms-auto mainmenu">
                             <li className="menu-item-has-children">
-                                <a href="home.html">Following</a>
+                                <a href="home.html">{t('following')}</a>
                             </li>
                             <li className="menu-item-has-children">
-                            <a
+                                <a
                                     href="#"
                                     className="dropdown-toggle"
                                     id="ranking"
@@ -124,7 +131,7 @@ export default async function Header() {
                                 <a href="/profile" className="anime-btn btn-dark border-change me-2 text-avt">
                                     {session.user?.name}
                                 </a>
-                                <LogoutButton />
+                                <DynamicLogoutButton />
                             </div>
                         )}
                     </div>

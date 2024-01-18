@@ -1,17 +1,17 @@
 // Import CSS
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './globals.css'
-import '../public/assets/css/vendor/font-awesome.css'
-import '../public/assets/css/vendor/slick.css'
-import '../public/assets/css/vendor/slick-theme.css'
-import '../public/assets/css/vendor/sal.css'
-import '../public/assets/css/app.css'
+import '@/public/assets/css/vendor/font-awesome.css'
+import '@/public/assets/css/vendor/slick.css'
+import '@/public/assets/css/vendor/slick-theme.css'
+import '@/public/assets/css/vendor/sal.css'
+import '@/public/assets/css/app.css'
 
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
-import Header from './components/layout/Header'
-import Footer from './components/layout/Footer'
+import Header from '../components/layout/Header'
+import Footer from '../components/layout/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,11 +22,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  params: { locale }
 }: {
-  children: React.ReactNode
+  children: React.ReactNode,
+  params: any
 }) {
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className={inter.className + " sticky-header"}>
         {/* Back To Top Start */}
         <a href="home-3.html#main-wrapper" id="backto-top" className="back-to-top">
