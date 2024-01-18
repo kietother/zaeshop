@@ -5349,3 +5349,8 @@ input:focus,
   font-size: 12px;
   padding-top: 8% !important;
 }
+.page-link.active {
+  color: var(--color-primary);
+  background: var(--color-black);
+}
+

@@ -20,10 +20,11 @@ const getAlbums = async (params: PagingRequest, filter: any) => {
 
 export default function Search() {
     const [albums, setAlbums] = useState();
+    const [pagingCount, setPagingCount] = useState({});
     const [isSubmitFilter, setIsSubmitFilter] = useState(false);
     const [pagingParams, setPagingParams] = useState<PagingRequest>({
         PageNumber: 1,
-        PageSize: 12,
+        PageSize: 2,
         SearchTerm: '',
         SortColumn: '',
         SortDirection: 'asc'
@@ -42,9 +43,12 @@ export default function Search() {
         //To Do
         filter.genre = filter.genre.toString().replace(/^0,/, '');
         filter.year = filter.year.toString().replace(/^0,/, '');
-        getAlbums(pagingParams, filter).then((response) => {
+        getAlbums(pagingParams, filter).then((response: any) => {
             if (response && response.data) {
                 setAlbums(response.data);
+                setPagingCount({
+                    pageLength: response.rowNum,
+                })
             }
         });
     }, [pagingParams, filter.firstChar, isSubmitFilter]);
@@ -52,7 +56,7 @@ export default function Search() {
     return (
         <>
             <FilterComponent pagingParams={pagingParams} setPagingParams={setPagingParams} filter={filter} setFilter={setFilter} setIsSubmitFilter={setIsSubmitFilter} isSubmitFilter={isSubmitFilter} />
-            <ComicSearchResult albums={albums} />
+            <ComicSearchResult albums={albums} pagingCount={pagingCount} setPagingParams={setPagingParams} pagingParams={pagingParams}/>
         </>
     );
 }

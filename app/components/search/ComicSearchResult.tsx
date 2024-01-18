@@ -1,6 +1,48 @@
 "use client";
 
-export default function ComicSearchResult({ albums }: { albums: any }) {
+export default function ComicSearchResult({ albums, pagingCount, setPagingParams, pagingParams }: { albums: any, pagingCount: any, setPagingParams: any, pagingParams: any }) {
+    const pageSize = pagingParams.PageSize;
+    const totalAlbums = pagingCount.pageLength;
+    const totalPages = Math.ceil(totalAlbums / pageSize);
+    const handlePageClick = (page: number) => {
+        setPagingParams({ ...pagingParams, PageNumber: page });
+    };
+    const handlePrevClick = () => {
+        const prevPage = pagingParams.PageNumber - 1;
+        if (prevPage >= 1) {
+            setPagingParams({ ...pagingParams, PageNumber: prevPage });
+        }
+    };
+
+    const handleNextClick = () => {
+        const nextPage = pagingParams.PageNumber + 1;
+        if (nextPage <= totalPages) {
+            setPagingParams({ ...pagingParams, PageNumber: nextPage });
+        }
+    };
+    const renderPagination = () => {
+        const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+        return (
+            <ul className="pagination">
+                <li className="page-item">
+                    <a href="#" className="page-link arrow" aria-label="Previous" onClick={handlePrevClick}>
+                        <i className="fa fa-chevron-left"></i>
+                    </a>
+                </li>
+                {pages.map((page) => (
+                    <li key={page} className="page-item">
+                        <a href="#" className={`page-link ${page === pagingParams.PageNumber ? 'active' : ''}`} onClick={() => handlePageClick(page)}>{page}</a>
+                    </li>
+                ))}
+                <li className="page-item">
+                    <a href="#" className="page-link arrow" aria-label="Next" onClick={handleNextClick}>
+                        <i className="fa fa-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        );
+    };
+
     return (
         <>
             {/* <!--=====================================-->
@@ -36,30 +78,7 @@ export default function ComicSearchResult({ albums }: { albums: any }) {
                         ))}
                     </div>
                     <div className="pagination-wrape">
-                        <ul className="pagination">
-                            <li className="page-item">
-                                <a href="#" className="page-link arrow" aria-label="Previous">
-                                    <i className="fa fa-chevron-left"></i>
-                                </a>
-                            </li>
-                            <li className="page-item">
-                                <a href="#" className="page-link current">1</a>
-                            </li>
-                            <li className="page-item">
-                                <a href="#" className="page-link">2</a>
-                            </li>
-                            <li className="page-item">
-                                <a href="#" className="page-link">3</a>
-                            </li>
-                            <li className="page-item">
-                                <a href="#" className="page-link">4</a>
-                            </li>
-                            <li className="page-item">
-                                <a href="#" className="page-link arrow" aria-label="next">
-                                    <i className="fa fa-chevron-right"></i>
-                                </a>
-                            </li>
-                        </ul>
+                        {renderPagination()}
                     </div>
                 </div>
             </section>
