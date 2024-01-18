@@ -15,7 +15,8 @@
         "comic": "Truyện Mỹ",
         "bande_dessinée": "Truyện Pháp",
         "all": "Tất cả",
-        "login": "Đăng nhập"
+        "login": "Đăng nhập",
+        "search": "Tìm kiếm"
     },
     "search": {
         "all": "Tất cả",
@@ -23,6 +24,27 @@
         "search_list": "Danh sách tìm kiếm",
         "year": "Năm",
         "status": "Trạng thái",
-        "releasing": "Thời gian ra mắt"
+        "releasing": "Đang cập nhật",
+        "completed": "Hoàn thành",
+        "rating": "Đánh giá",
+        "stars": "Sao",
+        "star": "Sao",
+        "sort_by": "Sắp xếp",
+        "recently_updated": "Vừa cập nhật",
+        "release_date": "Ngày ra mắt",
+        "most_view": "Xem nhiều nhất",
+        "most_popular": "Phổ biến nhất",
+        "filter_now": "Lọc ngay"
+    },
+    "profile":{
+        "profile": "Hồ sơ cá nhân",
+        "upgrade_account": "Nâng cấp tài khoản",
+        "shortcut": "Lối tắt",
+        "read_history": "Lịch sử đọc truyện",
+        "following": "Đang theo dõi"
+    },
+    "home":{
+        "popular": "Truyện phổ biến",
+        "recently_uploaded": "Truyện vừa cập nhật"
     }
 }

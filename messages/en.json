@@ -15,7 +15,8 @@
         "comic": "Comic",
         "bande_dessinée": "Bande Dessinée",
         "all":"All",
-        "login":"Login"
+        "login":"Login",
+        "search": "Search"
     },
     "search": {
         "all": "All",
@@ -23,6 +24,27 @@
         "search_list": "Search List",
         "year": "Year",
         "status": "Status",
-        "releasing": "Releasing"
+        "releasing": "Releasing",
+        "completed": "Completed",
+        "rating": "Rating",
+        "stars": "Stars",
+        "star": "Star",
+        "sort_by": "Sort by",
+        "recently_updated": "Recently Updated",
+        "release_date": "Release Date",
+        "most_view": "Most Views",
+        "most_popular": "Most Popular",
+        "filter_now": "Filter Now"
+    },
+    "profile":{
+        "profile": "Profile",
+        "upgrade_account": "Upgrade Account",
+        "shortcut": "Shortcut",
+        "read_history": "Read History",
+        "following": "Following"
+    },
+    "home":{
+        "popular": "Popular",
+        "recently_uploaded": "Recently Uploaded"
     }
 }

@@ -112,7 +112,7 @@ export default async function Header() {
                                     type="text"
                                     name="query"
                                     required={true}
-                                    placeholder="Search"
+                                    placeholder={t('search')}
                                 />
                             </div>
                         </form>
