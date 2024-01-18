@@ -2,6 +2,9 @@
     "header": {
         "following": "Flowing",
         "ranking": "Ranking",
-        "top_all": "Top All"
+        "top_all": "Top All",
+        "language": "Language",
+        "english": "English",
+        "vietnamese": "Vietnamese"
     }
 }

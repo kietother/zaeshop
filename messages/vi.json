@@ -2,6 +2,9 @@
     "header": {
         "following": "Theo dõi",
         "ranking": "Xếp hạng",
-        "top_all": "Tất cả"
+        "top_all": "Tất cả",
+        "language": "Ngôn ngữ",
+        "english": "Tiếng Anh",
+        "vietnamese": "Tiếng Việt"
     }
 }

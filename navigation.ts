@@ -1,6 +1,5 @@
 import {
-    createLocalizedPathnamesNavigation,
-    Pathnames
+    createLocalizedPathnamesNavigation
 } from 'next-intl/navigation';
 
 export const locales = ['vi', 'en'] as const;
@@ -11,11 +10,27 @@ export const localePrefix = 'as-needed';
 export const pathnames = {
     // If all locales use the same pathname, a
     // single external path can be provided.
-    '/comics': '/truyen-tranh',
-    '/comics/[...slug]': '/truyen-tranh/[...slug]',
-    '/search': '/tim-kiem',
-    '/login': '/dang-nhap'
-} satisfies Pathnames<typeof locales>;
+    '/comics': {
+        en: '/comics',
+        vi: '/truyen-tranh'
+    },
+    '/comics/[...slug]': {
+        en: '/comics/[...slug]',
+        vi: '/truyen-tranh/[...slug]'
+    },
+    '/search': {
+        en: '/search',
+        vi: '/tim-kiem'
+    },
+    '/login': {
+        en: '/login',
+        vi: '/dang-nhap'
+    }
+}
 
 export const { Link, redirect, usePathname, useRouter, getPathname } =
-    createLocalizedPathnamesNavigation({ locales, localePrefix, pathnames });
+    createLocalizedPathnamesNavigation({
+        locales,
+        localePrefix,
+        pathnames: pathnames as typeof pathnames & Record<string & {}, string>
+    });

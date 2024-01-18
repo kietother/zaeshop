@@ -12,6 +12,7 @@ import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import Header from '../components/layout/Header'
 import Footer from '../components/layout/Footer'
+import { NextIntlClientProvider, useMessages } from 'next-intl'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,6 +28,8 @@ export default function RootLayout({
   children: React.ReactNode,
   params: any
 }) {
+  const messages = useMessages();
+
   return (
     <html lang={locale}>
       <body className={inter.className + " sticky-header"}>
@@ -37,9 +40,11 @@ export default function RootLayout({
         {/* Back To Top End */}
         {/* Main Wrapper Start */}
         <div className="main-wrapper" id="main-wrapper">
-          <Header />
-          {children}
-          <Footer />
+          <NextIntlClientProvider messages={messages}>
+            <Header />
+            {children}
+            <Footer />
+          </NextIntlClientProvider>
         </div>
       </body>
       <Script src="/assets/js/vendor/jquery-3.6.0.min.js" />
