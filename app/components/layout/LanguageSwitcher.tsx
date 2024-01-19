@@ -1,10 +1,12 @@
 "use client";
 import { Link, usePathname } from "@/navigation";
 import { useTranslations } from "next-intl";
+import { useParams } from 'next/navigation';
 
 export default function LanguageSwitcher({ locale }: { locale: string }) {
-    const pathName = usePathname();
+    const pathname = usePathname();
     const t = useTranslations('header');
+    const params = useParams();
 
     return (
         <>
@@ -19,12 +21,18 @@ export default function LanguageSwitcher({ locale }: { locale: string }) {
             </a>
             <ul className="dropdown-menu" aria-labelledby="types">
                 <li>
-                    <Link locale="vi" href={pathName} className={locale === 'vi' ? 'active' : ''}>
+                    <Link locale="vi" href={{
+                        pathname,
+                        params: params as any
+                    }} className={locale === 'vi' ? 'active' : ''}>
                         <span className="flag-icon flag-icon-vn flag-icon-squared"></span> {t('vietnamese')}
                     </Link>
                 </li>
                 <li>
-                    <Link locale="en" href={pathName} className={locale === 'en' ? 'active' : ''}>
+                    <Link locale="en" href={{
+                        pathname,
+                        params: params as any
+                    }} className={locale === 'en' ? 'active' : ''}>
                         <span className="flag-icon flag-icon-gb-eng flag-icon-squared"></span> {t('english')}
                     </Link>
                 </li>
