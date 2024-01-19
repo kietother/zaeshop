@@ -49,5 +49,31 @@
     "home":{
         "popular": "Truyện phổ biến",
         "recently_uploaded": "Truyện vừa cập nhật"
+    },
+    "comic_detail":{
+        "home_page": "Trang Chủ",
+        "explore": "Khám phá",
+        "description": "Nội dung",
+        "follow": "Theo dõi",
+        "love": "Yêu thích",
+        "read_first_chapter": "Đọc Đầu Chương",
+        "read_last_chapter": "Đọc Cuối Chương",
+        "information": "Thông tin",
+        "author": "Tác giả",
+        "chapter_list": "Danh Sách Chương",
+        "artist": "Họa sĩ",
+        "year": "Năm ra mắt",
+        "status": "Tình trạng",
+        "nation": "Quốc gia",
+        "views": "Lượt xem",
+        "type": "Thể loại",
+        "similar": "Cùng Thể Loại",
+        "top_rated": "Truyện hàng đầu",
+        "comments": "Bình luận"
+    },
+    "logins":{
+        "login": "Đăng nhập",
+        "policy": "Để tiếp tục, bạn phải đồng ý với Điều khoản sử dụng và Chính sách quyền riêng tư của Fast Scans.",
+        "continue_with_google": "Đăng nhập bằng Google"
     }
 }

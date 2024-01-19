@@ -4901,7 +4901,7 @@ ul.pagination li a.current {
 
 .login-content {
   width: 350px;
-  height: 700px;
+  height: 500px;
   display: table-cell;
   vertical-align: middle;
   position: relative;
@@ -5367,4 +5367,7 @@ input:focus,
 .page-link.active {
   color: var(--color-primary) !important;
   background: var(--color-black) !important;
+}
+.hide-link:hover{
+  opacity: 0.5;
 }

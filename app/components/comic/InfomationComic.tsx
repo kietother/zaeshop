@@ -1,6 +1,8 @@
 import ComicDetail, { EAlbumStatus } from "@/app/models/comics/ComicDetail";
+import { useTranslations } from 'next-intl';
 
 export default function InfomationComic({ comic }: { comic?: ComicDetail | null }) {
+    const t = useTranslations('comic_detail');
     return (
         <>
             {/*=====================================*/}
@@ -74,30 +76,30 @@ export default function InfomationComic({ comic }: { comic?: ComicDetail | null 
                                             <ul className="dropdown-menu bg-color-black pt-3 pb-3 ps-3 pe-3">
                                                 <li>
                                                     <a href="manga-detail.html" className="none">
-                                                        <i className="fa fa-check" /> Xem Sau{" "}
+                                                        <i className="fa fa-check" /> {t('follow')}{" "}
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="manga-detail.html">
-                                                        <i className="fas fa-plus" /> Thêm vào yêu thích{" "}
+                                                        <i className="fas fa-heart" /> {t('love')}{" "}
                                                     </a>
                                                 </li>
                                             </ul>
                                         </div>
-                                        <h3>NỘI DUNG</h3>
+                                        <h3>{t('description')}</h3>
                                         <p>
-                                            {comic?.description}
+                                            {comic?.description}                
                                         </p>
                                         <div className="d-flex pt-4">
                                             <a
                                                 href={`/truyen-tranh/${comic?.friendlyName}/${comic?.contents[comic?.contents.length - 1]?.friendlyName}`}
                                                 className="anime-btn btn-dark border-change me-3"
                                             >
-                                                ĐỌC ĐẦU CHƯƠNG
+                                                {t('read_first_chapter')}
                                             </a>
                                             <a href={`/truyen-tranh/${comic?.friendlyName}/${comic?.contents[0]?.friendlyName}`}
                                                 className="anime-btn btn-dark">
-                                                ĐỌC CUỐI CHƯƠNG
+                                                 {t('read_last_chapter')}
                                             </a>
                                         </div>
                                     </div>
@@ -106,30 +108,30 @@ export default function InfomationComic({ comic }: { comic?: ComicDetail | null 
                         </div>
                         <div className="col-lg-3 col-sm-6 col-12">
                             <div className="trailer-content">
-                                <h3>Thông Tin</h3>
+                                <h3>{t('information')}</h3>
                                 <p>
-                                    <span>Tác Giả:</span> <b>{comic?.authorNames}</b>
+                                    <span>{t('author')}:</span> <b>{comic?.authorNames}</b>
                                 </p>
                                 <p>
-                                    <span>Họa sĩ:</span> <b>Bones</b>
+                                    <span>{t('artist')}:</span> <b>Bones</b>
                                 </p>
                                 <p>
-                                    <span>Năm: </span> {comic?.releaseYear}
+                                    <span>{t('year')}: </span> {comic?.releaseYear}
                                 </p>
                                 <p>
-                                    <span>Tình trạng:</span> <b>{comic?.albumStatus == EAlbumStatus.Ongoing ? 'Đang tiến hành' : 'Đã hoàn thành'}</b>
+                                    <span>{t('status')}:</span> <b>{comic?.albumStatus == EAlbumStatus.Ongoing ? 'Đang tiến hành' : 'Đã hoàn thành'}</b>
                                 </p>
                                 <p>
-                                    <span>Thể loại:</span> {comic?.contentTypeNames}
+                                    <span>{t('type')}:</span> {comic?.contentTypeNames}
                                 </p>
                                 <p>
-                                    <span>Quốc Gia:</span> {comic?.tags}
+                                    <span>{t('nation')}:</span> {comic?.tags} <b>Hàn</b>
                                 </p>
                                 {/* <p>
                                     <span>Scores:</span> 2.53 by 4,405 reviews
                                 </p> */}
                                 <p>
-                                    <span>Views:</span> Đang cập nhật
+                                    <span>{t('views')}:</span> Đang cập nhật
                                 </p>
                             </div>
                         </div>
