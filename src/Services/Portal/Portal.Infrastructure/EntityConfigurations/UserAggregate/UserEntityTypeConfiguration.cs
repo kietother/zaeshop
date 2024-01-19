@@ -10,5 +10,7 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
         builder.HasKey(x => x.Id);
 
         builder.HasIndex(x => x.IdentityUserId).IsUnique();
+        builder.HasIndex(x => x.Email).IsUnique();
+        builder.HasIndex(x => x.UserName).IsUnique();
     }
 }
