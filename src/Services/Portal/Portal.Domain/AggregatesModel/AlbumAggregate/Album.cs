@@ -43,5 +43,8 @@ namespace Portal.Domain.AggregatesModel.AlbumAggregate
 
         [JsonIgnore]
         public virtual AlbumAlertMessage? AlbumAlertMessage { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }
