@@ -13,7 +13,6 @@ const getComic = async (comicid: string | null) => {
         return response.data.data;
     }
     catch (exception: any) {
-        console.log(exception)
         return null;
     }
 }
