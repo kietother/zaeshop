@@ -1,7 +1,9 @@
 import ContentResponse from "@/app/models/contents/ContentResponse";
 import dayjs from "@/lib/dayjs/dayjs-custom";
+import { useTranslations } from 'next-intl';
 
 export default function ChapterComic({ contents }: { contents?: ContentResponse[] | null }) {
+    const t = useTranslations('comic_detail');
     return (
         <>
             {/*=====================================*/}
@@ -11,7 +13,7 @@ export default function ChapterComic({ contents }: { contents?: ContentResponse[
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-8 col-md-12 col-sm-12">
-                            <h3 className="small-title">DANH SÁCH CHƯƠNG</h3>
+                            <h3 className="small-title">{t('chapter_list')}</h3>
                             {contents?.map((content, index) => (
                                 <div key={index}>
                                     <h5>
@@ -21,15 +23,9 @@ export default function ChapterComic({ contents }: { contents?: ContentResponse[
                                     <hr />
                                 </div>
                             ))}                       
-                            <div className="text-center">
-                                <a href="manga-detail.html#" className="relese-btn">
-                                    Show More
-                                </a>
-                            </div>
-                            <hr />
                         </div>
                         <div className="col-lg-4 col-md-6 col-sm-8 offset-lg-0 offset-md-3 offset-sm-2 mt-lg-0 mt-3">
-                            <h3 className="small-title">Top Rated Manga</h3>
+                            <h3 className="small-title">{t('top_rated')}</h3>
                             <div className="anime-box bg-color-black">
                                 <a href="manga-detail.html">
                                     <div className="row m-0">

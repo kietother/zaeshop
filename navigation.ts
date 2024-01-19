@@ -14,9 +14,13 @@ export const pathnames = {
         en: '/comics',
         vi: '/truyen-tranh'
     },
-    '/comics/[...slug]': {
-        en: '/comics/[...slug]',
-        vi: '/truyen-tranh/[...slug]'
+    '/comics/[comicid]': {
+        en: '/comics/[comicid]',
+        vi: '/truyen-tranh/[comicid]'
+    },
+    '/comics/[comicid]/[contentid]': {
+        en: '/comics/[comicid]/[contentid]',
+        vi: '/truyen-tranh/[comicid]/[contentid]'
     },
     '/search': {
         en: '/search',

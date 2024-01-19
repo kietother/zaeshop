@@ -1,6 +1,8 @@
 import Image from "next/image";
+import { useTranslations } from 'next-intl';
 
 export default function CommentComic() {
+    const t = useTranslations('comic_detail');
     return (
         <>
             {/*=====================================*/}
@@ -12,7 +14,7 @@ export default function CommentComic() {
                         <div className="col-lg-8 col-md-12 col-sm-12">
                             <div className="comment-block">
                                 <div className="heading style-1 m-0">
-                                    <h2>COMMENTS</h2>
+                                    <h2>{t('comments')}</h2>
                                 </div>
                                 <p>
                                     We hope you have a good time browsing the comment section! <br />
@@ -667,7 +669,7 @@ export default function CommentComic() {
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-6 col-sm-8 offset-lg-0 offset-md-3 offset-sm-2 mt-lg-0 mt-3">
-                            <h3 className="small-title">SIMILAR</h3>
+                            <h3 className="small-title">{t('similar')}</h3>
                             <div className="anime-box bg-color-black">
                                 <a href="streaming-season.html">
                                     <div className="row m-0">

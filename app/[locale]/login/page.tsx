@@ -2,12 +2,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from 'next/navigation';
 import dynamic from "next/dynamic";
+import { getTranslations } from 'next-intl/server';
 
 const DynamicLoginButton = dynamic(() => import("../../components/login/LoginButton"), {
     ssr: false
 })
 
 export default async function Login() {
+    const t = await getTranslations('logins');
     const session = await getServerSession(authOptions);
     if (!!session) {
         return redirect('/');
@@ -22,8 +24,7 @@ export default async function Login() {
                 <div className="container">
                     <div className="login-block">
                         <div className="login-content">
-                            <img src="assets/media/icon/user.png" alt="" className="user-icon" />
-                            <h3>Log in</h3>
+                            <h3>{t('login')}</h3>
                             <DynamicLoginButton />
                             <div className="custom-control custom-checkbox">
                                 <input
@@ -32,8 +33,7 @@ export default async function Login() {
                                     id="check"
                                 />
                                 <label className="custom-control-label" htmlFor="check">
-                                By continuing, you agree to ANIMELOOP Terms of Use and Privacy
-                                Policy.
+                                    {t('policy')}
                                 </label>
                             </div>
                         </div>

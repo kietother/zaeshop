@@ -4,10 +4,11 @@ import Comment from "@/app/components/contents/Comment";
 import ContentResponse from "@/app/models/contents/ContentResponse";
 import ServerResponse from "@/app/models/common/ServerResponse";
 import getAxiosInstance from "@/lib/axios";
+import { portalServer } from "@/lib/services/client/baseUrl";
 
 const getContent = async (comicid: string | null, contentid: string | null) => {
     try {
-        const response = await getAxiosInstance(process.env.PORTAL_API_URL).get<ServerResponse<ContentResponse>>(process.env.PORTAL_API_URL + `/api/client/ContentApp/comics/${comicid}/contents/${contentid}`);
+        const response = await getAxiosInstance(portalServer).get<ServerResponse<ContentResponse>>(process.env.PORTAL_API_URL + `/api/client/ContentApp/comics/${comicid}/contents/${contentid}`);
         return response.data.data;
     }
     catch {

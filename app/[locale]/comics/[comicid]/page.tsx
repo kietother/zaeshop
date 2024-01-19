@@ -5,13 +5,14 @@ import CommentComic from "../../../components/comic/CommentComic";
 import InfomationComic from "../../../components/comic/InfomationComic";
 import ServerResponse from "@/app/models/common/ServerResponse";
 import ComicDetail from "@/app/models/comics/ComicDetail";
+import { portalServer } from "@/lib/services/client/baseUrl";
 
 const getComic = async (comicid: string | null) => {
     try {
-        const response = await getAxiosInstance(process.env.PORTAL_API_URL).get<ServerResponse<ComicDetail>>(process.env.PORTAL_API_URL + `/api/client/ComicApp/${comicid}`);
+        const response = await getAxiosInstance(portalServer).get<ServerResponse<ComicDetail>>(process.env.PORTAL_API_URL + `/api/client/ComicApp/${comicid}`);
         return response.data.data;
     }
-    catch {
+    catch (exception: any) {
         return null;
     }
 }

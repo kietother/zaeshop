@@ -1,3 +1,4 @@
 export const identityServer = 'https://codegota.me/identity';
 export const portalServer = 'https://codegota.me/portal';
-export const clientServer = 'http://localhost:3000';
+export const clientServer = 'https://app-dev.codegota.me';
+//https://app-dev.codegota.me

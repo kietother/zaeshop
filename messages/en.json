@@ -49,5 +49,31 @@
     "home":{
         "popular": "Popular",
         "recently_uploaded": "Recently Uploaded"
+    },
+    "comic_detail":{
+        "home_page": "Home Page",
+        "explore": "Explore",
+        "description": "Description",
+        "follow": "Follow",
+        "love": "Love",
+        "read_first_chapter": "Read First Chapter",
+        "read_last_chapter": "Read Last Chapter",
+        "information": "Information",
+        "author": "Author",
+        "chapter_list": "Chapter List",
+        "artist": "Artist",
+        "year": "Year",
+        "status": "Status",
+        "nation": "Nation",
+        "views": "Views",
+        "type": "Type",
+        "similar": "Similar",
+        "top_rated": "Top Rated",
+        "comments": "Comments"
+    },
+    "logins":{
+        "login": "Log in",
+        "policy": "By continuing, you agree to Fast Scans Terms of Use and Privacy Policy.",
+        "continue_with_google": "Continue with Google"
     }
 }
