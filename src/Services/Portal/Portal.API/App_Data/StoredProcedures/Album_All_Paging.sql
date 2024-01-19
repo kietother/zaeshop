@@ -65,8 +65,7 @@ BEGIN
 			AND (ISNULL(@genre, '') = '' OR
 				(SELECT COUNT(*) FROM STRING_SPLIT(@genre, ',') g
 				 WHERE CHARINDEX(CAST(g.value AS VARCHAR(10)), ct.Id) > 0) = (SELECT COUNT(*) FROM STRING_SPLIT(@genre, ',')))
-			AND (ISNULL(@year, '') = '' OR
-				(@year LIKE '%' + CONVERT(VARCHAR, YEAR(a.ReleaseYear)) + '%'))
+			AND (ISNULL(@year, '') = '' OR (a.ReleaseYear LIKE @year + '%'))
 			AND (a.AlbumStatus = @status)
         GROUP BY a.Id,
 			   a.Title,

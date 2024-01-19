@@ -4,9 +4,11 @@ using Common.Enums;
 using Common.Interfaces;
 using Common.Interfaces.Messaging;
 using Common.Models;
+using Common.Shared.Models.Users;
 using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Domain.Business.Interfaces.Services;
 using Identity.Domain.Interfaces.Infrastructure;
+using Identity.Domain.Interfaces.Messaging;
 using Identity.Domain.Models.Authenticates;
 using Identity.Domain.Models.ErrorCodes;
 using Identity.Domain.Models.ErrorResponses;
@@ -29,6 +31,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
         private readonly ISendMailPublisher _sendMailPublisher;
         private readonly IApiService _apiService;
         private readonly DbSet<UserToken> _userTokensDbSet;
+        private readonly ISyncUserPortalPublisher _syncUserPortalPublisher;
 
         public AccountService(
             AppIdentityDbContext context,
@@ -37,7 +40,8 @@ namespace Identity.Infrastructure.Implements.Business.Services
             SignInManager<User> signInManager,
             IOptions<AppSettings> appSettings,
             ISendMailPublisher sendMailPublisher,
-            IApiService apiService)
+            IApiService apiService,
+            ISyncUserPortalPublisher syncUserPortalPublisher)
         {
             _context = context;
             _jwtService = jwtService;
@@ -47,6 +51,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
             _sendMailPublisher = sendMailPublisher;
             _apiService = apiService;
             _userTokensDbSet = context.Set<UserToken>();
+            _syncUserPortalPublisher = syncUserPortalPublisher;
         }
 
         #region Token
@@ -192,7 +197,9 @@ namespace Identity.Infrastructure.Implements.Business.Services
             var resultApi = await _apiService.PostAsync<SyncUserFromIdentityRequestModel, SyncUserFromIdentityResponseModel>(CommonHelper.GetServiceUrl(EServiceHost.Portal), "/v1/users", new SyncUserFromIdentityRequestModel
             {
                 IdentityId = user.Id,
-                FullName = user.FullName
+                FullName = user.FullName,
+                Email = user.Email,
+                Username = user.UserName
             });
 
             if (resultApi != null && !resultApi.IsSuccess)
@@ -446,7 +453,9 @@ namespace Identity.Infrastructure.Implements.Business.Services
                 var resultApi = await _apiService.PostAsync<SyncUserFromIdentityRequestModel, SyncUserFromIdentityResponseModel>(CommonHelper.GetServiceUrl(EServiceHost.Portal), "/v1/users", new SyncUserFromIdentityRequestModel
                 {
                     IdentityId = user.Id,
-                    FullName = user.FullName
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    Username = user.UserName
                 });
 
                 if (resultApi != null && !resultApi.IsSuccess)
@@ -462,6 +471,21 @@ namespace Identity.Infrastructure.Implements.Business.Services
 
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
+            }
+            else if (user.FullName != model.Name.Split(' ').FirstOrDefault())
+            {
+                user.FullName = model.Name.Split(' ').FirstOrDefault() ?? string.Empty;
+                user.UpdatedOnUtc = DateTime.UtcNow;
+
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+                // Sync portal with message queue
+                await _syncUserPortalPublisher.SyncUserPortalAsync(new SyncUserPortalMessage
+                {
+                    IdentityUserId = user.Id,
+                    FullName = user.FullName
+                });
             }
 
             // Token expries in 30 days

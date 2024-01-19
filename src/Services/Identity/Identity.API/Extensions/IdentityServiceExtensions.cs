@@ -12,6 +12,8 @@ using MassTransit;
 using System.Security.Authentication;
 using Common.Interfaces.Messaging;
 using Common.Implements.Messaging;
+using Identity.Domain.Interfaces.Messaging;
+using Identity.Infrastructure.Implements.Messaging;
 
 namespace Identity.API.Extensions
 {
@@ -55,6 +57,7 @@ namespace Identity.API.Extensions
             // Identity registers publishers for MassTransit
             services.AddScoped<ISendMailPublisher, SendMailPublisher>();
             services.AddScoped<IServiceLogPublisher, ServiceLogPublisher>();
+            services.AddScoped<ISyncUserPortalPublisher, SyncUserPortalPublisher>();
 
             // configure DI for application services
             services.AddScoped<IJwtService, JwtService>();
