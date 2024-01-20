@@ -5,8 +5,8 @@ namespace Portal.Domain.Interfaces.Business.Services
 {
     public interface ICommentService
     {
-        Task<ServiceResponse<CommentModel>> CreateAsync(CommentRequestModel request, int userId);
-        Task<ServiceResponse<CommentModel>> UpdateAsync(int id, CommentRequestModel request, int userId);
-        Task<ServiceResponse<bool>> DeleteAsync(int id, int userId);
+        Task<ServiceResponse<CommentModel>> CreateAsync(CommentRequestModel request, string identityUserId);
+        Task<ServiceResponse<CommentModel>> UpdateAsync(int id, CommentRequestModel request, string identityUserId);
+        Task<ServiceResponse<bool>> DeleteAsync(int id, string identityUserId);
     }
 }

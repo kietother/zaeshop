@@ -5,6 +5,7 @@ using Portal.Domain.AggregatesModel.UserAggregate;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.CommentModels;
 using Portal.Domain.SeedWork;
+using Portal.Infrastructure.Helpers;
 
 namespace Portal.Infrastructure.Implements.Business.Services
 {
@@ -14,6 +15,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
         private readonly IGenericRepository<Comment> _commentRepository;
         private readonly IGenericRepository<Album> _albumRepository;
         private readonly IGenericRepository<User> _userRepository;
+        private readonly IGenericRepository<Collection> _collectionRepository;
 
         public CommentService(IUnitOfWork unitOfWork)
         {
@@ -21,11 +23,12 @@ namespace Portal.Infrastructure.Implements.Business.Services
             _commentRepository = _unitOfWork.Repository<Comment>();
             _albumRepository = _unitOfWork.Repository<Album>();
             _userRepository = _unitOfWork.Repository<User>();
+            _collectionRepository = _unitOfWork.Repository<Collection>();
         }
 
-        public async Task<ServiceResponse<CommentModel>> CreateAsync(CommentRequestModel request, int userId)
+        public async Task<ServiceResponse<CommentModel>> CreateAsync(CommentRequestModel request, string identityUserId)
         {
-            var user = await _userRepository.GetByIdAsync(userId);
+            var user = await _userRepository.GetByIdentityUserIdAsync(identityUserId);
             if (user == null)
             {
                 return new ServiceResponse<CommentModel>("error_user_not_found");
@@ -40,7 +43,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             Collection? collection;
             if (request.CollectionId.HasValue)
             {
-                collection = await _unitOfWork.Repository<Collection>().GetByIdAsync(request.CollectionId.Value);
+                collection = await _collectionRepository.GetByIdAsync(request.CollectionId.Value);
                 if (collection == null)
                 {
                     return new ServiceResponse<CommentModel>("error_collection_not_found");
@@ -51,7 +54,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             {
                 Text = request.Text,
                 CollectionId = request.CollectionId,
-                UserId = userId,
+                UserId = user.Id,
                 AlbumId = request.AlbumId
             };
 
@@ -67,13 +70,15 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 AlbumId = comment.AlbumId,
                 CollectionId = comment.CollectionId,
                 CreatedOnUtc = comment.CreatedOnUtc,
-                UpdatedOnUtc = comment.UpdatedOnUtc
+                UpdatedOnUtc = comment.UpdatedOnUtc,
+                FullName = user.FullName,
+                UserName = user.UserName
             };
 
             return new ServiceResponse<CommentModel>(response);
         }
 
-        public async Task<ServiceResponse<CommentModel>> UpdateAsync(int id, CommentRequestModel request, int userId)
+        public async Task<ServiceResponse<CommentModel>> UpdateAsync(int id, CommentRequestModel request, string identityUserId)
         {
             var comment = await _commentRepository.GetByIdAsync(id);
             if (comment == null || comment.IsDeleted)
@@ -81,13 +86,13 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 return new ServiceResponse<CommentModel>("error_comment_not_found");
             }
 
-            var user = await _userRepository.GetByIdAsync(userId);
+            var user = await _userRepository.GetByIdentityUserIdAsync(identityUserId);
             if (user == null)
             {
                 return new ServiceResponse<CommentModel>("error_user_not_found");
             }
 
-            if (comment.UserId != userId)
+            if (comment.UserId != user.Id)
             {
                 return new ServiceResponse<CommentModel>("error_comment_not_belog_current_user");
             }
@@ -98,13 +103,23 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 return new ServiceResponse<CommentModel>("error_album_not_found");
             }
 
+            if (comment.AlbumId != request.AlbumId)
+            {
+                return new ServiceResponse<CommentModel>("error_comment_not_belong_current_album");
+            }
+
             Collection? collection;
             if (request.CollectionId.HasValue)
             {
-                collection = await _unitOfWork.Repository<Collection>().GetByIdAsync(request.CollectionId.Value);
+                collection = await _collectionRepository.GetByIdAsync(request.CollectionId.Value);
                 if (collection == null)
                 {
                     return new ServiceResponse<CommentModel>("error_collection_not_found");
+                }
+
+                if (comment.CollectionId != request.CollectionId)
+                {
+                    return new ServiceResponse<CommentModel>("error_comment_not_belong_current_collection");
                 }
             }
 
@@ -121,13 +136,15 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 AlbumId = comment.AlbumId,
                 CollectionId = comment.CollectionId,
                 CreatedOnUtc = comment.CreatedOnUtc,
-                UpdatedOnUtc = comment.UpdatedOnUtc
+                UpdatedOnUtc = comment.UpdatedOnUtc,
+                FullName = user.FullName,
+                UserName = user.UserName
             };
 
             return new ServiceResponse<CommentModel>(response);
         }
 
-        public async Task<ServiceResponse<bool>> DeleteAsync(int id, int userId)
+        public async Task<ServiceResponse<bool>> DeleteAsync(int id, string identityUserId)
         {
             var comment = await _commentRepository.GetByIdAsync(id);
             if (comment == null || comment.IsDeleted)
@@ -135,13 +152,13 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 return new ServiceResponse<bool>("error_comment_not_found");
             }
 
-            var user = await _userRepository.GetByIdAsync(userId);
+            var user = await _userRepository.GetByIdentityUserIdAsync(identityUserId);
             if (user == null)
             {
                 return new ServiceResponse<bool>("error_user_not_found");
             }
 
-            if (comment.UserId != userId)
+            if (comment.UserId != user.Id)
             {
                 return new ServiceResponse<bool>("error_comment_not_belog_current_user");
             }
