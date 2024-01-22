@@ -72,5 +72,16 @@ namespace Portal.API.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPagingAsync([FromQuery] CommentPagingRequestModel request)
+        {
+            var response = await _commentService.GetPagingAsync(request);
+
+            if (!response.IsSuccess)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
     }
 }

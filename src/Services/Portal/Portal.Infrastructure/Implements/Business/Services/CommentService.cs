@@ -169,5 +169,38 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
             return new ServiceResponse<bool>(true);
         }
+
+        public async Task<ServiceResponse<PagingCommonResponse<CommentPagingResposneModel>>> GetPagingAsync(CommentPagingRequestModel request)
+        {
+            var parameters = new Dictionary<string, object?>
+            {
+                { "pageNumber", request.PageNumber },
+                { "pageSize", request.PageSize },
+                { "searchTerm", request.SearchTerm },
+                { "sortColumn", request.SortColumn },
+                { "sortDirection", request.SortDirection },
+                { "albumId", request.AlbumId },
+                { "collectionId", request.CollectionId },
+                { "userId", request.UserId }
+            };
+            var result = await _unitOfWork.QueryAsync<CommentPagingResposneModel>("Comment_All_Paging", parameters);
+
+            var record = result.Find(o => o.IsTotalRecord);
+            if (record == null)
+            {
+                return new ServiceResponse<PagingCommonResponse<CommentPagingResposneModel>>(new PagingCommonResponse<CommentPagingResposneModel>
+                {
+                    RowNum = 0,
+                    Data = new List<CommentPagingResposneModel>()
+                });
+            }
+
+            result.Remove(record);
+            return new ServiceResponse<PagingCommonResponse<CommentPagingResposneModel>>(new PagingCommonResponse<CommentPagingResposneModel>
+            {
+                RowNum = record.RowNum,
+                Data = result
+            });
+        }
     }
 }
