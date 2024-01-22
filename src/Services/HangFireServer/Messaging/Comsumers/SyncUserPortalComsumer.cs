@@ -1,0 +1,34 @@
+using Common.Shared.Models.Users;
+using MassTransit;
+using Portal.Domain.AggregatesModel.UserAggregate;
+using Portal.Domain.SeedWork;
+using Microsoft.EntityFrameworkCore;
+
+namespace HangFireServer.Messaging.Comsumers
+{
+    public class SyncUserPortalComsumer : IConsumer<SyncUserPortalMessage>
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenericRepository<User> _userRepository;
+
+        public SyncUserPortalComsumer(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+            _userRepository = unitOfWork.Repository<User>();
+        }
+
+        public async Task Consume(ConsumeContext<SyncUserPortalMessage> context)
+        {
+            var syncUserMessage = context.Message;
+
+            var user = await _userRepository.GetQueryable().FirstOrDefaultAsync(o => o.IdentityUserId == syncUserMessage.IdentityUserId);
+            if (user != null)
+            {
+                user.FullName = syncUserMessage.FullName;
+
+                _userRepository.Update(user);
+                await _unitOfWork.SaveChangesAsync();
+            }
+        }
+    }
+}

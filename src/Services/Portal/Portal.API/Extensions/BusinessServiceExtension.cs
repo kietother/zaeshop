@@ -13,6 +13,7 @@ namespace Portal.API.Extensions
             services.AddScoped<IAlbumService, AlbumService>();
             services.AddScoped<ICollectionService, CollectionService>();
             services.AddScoped<IContentItemService, ContentItemService>();
+            services.AddScoped<ICommentService, CommentService>();
 
             return services;
         }

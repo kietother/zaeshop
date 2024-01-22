@@ -3,9 +3,11 @@ using Common;
 using Common.Enums;
 using Common.Interfaces;
 using Common.Models;
+using Common.Shared.Models.Users;
 using Dapper;
 using Identity.Domain.AggregatesModel.UserAggregate;
 using Identity.Domain.Business.Interfaces.Services;
+using Identity.Domain.Interfaces.Messaging;
 using Identity.Domain.Models.ErrorCodes;
 using Identity.Domain.Models.ErrorResponses;
 using Identity.Domain.Models.Roles;
@@ -21,17 +23,20 @@ namespace Identity.Infrastructure.Implements.Business.Services
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IApiService _apiService;
+        private readonly ISyncUserPortalPublisher _syncUserPortalPublisher;
 
         public UserService(
             AppIdentityDbContext context,
             UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
-            IApiService apiService)
+            IApiService apiService,
+            ISyncUserPortalPublisher syncUserPortalPublisher)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
             _apiService = apiService;
+            _syncUserPortalPublisher = syncUserPortalPublisher;
         }
 
         public async Task<List<User>> GetAllAsync()
@@ -75,7 +80,9 @@ namespace Identity.Infrastructure.Implements.Business.Services
             var resultApi = await _apiService.PostAsync<SyncUserFromIdentityRequestModel, SyncUserFromIdentityResponseModel>(CommonHelper.GetServiceUrl(EServiceHost.Portal), "/v1/users", new SyncUserFromIdentityRequestModel
             {
                 IdentityId = user.Id,
-                FullName = user.FullName
+                FullName = user.FullName,
+                Email = user.Email,
+                Username = user.UserName
             });
 
             if (resultApi != null && !resultApi.IsSuccess)
@@ -103,6 +110,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
                 return null;
             }
 
+            bool isSyncUserPortal = user.FullName != userModel.FullName;
             user.FullName = userModel.FullName;
 
             if (!string.IsNullOrEmpty(userModel.Password))
@@ -145,6 +153,16 @@ namespace Identity.Infrastructure.Implements.Business.Services
                 {
                     await _userManager.RemoveFromRolesAsync(user, userRoles);
                 }
+            }
+
+            // Sync user portal
+            if (isSyncUserPortal)
+            {
+                await _syncUserPortalPublisher.SyncUserPortalAsync(new SyncUserPortalMessage
+                {
+                    IdentityUserId = user.Id,
+                    FullName = user.FullName
+                });
             }
 
             return new UserRegisterResponseModel

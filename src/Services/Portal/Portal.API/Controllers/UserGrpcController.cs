@@ -58,7 +58,30 @@ namespace Portal.API.Controllers
                 };
             }
 
-            var hasUserExists = await _unitOfWork.Repository<User>().GetQueryable().AnyAsync(x => x.IdentityUserId == request.IdentityId);
+            if (string.IsNullOrEmpty(request.Email))
+            {
+                return new SyncUserReply
+                {
+                    PortalId = 0,
+                    IsSuccess = false,
+                    Message = "Email is required."
+                };
+            }
+
+            if (string.IsNullOrEmpty(request.UserName))
+            {
+                return new SyncUserReply
+                {
+                    PortalId = 0,
+                    IsSuccess = false,
+                    Message = "UserName is required."
+                };
+            }
+
+            var hasUserExists = await _unitOfWork.Repository<User>().GetQueryable().AnyAsync(x =>
+                x.IdentityUserId == request.IdentityId ||
+                x.Email == request.Email ||
+                x.UserName == request.UserName);
             if (hasUserExists)
             {
                 return new SyncUserReply
@@ -72,7 +95,9 @@ namespace Portal.API.Controllers
             var user = new User
             {
                 IdentityUserId = request.IdentityId,
-                FullName = request.FullName
+                FullName = request.FullName,
+                Email = request.Email,
+                UserName = request.UserName
             };
 
             _unitOfWork.Repository<User>().Add(user);

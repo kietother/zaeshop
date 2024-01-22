@@ -4,6 +4,7 @@ namespace Common.Models
     {
         public bool IsSuccess { get; private set; }
         public string? ErrorMessage { get; private set; }
+        public object? ErrorKey { get; private set; }
 
         public T? Data { get; private set; }
 
@@ -13,10 +14,11 @@ namespace Common.Models
             Data = data;
         }
 
-        public ServiceResponse(string error)
+        public ServiceResponse(string error, object? errorKey = null)
         {
             IsSuccess = false;
             ErrorMessage = error;
+            ErrorKey = errorKey;
         }
     }
 }
