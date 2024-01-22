@@ -5356,6 +5356,9 @@ input:focus,
   .comic-element{
     width: 50% !important;
   }
+  .post-btn{
+    margin-top: 7vh !important;
+  }
 }
 .text-avt{
   font-size: 12px;

@@ -13,7 +13,6 @@ import Script from 'next/script'
 import Header from '../components/layout/Header'
 import Footer from '../components/layout/Footer'
 import { NextIntlClientProvider, useMessages } from 'next-intl'
-
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -52,11 +51,7 @@ export default function RootLayout({
       <Script src="bootstrap/dist/js/bootstrap.bundle.min.js" />
       <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" />
       <Script src="/assets/js/vendor/imagesloaded.pkgd.min.js" />
-      <Script src="/assets/js/vendor/slick.min.js" />
-      <Script src="/assets/js/vendor/jquery.countdown.min.js" />
-      <Script src="/assets/js/vendor/jquery-appear.js" />
       <Script src="/assets/js/vendor/sal.js" />
-      <Script src="/assets/js/app.js" />
     </html>
   )
 }

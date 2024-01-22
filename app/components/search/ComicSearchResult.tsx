@@ -1,10 +1,18 @@
 "use client";
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export default function ComicSearchResult({ albums, pagingCount, setPagingParams, pagingParams }: { albums: any, pagingCount: any, setPagingParams: any, pagingParams: any }) {
+    const [loading, setLoading] = useState(false);
     const pageSize = pagingParams.PageSize;
     const totalAlbums = pagingCount.pageLength;
     const totalPages = Math.ceil(totalAlbums / pageSize);
+    
+    useEffect(() => {
+        setLoading(false);
+        if (albums == null)
+            setLoading(true)
+    }, [albums]);
+
     const handlePageClick = (page: number) => {
         setPagingParams({ ...pagingParams, PageNumber: page });
     };
@@ -51,6 +59,14 @@ export default function ComicSearchResult({ albums, pagingCount, setPagingParams
             <!--=====================================--> */}
             <section className="anime sec-mar">
                 <div className="container">
+                    {loading && (
+                        // Display the spinner when loading is true
+                        <div className="d-flex justify-content-center align-items-center">
+                            <div className="spinner-border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    )}
                     <div className="row">
                         {albums?.map((album: any) => (
                             <div key={album.id} className="col-lg-4 col-md-6 col-sm-8 offset-md-0 offset-sm-2 col-12">

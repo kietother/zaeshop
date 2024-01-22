@@ -1,8 +1,15 @@
-import Image from "next/image";
+"use client"
 import { useTranslations } from 'next-intl';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 export default function CommentComic() {
     const t = useTranslations('comic_detail');
+    const editorStyle = {
+        width: '100%',
+        marginBottom: '4vh',
+        color: 'white',
+    };
     return (
         <>
             {/*=====================================*/}
@@ -17,9 +24,8 @@ export default function CommentComic() {
                                     <h2>{t('comments')}</h2>
                                 </div>
                                 <p>
-                                    We hope you have a good time browsing the comment section! <br />
-                                    Please read our <a href="comments.html">Comment Policy</a> before
-                                    commenting.
+                                    {t('We hope you have a good time browsing the comment section!')}<br />
+                                    {t('Please read our')} <a href="comments.html">{t('Comment Policy')}</a> {t('before commenting')}.
                                 </p>
                             </div>
                             <div className="row">
@@ -31,16 +37,15 @@ export default function CommentComic() {
                                 <div className="col-lg-11 col-10">
                                     <form action="manga-detail.html">
                                         <div className="input-group form-group footer-email-box">
-                                            <input
-                                                className="form-control"
-                                                type="text"
-                                                name="post"
-                                                placeholder="Join the discussion"
+                                            <ReactQuill
+                                                style={editorStyle}
+                                                value={"value"}
+                                                onChange={() => { }}
                                             />
-                                            <button className="input-group-text post-btn" type="submit">
-                                                Post
-                                            </button>
                                         </div>
+                                        <button className="input-group-text post-btn" type="submit">
+                                                Post
+                                        </button>
                                     </form>
                                 </div>
                             </div>

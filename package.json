@@ -15,12 +15,14 @@
     "bootstrap": "^5.3.2",
     "dayjs": "^1.11.10",
     "flag-icon-css": "^4.1.7",
+    "jquery": "^3.7.1",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
     "next-intl": "^3.4.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-lazy-load-image-component": "^1.6.0"
+    "react-lazy-load-image-component": "^1.6.0",
+    "react-quill": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
