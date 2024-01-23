@@ -1,15 +1,23 @@
 "use client"
 import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 export default function CommentComic() {
     const t = useTranslations('comic_detail');
+    const [comment, setComment] = useState('');
+    const [session, setSession] = useState<any>(null);
     const editorStyle = {
         width: '100%',
         marginBottom: '4vh',
         color: 'white',
     };
+    useEffect(() => {
+
+    }, []);
     return (
         <>
             {/*=====================================*/}
@@ -31,20 +39,16 @@ export default function CommentComic() {
                             <div className="row">
                                 <div className="col-lg-1 col-2">
                                     <a href="profile.html">
-                                        <img src="/assets/media/comment/comment-img.png" alt="" />
+                                        <img src={session?.user?.image ?? ''} alt="" />
                                     </a>
                                 </div>
                                 <div className="col-lg-11 col-10">
                                     <form action="manga-detail.html">
                                         <div className="input-group form-group footer-email-box">
-                                            <ReactQuill
-                                                style={editorStyle}
-                                                value={"value"}
-                                                onChange={() => { }}
-                                            />
+                                            <ReactQuill style={editorStyle} theme="snow" value={comment} onChange={setComment} />;
                                         </div>
                                         <button className="input-group-text post-btn" type="submit">
-                                                Post
+                                            {t('Post')}
                                         </button>
                                     </form>
                                 </div>
