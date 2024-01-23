@@ -24,7 +24,6 @@ namespace Portal.Domain.Models.CommentModels
         public int AlbumId { get; set; }
         public int? CollectionId { get; set; }
         public int? UserId { get; set; }
-        public bool? IsReply { get; set; }
     }
 
     public class CommentPagingResposneModel : CommentModel
