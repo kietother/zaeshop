@@ -181,7 +181,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 { "sortDirection", request.SortDirection },
                 { "albumId", request.AlbumId },
                 { "collectionId", request.CollectionId },
-                { "userId", request.UserId }
+                { "userId", request.UserId },
+                { "hasReply", false },
+                { "isReply", request.IsReply }
             };
             var result = await _unitOfWork.QueryAsync<CommentPagingResposneModel>("Comment_All_Paging", parameters);
 

@@ -6,7 +6,9 @@ CREATE OR ALTER PROCEDURE Comment_All_Paging
     @sortDirection varchar(4) = 'ASC',
     @userId INT,
     @albumId INT,
-    @collectionId INT
+    @collectionId INT,
+    @hasReply BIT,
+    @isReply BIT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -48,7 +50,8 @@ BEGIN
             WHERE c.IsDeleted = 0 AND
                 (ISNULL(@userId, '') = '' OR c.UserId = @userId) AND
                 (ISNULL(@albumId, '') = '' OR a.Id = @albumId) AND
-                (ISNULL(@collectionId, '') = '' OR c2.Id = @collectionId)
+                (ISNULL(@collectionId, '') = '' OR c2.Id = @collectionId) AND
+                (@isReply = 1 AND c.ParentCommentId IS NOT NULL OR @isReply = 0 AND c.ParentCommentId IS NULL)
         )
             SELECT COUNT_BIG(1) AS RowNum,
             0 Id,
