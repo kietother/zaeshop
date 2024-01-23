@@ -13,5 +13,6 @@ namespace Identity.Domain.Models.Users
         public string FullName { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string? Username { get; set; }
+        public string? Avatar { get; set; }
     }
 }

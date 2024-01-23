@@ -4,5 +4,7 @@ namespace Common.Shared.Models.Users
     {
         public string IdentityUserId { get; set; } = null!;
         public string FullName { get; set; } = null!;
+        public string? Avatar { get; set; }
+        public bool IsUpdateAvatar { get; set; }
     }
 }
