@@ -1,11 +1,15 @@
 import getAxiosInstance from "@/lib/axios";
 import Breadcrumb from "../../../components/comic/Breadcrumb";
 import ChapterComic from "../../../components/comic/ChapterComic";
-import CommentComic from "../../../components/comic/CommentComic";
 import InfomationComic from "../../../components/comic/InfomationComic";
 import ServerResponse from "@/app/models/common/ServerResponse";
 import ComicDetail from "@/app/models/comics/ComicDetail";
 import { portalServer } from "@/lib/services/client/baseUrl";
+import dynamic from "next/dynamic";
+
+const DynamicCommentComic = dynamic(() => import('@/app/components/comic/CommentComic'), {
+    ssr: false
+});
 
 const getComic = async (comicid: string | null) => {
     try {
@@ -24,7 +28,7 @@ export default async function Comic({ params }: { params: { comicid: string | nu
             <Breadcrumb title={comic?.title} friendlyName={comic?.friendlyName} />
             <InfomationComic comic={comic} />
             <ChapterComic contents={comic?.contents} />
-            <CommentComic />
+            <DynamicCommentComic />
         </>
     );
 }

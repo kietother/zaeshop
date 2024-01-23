@@ -1,15 +1,19 @@
 "use client"
+import UserSession from '@/app/models/auth/UserSession';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
+import { useEffect, useMemo, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 export default function CommentComic() {
     const t = useTranslations('comic_detail');
     const [comment, setComment] = useState('');
-    const [session, setSession] = useState<any>(null);
+
+    const userSession = useMemo<UserSession>(() => {
+        const session = localStorage.getItem('userSession');
+        return session ? JSON.parse(session) : null;
+    }, []);
+
     const editorStyle = {
         width: '100%',
         marginBottom: '4vh',
@@ -39,7 +43,7 @@ export default function CommentComic() {
                             <div className="row">
                                 <div className="col-lg-1 col-2">
                                     <a href="profile.html">
-                                        <img src={session?.user?.image ?? ''} alt="" />
+                                        <img src={userSession?.image ?? ''} alt="" />
                                     </a>
                                 </div>
                                 <div className="col-lg-11 col-10">
