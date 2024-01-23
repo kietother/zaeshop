@@ -37,6 +37,7 @@ BEGIN
                 u.UserName,
                 c.CreatedOnUtc,
                 c.UpdatedOnUtc,
+                u.Avatar,
 				COUNT(reply.Id) AS ReplyCount
             FROM dbo.Comment c
                 JOIN dbo.[User] u ON u.Id = c.UserId
@@ -58,7 +59,8 @@ BEGIN
                 u.UserName,
                 c.CreatedOnUtc,
                 c.UpdatedOnUtc,
-				c.ParentCommentId
+				c.ParentCommentId,
+                u.Avatar
         )
             SELECT COUNT_BIG(1) AS RowNum,
             0 Id,
@@ -71,6 +73,7 @@ BEGIN
             GETDATE() CreatedOnUtc,
             NULL UpdatedOnUtc,
 			0 ReplyCount,
+            NULL Avatar,
             1 AS IsTotalRecord
         FROM FilteredData
     UNION

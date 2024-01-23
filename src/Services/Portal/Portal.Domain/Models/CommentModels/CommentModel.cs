@@ -14,7 +14,8 @@ namespace Portal.Domain.Models.CommentModels
         public string? FullName { get; set; }
         public string? UserName { get; set; }
         public int? ParentCommentId { get; set; }
-        public bool? HasReply { get; set; }
+        public int? ReplyCount { get; set; }
+        public string? Avatar { get; set; }
         public DateTime CreatedOnUtc { get; set; }
         public DateTime? UpdatedOnUtc { get; set; }
     }
