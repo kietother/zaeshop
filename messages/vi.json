@@ -74,7 +74,9 @@
         "Please read our": "Vui lòng đọc",
         "Comment Policy": "Chính sách của chúng tôi",
         "before commenting": "trước khi bình luận",
-        "Post": "Đăng"
+        "post": "Đăng",
+        "reply": "Phản hồi",
+        "view_more_replies": "Xem thêm phản hồi"
     },
     "logins":{
         "login": "Đăng nhập",

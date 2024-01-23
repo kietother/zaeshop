@@ -106,6 +106,7 @@ export default function CommentComic({ comicId }: { comicId: any }) {
             pageSize: 10,
             sortColumn: 'createdOnUtc',
             sortDirection: 'desc',
+            isReply: false
         };
 
         setLoading(true);
@@ -149,21 +150,22 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                         <img src={userSession?.image ?? ''} alt="" />
                                     </a>
                                 </div>
-                                <div className="col-lg-11 col-10">
-                                    <form onSubmit={handlePostComment}>
-                                        <div className="input-group form-group footer-email-box">
-                                            <ReactQuill
-                                                style={editorStyle}
-                                                theme="snow"
-                                                value={comment}
-                                                onChange={(content, delta, source, editor) => setComment(content)}
-                                                preserveWhitespace={true} />
-                                        </div>
-                                        <button className="input-group-text post-btn" type="submit">
-                                            {t('Post')}
-                                        </button>
-                                    </form>
-                                </div>
+                                {userSession &&
+                                    <div className="col-lg-11 col-10">
+                                        <form onSubmit={handlePostComment}>
+                                            <div className="input-group form-group footer-email-box">
+                                                <ReactQuill
+                                                    style={editorStyle}
+                                                    theme="snow"
+                                                    value={comment}
+                                                    onChange={(content, delta, source, editor) => setComment(content)}
+                                                    preserveWhitespace={true} />
+                                            </div>
+                                            <button className="input-group-text post-btn" type="submit">
+                                                {t('post')}
+                                            </button>
+                                        </form>
+                                    </div>}
                             </div>
                             <div className="site-comment">
                                 {loading && <div className="spinner-border text-primary" role="status"></div>}
@@ -177,9 +179,10 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                         <div className="col-lg-11 col-10">
                                             <h5>
                                                 <a href="profile.html">{cmt.userName}</a>
-                                                <b>{formatDate(cmt.createdOnUtc)}</b>
+                                                {cmt.collectionId && <b className='relation-chap'>Chap 1</b>}
                                             </h5>
                                             <div dangerouslySetInnerHTML={{ __html: cmt.text }} />
+                                            <span className='date-comment'>{formatDate(cmt.createdOnUtc)}</span>
                                             <a href="manga-detail.html" className="comment-btn">
                                                 <i className="fa fa-thumbs-up" />
                                             </a>
@@ -189,47 +192,42 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                             <button
                                                 className=" accordion-button comment-btn"
                                                 data-bs-toggle="collapse"
-                                                data-bs-target="#reply1"
+                                                data-bs-target={`#reply${index}1`}
                                                 aria-expanded="true"
                                             >
-                                                Reply
+                                                 {t('reply')}
                                             </button>
                                             <div
-                                                id="reply1"
+                                                id={`reply${index}1`}
                                                 className="accordion-collapse collapse "
-                                                data-bs-parent="#accordionExample"
+                                                data-bs-parent={`#accordionExample${index}1`}
                                             >
                                                 <div className="card card-body">
-                                                    <div className="d-flex pt-3">
-                                                        <a href="profile.html">
-                                                            <img
-                                                                src="/assets/media/comment/comment-img-sm-2.png"
-                                                                alt=""
-                                                            />
-                                                        </a>
-                                                        <input type="text" placeholder="Add a reply" />
-                                                    </div>
-                                                    <div className="text-end">
-                                                        <button className="comment-btn">Cencel</button>
-                                                        <button className="comment-btn active">Reply</button>
-                                                    </div>
+                                                    <form onSubmit={handlePostComment}>
+                                                        <div className="input-group form-group footer-email-box">
+                                                            <ReactQuill style={editorStyle} theme="snow" value={comment} onChange={setComment} />
+                                                        </div>
+                                                        <button className="input-group-text post-btn" type="submit">
+                                                            {t('post')}
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </div>
                                             <a
                                                 href="manga-detail.html#"
                                                 className={`accordion-button comment-btn ${isOpen ? 'active' : ''}`}
                                                 data-bs-toggle="collapse"
-                                                data-bs-target="#reply"
+                                                data-bs-target={`#reply${index}`}
                                                 aria-expanded={isOpen}
-                                                aria-controls="reply"
+                                                aria-controls={`reply${index}`}
                                                 onClick={toggleReplies}
                                             >
-                                                <i className={`fa ${isOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`} /> 40 Replies
+                                                {t('view_more_replies')}
                                             </a>
                                             <div
-                                                id="reply"
+                                                id={`reply${index}`}
                                                 className="accordion-collapse collapse "
-                                                data-bs-parent="#accordionExample"
+                                                data-bs-parent={`#accordionExample${index}`}
                                             >
                                                 <div className="card card-body">
                                                     <div className="row pt-3">
@@ -257,18 +255,10 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                                                     <a href="manga-detail.html" className="comment-btn">
                                                                         <i className="fa fa-thumbs-down" />
                                                                     </a>
-                                                                    <button
-                                                                        className=" accordion-button comment-btn"
-                                                                        data-bs-toggle="collapse"
-                                                                        data-bs-target="#reply30"
-                                                                        aria-expanded="true"
-                                                                    >
-                                                                        Reply
-                                                                    </button>
                                                                     <div
                                                                         id="reply30"
                                                                         className="accordion-collapse collapse"
-                                                                        data-bs-parent="#accordionExample"
+                                                                        data-bs-parent={`accordionExample${index}`}
                                                                     >
                                                                         <div className="card card-body">
                                                                             <form onSubmit={handlePostComment}>

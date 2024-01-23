@@ -74,7 +74,9 @@
         "Please read our": "Please read our",
         "Comment Policy": "Comment Policy",
         "before commenting": "before commenting",
-        "Post": "Post"
+        "post": "Post",
+        "reply": "Reply",
+        "view_more_replies": "View more replies"
     },
     "logins":{
         "login": "Log in",
