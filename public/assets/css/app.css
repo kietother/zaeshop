@@ -4257,6 +4257,7 @@ ul.pagination li a.current {
 .site-comment .comment-btn:hover,
 .site-comment .comment-btn:focus {
   color: var(--color-primary);
+  cursor: pointer;
 }
 
 .site-comment img {

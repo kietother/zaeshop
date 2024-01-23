@@ -36,6 +36,8 @@ export default function CommentComic({ comicId }: { comicId: any }) {
     const [reloadTrigger, setReloadTrigger] = useState(false);
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(true);
+    const [reply, setReply] = useState('');
+    const [replies, setReplies] = useState<any>();
 
     const userSession = useMemo<UserSession>(() => {
         const session = localStorage.getItem('userSession');
@@ -83,20 +85,22 @@ export default function CommentComic({ comicId }: { comicId: any }) {
         setReloadTrigger((prev) => !prev);
     };
 
-    const handlePostReply = async (event: any) => {
+    const handlePostReply = async (event: any, commentId: any) => {
         event.preventDefault();
-        if (comment.trim() === '') {
+        if (reply.trim() === '') {
             return;
         }
 
         const commentData = {
-            Text: comment,
+            Text: reply,
             AlbumId: comicId,
             CollectionId: null,
+            ParentCommentId: commentId
         };
 
         await pushComment(commentData);
-        setComment('');
+        setReply('');
+        setReloadTrigger((prev) => !prev);
     };
 
     useEffect(() => {
@@ -173,7 +177,7 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                     <div key={index} className="row">
                                         <div className="col-lg-1 col-2">
                                             <a href="profile.html">
-                                                <img src="/assets/media/comment/comment-img-2.png" alt="" />
+                                                <img src={cmt.avatar} alt="" />
                                             </a>
                                         </div>
                                         <div className="col-lg-11 col-10">
@@ -203,9 +207,9 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                                 data-bs-parent={`#accordionExample${index}1`}
                                             >
                                                 <div className="card card-body">
-                                                    <form onSubmit={handlePostComment}>
+                                                    <form onSubmit={(event) => handlePostReply(event, cmt.id)}>
                                                         <div className="input-group form-group footer-email-box">
-                                                            <ReactQuill style={editorStyle} theme="snow" value={comment} onChange={setComment} />
+                                                            <ReactQuill style={editorStyle} theme="snow" value={reply} onChange={setReply} />
                                                         </div>
                                                         <button className="input-group-text post-btn" type="submit">
                                                             {t('post')}
@@ -213,7 +217,7 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                                     </form>
                                                 </div>
                                             </div>
-                                            {cmt.ReplyCount > 0 && <a
+                                            {cmt.replyCount > 0 && <a
                                                 className={`accordion-button comment-btn ${isOpen ? 'active' : ''}`}
                                                 data-bs-toggle="collapse"
                                                 data-bs-target={`#reply${index}`}
@@ -265,7 +269,7 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                                                                     <ReactQuill style={editorStyle} theme="snow" value={comment} onChange={setComment} />
                                                                                 </div>
                                                                                 <button className="input-group-text post-btn" type="submit">
-                                                                                    {t('Post')}
+                                                                                    {t('post')}
                                                                                 </button>
                                                                             </form>
                                                                         </div>
@@ -324,7 +328,7 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                                                                         <ReactQuill style={editorStyle} theme="snow" value={comment} onChange={setComment} />
                                                                                     </div>
                                                                                     <button className="input-group-text post-btn" type="submit">
-                                                                                        {t('Post')}
+                                                                                        {t('post')}
                                                                                     </button>
                                                                                 </form>
                                                                             </div>
