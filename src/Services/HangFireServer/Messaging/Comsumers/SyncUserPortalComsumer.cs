@@ -25,6 +25,7 @@ namespace HangFireServer.Messaging.Comsumers
             if (user != null)
             {
                 user.FullName = syncUserMessage.FullName;
+                user.Avatar = syncUserMessage.IsUpdateAvatar ? syncUserMessage.Avatar : user.Avatar;
 
                 _userRepository.Update(user);
                 await _unitOfWork.SaveChangesAsync();

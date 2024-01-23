@@ -439,7 +439,8 @@ namespace Identity.Infrastructure.Implements.Business.Services
                     ProviderAccountId = model.ProviderAccountId,
                     // Flag to check Client registered
                     IsClientRegistered = true,
-                    CreatedOnUtc = DateTime.UtcNow
+                    CreatedOnUtc = DateTime.UtcNow,
+                    Avatar = model.Image
                 };
 
                 // Create account
@@ -455,7 +456,8 @@ namespace Identity.Infrastructure.Implements.Business.Services
                     IdentityId = user.Id,
                     FullName = user.FullName,
                     Email = user.Email,
-                    Username = user.UserName
+                    Username = user.UserName,
+                    Avatar = user.Avatar
                 });
 
                 if (resultApi != null && !resultApi.IsSuccess)
@@ -472,9 +474,10 @@ namespace Identity.Infrastructure.Implements.Business.Services
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
             }
-            else if (user.FullName != model.Name.Split(' ').FirstOrDefault())
+            else if (user.FullName != model.Name.Split(' ').FirstOrDefault() || user.Avatar != model.Image)
             {
                 user.FullName = model.Name.Split(' ').FirstOrDefault() ?? string.Empty;
+                user.Avatar = model.Image;
                 user.UpdatedOnUtc = DateTime.UtcNow;
 
                 _context.Users.Update(user);
@@ -484,7 +487,9 @@ namespace Identity.Infrastructure.Implements.Business.Services
                 await _syncUserPortalPublisher.SyncUserPortalAsync(new SyncUserPortalMessage
                 {
                     IdentityUserId = user.Id,
-                    FullName = user.FullName
+                    FullName = user.FullName,
+                    Avatar = user.Avatar,
+                    IsUpdateAvatar = true
                 });
             }
 
