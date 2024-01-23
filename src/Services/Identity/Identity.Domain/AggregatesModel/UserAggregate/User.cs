@@ -18,6 +18,8 @@ namespace Identity.Domain.AggregatesModel.UserAggregate
         public string? ProviderAccountId { get; set; }
         public bool IsClientRegistered { get; set; }
 
+        public string? Avatar { get; set; }
+
         public DateTime CreatedOnUtc { get; set; }
         public DateTime? UpdatedOnUtc { get; set; }
 

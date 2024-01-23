@@ -11,6 +11,8 @@ public class User : Entity, IAggregateRoot
     public string Email { get; set; } = null!;
     public string UserName { get; set; } = null!;
 
+    public string? Avatar { get; set; }
+
     [JsonIgnore]
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 }
