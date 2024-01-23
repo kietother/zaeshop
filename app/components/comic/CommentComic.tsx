@@ -195,7 +195,7 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                                 data-bs-target={`#reply${index}1`}
                                                 aria-expanded="true"
                                             >
-                                                 {t('reply')}
+                                                {t('reply')}
                                             </button>
                                             <div
                                                 id={`reply${index}1`}
@@ -213,8 +213,7 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                                     </form>
                                                 </div>
                                             </div>
-                                            <a
-                                                href="manga-detail.html#"
+                                            {cmt.ReplyCount > 0 && <a
                                                 className={`accordion-button comment-btn ${isOpen ? 'active' : ''}`}
                                                 data-bs-toggle="collapse"
                                                 data-bs-target={`#reply${index}`}
@@ -223,7 +222,7 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                                 onClick={toggleReplies}
                                             >
                                                 {t('view_more_replies')}
-                                            </a>
+                                            </a>}
                                             <div
                                                 id={`reply${index}`}
                                                 className="accordion-collapse collapse "
