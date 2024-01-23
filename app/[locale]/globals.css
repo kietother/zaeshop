@@ -37,3 +37,7 @@
 .hover {
     cursor: pointer;
 }
+
+.ql-editor {
+    white-space: normal !important;
+}
