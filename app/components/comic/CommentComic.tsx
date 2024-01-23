@@ -152,7 +152,12 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                 <div className="col-lg-11 col-10">
                                     <form onSubmit={handlePostComment}>
                                         <div className="input-group form-group footer-email-box">
-                                            <ReactQuill style={editorStyle} theme="snow" value={comment} onChange={(content, delta, source, editor) => setComment(editor.getHTML())} />
+                                            <ReactQuill
+                                                style={editorStyle}
+                                                theme="snow"
+                                                value={comment}
+                                                onChange={(content, delta, source, editor) => setComment(content)}
+                                                preserveWhitespace={true} />
                                         </div>
                                         <button className="input-group-text post-btn" type="submit">
                                             {t('Post')}
