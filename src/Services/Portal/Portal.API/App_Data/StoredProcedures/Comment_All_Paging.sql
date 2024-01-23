@@ -6,7 +6,9 @@ CREATE OR ALTER PROCEDURE Comment_All_Paging
     @sortDirection varchar(4) = 'ASC',
     @userId INT,
     @albumId INT,
-    @collectionId INT
+    @collectionId INT,
+    @isReply BIT,
+    @parentCommentId INT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -37,6 +39,7 @@ BEGIN
                 u.UserName,
                 c.CreatedOnUtc,
                 c.UpdatedOnUtc,
+                c.ParentCommentId,
                 u.Avatar,
 				COUNT(reply.Id) AS ReplyCount
             FROM dbo.Comment c
@@ -48,7 +51,7 @@ BEGIN
                 (ISNULL(@userId, '') = '' OR c.UserId = @userId) AND
                 (ISNULL(@albumId, '') = '' OR a.Id = @albumId) AND
                 (ISNULL(@collectionId, '') = '' OR c2.Id = @collectionId) AND
-				c.ParentCommentId IS NULL
+				(@isReply = 1 AND (c.ParentCommentId IS NOT NULL AND c.ParentCommentId = @parentCommentId) OR @isReply = 0 AND c.ParentCommentId IS NULL)
             GROUP BY
 				c.Id,
                 c.Text,
@@ -72,8 +75,9 @@ BEGIN
             NULL [UserName],
             GETDATE() CreatedOnUtc,
             NULL UpdatedOnUtc,
-			0 ReplyCount,
+            1 ParentCommentId,
             NULL Avatar,
+			0 ReplyCount,
             1 AS IsTotalRecord
         FROM FilteredData
     UNION
