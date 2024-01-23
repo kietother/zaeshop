@@ -33,6 +33,9 @@ export default function CommentComic({ comicId }: { comicId: any }) {
     const t = useTranslations('comic_detail');
     const [comment, setComment] = useState('');
     const [comments, setComments] = useState<any>();
+    const [reloadTrigger, setReloadTrigger] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     const userSession = useMemo<UserSession>(() => {
         const session = localStorage.getItem('userSession');
@@ -43,6 +46,24 @@ export default function CommentComic({ comicId }: { comicId: any }) {
         width: '100%',
         marginBottom: '5vh',
         color: 'white',
+    };
+
+    const formatDate = (utcDate: string) => {
+        const options: Intl.DateTimeFormatOptions = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+        };
+        const formattedDate = new Date(utcDate).toLocaleString(undefined, options);
+        return formattedDate;
+    };
+
+    const toggleReplies = () => {
+        setIsOpen(!isOpen);
     };
 
     const handlePostComment = async (event: any) => {
@@ -59,6 +80,7 @@ export default function CommentComic({ comicId }: { comicId: any }) {
 
         await pushComment(commentData);
         setComment('');
+        setReloadTrigger((prev) => !prev);
     };
 
     const handlePostReply = async (event: any) => {
@@ -82,18 +104,25 @@ export default function CommentComic({ comicId }: { comicId: any }) {
             albumId: comicId,
             pageNumber: 1,
             pageSize: 10,
-        }
+            sortColumn: 'createdOnUtc',
+            sortDirection: 'desc',
+        };
+
+        setLoading(true);
 
         getComments(query)
-            .then(response => {
+            .then((response) => {
                 if (response && response.data) {
                     setComments(response.data);
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Error fetching types:', error);
+            })
+            .finally(() => {
+                setLoading(false);
             });
-    }, [comments]);
+    }, [reloadTrigger]);
 
 
     return (
@@ -132,6 +161,7 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                 </div>
                             </div>
                             <div className="site-comment">
+                                {loading && <div className="spinner-border text-primary" role="status"></div>}
                                 {comments?.map((cmt: any, index: number) => (
                                     <div key={index} className="row">
                                         <div className="col-lg-1 col-2">
@@ -142,7 +172,7 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                         <div className="col-lg-11 col-10">
                                             <h5>
                                                 <a href="profile.html">{cmt.userName}</a>
-                                                <b>5 minutes ago</b>
+                                                <b>{formatDate(cmt.createdOnUtc)}</b>
                                             </h5>
                                             <div dangerouslySetInnerHTML={{ __html: cmt.text }} />
                                             <a href="manga-detail.html" className="comment-btn">
@@ -182,13 +212,14 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                             </div>
                                             <a
                                                 href="manga-detail.html#"
-                                                className="accordion-button comment-btn active"
+                                                className={`accordion-button comment-btn ${isOpen ? 'active' : ''}`}
                                                 data-bs-toggle="collapse"
                                                 data-bs-target="#reply"
-                                                aria-expanded="true"
+                                                aria-expanded={isOpen}
                                                 aria-controls="reply"
+                                                onClick={toggleReplies}
                                             >
-                                                <i className="fa fa-chevron-up" /> 40 Replies
+                                                <i className={`fa ${isOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`} /> 40 Replies
                                             </a>
                                             <div
                                                 id="reply"
@@ -450,197 +481,6 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                         </div>
                                     </div>
                                 ))}
-
-                                <a
-                                    href="manga-detail.html#"
-                                    className="accordion-button comment-btn active"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#reply20"
-                                    aria-expanded="true"
-                                >
-                                    <i className="fa fa-chevron-down" /> 40 Replies
-                                </a>
-                                <div
-                                    id="reply20"
-                                    className="accordion-collapse collapse "
-                                    data-bs-parent="#accordionExample"
-                                >
-                                    <div className="card card-body">
-                                        <div className="row pt-3">
-                                            <div className="col-lg-11 offset-lg-1 offset-2 col-10 pb-4">
-                                                <div className="d-inline-flex align-items-start">
-                                                    <a href="profile.html">
-                                                        <img
-                                                            src="/assets/media/comment/comment-img-sm-3.png"
-                                                            alt=""
-                                                        />
-                                                    </a>
-                                                    <div className="replies">
-                                                        <h5>
-                                                            <a href="profile.html">@username</a>{" "}
-                                                            <b>5 minutes ago</b>
-                                                        </h5>
-                                                        <p>
-                                                            At vero eos et accusamus et iusto odio dignissimos
-                                                            ducimus qui blanditiis praesentium voluptatum deleniti
-                                                            atque corrupti quos dolores et quas molestias.
-                                                        </p>
-                                                        <a href="manga-detail.html" className="comment-btn">
-                                                            <i className="fa fa-thumbs-up" />
-                                                        </a>
-                                                        <a href="manga-detail.html" className="comment-btn">
-                                                            <i className="fa fa-thumbs-down" />
-                                                        </a>
-                                                        <button
-                                                            className=" accordion-button comment-btn"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#reply4"
-                                                            aria-expanded="true"
-                                                            aria-controls="reply"
-                                                        >
-                                                            Reply
-                                                        </button>
-                                                        <div
-                                                            id="reply4"
-                                                            className="accordion-collapse collapse  "
-                                                            data-bs-parent="#accordionExample"
-                                                        >
-                                                            <div className="card card-body">
-                                                                <div className="d-flex pt-3">
-                                                                    <img
-                                                                        src="/assets/media/comment/comment-img-sm-2.png"
-                                                                        alt=""
-                                                                    />
-                                                                    <input type="text" placeholder="Add a reply" />
-                                                                </div>
-                                                                <div className="text-end">
-                                                                    <button className="comment-btn">Cencel</button>
-                                                                    <button className="comment-btn active">
-                                                                        Reply
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-11 offset-lg-1 offset-2 col-10 pb-4">
-                                                <div className="d-inline-flex align-items-start">
-                                                    <a href="profile.html">
-                                                        <img
-                                                            src="/assets/media/comment/comment-img-sm-1.png"
-                                                            alt=""
-                                                        />
-                                                    </a>
-                                                    <div className="replies">
-                                                        <h5>
-                                                            <a href="profile.html">@username</a>{" "}
-                                                            <b>5 minutes ago</b>
-                                                        </h5>
-                                                        <p>
-                                                            At vero eos et accusamus et iusto odio dignissimos
-                                                            ducimus qui blanditiis praesentium voluptatum deleniti
-                                                            atque corrupti quos dolores et quas molestias.
-                                                        </p>
-                                                        <a href="manga-detail.html" className="comment-btn">
-                                                            <i className="fa fa-thumbs-up" />
-                                                        </a>
-                                                        <a href="manga-detail.html" className="comment-btn">
-                                                            <i className="fa fa-thumbs-down" />
-                                                        </a>
-                                                        <button
-                                                            className=" accordion-button comment-btn"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#reply5"
-                                                            aria-expanded="true"
-                                                            aria-controls="reply"
-                                                        >
-                                                            Reply
-                                                        </button>
-                                                        <div
-                                                            id="reply5"
-                                                            className="accordion-collapse collapse  "
-                                                            data-bs-parent="#accordionExample"
-                                                        >
-                                                            <div className="card card-body">
-                                                                <div className="d-flex pt-3">
-                                                                    <img
-                                                                        src="/assets/media/comment/comment-img-sm-1.png"
-                                                                        alt=""
-                                                                    />
-                                                                    <input type="text" placeholder="Add a reply" />
-                                                                </div>
-                                                                <div className="text-end">
-                                                                    <button className="comment-btn">Cencel</button>
-                                                                    <button className="comment-btn active">
-                                                                        Reply
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-11 offset-lg-1 offset-2 col-10 pb-4">
-                                                <div className="d-inline-flex align-items-start">
-                                                    <a href="profile.html">
-                                                        <img
-                                                            src="/assets/media/comment/comment-img-sm-3.png"
-                                                            alt=""
-                                                        />
-                                                    </a>
-                                                    <div className="replies">
-                                                        <h5>
-                                                            <a href="profile.html">@username</a>{" "}
-                                                            <b>5 minutes ago</b>
-                                                        </h5>
-                                                        <p>
-                                                            At vero eos et accusamus et iusto odio dignissimos
-                                                            ducimus qui blanditiis praesentium voluptatum deleniti
-                                                            atque corrupti quos dolores et quas molestias.
-                                                        </p>
-                                                        <a href="manga-detail.html" className="comment-btn">
-                                                            <i className="fa fa-thumbs-up" />
-                                                        </a>
-                                                        <a href="manga-detail.html" className="comment-btn">
-                                                            <i className="fa fa-thumbs-down" />
-                                                        </a>
-                                                        <button
-                                                            className=" accordion-button comment-btn"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#reply6"
-                                                            aria-expanded="true"
-                                                            aria-controls="reply"
-                                                        >
-                                                            Reply
-                                                        </button>
-                                                        <div
-                                                            id="reply6"
-                                                            className="accordion-collapse collapse  "
-                                                            data-bs-parent="#accordionExample"
-                                                        >
-                                                            <div className="card card-body">
-                                                                <div className="d-flex pt-3">
-                                                                    <img
-                                                                        src="/assets/media/comment/comment-img-sm-2.png"
-                                                                        alt=""
-                                                                    />
-                                                                    <input type="text" placeholder="Add a reply" />
-                                                                </div>
-                                                                <div className="text-end">
-                                                                    <button className="comment-btn">Cencel</button>
-                                                                    <button className="comment-btn active">
-                                                                        Reply
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-6 col-sm-8 offset-lg-0 offset-md-3 offset-sm-2 mt-lg-0 mt-3">
