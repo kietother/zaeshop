@@ -1,33 +1,18 @@
 "use client"
 import UserSession from '@/app/models/auth/UserSession';
+import { formatDateToLocale } from '@/lib/dayjs/format-date';
+import { getComments, pushComment } from '@/lib/services/client/comment/commentService';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { portalServer } from "@/lib/services/client/baseUrl";
-import ServerResponse from '@/app/models/common/ServerResponse';
-import axiosClientApiInstance from '@/lib/services/client/interceptor';
+import ReplyComic from './ReplyComic';
 
-const pushComment = async (commentData: any) => {
-    try {
-        const response = await axiosClientApiInstance.post<ServerResponse<any>>(portalServer + '/api/comment', commentData);
-        return response.data;
-    } catch (error) {
-        return null;
-    }
+const editorStyle = {
+    width: '100%',
+    marginBottom: '5vh',
+    color: 'white',
 };
-
-const getComments = async (queryParams: any) => {
-    try {
-        const response = await axiosClientApiInstance.get<ServerResponse<any>>(portalServer + '/api/comment', {
-            params: queryParams,
-        });
-        return response.data.data;
-    } catch (error) {
-        return null;
-    }
-};
-
 
 export default function CommentComic({ comicId }: { comicId: any }) {
     const t = useTranslations('comic_detail');
@@ -35,50 +20,12 @@ export default function CommentComic({ comicId }: { comicId: any }) {
     const [comments, setComments] = useState<any>();
     const [reloadTrigger, setReloadTrigger] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [isOpen, setIsOpen] = useState(true);
     const [reply, setReply] = useState('');
-    const [replies, setReplies] = useState<any[]>([]);
 
     const userSession = useMemo<UserSession>(() => {
         const session = localStorage.getItem('userSession');
         return session ? JSON.parse(session) : null;
     }, []);
-
-    const editorStyle = {
-        width: '100%',
-        marginBottom: '5vh',
-        color: 'white',
-    };
-
-    const formatDate = (utcDate: string) => {
-        const options: Intl.DateTimeFormatOptions = {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-        };
-        const formattedDate = new Date(utcDate).toLocaleString(undefined, options);
-        return formattedDate;
-    };
-
-    const toggleReplies = async (commentId: any) => {
-        setIsOpen(!isOpen);
-        const query = {
-            albumId: comicId,
-            pageNumber: 1,
-            pageSize: 10,
-            sortColumn: 'createdOnUtc',
-            sortDirection: 'desc',
-            isReply: true,
-            parentCommentId: commentId
-        };
-
-        var result = await getComments(query);
-        setReplies(result.data);       
-    };
 
     const handlePostComment = async (event: any) => {
         event.preventDefault();
@@ -198,7 +145,7 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                                 {cmt.collectionId && <b className='relation-chap'>Chap 1</b>}
                                             </h5>
                                             <div dangerouslySetInnerHTML={{ __html: cmt.text }} />
-                                            <span className='date-comment'>{formatDate(cmt.createdOnUtc)}</span>
+                                            <span className='date-comment'>{formatDateToLocale(cmt.createdOnUtc)}</span>
                                             <a href="manga-detail.html" className="comment-btn">
                                                 <i className="fa fa-thumbs-up" />
                                             </a>
@@ -229,67 +176,13 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                                     </form>
                                                 </div>
                                             </div>
-                                            {cmt.replyCount > 0 && <a
-                                                className={`accordion-button comment-btn ${isOpen ? 'active' : ''}`}
-                                                data-bs-toggle="collapse"
-                                                data-bs-target={`#reply${index}`}
-                                                aria-expanded={isOpen}
-                                                aria-controls={`reply${index}`}
-                                                onClick={() => toggleReplies(cmt.id)}
-                                            >
-                                                {t('view_more_replies')}
-                                            </a>}
-                                            <div
-                                                id={`reply${index}`}
-                                                className="accordion-collapse collapse "
-                                                data-bs-parent={`#accordionExample${index}`}
-                                            >
-                                                <div className="card card-body">
-                                                    <div className="row pt-3">
-                                                    {replies?.map((rl: any, index: number) => (
-                                                        <div key={index} className="col-lg-11 offset-lg-1 offset-2 col-10 pb-4">
-                                                            <div className="d-inline-flex align-items-start">
-                                                                <a href="profile.html">
-                                                                    <img
-                                                                        src="/assets/media/comment/comment-img-sm-1.png"
-                                                                        alt=""
-                                                                    />
-                                                                </a>
-                                                                <div className="replies">
-                                                                    <h5>
-                                                                        <a href="profile.html">{rl.userName}</a>{" "}
-                                                                    </h5>
-                                                                    <div dangerouslySetInnerHTML={{ __html: rl.text }} />
-                                                                    <span className='date-comment'>{formatDate(rl.createdOnUtc)}</span>
-                                                                    <a href="manga-detail.html" className="comment-btn">
-                                                                        <i className="fa fa-thumbs-up" />
-                                                                    </a>
-                                                                    <a href="manga-detail.html" className="comment-btn">
-                                                                        <i className="fa fa-thumbs-down" />
-                                                                    </a>
-                                                                    <div
-                                                                        id="reply30"
-                                                                        className="accordion-collapse collapse"
-                                                                        data-bs-parent={`accordionExample${index}`}
-                                                                    >
-                                                                        <div className="card card-body">
-                                                                            <form onSubmit={handlePostComment}>
-                                                                                <div className="input-group form-group footer-email-box">
-                                                                                    <ReactQuill style={editorStyle} theme="snow" value={comment} onChange={setComment} />
-                                                                                </div>
-                                                                                <button className="input-group-text post-btn" type="submit">
-                                                                                    {t('post')}
-                                                                                </button>
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            {cmt.replyCount > 0 &&
+                                                <ReplyComic
+                                                    comicId={comicId}
+                                                    commentId={cmt.id}
+                                                    replyCount={cmt.replyCount}
+                                                    isOpen={false}
+                                                    index={index} />}
                                         </div>
                                     </div>
                                 ))}
