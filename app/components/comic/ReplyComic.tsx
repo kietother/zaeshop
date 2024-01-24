@@ -2,18 +2,11 @@ import { formatDateToLocale } from "@/lib/dayjs/format-date";
 import { getComments } from "@/lib/services/client/comment/commentService";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import ReactQuill from "react-quill";
 
-const editorStyle = {
-    width: '100%',
-    marginBottom: '5vh',
-    color: 'white',
-};
-
-export default function ReplyComic({ comicId, commentId, replyCount, isOpen, index }: {
+export default function ReplyComic({ comicId, commentId, replyCount, index }: {
     comicId: number,
     commentId: number, replyCount: number,
-    isOpen: boolean, index: number
+    index: number
 }) {
     const t = useTranslations('comic_detail');
     const [replies, setReplies] = useState<any[]>([]);
@@ -33,13 +26,27 @@ export default function ReplyComic({ comicId, commentId, replyCount, isOpen, ind
         setReplies(result.data);
     };
 
+    const scrollToReplyEditor = () => {
+        const section = document.querySelector(`#reply${index}1`);
+        if (section) {
+            if (!section.classList.contains('shake-highlight')) {
+                section.classList.add('shake-highlight');
+
+                setTimeout(() => {
+                    section.classList.remove('shake-highlight');
+                }, 1000);
+            }
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
     return (
         <>
             {replyCount > 0 && <a
-                className={`accordion-button comment-btn ${isOpen ? 'active' : ''}`}
+                className={'accordion-button comment-btn active'}
                 data-bs-toggle="collapse"
                 data-bs-target={`#reply${index}`}
-                aria-expanded={isOpen}
+                aria-expanded={true}
                 aria-controls={`reply${index}`}
                 onClick={() => toggleReplies()}
             >
@@ -52,12 +59,12 @@ export default function ReplyComic({ comicId, commentId, replyCount, isOpen, ind
             >
                 <div className="card card-body">
                     <div className="row pt-3">
-                        {replies?.map((rl: any, index: number) => (
-                            <div key={index} className="col-lg-11 offset-lg-1 offset-2 col-10 pb-4">
+                        {replies?.map((rl: any, rlIndex: number) => (
+                            <div key={rlIndex} className="col-lg-11 offset-lg-1 offset-2 col-10 pb-4">
                                 <div className="d-inline-flex align-items-start">
                                     <a href="profile.html">
                                         <img
-                                            src="/assets/media/comment/comment-img-sm-1.png"
+                                            src={rl.avatar}
                                             alt=""
                                         />
                                     </a>
@@ -73,22 +80,15 @@ export default function ReplyComic({ comicId, commentId, replyCount, isOpen, ind
                                         <a href="manga-detail.html" className="comment-btn">
                                             <i className="fa fa-thumbs-down" />
                                         </a>
-                                        {/* <div
-                                            id="reply30"
-                                            className="accordion-collapse collapse"
-                                            data-bs-parent={`accordionExample${index}`}
+                                        <button
+                                            className=" accordion-button comment-btn"
+                                            data-bs-toggle=""
+                                            data-bs-target={`#reply${index}1`}
+                                            aria-expanded="true"
+                                            onClick={scrollToReplyEditor}
                                         >
-                                            <div className="card card-body">
-                                                <form onSubmit={handlePostComment}>
-                                                    <div className="input-group form-group footer-email-box">
-                                                        <ReactQuill style={editorStyle} theme="snow" value={comment} onChange={setComment} />
-                                                    </div>
-                                                    <button className="input-group-text post-btn" type="submit">
-                                                        {t('post')}
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div> */}
+                                            {t('reply')}
+                                        </button>
                                     </div>
                                 </div>
                             </div>

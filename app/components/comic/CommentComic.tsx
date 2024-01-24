@@ -181,7 +181,6 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                                     comicId={comicId}
                                                     commentId={cmt.id}
                                                     replyCount={cmt.replyCount}
-                                                    isOpen={false}
                                                     index={index} />}
                                         </div>
                                     </div>
