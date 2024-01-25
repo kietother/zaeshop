@@ -44,24 +44,6 @@ export default function CommentComic({ comicId }: { comicId: any }) {
         setReloadTrigger((prev) => !prev);
     };
 
-    const handlePostReply = async (event: any, commentId: any) => {
-        event.preventDefault();
-        if (reply.trim() === '') {
-            return;
-        }
-
-        const commentData = {
-            Text: reply,
-            AlbumId: comicId,
-            CollectionId: null,
-            ParentCommentId: commentId
-        };
-
-        await pushComment(commentData);
-        setReply('');
-        setReloadTrigger((prev) => !prev);
-    };
-
     useEffect(() => {
         const query = {
             albumId: comicId,
@@ -152,36 +134,12 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                             <a href="manga-detail.html" className="comment-btn">
                                                 <i className="fa fa-thumbs-down" />
                                             </a>
-                                            <button
-                                                className=" accordion-button comment-btn"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target={`#reply${index}1`}
-                                                aria-expanded="true"
-                                            >
-                                                {t('reply')}
-                                            </button>
-                                            <div
-                                                id={`reply${index}1`}
-                                                className="accordion-collapse collapse "
-                                                data-bs-parent={`#accordionExample${index}1`}
-                                            >
-                                                <div className="card card-body">
-                                                    <form onSubmit={(event) => handlePostReply(event, cmt.id)}>
-                                                        <div className="input-group form-group footer-email-box">
-                                                            <ReactQuill style={editorStyle} theme="snow" value={reply} onChange={setReply} />
-                                                        </div>
-                                                        <button className="input-group-text post-btn" type="submit">
-                                                            {t('post')}
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            {cmt.replyCount > 0 &&
-                                                <ReplyComic
-                                                    comicId={comicId}
-                                                    commentId={cmt.id}
-                                                    replyCount={cmt.replyCount}
-                                                    index={index} />}
+                                            <ReplyComic
+                                                comment={cmt}
+                                                comicId={comicId}
+                                                commentId={cmt.id}
+                                                replyCount={cmt.replyCount}
+                                                index={index} />
                                         </div>
                                     </div>
                                 ))}
