@@ -10,6 +10,7 @@ export default function LogoutButton() {
             redirect: true
         }).then(() => {
             localStorage.removeItem('token');
+            localStorage.removeItem('userSession');
         })
     };
 

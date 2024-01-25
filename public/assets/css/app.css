@@ -4257,15 +4257,13 @@ ul.pagination li a.current {
 .site-comment .comment-btn:hover,
 .site-comment .comment-btn:focus {
   color: var(--color-primary);
+  cursor: pointer;
 }
 
 .site-comment img {
   object-fit: contain;
 }
 
-.site-comment .d-inline-flex a{
-  display: contents;
-}
 .site-comment .d-inline-flex img {
   padding-right: 10px;
 }
@@ -5356,6 +5354,9 @@ input:focus,
   .comic-element{
     width: 50% !important;
   }
+  .post-btn{
+    margin-top: 7vh !important;
+  }
 }
 .text-avt{
   font-size: 12px;
@@ -5370,4 +5371,25 @@ input:focus,
 }
 .hide-link:hover{
   opacity: 0.5;
+}
+.relation-chap
+{
+  font-style: italic !important;
+  font-size: 12px;
+  color: #6094A2 !important;
+}
+.relation-chap:hover{
+  cursor: pointer;
+  color: #acddeb !important;
+}
+.date-comment{
+  display: block;
+  margin-bottom: 2vh;
+  color: white;
+  font-size: 11px;
+  font-family: 'MTO';
+}
+.d-inline-flex
+{
+  display: -webkit-inline-box !important;
 }

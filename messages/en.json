@@ -69,7 +69,14 @@
         "type": "Type",
         "similar": "Similar",
         "top_rated": "Top Rated",
-        "comments": "Comments"
+        "comments": "Comments",
+        "We hope you have a good time browsing the comment section!": "We hope you have a good time browsing the comment section!",
+        "Please read our": "Please read our",
+        "Comment Policy": "Comment Policy",
+        "before commenting": "before commenting",
+        "post": "Post",
+        "reply": "Reply",
+        "view_more_replies": "View more replies"
     },
     "logins":{
         "login": "Log in",

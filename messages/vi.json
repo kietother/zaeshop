@@ -69,7 +69,14 @@
         "type": "Thể loại",
         "similar": "Cùng Thể Loại",
         "top_rated": "Truyện hàng đầu",
-        "comments": "Bình luận"
+        "comments": "Bình luận",
+        "We hope you have a good time browsing the comment section!": "Chúng tôi hy vọng bạn có khoảnh khắc vui vẻ khi đọc phần bình luận!",
+        "Please read our": "Vui lòng đọc",
+        "Comment Policy": "Chính sách của chúng tôi",
+        "before commenting": "trước khi bình luận",
+        "post": "Đăng",
+        "reply": "Phản hồi",
+        "view_more_replies": "Xem thêm phản hồi"
     },
     "logins":{
         "login": "Đăng nhập",
