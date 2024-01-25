@@ -55,7 +55,8 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 Text = request.Text,
                 CollectionId = request.CollectionId,
                 UserId = user.Id,
-                AlbumId = request.AlbumId
+                AlbumId = request.AlbumId,
+                ParentCommentId = request.ParentCommentId
             };
 
             _commentRepository.Add(comment);
@@ -72,7 +73,8 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 CreatedOnUtc = comment.CreatedOnUtc,
                 UpdatedOnUtc = comment.UpdatedOnUtc,
                 FullName = user.FullName,
-                UserName = user.UserName
+                UserName = user.UserName,
+                ParentCommentId = comment.ParentCommentId
             };
 
             return new ServiceResponse<CommentModel>(response);
@@ -181,7 +183,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 { "sortDirection", request.SortDirection },
                 { "albumId", request.AlbumId },
                 { "collectionId", request.CollectionId },
-                { "userId", request.UserId }
+                { "userId", request.UserId },
+                { "isReply", request.IsReply },
+                { "parentCommentId", request.ParentCommentId }
             };
             var result = await _unitOfWork.QueryAsync<CommentPagingResposneModel>("Comment_All_Paging", parameters);
 
