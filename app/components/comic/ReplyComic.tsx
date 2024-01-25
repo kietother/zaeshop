@@ -147,6 +147,7 @@ export default function ReplyComic({ comment, comicId, commentId, replyCount, in
                                 <div className="d-inline-flex align-items-start">
                                     <a href="profile.html">
                                         <img
+                                            className="avatar-reply"
                                             src={rl.avatar}
                                             alt=""
                                         />

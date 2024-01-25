@@ -68,3 +68,8 @@
 .shake-highlight {
     animation: shake 0.5s ease-in-out;
 }
+
+.avatar-reply {
+    height: '29px';
+    width: '29px';
+}
