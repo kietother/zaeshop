@@ -23,7 +23,7 @@ export default function ReplyComic({ comment, comicId, commentId, replyCount, in
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (comment.replyCount > 0) {
+        if (replyCount > 0) {
             const query = {
                 albumId: comicId,
                 pageNumber: 1,
@@ -49,7 +49,7 @@ export default function ReplyComic({ comment, comicId, commentId, replyCount, in
                     setLoading(false);
                 });
         }
-    }, [reloadTrigger, comment.replyCount]);
+    }, [reloadTrigger, replyCount]);
 
     const toggleReplies = async () => {
         const query = {
@@ -123,59 +123,59 @@ export default function ReplyComic({ comment, comicId, commentId, replyCount, in
                         </button>
                     </form>
                 </div>
-                {loading && <div className="spinner-border text-primary" role="status"></div>}
-                {!loading && comment.replyCount && replyCount > 0 && <a
-                    className={'accordion-button comment-btn active'}
-                    data-bs-toggle="collapse"
-                    data-bs-target={`#reply${index}`}
-                    aria-expanded={true}
-                    aria-controls={`reply${index}`}
-                    onClick={() => toggleReplies()}
-                >
-                    {t('view_more_replies')}
-                </a>}
-                <div
-                    id={`reply${index}`}
-                    className="accordion-collapse collapse "
-                    data-bs-parent={`#accordionExample${index}`}
-                >
-                    <div className="card card-body">
-                        <div className="row pt-3">
-                            {replies?.map((rl: any, rlIndex: number) => (
-                                <div key={rlIndex} className="col-lg-11 offset-lg-1 offset-2 col-10 pb-4">
-                                    <div className="d-inline-flex align-items-start">
-                                        <a href="profile.html">
-                                            <img
-                                                src={rl.avatar}
-                                                alt=""
-                                            />
+            </div>
+            {loading && <div className="spinner-border text-primary" role="status"></div>}
+            {!loading && replyCount > 0 && <a
+                className={'accordion-button comment-btn active'}
+                data-bs-toggle="collapse"
+                data-bs-target={`#reply${index}`}
+                aria-expanded={true}
+                aria-controls={`reply${index}`}
+                onClick={() => toggleReplies()}
+            >
+                {t('view_more_replies')}
+            </a>}
+            <div
+                id={`reply${index}`}
+                className="accordion-collapse collapse "
+                data-bs-parent={`#accordionExample${index}`}
+            >
+                <div className="card card-body">
+                    <div className="row pt-3">
+                        {replies?.map((rl: any, rlIndex: number) => (
+                            <div key={rlIndex} className="col-lg-11 offset-lg-1 offset-2 col-10 pb-4">
+                                <div className="d-inline-flex align-items-start">
+                                    <a href="profile.html">
+                                        <img
+                                            src={rl.avatar}
+                                            alt=""
+                                        />
+                                    </a>
+                                    <div className="replies">
+                                        <h5>
+                                            <a href="profile.html">{rl.userName}</a>{" "}
+                                        </h5>
+                                        <div dangerouslySetInnerHTML={{ __html: rl.text }} />
+                                        <span className='date-comment'>{formatDateToLocale(rl.createdOnUtc)}</span>
+                                        <a href="manga-detail.html" className="comment-btn">
+                                            <i className="fa fa-thumbs-up" />
                                         </a>
-                                        <div className="replies">
-                                            <h5>
-                                                <a href="profile.html">{rl.userName}</a>{" "}
-                                            </h5>
-                                            <div dangerouslySetInnerHTML={{ __html: rl.text }} />
-                                            <span className='date-comment'>{formatDateToLocale(rl.createdOnUtc)}</span>
-                                            <a href="manga-detail.html" className="comment-btn">
-                                                <i className="fa fa-thumbs-up" />
-                                            </a>
-                                            <a href="manga-detail.html" className="comment-btn">
-                                                <i className="fa fa-thumbs-down" />
-                                            </a>
-                                            <button
-                                                className=" accordion-button comment-btn"
-                                                data-bs-toggle=""
-                                                data-bs-target={`#reply${index}1`}
-                                                aria-expanded="true"
-                                                onClick={scrollToReplyEditor}
-                                            >
-                                                {t('reply')}
-                                            </button>
-                                        </div>
+                                        <a href="manga-detail.html" className="comment-btn">
+                                            <i className="fa fa-thumbs-down" />
+                                        </a>
+                                        <button
+                                            className=" accordion-button comment-btn"
+                                            data-bs-toggle=""
+                                            data-bs-target={`#reply${index}1`}
+                                            aria-expanded="true"
+                                            onClick={scrollToReplyEditor}
+                                        >
+                                            {t('reply')}
+                                        </button>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
