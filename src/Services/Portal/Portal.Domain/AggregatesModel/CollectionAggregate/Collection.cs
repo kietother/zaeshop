@@ -27,5 +27,8 @@ namespace Portal.Domain.AggregatesModel.CollectionAggregate
 
         [JsonIgnore]
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
+        [JsonIgnore]
+        public virtual ICollection<CollectionView> CollectionViews { get; set; } = new List<CollectionView>();
     }
 }
