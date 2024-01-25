@@ -15,4 +15,7 @@ public class User : Entity, IAggregateRoot
 
     [JsonIgnore]
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
+    [JsonIgnore]
+    public virtual ICollection<CollectionView> CollectionViews { get; set; } = new List<CollectionView>();
 }
