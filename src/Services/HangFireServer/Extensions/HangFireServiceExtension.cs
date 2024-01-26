@@ -30,10 +30,11 @@ namespace HangFireServer.Extensions
             return services;
         }
 
-        public static async Task StartHangFireJobs(this WebApplication app)
+        public static void StartHangFireJobs(this WebApplication app)
         {
-            var unitOfWork = app.Services.GetRequiredService<IUnitOfWork>();
-            await unitOfWork.ExecuteAsync("Hangfire_ResetJobs");
+            using var scope = app.Services.CreateScope();
+            var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+            unitOfWork.ExecuteAsync("Hangfire_ResetJobs");
 
             // 10 Minutes to calculate views from redis
             RecurringJob.AddOrUpdate<ICollectionService>(HangfireJobName.CalculateViewsFromRedis, x => x.CalculateViewsFromRedisTaskAsync(), "*/10 * * * *");

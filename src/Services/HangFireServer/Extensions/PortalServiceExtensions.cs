@@ -4,7 +4,9 @@ using System.Security.Cryptography.X509Certificates;
 using Amazon;
 using Amazon.S3;
 using Common.Implements;
+using Common.Implements.Messaging;
 using Common.Interfaces;
+using Common.Interfaces.Messaging;
 using Common.Models.Redis;
 using EmailHelper.Models;
 using EmailHelper.Services;
@@ -66,6 +68,10 @@ public static class PortalServiceExtensions
                 cfg.ConfigureEndpoints(context);
             });
         });
+
+        // Portal registers publishers for MassTransit
+        services.AddScoped<ISendMailPublisher, SendMailPublisher>();
+        services.AddScoped<IServiceLogPublisher, ServiceLogPublisher>();
 
         // Inject Services
         services.AddScoped<IApiService, ApiService>();
