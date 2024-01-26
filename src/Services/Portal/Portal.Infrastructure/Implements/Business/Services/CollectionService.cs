@@ -386,7 +386,8 @@ namespace Portal.Infrastructure.Implements.Business.Services
             bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
             var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
 
-            var key = string.Format(Const.RedisCacheKey.ViewCount, DateTime.UtcNow.Minute - (DateTime.UtcNow.Minute % 10));
+            // Get redis data from 10 minutes ago
+            var key = string.Format(Const.RedisCacheKey.ViewCount, DateTime.UtcNow.Minute - (DateTime.UtcNow.Minute % 10) - 10);
             var value = await _redisService.GetAsync<List<CollectionViewModel>>(key);
             if (value != null && value.Count != 0)
             {
