@@ -38,6 +38,10 @@ builder.Services.AddResponseCompression(options =>
     options.Providers.Add<BrotliCompressionProvider>();
     options.Providers.Add<GzipCompressionProvider>();
 });
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -76,6 +80,7 @@ app.UseMiddleware<JwtMiddleware>();
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllers();
 

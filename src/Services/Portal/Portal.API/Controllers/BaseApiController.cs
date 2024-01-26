@@ -11,5 +11,15 @@ namespace Portal.API.Controllers
             var identityUserId = User.FindFirstValue("id");
             return identityUserId;
         }
+
+        [NonAction]
+        public string? IpAddress()
+        {
+            // get source ip address for the current request
+            if (Request.Headers.TryGetValue("X-Forwarded-For", out Microsoft.Extensions.Primitives.StringValues value))
+                return value;
+            else
+                return HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString();
+        }
     }
 }

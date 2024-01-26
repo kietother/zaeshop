@@ -12,5 +12,6 @@ namespace Portal.Domain.Interfaces.Business.Services
         Task<ServiceResponse<bool>> DeleteAsync(int id);
         Task<ServiceResponse<List<GetContentItemModel>>> GetContentItemsAsync(int id);
         Task<ServiceResponse<PagingCommonResponse<CollectionPagingResponse>>> GetPagingAsync(CollectionPagingRequest request);
+        Task AddViewFromUserToRedis(CollectionViewUserBuildModel model);
     }
 }

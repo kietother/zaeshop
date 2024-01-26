@@ -1,11 +1,19 @@
 using Common;
+using Common.Enums;
+using Common.Interfaces;
+using Common.Interfaces.Messaging;
 using Common.Models;
+using Common.Shared.Models.Logs;
+using Common.ValueObjects;
+using Microsoft.Extensions.Hosting;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
+using Portal.Domain.AggregatesModel.UserAggregate;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.CollectionModels;
 using Portal.Domain.Models.ContentItemModels;
 using Portal.Domain.SeedWork;
+using Portal.Infrastructure.Helpers;
 
 namespace Portal.Infrastructure.Implements.Business.Services
 {
@@ -15,13 +23,25 @@ namespace Portal.Infrastructure.Implements.Business.Services
         private readonly IGenericRepository<Collection> _repository;
         private readonly IGenericRepository<Album> _albumRepository;
         private readonly IGenericRepository<ContentItem> _contentItemRepository;
+        private readonly IRedisService _redisService;
+        private readonly IGenericRepository<User> _userRepository;
+        private readonly IServiceLogPublisher _serviceLogPublisher;
+        private readonly IHostEnvironment _hostingEnvironment;
 
-        public CollectionService(IUnitOfWork unitOfWork)
+        public CollectionService(
+            IUnitOfWork unitOfWork,
+            IRedisService redisService,
+            IServiceLogPublisher serviceLogPublisher,
+            IHostEnvironment hostingEnvironment)
         {
             _unitOfWork = unitOfWork;
             _repository = unitOfWork.Repository<Collection>();
             _albumRepository = unitOfWork.Repository<Album>();
             _contentItemRepository = unitOfWork.Repository<ContentItem>();
+            _redisService = redisService;
+            _userRepository = unitOfWork.Repository<User>();
+            _serviceLogPublisher = serviceLogPublisher;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public async Task<ServiceResponse<CollectionResponseModel>> CreateAsync(CollectionRequestModel requestModel)
@@ -214,6 +234,108 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 RowNum = record.RowNum,
                 Data = result
             });
+        }
+
+        public async Task AddViewFromUserToRedis(CollectionViewUserBuildModel model)
+        {
+            bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
+            var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
+
+            try
+            {
+                User? user = null;
+                if (!string.IsNullOrEmpty(model.IdentityUserId))
+                {
+                    user = await _userRepository.GetByIdentityUserIdAsync(model.IdentityUserId);
+                    if (user == null)
+                    {
+                        // Log Error when model have user id not exists database
+                        await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
+                        {
+                            LogLevel = ELogLevel.Information,
+                            EventName = Const.ServiceLogEventName.Error,
+                            ServiceName = "Hangfire",
+                            Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
+                            Description = $"User with IdentityUserId {model.IdentityUserId} not found",
+                            IpAddress = model.IpAddress,
+                            Request = JsonSerializationHelper.Serialize(model)
+                        });
+                        return;
+                    }
+                }
+
+                var collection = await _repository.GetByIdAsync(model.CollectionId);
+                if (collection == null)
+                {
+                    // Log Error when model have collection id not exists database
+                    await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
+                    {
+                        LogLevel = ELogLevel.Information,
+                        EventName = Const.ServiceLogEventName.Error,
+                        ServiceName = "Hangfire",
+                        Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
+                        Description = $"Collection with id {model.CollectionId} not found",
+                        IpAddress = model.IpAddress,
+                        Request = JsonSerializationHelper.Serialize(model)
+                    });
+                    return;
+                }
+
+                // We use key ViewCount_0 -> ViewCount_50
+                var key = string.Format(Const.RedisCacheKey.ViewCount, DateTime.UtcNow.Minute - (DateTime.UtcNow.Minute % 10));
+                var value = await _redisService.GetAsync<List<CollectionViewModel>>(key);
+                if (value == null)
+                {
+                    value = new List<CollectionViewModel>
+                    {
+                        new CollectionViewModel
+                        {
+                            CollectionId = model.CollectionId,
+                            UserId = user?.Id,
+                            SessionId = model.SessionId,
+                            IpAddress = model.IpAddress,
+                            CreatedOnUtc = DateTime.UtcNow
+                        }
+                    };
+
+                    await _redisService.SetAsync(key, value, 59);
+                }
+                else
+                {
+                    var collectionViewByUser = value.Find(o => o.CollectionId == model.CollectionId && (
+                        o.UserId == user?.Id || o.IpAddress == model.IpAddress || o.SessionId == model.SessionId
+                    ));
+
+                    if (collectionViewByUser == null)
+                    {
+                        value.Add(new CollectionViewModel
+                        {
+                            CollectionId = model.CollectionId,
+                            UserId = user?.Id,
+                            SessionId = model.SessionId,
+                            IpAddress = model.IpAddress,
+                            CreatedOnUtc = DateTime.UtcNow
+                        });
+
+                        await _redisService.SetAsync(key, value, 59);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
+                {
+                    LogLevel = ELogLevel.Error,
+                    EventName = ex.Message,
+                    StackTrace = ex.StackTrace,
+                    ServiceName = "Hangfire",
+                    Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
+                    Description = $"[Exception]: {ex.Message}",
+                    IpAddress = model.IpAddress,
+                    StatusCode = "Internal Server Error",
+                    Request = JsonSerializationHelper.Serialize(model)
+                });
+            }
         }
     }
 }
