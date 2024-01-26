@@ -88,7 +88,7 @@ export default function InfomationComic({ comic }: { comic?: ComicDetail | null 
                                         </div>
                                         <h3>{t('description')}</h3>
                                         <p>
-                                            {comic?.description}                
+                                            {comic?.description}
                                         </p>
                                         <div className="d-flex pt-4">
                                             <a
@@ -99,7 +99,7 @@ export default function InfomationComic({ comic }: { comic?: ComicDetail | null 
                                             </a>
                                             <a href={`/truyen-tranh/${comic?.friendlyName}/${comic?.contents[0]?.friendlyName}`}
                                                 className="anime-btn btn-dark">
-                                                 {t('read_last_chapter')}
+                                                {t('read_last_chapter')}
                                             </a>
                                         </div>
                                     </div>
@@ -131,7 +131,7 @@ export default function InfomationComic({ comic }: { comic?: ComicDetail | null 
                                     <span>Scores:</span> 2.53 by 4,405 reviews
                                 </p> */}
                                 <p>
-                                    <span>{t('views')}:</span> Đang cập nhật
+                                    <span>{t('views')}:</span> {comic?.views}
                                 </p>
                             </div>
                         </div>

@@ -24,6 +24,8 @@ export default interface ComicDetail {
     // Thumbnail
     thumbnailUrl?: string;
 
+    views: number;
+
     createdDate: Date;
     updatedDate?: Date;
 
