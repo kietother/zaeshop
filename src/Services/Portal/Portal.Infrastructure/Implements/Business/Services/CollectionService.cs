@@ -337,5 +337,10 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 });
             }
         }
+
+        public async Task CalculateViewsFromRedis()
+        {
+            
+        }
     }
 }

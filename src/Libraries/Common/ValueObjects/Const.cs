@@ -12,5 +12,10 @@ namespace Common.ValueObjects
         {
             public const string Error = "Add View From User To Redis";
         }
+
+        public static class HangfireJobName
+        {
+            public const string CalculateViewsFromRedis = "Calculate Views From Redis";
+        }
     }
 }

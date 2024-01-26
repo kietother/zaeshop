@@ -21,11 +21,13 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-app.UseHangfireDashboard(options: new DashboardOptions {
+app.UseHangfireDashboard(options: new DashboardOptions
+{
     Authorization = new[] { new DashboardNoAuthorizationFilter() }
 });
 
 app.MapControllers();
 app.MapHangfireDashboard();
 
+app.StartHangFireJobs().GetAwaiter().GetResult();
 app.Run();
