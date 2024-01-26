@@ -37,6 +37,7 @@ namespace Portal.API.Controllers
                 CreatedDate = x.CreatedOnUtc,
                 UpdatedDate = x.UpdatedOnUtc,
                 CdnThumbnailUrl = x.CdnThumbnailUrl,
+                Views = x.Views,
                 Contents = x.Collections.OrderByDescending(y => y.Title).Take(5).Select(z => new ContentAppModel
                 {
                     Id = z.Id,

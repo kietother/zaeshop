@@ -35,6 +35,8 @@ namespace Portal.Domain.AggregatesModel.AlbumAggregate
         public string? CdnThumbnailUrl { get; set; }
         #endregion
 
+        public ulong Views { get; set; }
+
         [JsonIgnore]
         public virtual ICollection<Collection> Collections { get; set; } = new List<Collection>();
 

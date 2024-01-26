@@ -78,7 +78,8 @@ namespace Portal.API.Controllers
                 ExtendName = collection.ExtendName,
                 Volume = collection.Volume,
                 // Add other properties as needed
-                ContentItems = collection.ContentItems?.OrderByDescending(x => x.OrderBy).Select(y => y.DisplayUrl).ToList()
+                ContentItems = collection.ContentItems?.OrderByDescending(x => x.OrderBy).Select(y => y.DisplayUrl).ToList(),
+                Views = collection.Views
             });
             await _redisService.SetAsync(string.Format(Const.RedisCacheKey.ComicContent, comicFriendlyName, contentFriendlyName), result.Data, 5);
 

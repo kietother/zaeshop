@@ -30,7 +30,9 @@ namespace Portal.Domain.Models.AlbumModels
 
         public bool IsPublic { get; set; }
         public string? FriendlyName { get; set; }
-        public string? CdnThumbnailUrl { get; set; } 
+        public string? CdnThumbnailUrl { get; set; }
+
+        public ulong Views { get; set; }
 
         public List<ContentAppModel> Contents { get; set; } = [];
     }
