@@ -422,6 +422,13 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
                 await _unitOfWork.SaveChangesAsync();
 
+                // Re-calculate views to collection and album
+                var parameters = new Dictionary<string, object?>
+                {
+                    { "collectionIds",  string.Join(',', collectionIds)}
+                };
+                await _unitOfWork.ExecuteAsync("Collection_Album_RecalculateViews", parameters);
+
                 // Log to service log to stored
                 await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
                 {
