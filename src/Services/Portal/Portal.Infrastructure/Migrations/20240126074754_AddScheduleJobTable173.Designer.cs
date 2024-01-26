@@ -12,7 +12,7 @@ using Portal.Infrastructure;
 namespace Portal.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240126065437_AddScheduleJobTable173")]
+    [Migration("20240126074754_AddScheduleJobTable173")]
     partial class AddScheduleJobTable173
     {
         /// <inheritdoc />
@@ -90,9 +90,6 @@ namespace Portal.Infrastructure.Migrations
 
                     b.Property<DateTime?>("UpdatedOnUtc")
                         .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Views")
-                        .HasColumnType("decimal(20,0)");
 
                     b.HasKey("Id");
 
@@ -218,9 +215,6 @@ namespace Portal.Infrastructure.Migrations
 
                     b.Property<DateTime?>("UpdatedOnUtc")
                         .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Views")
-                        .HasColumnType("decimal(20,0)");
 
                     b.Property<int?>("Volume")
                         .HasColumnType("int");
