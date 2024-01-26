@@ -29,5 +29,5 @@ app.UseHangfireDashboard(options: new DashboardOptions
 app.MapControllers();
 app.MapHangfireDashboard();
 
-app.StartHangFireJobs().GetAwaiter().GetResult();
+app.StartHangFireJobs();
 app.Run();
