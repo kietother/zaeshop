@@ -13,6 +13,8 @@ namespace Portal.Domain.Models.CollectionModels
         public string? ExtendName { get; set; }
         public string? Description { get; set; }
 
+        public ulong Views { get; set; }
+
         public bool IsPublic { get; set; }
         public string? FriendlyName { get; set; }
 
