@@ -19,8 +19,6 @@ namespace Portal.Domain.AggregatesModel.CollectionAggregate
         [Column(TypeName = "varchar(350)")]
         public string? FriendlyName { get; set; }
 
-        public ulong Views { get; set; }
-
         [JsonIgnore]
         public virtual Album Album { get; set; } = null!;
 

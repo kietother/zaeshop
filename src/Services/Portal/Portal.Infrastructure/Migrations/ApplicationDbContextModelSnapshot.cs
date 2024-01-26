@@ -88,9 +88,6 @@ namespace Portal.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedOnUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Views")
-                        .HasColumnType("decimal(20,0)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AlbumAlertMessageId");
@@ -215,9 +212,6 @@ namespace Portal.Infrastructure.Migrations
 
                     b.Property<DateTime?>("UpdatedOnUtc")
                         .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Views")
-                        .HasColumnType("decimal(20,0)");
 
                     b.Property<int?>("Volume")
                         .HasColumnType("int");
