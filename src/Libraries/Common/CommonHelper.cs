@@ -95,7 +95,8 @@ namespace Common
 
         private static readonly JsonSerializerOptions s_readOptions = new()
         {
-            AllowTrailingCommas = false
+            AllowTrailingCommas = false,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase      
         };
 
         public static string Serialize<T>(T value)
