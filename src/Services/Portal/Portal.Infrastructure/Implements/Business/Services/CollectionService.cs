@@ -8,6 +8,7 @@ using Common.ValueObjects;
 using Microsoft.Extensions.Hosting;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
+using Portal.Domain.AggregatesModel.TaskAggregate;
 using Portal.Domain.AggregatesModel.UserAggregate;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.CollectionModels;
@@ -27,6 +28,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
         private readonly IGenericRepository<User> _userRepository;
         private readonly IServiceLogPublisher _serviceLogPublisher;
         private readonly IHostEnvironment _hostingEnvironment;
+        private readonly IGenericRepository<CollectionView> _collectionViewRepository;
 
         public CollectionService(
             IUnitOfWork unitOfWork,
@@ -42,6 +44,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             _userRepository = unitOfWork.Repository<User>();
             _serviceLogPublisher = serviceLogPublisher;
             _hostingEnvironment = hostingEnvironment;
+            _collectionViewRepository = unitOfWork.Repository<CollectionView>();
         }
 
         public async Task<ServiceResponse<CollectionResponseModel>> CreateAsync(CollectionRequestModel requestModel)
@@ -253,7 +256,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                         await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
                         {
                             LogLevel = ELogLevel.Information,
-                            EventName = Const.ServiceLogEventName.Error,
+                            EventName = Const.ServiceLogEventName.ErrorAddView,
                             ServiceName = "Hangfire",
                             Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
                             Description = $"User with IdentityUserId {model.IdentityUserId} not found",
@@ -271,7 +274,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                     await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
                     {
                         LogLevel = ELogLevel.Information,
-                        EventName = Const.ServiceLogEventName.Error,
+                        EventName = Const.ServiceLogEventName.ErrorAddView,
                         ServiceName = "Hangfire",
                         Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
                         Description = $"Collection with id {model.CollectionId} not found",
@@ -298,7 +301,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                         }
                     };
 
-                    await _redisService.SetAsync(key, value, 59);
+                    await _redisService.SetAsync(key, value, 30);
                 }
                 else
                 {
@@ -317,7 +320,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                             CreatedOnUtc = DateTime.UtcNow
                         });
 
-                        await _redisService.SetAsync(key, value, 59);
+                        await _redisService.SetAsync(key, value, 30);
                     }
                 }
             }
@@ -340,12 +343,96 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
         public async Task CalculateViewsFromRedisTaskAsync()
         {
+            bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
+            var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
 
+            var scheduleJob = await _unitOfWork.Repository<HangfireScheduleJob>().GetByNameAsync(Const.HangfireJobName.CalculateViewsFromRedis);
+            if (scheduleJob != null && scheduleJob.IsEnabled && !scheduleJob.IsRunning)
+            {
+                try
+                {
+                    scheduleJob.IsRunning = true;
+                    scheduleJob.StartOnUtc = DateTime.UtcNow;
+                    await _unitOfWork.SaveChangesAsync();
+
+                    await CaclculateViewsFromRedisAsync();
+
+                    scheduleJob.EndOnUtc = DateTime.UtcNow;
+                    scheduleJob.IsRunning = false;
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
+                    {
+                        LogLevel = ELogLevel.Error,
+                        EventName = ex.Message,
+                        StackTrace = ex.StackTrace,
+                        ServiceName = "Hangfire",
+                        Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
+                        Description = $"[Exception]: {ex.Message}",
+                        StatusCode = "Internal Server Error"
+                    });
+
+                    scheduleJob.EndOnUtc = DateTime.UtcNow;
+                    scheduleJob.IsRunning = false;
+                    await _unitOfWork.SaveChangesAsync();
+                }
+            }
         }
 
         private async Task CaclculateViewsFromRedisAsync()
         {
+            bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
+            var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
 
+            var key = string.Format(Const.RedisCacheKey.ViewCount, DateTime.UtcNow.Minute - (DateTime.UtcNow.Minute % 10));
+            var value = await _redisService.GetAsync<List<CollectionViewModel>>(key);
+            if (value != null && value.Count != 0)
+            {
+                var collectionIds = value.Select(x => x.CollectionId).Distinct();
+                var collectionViewsInDb = await _collectionViewRepository.GetQueryable().Where(x =>
+                    collectionIds.Contains(x.CollectionId) && (x.Date == value[0].CreatedOnUtc.Date)
+                ).ToListAsync();
+
+                foreach (var item in value)
+                {
+                    var collectionView = collectionViewsInDb.Find(x => x.CollectionId == item.CollectionId && (
+                        x.UserId == item.UserId || x.IpAddress == item.IpAddress || x.SessionId == item.SessionId
+                    ));
+                    if (collectionView == null)
+                    {
+                        _collectionViewRepository.Add(new CollectionView
+                        {
+                            CollectionId = item.CollectionId,
+                            UserId = item.UserId,
+                            AnonymousInformation = item.AnonymousInformation,
+                            View = 1,
+                            IpAddress = item.IpAddress,
+                            SessionId = item.SessionId,
+                            Date = item.CreatedOnUtc.Date
+                        });
+                    }
+                    else
+                    {
+                        collectionView.View++;
+                        _collectionViewRepository.Update(collectionView);
+                    }
+                }
+
+                await _unitOfWork.SaveChangesAsync();
+
+                // Log to service log to stored
+                await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
+                {
+                    LogLevel = ELogLevel.Information,
+                    EventName = Const.ServiceLogEventName.StoredViewsCache,
+                    ServiceName = "Hangfire",
+                    Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
+                    Description = $"Stored total views from redis cache. At {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}",
+                    Request = JsonSerializationHelper.Serialize(value)
+                });
+            }
         }
     }
 }

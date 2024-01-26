@@ -10,7 +10,8 @@ namespace Common.ValueObjects
 
         public static class ServiceLogEventName
         {
-            public const string Error = "Add View From User To Redis";
+            public const string ErrorAddView = "Error From Add View From User To Redis";
+            public const string StoredViewsCache = "Stored Views Content Comic From Redis Cache";
         }
 
         public static class HangfireJobName
