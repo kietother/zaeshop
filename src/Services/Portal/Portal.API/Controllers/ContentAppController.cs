@@ -38,7 +38,7 @@ namespace Portal.API.Controllers
             if (value != null)
             {
                 // Hangfire
-                _backgroundJobClient.Enqueue<ICollectionService>(x => x.AddViewFromUserToRedis(new CollectionViewUserBuildModel
+                _backgroundJobClient.Enqueue<ICollectionService>(x => x.AddViewFromUserToRedisAsync(new CollectionViewUserBuildModel
                 {
                     CollectionId = value!.Id,
                     IdentityUserId = User.FindFirstValue("id"),
@@ -83,7 +83,7 @@ namespace Portal.API.Controllers
             await _redisService.SetAsync(string.Format(Const.RedisCacheKey.ComicContent, comicFriendlyName, contentFriendlyName), result.Data, 5);
 
             #region Hangfire Enqueue Background
-            _backgroundJobClient.Enqueue<ICollectionService>(x => x.AddViewFromUserToRedis(new CollectionViewUserBuildModel
+            _backgroundJobClient.Enqueue<ICollectionService>(x => x.AddViewFromUserToRedisAsync(new CollectionViewUserBuildModel
             {
                 CollectionId = result.Data!.Id,
                 IdentityUserId = User.FindFirstValue("id"),

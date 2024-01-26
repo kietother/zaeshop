@@ -236,7 +236,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             });
         }
 
-        public async Task AddViewFromUserToRedis(CollectionViewUserBuildModel model)
+        public async Task AddViewFromUserToRedisAsync(CollectionViewUserBuildModel model)
         {
             bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
             var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
@@ -338,9 +338,14 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
         }
 
-        public async Task CalculateViewsFromRedis()
+        public async Task CalculateViewsFromRedisTaskAsync()
         {
-            
+
+        }
+
+        private async Task CaclculateViewsFromRedisAsync()
+        {
+
         }
     }
 }
