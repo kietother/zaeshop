@@ -11,20 +11,6 @@ namespace Portal.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<decimal>(
-                name: "Views",
-                table: "Collection",
-                type: "decimal(20,0)",
-                nullable: false,
-                defaultValue: 0m);
-
-            migrationBuilder.AddColumn<decimal>(
-                name: "Views",
-                table: "Album",
-                type: "decimal(20,0)",
-                nullable: false,
-                defaultValue: 0m);
-
             migrationBuilder.CreateTable(
                 name: "HangfireScheduleJob",
                 columns: table => new
@@ -50,14 +36,6 @@ namespace Portal.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "HangfireScheduleJob");
-
-            migrationBuilder.DropColumn(
-                name: "Views",
-                table: "Collection");
-
-            migrationBuilder.DropColumn(
-                name: "Views",
-                table: "Album");
         }
     }
 }
