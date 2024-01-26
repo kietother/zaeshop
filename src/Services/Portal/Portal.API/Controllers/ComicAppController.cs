@@ -86,6 +86,7 @@ namespace Portal.API.Controllers
                 ArtitstNames = comic.ArtitstNames,
                 Tags = comic.Tags,
                 ThumbnailUrl = comic.CdnThumbnailUrl,
+                Views = comic.Views,
                 Contents = comic.Collections.Select(z => new ContentAppModel
                 {
                     Id = z.Id,
