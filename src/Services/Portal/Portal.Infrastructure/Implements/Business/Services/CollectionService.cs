@@ -454,27 +454,27 @@ namespace Portal.Infrastructure.Implements.Business.Services
                         }
                         #endregion
                     }
-
-                    await _unitOfWork.SaveChangesAsync();
-
-                    // Re-calculate views to collection and album
-                    var parameters = new Dictionary<string, object?>
-                    {
-                        { "collectionIds",  string.Join(',', collectionIds)}
-                    };
-                    await _unitOfWork.ExecuteAsync("Collection_Album_RecalculateViews", parameters);
-
-                    // Log to service log to stored
-                    await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
-                    {
-                        LogLevel = ELogLevel.Information,
-                        EventName = Const.ServiceLogEventName.StoredViewsCache,
-                        ServiceName = "Hangfire",
-                        Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
-                        Description = $"Stored total views from redis cache. At {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}",
-                        Request = JsonSerializationHelper.Serialize(value)
-                    });
                 }
+
+                await _unitOfWork.SaveChangesAsync();
+
+                // Re-calculate views to collection and album
+                var parameters = new Dictionary<string, object?>
+                {
+                    { "collectionIds",  string.Join(',', collectionIds)}
+                };
+                await _unitOfWork.ExecuteAsync("Collection_Album_RecalculateViews", parameters);
+
+                // Log to service log to stored
+                await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
+                {
+                    LogLevel = ELogLevel.Information,
+                    EventName = Const.ServiceLogEventName.StoredViewsCache,
+                    ServiceName = "Hangfire",
+                    Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
+                    Description = $"Stored total views from redis cache. At {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}",
+                    Request = JsonSerializationHelper.Serialize(value)
+                });
             }
         }
     }
