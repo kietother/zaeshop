@@ -417,29 +417,64 @@ namespace Portal.Infrastructure.Implements.Business.Services
                     else
                     {
                         collectionView.View++;
-                        _collectionViewRepository.Update(collectionView);
+
+                        if (item.UserId != null && collectionView.UserId == null)
+                        {
+                            collectionView.UserId = item.UserId;
+                        }
+
+                        #region Update lastest IP and stored Previous IPs
+                        if (!string.IsNullOrEmpty(item.IpAddress) && item.IpAddress != collectionView.IpAddress)
+                        {
+                            if (string.IsNullOrEmpty(collectionView.AnonymousInformation))
+                            {
+                                var ipAddresses = new List<string> { item.IpAddress };
+                                collectionView.AnonymousInformation = JsonSerializationHelper.Serialize(ipAddresses);
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    var ipAddresses = JsonSerializationHelper.Deserialize<List<string>>(collectionView.AnonymousInformation);
+                                    if (ipAddresses != null)
+                                    {
+                                        ipAddresses.Add(item.IpAddress);
+                                        collectionView.AnonymousInformation = JsonSerializationHelper.Serialize(ipAddresses);
+                                    }
+                                }
+                                catch
+                                {
+                                    var ipAddresses = new List<string> { item.IpAddress };
+                                    collectionView.AnonymousInformation = JsonSerializationHelper.Serialize(ipAddresses);
+                                }
+                            }
+
+                            collectionView.IpAddress = item.IpAddress;
+                            _collectionViewRepository.Update(collectionView);
+                        }
+                        #endregion
                     }
+
+                    await _unitOfWork.SaveChangesAsync();
+
+                    // Re-calculate views to collection and album
+                    var parameters = new Dictionary<string, object?>
+                    {
+                        { "collectionIds",  string.Join(',', collectionIds)}
+                    };
+                    await _unitOfWork.ExecuteAsync("Collection_Album_RecalculateViews", parameters);
+
+                    // Log to service log to stored
+                    await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
+                    {
+                        LogLevel = ELogLevel.Information,
+                        EventName = Const.ServiceLogEventName.StoredViewsCache,
+                        ServiceName = "Hangfire",
+                        Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
+                        Description = $"Stored total views from redis cache. At {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}",
+                        Request = JsonSerializationHelper.Serialize(value)
+                    });
                 }
-
-                await _unitOfWork.SaveChangesAsync();
-
-                // Re-calculate views to collection and album
-                var parameters = new Dictionary<string, object?>
-                {
-                    { "collectionIds",  string.Join(',', collectionIds)}
-                };
-                await _unitOfWork.ExecuteAsync("Collection_Album_RecalculateViews", parameters);
-
-                // Log to service log to stored
-                await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
-                {
-                    LogLevel = ELogLevel.Information,
-                    EventName = Const.ServiceLogEventName.StoredViewsCache,
-                    ServiceName = "Hangfire",
-                    Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
-                    Description = $"Stored total views from redis cache. At {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}",
-                    Request = JsonSerializationHelper.Serialize(value)
-                });
             }
         }
     }
