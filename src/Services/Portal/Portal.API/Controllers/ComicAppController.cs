@@ -26,7 +26,6 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet]
-        [RedisCache(5)]
         public async Task<IActionResult> GetAsync()
         {
             var comics = await _albumRepository.GetAllAsync();
@@ -56,7 +55,8 @@ namespace Portal.API.Controllers
                     AlbumFriendlyName = x.FriendlyName,
                     Description = z.Description,
                     ExtendName = z.ExtendName,
-                    Volume = z.Volume
+                    Volume = z.Volume,
+                    Views = z.Views,
                 }).ToList()
             }));
 
@@ -64,7 +64,6 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("{friendlyName}")]
-        [RedisCache(5)]
         public async Task<IActionResult> GetByIdAsync(string friendlyName)
         {
             var parameters = new Dictionary<string, object?>
@@ -88,7 +87,8 @@ namespace Portal.API.Controllers
                 IsPublic = z.IsPublic,
                 AlbumId = z.AlbumId,
                 AlbumTitle = comic.Title,
-                AlbumFriendlyName = comic.FriendlyName
+                AlbumFriendlyName = comic.FriendlyName,
+                Views = z.Views,
             }).OrderByDescending(x => RegexHelper.GetChapterNumber(x.Title)).ToList();
 
             var result = new ServiceResponse<ComicAppModel>(comic);
