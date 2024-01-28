@@ -1,0 +1,48 @@
+CREATE OR ALTER PROCEDURE Collection_Comic_GetByFriendlyName
+(
+    @friendlyName NVARCHAR(MAX)
+)
+AS
+BEGIN
+    select
+        a.Id,
+        a.Title,
+        a.FriendlyName,
+        a.Description,
+        am.Name as [AlbumAlertMessageName],
+        a.IsPublic,
+        a.CreatedDateUtc,
+        a.UpdatedDateUtc,
+        a.AlternativeName,
+        a.Type,
+        a.AlbumStatus,
+        a.ReleaseYear,
+        a.AuthorNames,
+        a.ArtitstNames,
+        a.Tags,
+        a.ThumbnailUrl,
+        a.Views,
+        STRING_AGG(ct.Name, ',') WITHIN GROUP (ORDER BY ct.Name) as ContentTypeNames
+    from dbo.Album a
+        left join dbo.AlbumAlertMessage am on am.Id = a.AlbumAlertMessageId
+        left join dbo.AlbumContentType act on act.AlbumId = a.Id
+        left join dbo.ContentType ct on ct.Id = act.ContentTypeId
+    where a.FriendlyName = @friendlyName
+    group by a.Id,
+    a.Title,
+    a.FriendlyName,
+    a.Description,
+    am.Name,
+    a.IsPublic,
+    a.CreatedDateUtc,
+    a.UpdatedDateUtc,
+    a.AlternativeName,
+    a.Type,
+    a.AlbumStatus,
+    a.ReleaseYear,
+    a.AuthorNames,
+    a.ArtitstNames,
+    a.Tags,
+    a.ThumbnailUrl,
+    a.Views
+END

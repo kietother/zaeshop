@@ -3,6 +3,7 @@ using Common.Models;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
+using Portal.Domain.AggregatesModel.CollectionAggregate;
 using Portal.Domain.Models.AlbumModels;
 using Portal.Domain.Models.CollectionModels;
 
@@ -13,11 +14,15 @@ namespace Portal.API.Controllers
     [AllowAnonymous]
     public class ComicAppController : ControllerBase
     {
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IGenericRepository<Album> _albumRepository;
+        private readonly IGenericRepository<Collection> _collectionRepository;
 
-        public ComicAppController(IUnitOfWork unitOfWork)
+        public ComicAppController(IUnitOfWork unitOfWork, IGenericRepository<Collection> collectionRepository)
         {
+            _unitOfWork = unitOfWork;
             _albumRepository = unitOfWork.Repository<Album>();
+            _collectionRepository = collectionRepository;
         }
 
         [HttpGet]
@@ -34,8 +39,8 @@ namespace Portal.API.Controllers
                 AlbumAlertMessageName = x.AlbumAlertMessage?.Name,
                 ContentTypeNames = x.AlbumContentTypes?.Where(y => !string.IsNullOrEmpty(y.ContentType?.Name)).Select(y => y.ContentType.Name).OrderBy(o => o).JoinSeparator(),
                 IsPublic = x.IsPublic,
-                CreatedDate = x.CreatedOnUtc,
-                UpdatedDate = x.UpdatedOnUtc,
+                CreatedOnUtc = x.CreatedOnUtc,
+                UpdatedOnUtc = x.UpdatedOnUtc,
                 CdnThumbnailUrl = x.CdnThumbnailUrl,
                 Views = x.Views,
                 Contents = x.Collections.OrderByDescending(y => y.Title).Take(5).Select(z => new ContentAppModel
@@ -43,8 +48,8 @@ namespace Portal.API.Controllers
                     Id = z.Id,
                     Title = z.Title,
                     FriendlyName = z.FriendlyName,
-                    CreatedDate = z.CreatedOnUtc,
-                    UpdatedDate = z.UpdatedOnUtc,
+                    CreatedOnUtc = z.CreatedOnUtc,
+                    UpdatedOnUtc = z.UpdatedOnUtc,
                     IsPublic = z.IsPublic,
                     AlbumId = z.AlbumId,
                     AlbumTitle = x.Title,
@@ -62,44 +67,31 @@ namespace Portal.API.Controllers
         [RedisCache(5)]
         public async Task<IActionResult> GetByIdAsync(string friendlyName)
         {
-            var comic = await _albumRepository.GetQueryable().FirstOrDefaultAsync(o => o.FriendlyName == friendlyName);
+            var parameters = new Dictionary<string, object?>
+            {
+                { "friendlyName",  friendlyName }
+            };
+            var comic = (await _unitOfWork.QueryAsync<ComicAppModel>("Collection_Comic_GetByFriendlyName", parameters)).FirstOrDefault();
             if (comic == null)
             {
                 return BadRequest(new ServiceResponse<ComicAppModel>("Không tìm thấy truyện tranh"));
             }
-            var result = new ServiceResponse<ComicAppModel>(new ComicAppModel
+
+            var collections = await _collectionRepository.GetQueryable().Where(o => o.AlbumId == comic.Id).ToListAsync();
+            comic.Contents = collections.ConvertAll(z => new ContentAppModel
             {
-                Id = comic.Id,
-                Title = comic.Title,
-                FriendlyName = comic.FriendlyName,
-                Description = comic.Description,
-                AlbumAlertMessageName = comic.AlbumAlertMessage?.Name,
-                ContentTypeNames = comic.AlbumContentTypes?.Where(y => !string.IsNullOrEmpty(y.ContentType?.Name)).Select(y => y.ContentType.Name).OrderBy(o => o).JoinSeparator(),
-                IsPublic = comic.IsPublic,
-                CreatedDate = comic.CreatedOnUtc,
-                UpdatedDate = comic.UpdatedOnUtc,
-                AlternativeName = comic.AlternativeName,
-                Type = comic.Type,
-                AlbumStatus = comic.AlbumStatus,
-                ReleaseYear = comic.ReleaseYear,
-                AuthorNames = comic.AuthorNames,
-                ArtitstNames = comic.ArtitstNames,
-                Tags = comic.Tags,
-                ThumbnailUrl = comic.CdnThumbnailUrl,
-                Views = comic.Views,
-                Contents = comic.Collections.Select(z => new ContentAppModel
-                {
-                    Id = z.Id,
-                    Title = z.Title,
-                    FriendlyName = z.FriendlyName,
-                    CreatedDate = z.CreatedOnUtc,
-                    UpdatedDate = z.UpdatedOnUtc,
-                    IsPublic = z.IsPublic,
-                    AlbumId = z.AlbumId,
-                    AlbumTitle = comic.Title,
-                    AlbumFriendlyName = comic.FriendlyName
-                }).OrderByDescending(x => RegexHelper.GetChapterNumber(x.Title)).ToList()
-            });
+                Id = z.Id,
+                Title = z.Title,
+                FriendlyName = z.FriendlyName,
+                CreatedOnUtc = z.CreatedOnUtc,
+                UpdatedOnUtc = z.UpdatedOnUtc,
+                IsPublic = z.IsPublic,
+                AlbumId = z.AlbumId,
+                AlbumTitle = comic.Title,
+                AlbumFriendlyName = comic.FriendlyName
+            }).OrderByDescending(x => RegexHelper.GetChapterNumber(x.Title)).ToList();
+
+            var result = new ServiceResponse<ComicAppModel>(comic);
 
             return Ok(result);
         }
