@@ -5,8 +5,8 @@ export default interface ContentResponse {
     albumId: number;
     albumTitle: string | null;
     albumFriendlyName: string | null;
-    createdDate: Date;
-    updatedDate: Date;
+    createdOnUtc: Date;
+    updatedOnUtc: Date;
 
     volume: string | null;
     extendName: string | null;

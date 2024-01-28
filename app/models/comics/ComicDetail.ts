@@ -26,8 +26,8 @@ export default interface ComicDetail {
 
     views: number;
 
-    createdDate: Date;
-    updatedDate?: Date;
+    createdOnUtc: Date;
+    updatedOnUtc?: Date;
 
     isPublic: boolean;
     friendlyName?: string;
