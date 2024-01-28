@@ -5,7 +5,6 @@ using Common.ValueObjects;
 using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
-using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.CollectionModels;
@@ -17,8 +16,6 @@ namespace Portal.API.Controllers
     [AllowAnonymous]
     public class ContentAppController : BaseApiController
     {
-        private readonly IGenericRepository<Collection> _collectionRepository;
-        private readonly IGenericRepository<Album> _albumRepository;
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly IRedisService _redisService;
         private readonly IUnitOfWork _unitOfWork;
@@ -26,8 +23,6 @@ namespace Portal.API.Controllers
 
         public ContentAppController(IUnitOfWork unitOfWork, IBackgroundJobClient backgroundJobClient, IRedisService redisService)
         {
-            _collectionRepository = unitOfWork.Repository<Collection>();
-            _albumRepository = unitOfWork.Repository<Album>();
             _backgroundJobClient = backgroundJobClient;
             _redisService = redisService;
             _unitOfWork = unitOfWork;

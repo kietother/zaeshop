@@ -22,7 +22,7 @@ BEGIN
         a.Tags,
         a.ThumbnailUrl,
         a.Views,
-        STRING_AGG(ct.Name, ',') WITHIN GROUP (ORDER BY ct.Name) as ContentTypeNames
+        STRING_AGG(ct.Name, ', ') WITHIN GROUP (ORDER BY ct.Name) as ContentTypeNames
     from dbo.Album a
         left join dbo.AlbumAlertMessage am on am.Id = a.AlbumAlertMessageId
         left join dbo.AlbumContentType act on act.AlbumId = a.Id

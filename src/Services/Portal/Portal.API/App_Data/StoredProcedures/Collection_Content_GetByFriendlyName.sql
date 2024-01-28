@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE Collection_Comic_GetByFriendlyName
+CREATE OR ALTER PROCEDURE Collection_Content_GetByFriendlyName
 (
     @comicFriendlyName NVARCHAR(MAX),
     @contentFriendlyName NVARCHAR(MAX)

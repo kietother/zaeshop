@@ -18,11 +18,11 @@ namespace Portal.API.Controllers
         private readonly IGenericRepository<Album> _albumRepository;
         private readonly IGenericRepository<Collection> _collectionRepository;
 
-        public ComicAppController(IUnitOfWork unitOfWork, IGenericRepository<Collection> collectionRepository)
+        public ComicAppController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _albumRepository = unitOfWork.Repository<Album>();
-            _collectionRepository = collectionRepository;
+            _collectionRepository = unitOfWork.Repository<Collection>();
         }
 
         [HttpGet]
