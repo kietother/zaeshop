@@ -25,8 +25,8 @@ namespace Portal.Domain.Models.AlbumModels
         public string? ThumbnailUrl { get; set; }
         #endregion
 
-        public DateTime CreatedDateUtc { get; set; }
-        public DateTime? UpdatedDateUtc { get; set; }
+        public DateTime CreatedOnUtc { get; set; }
+        public DateTime? UpdatedOnUtc { get; set; }
 
         public bool IsPublic { get; set; }
         public string? FriendlyName { get; set; }
