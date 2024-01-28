@@ -8,6 +8,11 @@ import { portalServer } from "@/lib/services/client/baseUrl";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { headers } from "next/headers";
+import dynamic from "next/dynamic";
+
+const DynamicCommentComic = dynamic(() => import('@/app/components/comic/CommentComic'), {
+    ssr: false
+});
 
 const getContent = async (
     comicid: string | null,
@@ -39,7 +44,7 @@ export default async function Content({ params }: { params: { comicid: string | 
         <>
             <Breadcrumb content={content} />
             <ContentComic content={content} />
-            <Comment />
+            <DynamicCommentComic comicId={content?.albumId} collectionId={content?.id}/>
         </>
     );
 }

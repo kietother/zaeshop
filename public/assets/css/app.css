@@ -5393,3 +5393,23 @@ input:focus,
 {
   display: -webkit-inline-box !important;
 }
+.chapter-list
+{
+  display: flex;
+  justify-content: space-between;
+}
+.chapter-list span
+{
+  width: 25%;
+  text-align: left;
+}
+.chapter-list a
+{
+  width: 20%;
+  text-align: left;
+}
+.chapter-list p
+{
+  width: 20%;
+  text-align: right;
+}

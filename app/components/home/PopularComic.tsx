@@ -1,8 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from 'next-intl';
+import PagingRequest from "@/app/models/paging/PagingRequest";
+import axiosClientApiInstance from "@/lib/services/client/interceptor";
+import ServerResponse from "@/app/models/common/ServerResponse";
+import { portalServer } from "@/lib/services/client/baseUrl";
 export default function PopularComic() {
     const t = useTranslations('home');
+    const getAlbums = async (params: PagingRequest, filter: any) => {
+        try {
+            const response = await axiosClientApiInstance.get<ServerResponse<any>>(portalServer + '/api/album', {
+                params: { ...params, ...filter },
+            });
+            return response.data.data;
+        } catch (error) {
+            return null;
+        }
+    };
     return (
         <>
             {/*=====================================*/}

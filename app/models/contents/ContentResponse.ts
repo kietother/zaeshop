@@ -11,6 +11,6 @@ export default interface ContentResponse {
     volume: string | null;
     extendName: string | null;
     description: string | null;
-
+    views: number;
     contentItems: Array<string> | null;
 }

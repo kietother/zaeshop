@@ -14,13 +14,12 @@ const editorStyle = {
     color: 'white',
 };
 
-export default function CommentComic({ comicId }: { comicId: any }) {
+export default function CommentComic({ comicId, collectionId }: { comicId: any, collectionId: any }) {
     const t = useTranslations('comic_detail');
     const [comment, setComment] = useState('');
     const [comments, setComments] = useState<any>();
     const [reloadTrigger, setReloadTrigger] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [reply, setReply] = useState('');
 
     const userSession = useMemo<UserSession>(() => {
         const session = localStorage.getItem('userSession');
@@ -36,7 +35,7 @@ export default function CommentComic({ comicId }: { comicId: any }) {
         const commentData = {
             Text: comment,
             AlbumId: comicId,
-            CollectionId: null,
+            CollectionId: collectionId,
         };
 
         await pushComment(commentData);
@@ -124,7 +123,7 @@ export default function CommentComic({ comicId }: { comicId: any }) {
                                         <div className="col-lg-11 col-10">
                                             <h5>
                                                 <a href="profile.html">{cmt.userName}</a>
-                                                {cmt.collectionId && <b className='relation-chap'>Chap 1</b>}
+                                                {cmt.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${cmt.albumFriendlyName}/${cmt.friendlyName}`}>{cmt.title}</a></b>}
                                             </h5>
                                             <div dangerouslySetInnerHTML={{ __html: cmt.text }} />
                                             <span className='date-comment'>{formatDateToLocale(cmt.createdOnUtc)}</span>
