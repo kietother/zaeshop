@@ -31,7 +31,7 @@ const getContent = async (
 
 export default async function Content({ params }: { params: { comicid: string | null, contentid: string | null } }) {
     const headersList = headers();
-    const ip = headersList.get("x-forwarded-for");
+    const ip = headersList.get("cf-connecting-ip") ?? headersList.get("x-forwarded-for");
 
     const session = await getServerSession(authOptions);
     const content = await getContent(params.comicid, params.contentid, session?.user?.token?.apiToken, ip);
