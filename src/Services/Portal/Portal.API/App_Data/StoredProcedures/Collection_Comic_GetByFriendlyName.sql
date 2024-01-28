@@ -20,7 +20,7 @@ BEGIN
         a.AuthorNames,
         a.ArtitstNames,
         a.Tags,
-        a.ThumbnailUrl,
+        a.CdnThumbnailUrl as [ThumbnailUrl],
         a.Views,
         STRING_AGG(ct.Name, ', ') WITHIN GROUP (ORDER BY ct.Name) as ContentTypeNames
     from dbo.Album a
@@ -43,6 +43,6 @@ BEGIN
     a.AuthorNames,
     a.ArtitstNames,
     a.Tags,
-    a.ThumbnailUrl,
+    a.CdnThumbnailUrl,
     a.Views
 END
