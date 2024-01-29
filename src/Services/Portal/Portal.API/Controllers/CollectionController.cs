@@ -14,13 +14,16 @@ namespace Portal.API.Controllers
     {
         private readonly ICollectionService _collectionService;
         private readonly IBackgroundJobClient _backgroundJobClient;
+        private readonly IContentItemService _contentItemService;
 
         public CollectionController(
             ICollectionService collectionService,
-            IBackgroundJobClient backgroundJobClient)
+            IBackgroundJobClient backgroundJobClient,
+            IContentItemService contentItemService)
         {
             _collectionService = collectionService;
             _backgroundJobClient = backgroundJobClient;
+            _contentItemService = contentItemService;
         }
 
         [HttpPost]
@@ -89,28 +92,14 @@ namespace Portal.API.Controllers
 
         [HttpPost]
         [Route("{id}/content-items")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
         [EnableRouteResponseCompression]
-        public IActionResult CreateContentItems([FromRoute] int id, [FromForm] List<IFormFile> files)
+        [MultipartFormData]
+        [DisableFormValueModelBinding]
+        public async Task<IActionResult> CreateContentItemsAsync([FromRoute] int id)
         {
-            // Validate and get data
-            var model = new ContentItemRequestModel
-            {
-                Items = new List<ContentItemRequestDetailModel>()
-            };
-
-            foreach (var file in files)
-            {
-                var fileName = file.FileName;
-                var fileBytes = GetFileBytes(file);
-
-                model.Items.Add(new ContentItemRequestDetailModel
-                {
-                    Name = fileName,
-                    Data = fileBytes
-                });
-            }
-
-            _backgroundJobClient.Enqueue<IContentItemService>(x => x.CreateContentItemsAsync(id, model));
+            await _contentItemService.CreateContentItemsAsync(id, Request.Body, Request.ContentType ?? string.Empty);
             return Ok();
         }
 
