@@ -66,12 +66,15 @@ namespace Portal.Infrastructure.Implements.Business.Services
             while (section != null)
             {
                 var fileSection = section.AsFileSection();
-                if (fileSection != null)
+                if (fileSection != null && fileSection.FileStream != null)
                 {
+                    // Compress images at 85% quality
+                    var compressedStream = await CommonHelper.CompressImageAsync(fileSection.FileStream, 85);
+
                     var result = await _amazonS3Service.UploadImageAsync(new ImageUploadRequestModel
                     {
-                        FileName = fileSection.FileName,
-                        ImageData = await CommonHelper.GetFileBytesByStreamAsync(fileSection.FileStream)
+                        FileName = Path.ChangeExtension(fileSection.FileName, ".jpeg"),
+                        ImageData = await CommonHelper.GetFileBytesByStreamAsync(compressedStream)
                     }, $"{existingCollection.Album.FriendlyName}/{existingCollection.FriendlyName}");
 
                     results.Add(result);

@@ -5,6 +5,8 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Common.Enums;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
 
 namespace Common
 {
@@ -84,12 +86,30 @@ namespace Common
             return normalizedName.ToLower().Replace(" ", "-");
         }
 
-        public static async Task<byte[]> GetFileBytesByStreamAsync(Stream? stream)
+        public static async Task<byte[]> GetFileBytesByStreamAsync(Stream stream)
         {
-            if (stream == null) return Array.Empty<byte>();
             using var ms = new MemoryStream();
             await stream.CopyToAsync(ms);
             return ms.ToArray();
+        }
+
+        public static async Task<Stream> CompressImageAsync(Stream inputStream, int quality = 85)
+        {
+            // Create output stream
+            var outputStream = new MemoryStream();
+
+            // Load image from input stream
+            Image image = await Image.LoadAsync(inputStream);
+
+            // Set jpeg encoder options
+            var encoder = new JpegEncoder() { Quality = quality };
+
+            // Compress image and save to output stream
+            await image.SaveAsync(outputStream, encoder);
+
+            // Return compressed image stream
+            outputStream.Position = 0;
+            return outputStream;
         }
     }
 
