@@ -1,6 +1,4 @@
 using System.Text.Json;
-using Google.Api;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Portal.API.Controllers;
@@ -9,6 +7,10 @@ using Portal.API.Middlewares;
 using Portal.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.Limits.MaxRequestBodySize = long.MaxValue;
+});
 
 // Add services to the container.
 
