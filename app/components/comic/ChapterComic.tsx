@@ -16,9 +16,10 @@ export default function ChapterComic({ contents }: { contents?: ContentResponse[
                             <h3 className="small-title">{t('chapter_list')}</h3>
                             {contents?.map((content, index) => (
                                 <div key={index}>
-                                    <h5>
-                                        <a href={`/truyen-tranh/${content.albumFriendlyName}/${content.friendlyName}`}>{content.title}</a> 
-                                        <span>{dayjs.utc(content.createdOnUtc).local().format('DD-MM-YYYY HH:mm')}</span>
+                                    <h5 className="chapter-list">
+                                        <a href={`/truyen-tranh/${content.albumFriendlyName}/${content.friendlyName}`}>{content.title}</a>
+                                        <span>{dayjs.utc(content.createdOnUtc).local().format('DD-MM-YYYY HH:mm')}</span> 
+                                        <p><i className="fas fa-eye"></i> {content.views.toLocaleString()}</p>
                                     </h5>
                                     <hr />
                                 </div>

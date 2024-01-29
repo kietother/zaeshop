@@ -28,7 +28,7 @@ export default async function Comic({ params }: { params: { comicid: string | nu
             <Breadcrumb title={comic?.title} friendlyName={comic?.friendlyName} />
             <InfomationComic comic={comic} />
             <ChapterComic contents={comic?.contents} />
-            <DynamicCommentComic comicId={comic?.id}/>
+            <DynamicCommentComic comicId={comic?.id} collectionId={null}/>
         </>
     );
 }
