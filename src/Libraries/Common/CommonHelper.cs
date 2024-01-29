@@ -86,7 +86,7 @@ namespace Common
 
         public static async Task<byte[]> GetFileBytesByStreamAsync(Stream? stream)
         {
-            if (stream == null) return new byte[0];
+            if (stream == null) return Array.Empty<byte>();
             using var ms = new MemoryStream();
             await stream.CopyToAsync(ms);
             return ms.ToArray();
