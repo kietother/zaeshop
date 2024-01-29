@@ -41,6 +41,9 @@ BEGIN
                 c.UpdatedOnUtc,
                 c.ParentCommentId,
                 u.Avatar,
+                c2.Title,
+                a.FriendlyName as AlbumFriendlyName,
+                c2.FriendlyName as FriendlyName,
 				COUNT(reply.Id) AS ReplyCount
             FROM dbo.Comment c
                 JOIN dbo.[User] u ON u.Id = c.UserId
@@ -63,7 +66,10 @@ BEGIN
                 c.CreatedOnUtc,
                 c.UpdatedOnUtc,
 				c.ParentCommentId,
-                u.Avatar
+                u.Avatar,
+                c2.Title,
+                a.FriendlyName,
+                c2.FriendlyName
         )
             SELECT COUNT_BIG(1) AS RowNum,
             0 Id,
@@ -77,6 +83,9 @@ BEGIN
             NULL UpdatedOnUtc,
             1 ParentCommentId,
             NULL Avatar,
+            NULL Title,
+            NULL AlbumFriendlyName,
+            NULL FriendlyName,
 			0 ReplyCount,
             1 AS IsTotalRecord
         FROM FilteredData

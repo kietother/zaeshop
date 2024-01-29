@@ -16,6 +16,9 @@ namespace Portal.Domain.Models.CommentModels
         public int? ParentCommentId { get; set; }
         public int? ReplyCount { get; set; }
         public string? Avatar { get; set; }
+        public string? Title { get; set; }
+        public string? AlbumFriendlyName { get; set; }
+        public string? FriendlyName { get; set; }
         public DateTime CreatedOnUtc { get; set; }
         public DateTime? UpdatedOnUtc { get; set; }
     }

@@ -56,7 +56,8 @@ namespace Portal.API.Controllers
                     AlbumFriendlyName = x.FriendlyName,
                     Description = z.Description,
                     ExtendName = z.ExtendName,
-                    Volume = z.Volume
+                    Volume = z.Volume,
+                    Views = z.Views,
                 }).ToList()
             }));
 
@@ -88,7 +89,8 @@ namespace Portal.API.Controllers
                 IsPublic = z.IsPublic,
                 AlbumId = z.AlbumId,
                 AlbumTitle = comic.Title,
-                AlbumFriendlyName = comic.FriendlyName
+                AlbumFriendlyName = comic.FriendlyName,
+                Views = z.Views,
             }).OrderByDescending(x => RegexHelper.GetChapterNumber(x.Title)).ToList();
 
             var result = new ServiceResponse<ComicAppModel>(comic);
