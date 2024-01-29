@@ -83,6 +83,14 @@ namespace Common
             var normalizedName = RemoveVietnameseCharacters(name);
             return normalizedName.ToLower().Replace(" ", "-");
         }
+
+        public static async Task<byte[]> GetFileBytesByStreamAsync(Stream? stream)
+        {
+            if (stream == null) return new byte[0];
+            using var ms = new MemoryStream();
+            await stream.CopyToAsync(ms);
+            return ms.ToArray();
+        }
     }
 
     public static class JsonSerializationHelper
@@ -96,7 +104,7 @@ namespace Common
         private static readonly JsonSerializerOptions s_readOptions = new()
         {
             AllowTrailingCommas = false,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase      
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
         public static string Serialize<T>(T value)

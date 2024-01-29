@@ -1,8 +1,10 @@
+using Common;
 using Common.Models;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Net.Http.Headers;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Interfaces.External;
-using Portal.Domain.Models.CollectionModels;
 using Portal.Domain.Models.ContentItemModels;
 using Portal.Domain.Models.ImageUploadModels;
 using Portal.Domain.SeedWork;
@@ -26,13 +28,20 @@ namespace Portal.Infrastructure.Implements.Business.Services
             _amazonS3Service = amazonS3Service;
         }
 
-        public async Task<ServiceResponse<bool>> CreateContentItemsAsync(int collectionId, ContentItemRequestModel model)
+        private static string GetBoundary(MediaTypeHeaderValue contentType)
         {
-            if (model.Items == null || model.Items.Count == 0)
+            var boundary = HeaderUtilities.RemoveQuotes(contentType.Boundary).Value;
+
+            if (string.IsNullOrWhiteSpace(boundary))
             {
-                return new ServiceResponse<bool>("error_content_type_not_empty");
+                throw new InvalidDataException("Missing content-type boundary.");
             }
 
+            return boundary;
+        }
+
+        public async Task<ServiceResponse<bool>> CreateContentItemsAsync(int collectionId, Stream stream, string contentType)
+        {
             // Retrieve the existing collection entity by ID
             var existingCollection = await _collectionRepository.GetByIdAsync(collectionId);
             if (existingCollection == null)
@@ -47,17 +56,33 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 return new ServiceResponse<bool>("error_content_type_not_empty");
             }
 
-            // Build and Upload to image services
-            var amazonBulkUploadModels = model.Items.ConvertAll(x => new ImageUploadRequestModel
-            {
-                FileName = x.Name,
-                ImageData = x.Data
-            }).ToList();
+            var results = new List<ImageUploadResultModel>();
 
-            var result = await _amazonS3Service.BulkUploadImagesAsync(amazonBulkUploadModels, $"{existingCollection.Album.FriendlyName}/{existingCollection.FriendlyName}");
+            #region Handle large files from Streams
+            var boundary = GetBoundary(MediaTypeHeaderValue.Parse(contentType));
+            var multipartReader = new MultipartReader(boundary, stream);
+            var section = await multipartReader.ReadNextSectionAsync();
+
+            while (section != null)
+            {
+                var fileSection = section.AsFileSection();
+                if (fileSection != null)
+                {
+                    var result = await _amazonS3Service.UploadImageAsync(new ImageUploadRequestModel
+                    {
+                        FileName = fileSection.FileName,
+                        ImageData = await CommonHelper.GetFileBytesByStreamAsync(fileSection.FileStream)
+                    }, $"{existingCollection.Album.FriendlyName}/{existingCollection.FriendlyName}");
+
+                    results.Add(result);
+                }
+
+                section = await multipartReader.ReadNextSectionAsync();
+            }
+            #endregion
 
             // Store database
-            var addItems = result.Select((x, index) => new ContentItem
+            var addItems = results.OrderBy(r => r.FileName).Select((x, index) => new ContentItem
             {
                 CollectionId = collectionId,
                 Name = x.FileName,
