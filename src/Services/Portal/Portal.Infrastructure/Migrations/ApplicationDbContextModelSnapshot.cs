@@ -337,7 +337,7 @@ namespace Portal.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DisplayUrl")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
@@ -365,9 +365,7 @@ namespace Portal.Infrastructure.Migrations
 
                     b.HasIndex("CollectionId");
 
-                    b.HasIndex("DisplayUrl");
-
-                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("DisplayUrl"), new[] { "CollectionId" });
+                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("CollectionId"), new[] { "DisplayUrl" });
 
                     b.ToTable("ContentItem", (string)null);
                 });
