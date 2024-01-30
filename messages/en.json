@@ -76,7 +76,9 @@
         "before commenting": "before commenting",
         "post": "Post",
         "reply": "Reply",
-        "view_more_replies": "View more replies"
+        "view_more_replies": "View more replies",
+        "next": "Next",
+        "previous": "Previous"
     },
     "logins":{
         "login": "Log in",

@@ -76,7 +76,9 @@
         "before commenting": "trước khi bình luận",
         "post": "Đăng",
         "reply": "Phản hồi",
-        "view_more_replies": "Xem thêm phản hồi"
+        "view_more_replies": "Xem thêm phản hồi",
+        "next": "Chap sau",
+        "previous": "Chap trước"
     },
     "logins":{
         "login": "Đăng nhập",
