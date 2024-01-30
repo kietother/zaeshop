@@ -16,13 +16,13 @@ export default function Breadcrumb({ title, friendlyName }: { title?: string, fr
                                 </a>
                             </li>
                             <li>
-                                <a href="/truyen-tranh"> {t('explore')}</a>
+                                <a href="/search"> {t('explore')}</a>
                             </li>
                             <li>
-                            <a href={`/truyen-tranh/${friendlyName}`} className="active">
-                                {title}
-                            </a>
-                        </li>
+                                <a href={`/comics/${friendlyName}`} className="active">
+                                    {title}
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
