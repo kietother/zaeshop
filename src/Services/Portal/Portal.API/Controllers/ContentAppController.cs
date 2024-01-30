@@ -61,7 +61,7 @@ namespace Portal.API.Controllers
             }
 
             var contentItems = await _contentItemRepository.GetQueryable()
-                            .Where(o => o.CollectionId == collection.Id)
+                            .Where(o => o.CollectionId == collection.Id).OrderBy(o => o.OrderBy)
                             .Select(x => x.DisplayUrl).ToListAsync();
             collection.ContentItems = contentItems;
 
