@@ -70,6 +70,9 @@
 }
 
 .avatar-reply {
-    height: 29px;
-    width: 29px;
+    height: 43.2px;
+    width: 43.2px;
+    display: block;
+    margin-right: 15px;
+    padding-right: 0px !important;
 }
