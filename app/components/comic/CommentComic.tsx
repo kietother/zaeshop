@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ReplyComic from './ReplyComic';
+import { ERoleType } from '@/app/models/common/ERoleType';
 
 const editorStyle = {
     width: '100%',
@@ -129,10 +130,26 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
                                             </a>
                                         </div>
                                         <div className="col-lg-11 col-10">
-                                            <h5>
-                                                <a href="profile.html">{cmt.userName}</a>
-                                                {cmt.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${cmt.albumFriendlyName}/${cmt.friendlyName}`}>{cmt.title}</a></b>}
-                                            </h5>
+                                            {cmt.roleType == ERoleType.UserSuperPremium &&
+                                                <h5>
+                                                    <span className="s-premium-badge">S-Premium</span>
+                                                    <a href="#" className="s-glitter-text">{cmt.userName}</a>
+                                                    {cmt.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${cmt.albumFriendlyName}/${cmt.friendlyName}`}>{cmt.title}</a></b>}
+                                                </h5>
+                                            }
+                                            {cmt.roleType == ERoleType.UserPremium &&
+                                                <h5>
+                                                    <span className="premium-badge">Premium</span>
+                                                    <a href="#" className="glitter-text">{cmt.userName}</a>
+                                                    {cmt.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${cmt.albumFriendlyName}/${cmt.friendlyName}`}>{cmt.title}</a></b>}
+                                                </h5>
+                                            }
+                                            {cmt.roleType == ERoleType.User &&
+                                                <h5>
+                                                    <a href="#">{cmt.userName}</a>
+                                                    {cmt.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${cmt.albumFriendlyName}/${cmt.friendlyName}`}>{cmt.title}</a></b>}
+                                                </h5>
+                                            }
                                             <div dangerouslySetInnerHTML={{ __html: cmt.text }} />
                                             <span className='date-comment'>{formatDateToLocale(cmt.createdOnUtc)}</span>
                                             {userSession &&
@@ -145,8 +162,6 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
                                                     <i className="fa fa-thumbs-down" />
                                                 </a>
                                             }
-
-
                                             <ReplyComic
                                                 comment={cmt}
                                                 comicId={comicId}
