@@ -5,6 +5,7 @@ import { getComments, pushComment } from "@/lib/services/client/comment/commentS
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import ReactQuill from "react-quill";
+import { getHoverText, getHoverTextValue, getLevelBadgeClass, getRoleBadge, getUserClass, getUserNameClass } from '@/app/utils/HelperFunctions';
 
 const editorStyle = {
     width: '100%',
@@ -152,46 +153,19 @@ export default function ReplyComic({ comment, comicId, commentId, replyCount, in
                         {replies?.map((rl: any, rlIndex: number) => (
                             <div key={rlIndex} className="col-lg-11 offset-lg-1 offset-2 col-10 pb-4">
                                 <div className="d-inline-flex align-items-start">
-                                    <a href="profile.html">
-                                        <img
-                                            className="avatar-reply"
-                                            src={rl.avatar}
-                                            alt=""
-                                        />
+                                    <a data-hover-text={getHoverText(rl.roleType)} className={getUserClass(rl.roleType)}>
+                                        <img src={rl.avatar} className="avatar-reply" alt="" />
+                                        <span className={getLevelBadgeClass(rl.roleType)}>Base</span>
+                                        <div className="hover-text">{getHoverTextValue(rl.roleType)}</div>
                                     </a>
                                     <div className="replies">
-                                        {rl.roleType == ERoleType.UserSuperPremium &&
-                                            <h5>
-                                                <span className="s-premium-badge">S-Premium</span>
-                                                <a href="#" className="s-glitter-text">{rl.userName}</a>
-                                                {rl.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${rl.albumFriendlyName}/${rl.friendlyName}`}>{rl.title}</a></b>}
-                                            </h5>
-                                        }
-                                        {rl.roleType == ERoleType.UserPremium &&
-                                            <h5>
-                                                <span className="premium-badge">Premium</span>
-                                                <a href="#" className="glitter-text">{rl.userName}</a>
-                                                {rl.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${rl.albumFriendlyName}/${rl.friendlyName}`}>{rl.title}</a></b>}
-                                            </h5>
-                                        }
-                                        {rl.roleType == ERoleType.User &&
-                                            <h5>
-                                                <a href="#">{rl.userName}</a>
-                                                {rl.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${rl.albumFriendlyName}/${rl.friendlyName}`}>{rl.title}</a></b>}
-                                            </h5>
-                                        }
+                                        <h5>
+                                            {getRoleBadge(rl.roleType)}
+                                            <a href="#" className={getUserNameClass(rl.roleType)}>{rl.userName}</a>
+                                            {rl.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${rl.albumFriendlyName}/${rl.friendlyName}`}>{rl.title}</a></b>}
+                                        </h5>
                                         <div dangerouslySetInnerHTML={{ __html: rl.text }} />
                                         <span className='date-comment'>{formatDateToLocale(rl.createdOnUtc)}</span>
-                                        {userSession &&
-                                            <a href="manga-detail.html" className="comment-btn">
-                                                <i className="fa fa-thumbs-up" />
-                                            </a>
-                                        }
-                                        {userSession &&
-                                            <a href="manga-detail.html" className="comment-btn">
-                                                <i className="fa fa-thumbs-down" />
-                                            </a>
-                                        }
                                         {userSession &&
                                             <button
                                                 className=" accordion-button comment-btn"

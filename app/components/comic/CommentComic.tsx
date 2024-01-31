@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ReplyComic from './ReplyComic';
-import { ERoleType } from '@/app/models/common/ERoleType';
+import { getHoverText, getHoverTextValue, getLevelBadgeClass, getRoleBadge, getUserClass, getUserNameClass } from '@/app/utils/HelperFunctions';
 
 const editorStyle = {
     width: '100%',
@@ -21,7 +21,6 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
     const [comments, setComments] = useState<any>();
     const [reloadTrigger, setReloadTrigger] = useState(false);
     const [loading, setLoading] = useState(false);
-
     const userSession = useMemo<UserSession>(() => {
         const session = localStorage.getItem('userSession');
         return session ? JSON.parse(session) : null;
@@ -125,43 +124,20 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
                                 {comments?.map((cmt: any, index: number) => (
                                     <div key={index} className="row">
                                         <div className="col-lg-1 col-2">
-                                            <a href="profile.html">
+                                            <a data-hover-text={getHoverText(cmt.roleType)} className={getUserClass(cmt.roleType)}>
                                                 <img src={cmt.avatar} alt="" />
+                                                <span className={getLevelBadgeClass(cmt.roleType)}>Base</span>
+                                                <div className="hover-text">{getHoverTextValue(cmt.roleType)}</div>
                                             </a>
                                         </div>
                                         <div className="col-lg-11 col-10">
-                                            {cmt.roleType == ERoleType.UserSuperPremium &&
-                                                <h5>
-                                                    <span className="s-premium-badge">S-Premium</span>
-                                                    <a href="#" className="s-glitter-text">{cmt.userName}</a>
-                                                    {cmt.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${cmt.albumFriendlyName}/${cmt.friendlyName}`}>{cmt.title}</a></b>}
-                                                </h5>
-                                            }
-                                            {cmt.roleType == ERoleType.UserPremium &&
-                                                <h5>
-                                                    <span className="premium-badge">Premium</span>
-                                                    <a href="#" className="glitter-text">{cmt.userName}</a>
-                                                    {cmt.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${cmt.albumFriendlyName}/${cmt.friendlyName}`}>{cmt.title}</a></b>}
-                                                </h5>
-                                            }
-                                            {cmt.roleType == ERoleType.User &&
-                                                <h5>
-                                                    <a href="#">{cmt.userName}</a>
-                                                    {cmt.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${cmt.albumFriendlyName}/${cmt.friendlyName}`}>{cmt.title}</a></b>}
-                                                </h5>
-                                            }
+                                            <h5>
+                                                {getRoleBadge(cmt.roleType)}
+                                                <a href="#" className={getUserNameClass(cmt.roleType)}>{cmt.userName}</a>
+                                                {cmt.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${cmt.albumFriendlyName}/${cmt.friendlyName}`}>{cmt.title}</a></b>}
+                                            </h5>
                                             <div dangerouslySetInnerHTML={{ __html: cmt.text }} />
                                             <span className='date-comment'>{formatDateToLocale(cmt.createdOnUtc)}</span>
-                                            {userSession &&
-                                                <a href="manga-detail.html" className="comment-btn">
-                                                    <i className="fa fa-thumbs-up" />
-                                                </a>
-                                            }
-                                            {userSession &&
-                                                <a href="manga-detail.html" className="comment-btn">
-                                                    <i className="fa fa-thumbs-down" />
-                                                </a>
-                                            }
                                             <ReplyComic
                                                 comment={cmt}
                                                 comicId={comicId}

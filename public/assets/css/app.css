@@ -5433,3 +5433,111 @@ input:focus,
   font-size: 5px;
   margin-right: 10px;
 }
+.level-badge-s-premium {
+  background: linear-gradient(45deg, #f06, yellow, #9f6);
+  background-size: 200% 200%;
+  animation: gradient 3s infinite;
+  display: inline-block;
+  color: transparent;
+  background-clip: text;
+  border-image: linear-gradient(45deg, #f06, yellow, #9f6);
+  border-image-slice: 1;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 5px;
+  margin-top: 10px;
+  font-size: 10px;
+  padding: 3px 5px;
+}
+.level-badge-premium {
+  background: linear-gradient(45deg, #D16BA5, #86A8E7, #5FFBF1);
+  background-size: 200% 200%;
+  animation: gradient 3s infinite;
+  display: inline-block;
+  color: transparent;
+  background-clip: text;
+  border-image: linear-gradient(45deg, #D16BA5, #86A8E7, #5FFBF1);
+  border-image-slice: 1;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 5px;
+  margin-top: 10px;
+  font-size: 10px;
+  padding: 3px 5px;
+}
+.level-badge {
+  background: white;
+  background-size: 200% 200%;
+  animation: gradient 3s infinite;
+  display: inline-block;
+  color: transparent;
+  background-clip: text;
+  border: 2px solid white;
+  border-radius: 5px;
+  margin-top: 10px;
+  font-size: 10px;
+  padding: 3px 5px;
+}
+.hover-text {
+  display: none;
+  position: absolute;
+  background-color: #f0f0f0;
+  padding: 5px;
+  border: 1px solid #ccc;
+  z-index: 1;
+}
+
+.user-level:hover .hover-text {
+  background: white;
+  background-size: 200% 200%;
+  animation: gradient 3s infinite;
+  display: block;
+  color: transparent;
+  background-clip: text;
+  border-image: white;
+  border-image-slice: 1;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 5px;
+  margin-top: 5px;
+  font-size: 10px;
+  padding: 3px 5px;
+}
+.user-level-premium:hover .hover-text {
+  background: linear-gradient(45deg, #D16BA5, #86A8E7, #5FFBF1);
+  background-size: 200% 200%;
+  animation: gradient 3s infinite;
+  display: block;
+  color: transparent;
+  background-clip: text;
+  border-image: linear-gradient(45deg, #D16BA5, #86A8E7, #5FFBF1);
+  border-image-slice: 1;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 5px;
+  margin-top: 5px;
+  font-size: 10px;
+  padding: 3px 5px;
+}
+.user-level-s-premium:hover .hover-text {
+  background: linear-gradient(45deg, #f06, yellow, #9f6);
+  background-size: 200% 200%;
+  animation: gradient 3s infinite;
+  display: block;
+  color: transparent;
+  background-clip: text;
+  border-image: linear-gradient(45deg, #f06, yellow, #9f6);
+  border-image-slice: 1;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 5px;
+  margin-top: 5px;
+  font-size: 10px;
+  padding: 3px 5px;
+}
+
+.user-level:hover,
+.user-level-premium:hover,
+.user-level-s-premium:hover {
+  cursor: pointer;
+}
