@@ -1693,28 +1693,6 @@ ul.pagination li a.current {
 /*-------------------------
     Banner
 -------------------------*/
-
-.banner.style-1 .banner-block.style-1 {
-  background: url(../media/banner/banner-bg-1.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.banner.style-2 .banner-block.style-1{
-  background: url(../media/banner/banner-bg-6.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-.banner.style-2 .banner-block.style-2{
-  background: url(../media/banner/banner-bg-4.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-.banner.style-2 .banner-block.style-3{
-  background: url(../media/banner/banner-bg-7.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
 .banner.style-2 .banner-block {
   padding: 160px 0 50px;
 }
@@ -1723,18 +1701,6 @@ ul.pagination li a.current {
   display: table-cell;
   height: 700px;
   vertical-align: middle;
-}
-
-.banner.style-1 .banner-block.style-2 {
-  background: url(../media/banner/banner-bg-2.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.banner.style-1 .banner-block.style-3 {
-  background: url(../media/banner/banner-bg-3.png);
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
 .banner .slick-prev {
@@ -1992,10 +1958,6 @@ ul.pagination li a.current {
 }
 
 @media only screen and (max-width: 492px) {
-  .banner.style-2 {
-    background: url(../media/banner/banner-bg-5.png);
-  }
-
   .banner.style-1 .banner-content {
     height: 500px;
   }
@@ -2252,25 +2214,6 @@ ul.pagination li a.current {
 /*-------------------------
   Coming out
 -------------------------*/
-.coming-out.style-1 {
-  background: url(../media/coming-out/comingOut-bg.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.coming-out.style-2 {
-  background: url(../media/coming-out/comingOut-bg-1.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.coming-out.style-3 {
-  background: url(../media/coming-out/comingOut-bg-3.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: bottom;
-}
-
 .comingOut-content .title {
   font-family: MTO;
   font-weight: 700;
@@ -2342,10 +2285,6 @@ ul.pagination li a.current {
 }
 
 @media only screen and (max-width: 992px) {
-  .coming-out.style-2 {
-    background: url(../media/coming-out/comingOut-bg-2.png);
-  }
-
   .comingOut-content {
     width: 80%;
     height: auto;
@@ -2507,19 +2446,6 @@ ul.pagination li a.current {
   height: 910px;
 }
 
-.schedule.style-2 .card-body.style-2 {
-  background: url(../media/movie/movie-bg.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-  padding: 0;
-}
-
-.schedule.style-2 .card-body.style-3 {
-  background: url(../media/movie/movie-bg.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-  padding: 100px 20px 30px;
-}
 .schedule.style-2 .card-body.style-3 .tab-pane{
   padding: 0 10px;
 }
@@ -5409,14 +5335,13 @@ input:focus,
 }
 .chapter-list span
 {
-  width: 25%;
+  width: 40%;
   text-align: left;
   font-size: 15px;
-  margin-top: 2vh;
 }
 .chapter-list a
 {
-  width: 20%;
+  width: 25%;
   text-align: left;
 }
 .chapter-list p
@@ -5424,6 +5349,7 @@ input:focus,
   width: 20%;
   text-align: right;
   margin-right: 5px;
+  font-size: 12px;
 }
 .view-more:hover
 {

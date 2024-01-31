@@ -125,7 +125,7 @@ export default function PopularComic() {
                                             </ul>
                                         </div>
                                     </div>
-                                    <a href="manga-detail.html">
+                                    <a href={`truyen-tranh/${album.friendlyName}`}>
                                         <p>{album.title}</p>
                                     </a>
                                 </div>

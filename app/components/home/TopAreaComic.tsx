@@ -10,7 +10,7 @@ export default function TopAreaComic() {
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-4 col-md-6 col-sm-8 offset-lg-0 offset-md-0 offset-sm-2 col-12">
-                            <h3>Recently Completed</h3>
+                            <h3>Top Day</h3>
                             <div className="anime-box style-2 bg-color-black">
                                 <a href="manga-detail.html">
                                     <div className="row m-0">
@@ -122,7 +122,7 @@ export default function TopAreaComic() {
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-6 col-sm-8 offset-lg-0 offset-md-0 offset-sm-2 col-12">
-                            <h3>New</h3>
+                            <h3>Top Month</h3>
                             <div className="anime-box style-2 bg-color-black">
                                 <a href="manga-detail.html">
                                     <div className="row m-0">
@@ -234,7 +234,7 @@ export default function TopAreaComic() {
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-6 col-sm-8 offset-lg-0 offset-md-3 offset-sm-2 col-12">
-                            <h3>Top Rated Manga</h3>
+                            <h3>Top Year</h3>
                             <div className="anime-box style-2 bg-color-black">
                                 <a href="manga-detail.html">
                                     <div className="row m-0">
