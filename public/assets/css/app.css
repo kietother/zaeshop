@@ -5389,3 +5389,47 @@ input:focus,
 {
   margin-left: 5px;
 }
+.glitter-text {
+  background: linear-gradient(45deg, #D16BA5, #86A8E7, #5FFBF1);
+  background-size: 200% 200%;
+  animation: gradient 3s infinite;
+  display: inline-block;
+  color: transparent;
+  background-clip: text;
+}
+.s-glitter-text {
+  background: linear-gradient(45deg, #f06, yellow, #9f6);
+  background-size: 200% 200%;
+  animation: gradient 3s infinite;
+  display: inline-block;
+  color: transparent;
+  background-clip: text;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.s-premium-badge {
+  border: 2px solid #ffc107;
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: #ffc107;
+  font-size: 5px;
+  margin-right: 10px;
+}
+.premium-badge {
+  border: 2px solid silver;
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: silver;
+  font-size: 5px;
+  margin-right: 10px;
+}

@@ -1,4 +1,5 @@
 import UserSession from "@/app/models/auth/UserSession";
+import { ERoleType } from "@/app/models/common/ERoleType";
 import { formatDateToLocale } from "@/lib/dayjs/format-date";
 import { getComments, pushComment } from "@/lib/services/client/comment/commentService";
 import { useTranslations } from "next-intl";
@@ -159,9 +160,26 @@ export default function ReplyComic({ comment, comicId, commentId, replyCount, in
                                         />
                                     </a>
                                     <div className="replies">
-                                        <h5>
-                                            <a href="profile.html">{rl.userName}</a>{" "}
-                                        </h5>
+                                        {rl.roleType == ERoleType.UserSuperPremium &&
+                                            <h5>
+                                                <span className="s-premium-badge">S-Premium</span>
+                                                <a href="#" className="s-glitter-text">{rl.userName}</a>
+                                                {rl.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${rl.albumFriendlyName}/${rl.friendlyName}`}>{rl.title}</a></b>}
+                                            </h5>
+                                        }
+                                        {rl.roleType == ERoleType.UserPremium &&
+                                            <h5>
+                                                <span className="premium-badge">Premium</span>
+                                                <a href="#" className="glitter-text">{rl.userName}</a>
+                                                {rl.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${rl.albumFriendlyName}/${rl.friendlyName}`}>{rl.title}</a></b>}
+                                            </h5>
+                                        }
+                                        {rl.roleType == ERoleType.User &&
+                                            <h5>
+                                                <a href="#">{rl.userName}</a>
+                                                {rl.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${rl.albumFriendlyName}/${rl.friendlyName}`}>{rl.title}</a></b>}
+                                            </h5>
+                                        }
                                         <div dangerouslySetInnerHTML={{ __html: rl.text }} />
                                         <span className='date-comment'>{formatDateToLocale(rl.createdOnUtc)}</span>
                                         {userSession &&
