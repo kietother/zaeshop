@@ -78,7 +78,8 @@
         "reply": "Phản hồi",
         "view_more_replies": "Xem thêm phản hồi",
         "next": "Chap sau",
-        "previous": "Chap trước"
+        "previous": "Chap trước",
+        "please_login": "Vui lòng đăng nhập để bình luận"
     },
     "logins":{
         "login": "Đăng nhập",

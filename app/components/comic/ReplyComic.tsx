@@ -1,7 +1,8 @@
+import UserSession from "@/app/models/auth/UserSession";
 import { formatDateToLocale } from "@/lib/dayjs/format-date";
 import { getComments, pushComment } from "@/lib/services/client/comment/commentService";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ReactQuill from "react-quill";
 
 const editorStyle = {
@@ -21,6 +22,10 @@ export default function ReplyComic({ comment, comicId, commentId, replyCount, in
     const [reply, setReply] = useState('');
     const [reloadTrigger, setReloadTrigger] = useState(false);
     const [loading, setLoading] = useState(false);
+    const userSession = useMemo<UserSession>(() => {
+        const session = localStorage.getItem('userSession');
+        return session ? JSON.parse(session) : null;
+    }, []);
 
     useEffect(() => {
         if (replyCount > 0) {
@@ -100,7 +105,7 @@ export default function ReplyComic({ comment, comicId, commentId, replyCount, in
 
     return (
         <>
-            <button
+            {userSession && <button
                 className=" accordion-button comment-btn"
                 data-bs-toggle="collapse"
                 data-bs-target={`#reply${index}1`}
@@ -108,6 +113,7 @@ export default function ReplyComic({ comment, comicId, commentId, replyCount, in
             >
                 {t('reply')}
             </button>
+            }
             <div
                 id={`reply${index}1`}
                 className="accordion-collapse collapse "
@@ -158,21 +164,27 @@ export default function ReplyComic({ comment, comicId, commentId, replyCount, in
                                         </h5>
                                         <div dangerouslySetInnerHTML={{ __html: rl.text }} />
                                         <span className='date-comment'>{formatDateToLocale(rl.createdOnUtc)}</span>
-                                        <a href="manga-detail.html" className="comment-btn">
-                                            <i className="fa fa-thumbs-up" />
-                                        </a>
-                                        <a href="manga-detail.html" className="comment-btn">
-                                            <i className="fa fa-thumbs-down" />
-                                        </a>
-                                        <button
-                                            className=" accordion-button comment-btn"
-                                            data-bs-toggle=""
-                                            data-bs-target={`#reply${index}1`}
-                                            aria-expanded="true"
-                                            onClick={scrollToReplyEditor}
-                                        >
-                                            {t('reply')}
-                                        </button>
+                                        {userSession &&
+                                            <a href="manga-detail.html" className="comment-btn">
+                                                <i className="fa fa-thumbs-up" />
+                                            </a>
+                                        }
+                                        {userSession &&
+                                            <a href="manga-detail.html" className="comment-btn">
+                                                <i className="fa fa-thumbs-down" />
+                                            </a>
+                                        }
+                                        {userSession &&
+                                            <button
+                                                className=" accordion-button comment-btn"
+                                                data-bs-toggle=""
+                                                data-bs-target={`#reply${index}1`}
+                                                aria-expanded="true"
+                                                onClick={scrollToReplyEditor}
+                                            >
+                                                {t('reply')}
+                                            </button>
+                                        }
                                     </div>
                                 </div>
                             </div>

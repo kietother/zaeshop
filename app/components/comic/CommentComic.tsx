@@ -94,22 +94,30 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
                                         <img src={userSession?.image ?? ''} alt="" />
                                     </a>
                                 </div>
-                                {userSession &&
-                                    <div className="col-lg-11 col-10">
-                                        <form onSubmit={handlePostComment}>
-                                            <div className="input-group form-group footer-email-box">
-                                                <ReactQuill
-                                                    style={editorStyle}
-                                                    theme="snow"
-                                                    value={comment}
-                                                    onChange={(content, delta, source, editor) => setComment(content)}
-                                                    preserveWhitespace={true} />
-                                            </div>
-                                            <button className="input-group-text post-btn" type="submit">
-                                                {t('post')}
-                                            </button>
-                                        </form>
-                                    </div>}
+                                {
+                                    userSession ? (
+                                        <div className="col-lg-11 col-10">
+                                            <form onSubmit={handlePostComment}>
+                                                <div className="input-group form-group footer-email-box">
+                                                    <ReactQuill
+                                                        style={editorStyle}
+                                                        theme="snow"
+                                                        value={comment}
+                                                        onChange={(content, delta, source, editor) => setComment(content)}
+                                                        preserveWhitespace={true}
+                                                    />
+                                                </div>
+                                                <button className="input-group-text post-btn" type="submit">
+                                                    {t('post')}
+                                                </button>
+                                            </form>
+                                        </div>
+                                    ) : (
+                                        <p>
+                                            {t('please_login')}...
+                                        </p>
+                                    )
+                                }
                             </div>
                             <div className="site-comment">
                                 {loading && <div className="spinner-border text-primary" role="status"></div>}
@@ -127,12 +135,18 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
                                             </h5>
                                             <div dangerouslySetInnerHTML={{ __html: cmt.text }} />
                                             <span className='date-comment'>{formatDateToLocale(cmt.createdOnUtc)}</span>
-                                            <a href="manga-detail.html" className="comment-btn">
-                                                <i className="fa fa-thumbs-up" />
-                                            </a>
-                                            <a href="manga-detail.html" className="comment-btn">
-                                                <i className="fa fa-thumbs-down" />
-                                            </a>
+                                            {userSession &&
+                                                <a href="manga-detail.html" className="comment-btn">
+                                                    <i className="fa fa-thumbs-up" />
+                                                </a>
+                                            }
+                                            {userSession &&
+                                                <a href="manga-detail.html" className="comment-btn">
+                                                    <i className="fa fa-thumbs-down" />
+                                                </a>
+                                            }
+
+
                                             <ReplyComic
                                                 comment={cmt}
                                                 comicId={comicId}

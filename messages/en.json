@@ -78,7 +78,8 @@
         "reply": "Reply",
         "view_more_replies": "View more replies",
         "next": "Next",
-        "previous": "Previous"
+        "previous": "Previous",
+        "please_login": "Please login to post a comment"
     },
     "logins":{
         "login": "Log in",
