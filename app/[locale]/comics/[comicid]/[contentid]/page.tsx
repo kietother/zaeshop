@@ -1,6 +1,5 @@
 import Breadcrumb from "@/app/components/contents/Breadcrumb";
 import ContentComic from "@/app/components/contents/ContentComic";
-import Comment from "@/app/components/contents/Comment";
 import ContentResponse from "@/app/models/contents/ContentResponse";
 import ServerResponse from "@/app/models/common/ServerResponse";
 import getAxiosInstance from "@/lib/axios";
