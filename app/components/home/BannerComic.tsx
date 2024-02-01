@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { useTranslations } from 'next-intl';
+import ToNotDieBanner from '@/public/assets/media/banner/to_not_die.png';
+
 export default function BannerComic() {
     const t = useTranslations('home');
     return (
@@ -25,10 +27,11 @@ export default function BannerComic() {
                                     </div>
                                 </div>
                                 <div className="col-lg-6 col-sm-6 col-12 ">
-                                    <img
-                                        src="/assets/media/banner/to_not_die.png"
+                                    <Image
+                                        src={ToNotDieBanner}
                                         className="dignole-img show-img"
-                                        alt=""
+                                        alt="to-not-die-banner"
+                                        priority
                                     />
                                 </div>
                             </div>

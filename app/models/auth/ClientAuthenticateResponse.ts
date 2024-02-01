@@ -3,4 +3,5 @@ export default interface ClientAuthenticateResponse {
     fullName?: string;
     userName?: string;
     jwtToken?: string;
+    roles?: Array<string> | null;
 }
