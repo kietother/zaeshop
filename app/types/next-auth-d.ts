@@ -8,6 +8,8 @@ declare module "next-auth/jwt" {
     googleToken?: string;
     /** Our Server Token */
     apiToken?: string;
+    /** Our Server Roles */
+    roles?: Array<string> | null;
   }
 }
 
@@ -17,7 +19,8 @@ declare module "next-auth" {
  */
   export interface User extends DefaultUser {
     /** Define any user-specific variables here to make them available to other code inferences */
-    apiToken?: string
+    apiToken?: string;
+    roles?: Array<string> | null;
   }
   /**
    * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context

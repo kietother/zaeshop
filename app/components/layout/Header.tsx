@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import dynamic from 'next/dynamic'
 import { getTranslations, getLocale } from 'next-intl/server';
 import Initial from "./Initial";
+import Logo from '@/public/assets/media/logo.png'; 
+import Image from "next/image";
 
 const DynamicLogoutButton = dynamic(() => import('./LogoutButton'), {
     ssr: false
@@ -26,7 +28,7 @@ export default async function Header() {
                 {/* Start Mainmanu Nav */}
                 <nav className="navbar navbar-expand-lg">
                     <a className="navbar-brand" href="/">
-                        <img src="/assets/media/logo.png" alt="" />
+                        <Image src={Logo} alt="logo" />
                     </a>
                     <button
                         className="navbar-toggler"
