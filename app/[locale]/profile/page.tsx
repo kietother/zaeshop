@@ -32,7 +32,7 @@ export default async function Page() {
             <section className="profile sec-mar">
                 <div className="container">
                     <div className="row">
-                        <div className="col-lg-9 col-sm-12 col-12">
+                        <div className="col-lg-6 col-sm-12 col-12">
                             <div className="row pb-5">
                                 <div className="col-lg-4 col-sm-6 col-12">
                                     <div className="img-box">
@@ -58,24 +58,28 @@ export default async function Page() {
                                 </div>
                             </div>
                         </div>
+                        <div className="col-lg-3 col-sm-12 col-12">
+                        <div className="profile-link bg-color-black">
+                            <a data-hover-text="Hello" className="user-level">
+                                <p className="user-level">{t('level_list')}</p>
+                                <div className="hover-text level-step">Base
+                                    <hr /> SSJ1
+                                    <hr /> SSJ2
+                                    <hr /> SSJ3
+                                    <hr /> GOD
+                                    <hr /> BLUE
+                                    <hr /> UI
+                                    <hr /> MUI
+                                </div>
+                            </a>
+                            </div>
+                        </div>
                         <div className="col-lg-3 offset-lg-0 col-sm-8 offset-sm-2 col-12">
                             <div className="profile-link bg-color-black">
                                 <h5>{t('shortcut')}</h5>
                                 <a href="#">{t('read_history')}</a>
                                 <a href="#">{t('following')}</a>
                             </div>
-                            <a data-hover-text="Hello" className="user-level">
-                                <p className="user-level">{t('level_list')}</p>
-                                <div className="hover-text level-step">Base 
-                                <hr/> SSJ1
-                                <hr/> SSJ2
-                                <hr/> SSJ3
-                                <hr/> GOD
-                                <hr/> BLUE
-                                <hr/> UI
-                                <hr/> MUI
-                                </div>
-                            </a>
                         </div>
                     </div>
                 </div>

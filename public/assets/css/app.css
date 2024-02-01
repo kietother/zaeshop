@@ -5544,4 +5544,7 @@ input:focus,
 .level-step{
   width: 200px;
   text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+  position: relative !important;
 }
