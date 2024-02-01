@@ -30,10 +30,10 @@ export default function ChapterComic({ contents }: { contents?: ContentResponse[
                         <div className="col-lg-4 col-md-6 col-sm-8 offset-lg-0 offset-md-3 offset-sm-2 mt-lg-0 mt-3">
                             <h3 className="small-title">{t('similar')}</h3>
                             <div className="anime-box bg-color-black">
-                                <a href="streaming-season.html">
+                                <a href="#">
                                     <div className="row m-0">
                                         <div className="p-0 col-2">
-                                            <img src="/assets/media/anime-sm-img/anime-img-7.png" alt="" />
+                                            <img src="" alt="" />
                                         </div>
                                         <div className="p-0 col-9">
                                             <div className="anime-blog">

@@ -4,4 +4,5 @@ export default interface PagingRequest {
     SearchTerm?: string;
     SortColumn?: string;
     SortDirection?: string;
+    TopType?: string;
 }

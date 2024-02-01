@@ -49,7 +49,7 @@ export default function PopularComic() {
                 <div className="container">
                     <div className="heading style-1">
                         <h2>
-                            {t('popular')}<span className="view-more">View more</span>
+                            {t('popular')}<span className="view-more">{t('view_more')}</span>
                         </h2>
                     </div>
                     {loading && (
@@ -68,7 +68,7 @@ export default function PopularComic() {
                                         <img src={album.cdnThumbnailUrl ?? "/assets/media/404/none.jpg"} alt={album.title} />
                                     </a>
                                     <div className="d-flex justify-content-between">
-                                        <p className="text">Views: {album.views.toLocaleString()}</p>
+                                        <p className="text">{t('views')}: {album.views.toLocaleString()}</p>
                                         <div className="dropdown">
                                             <button
                                                 type="button"
@@ -118,8 +118,8 @@ export default function PopularComic() {
                                             </button>
                                             <ul className="dropdown-menu bg-color-black pt-3 pb-3 ps-3 pe-3">
                                                 <li>
-                                                    <a href="manga-detail.html" className="none">
-                                                        <i className="fa fa-check" /> Follow{" "}
+                                                    <a href="#" className="none">
+                                                        <i className="fa fa-check" /> {t('follow')}{" "}
                                                     </a>
                                                 </li>
                                             </ul>

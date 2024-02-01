@@ -1,6 +1,5 @@
 "use client"
 import UserSession from '@/app/models/auth/UserSession';
-import { formatDateToLocale } from '@/lib/dayjs/format-date';
 import { getComments, pushComment } from '@/lib/services/client/comment/commentService';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
@@ -8,6 +7,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ReplyComic from './ReplyComic';
 import { getHoverText, getHoverTextValue, getLevelBadgeClass, getRoleBadge, getUserClass, getUserNameClass } from '@/app/utils/HelperFunctions';
+import dayjs from "@/lib/dayjs/dayjs-custom";
 
 const editorStyle = {
     width: '100%',
@@ -21,6 +21,16 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
     const [comments, setComments] = useState<any>();
     const [reloadTrigger, setReloadTrigger] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [pagingParams, setPagingParams] = useState<any>({
+        albumId: comicId,
+        pageNumber: 1,
+        pageSize: 5,
+        sortColumn: 'createdOnUtc',
+        sortDirection: 'desc',
+        isReply: false
+    });
+    const [totalPages, setTotalPages] = useState<any>();
+
     const userSession = useMemo<UserSession>(() => {
         const session = localStorage.getItem('userSession');
         return session ? JSON.parse(session) : null;
@@ -44,20 +54,12 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
     };
 
     useEffect(() => {
-        const query = {
-            albumId: comicId,
-            pageNumber: 1,
-            pageSize: 10,
-            sortColumn: 'createdOnUtc',
-            sortDirection: 'desc',
-            isReply: false
-        };
-
         setLoading(true);
 
-        getComments(query)
+        getComments(pagingParams)
             .then((response) => {
                 if (response && response.data) {
+                    setTotalPages(Math.ceil(response.rowNum / pagingParams.pageSize));
                     setComments(response.data);
                 }
             })
@@ -67,8 +69,58 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
             .finally(() => {
                 setLoading(false);
             });
-    }, [reloadTrigger]);
+    }, [reloadTrigger, pagingParams]);
 
+    const scrollUpByPercentage = (percentage: number) => {
+        const currentPosition = window.scrollY || document.documentElement.scrollTop;
+        const newPosition = currentPosition - percentage * window.innerHeight / 100;
+        const scrollToPosition = Math.max(newPosition, 0);
+        window.scrollTo({ top: scrollToPosition, behavior: 'smooth' });
+    };
+
+    const handlePageClick = (page: number) => {
+        setPagingParams({ ...pagingParams, pageNumber: page });
+        scrollUpByPercentage(80);
+    };
+    
+    const handlePrevClick = () => {
+        const prevPage = pagingParams.pageNumber - 1;
+        if (prevPage >= 1) {
+            setPagingParams({ ...pagingParams, pageNumber: prevPage });
+            scrollUpByPercentage(80);
+        }
+    };
+
+    const handleNextClick = () => {
+        const nextPage = pagingParams.pageNumber + 1;
+        if (nextPage <= totalPages) {
+            setPagingParams({ ...pagingParams, pageNumber: nextPage });
+            scrollUpByPercentage(80);
+        }
+    };
+
+    const renderPagination = useMemo(() => {
+        const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+        return (
+            <ul className="pagination">
+                <li className="page-item">
+                    <a className="hover page-link arrow" aria-label="Previous" onClick={handlePrevClick}>
+                        <i className="fa fa-chevron-left"></i>
+                    </a>
+                </li>
+                {pages.map((page) => (
+                    <li key={page} className="page-item">
+                        <a className={`hover page-link ${page === pagingParams.pageNumber ? 'active' : ''}`} onClick={() => handlePageClick(page)}>{page}</a>
+                    </li>
+                ))}
+                <li className="page-item">
+                    <a className="hover page-link arrow" aria-label="Next" onClick={handleNextClick}>
+                        <i className="fa fa-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        );
+    }, [pagingParams.pageNumber, totalPages]);
 
     return (
         <>
@@ -85,12 +137,12 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
                                 </div>
                                 <p>
                                     {t('We hope you have a good time browsing the comment section!')}<br />
-                                    {t('Please read our')} <a href="comments.html">{t('Comment Policy')}</a> {t('before commenting')}.
+                                    {t('Please read our')} <a href="#">{t('Comment Policy')}</a> {t('before commenting')}.
                                 </p>
                             </div>
                             <div className="row">
                                 <div className="col-lg-1 col-2">
-                                    <a href="profile.html">
+                                    <a href="#">
                                         <img src={userSession?.image ?? ''} alt="" />
                                     </a>
                                 </div>
@@ -137,7 +189,7 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
                                                 {cmt.collectionId && <b className='relation-chap'><a href={`/truyen-tranh/${cmt.albumFriendlyName}/${cmt.friendlyName}`}>{cmt.title}</a></b>}
                                             </h5>
                                             <div dangerouslySetInnerHTML={{ __html: cmt.text }} />
-                                            <span className='date-comment'>{formatDateToLocale(cmt.createdOnUtc)}</span>
+                                            <span className='date-comment'>{dayjs.utc(cmt.createdOnUtc).local().format('DD-MM-YYYY HH:mm')}</span>
                                             <ReplyComic
                                                 comment={cmt}
                                                 comicId={comicId}
@@ -147,6 +199,9 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                            <div className="pagination-wrape">
+                                {renderPagination}
                             </div>
                         </div>
                     </div>

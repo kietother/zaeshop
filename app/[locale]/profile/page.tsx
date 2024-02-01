@@ -43,8 +43,14 @@ export default async function Page() {
                                     <h5>{session.user?.name}</h5>
                                     <p>{session.user?.email?.split('@')[0]}</p>
                                     <p className="pb-3">{session.user?.email}</p>
+                                    <p className="user-level">{t('level')}: Base</p>
+                                    <div className="progress-container">
+                                        <div className="progress-bar progress-bar-rgb-s-premium" style={{ width: '78%' }}>
+                                            78%
+                                        </div>
+                                    </div>
                                     <a
-                                        href="edit-profile.html"
+                                        href="#"
                                         className="anime-btn btn-dark border-change"
                                     >
                                         {t('upgrade_account')}
@@ -55,9 +61,21 @@ export default async function Page() {
                         <div className="col-lg-3 offset-lg-0 col-sm-8 offset-sm-2 col-12">
                             <div className="profile-link bg-color-black">
                                 <h5>{t('shortcut')}</h5>
-                                <a href="playlist.html">{t('read_history')}</a>
-                                <a href="home.html">{t('following')}</a>
+                                <a href="#">{t('read_history')}</a>
+                                <a href="#">{t('following')}</a>
                             </div>
+                            <a data-hover-text="Hello" className="user-level">
+                                <p className="user-level">{t('level_list')}</p>
+                                <div className="hover-text level-step">Base 
+                                <hr/> SSJ1
+                                <hr/> SSJ2
+                                <hr/> SSJ3
+                                <hr/> GOD
+                                <hr/> BLUE
+                                <hr/> UI
+                                <hr/> MUI
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>

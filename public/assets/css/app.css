@@ -1,10 +1,4 @@
 /*---------------------------------------------
-Template Name: AnimeLoop
-Template URL: https://techpedia.co.uk/template/animeLoop/
-Description: AnimeLoop HTML5 Template
-Author: TPD-Themes
-Version: 1.0.0
-
 ===============================================   
 STYLESHEETS INDEXING
 |
@@ -1487,7 +1481,7 @@ ul.pagination li a.current {
 }
 
 .footer-main.style-2 {
-  background: url(../media/footer/footer-bg-2.png);
+  background: url(../media/footer/footer-bg.png);
   background-repeat: no-repeat;
   background-size: cover;
   height: 530px;
@@ -1533,7 +1527,7 @@ ul.pagination li a.current {
 .footer-widget p {
   font-family: MTO;
   font-weight: 400;
-  font-size: 18px;
+  font-size: 16px;
   color: var(--color-semi-grey);
 }
 
@@ -3009,24 +3003,6 @@ ul.pagination li a.current {
   height: 550px;
   position: relative;
   border-radius: 15px;
-}
-
-.blog.style-2 .inner-box.style-1 {
-  background: url(../media/blog/blog-bg-1.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.blog.style-2 .inner-box.style-2 {
-  background: url(../media/blog/blog-bg-2.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.blog.style-2 .inner-box.style-3 {
-  background: url(../media/blog/blog-bg-3.png);
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
 .blog-search {
@@ -4723,28 +4699,6 @@ ul.pagination li a.current {
   width: 500px;
   position: relative;
 }
-.coming-soon-block::before{
-  content: '';
-  position: absolute;
-  left: -200px;
-  top: -25%;
-  background: url(../media/comming-soon/comming-soon-img-2.png);
-  z-index: 999;
-  width: 290px;
-  height: 590px;
-  background-repeat: no-repeat ;
-}
-.coming-soon-block::after{
-  content: '';
-  position: absolute;
-  right: -210px;
-  top: -25%;
-  background: url(../media/comming-soon/comming-soon-img-1.png);
-  z-index: 999;
-  width: 290px;
-  height: 590px;
-  background-repeat: no-repeat ;
-}
 
 .coming-soon-content {
   margin-top: 25%;
@@ -5540,4 +5494,54 @@ input:focus,
 .user-level-premium:hover,
 .user-level-s-premium:hover {
   cursor: pointer;
+}
+
+.progress-container {
+  width: 50%;
+  background-color: #eee;
+  border-radius: 5px;
+}
+
+.progress-bar {
+  height: 30px;
+  border-radius: 5px;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+}
+
+.progress-bar-rgb-s-premium {
+  background: linear-gradient(45deg, #f06, yellow, #9f6);
+  background-size: 200% 200%;
+  animation: gradient 3s infinite;
+  display: block;
+  color: #6a4949;;
+  margin-top: 5px;
+  font-size: 10px;
+  padding: 3px 5px;
+}
+.progress-bar-rgb-premium {
+  background: linear-gradient(45deg, #f06, yellow, #9f6);
+  background-size: 200% 200%;
+  animation: gradient 3s infinite;
+  display: block;
+  color: #6a4949;;
+  margin-top: 5px;
+  font-size: 10px;
+  padding: 3px 5px;
+}
+.progress-bar-rgb {
+  background: linear-gradient(45deg, rgb(215, 206, 209), rgb(131, 131, 105));
+  background-size: 200% 200%;
+  animation: gradient 3s infinite;
+  display: block;
+  color: #6a4949;;
+  margin-top: 5px;
+  font-size: 10px;
+  padding: 3px 5px;
+}
+
+.level-step{
+  width: 200px;
+  text-align: center;
 }

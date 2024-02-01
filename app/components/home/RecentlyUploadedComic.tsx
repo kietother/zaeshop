@@ -113,7 +113,7 @@ export default function RecentlyUploadedComic() {
                                         <ul className="dropdown-menu bg-color-black pt-3 pb-3 ps-3 pe-3">
                                             <li>
                                                 <a href="#" className="none">
-                                                    <i className="fa fa-check" /> Follow{" "}
+                                                    <i className="fa fa-check" />{t('follow')}{" "}
                                                 </a>
                                             </li>
                                         </ul>

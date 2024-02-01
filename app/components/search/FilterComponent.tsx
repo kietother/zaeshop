@@ -153,7 +153,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                             </ul>
                         </li>
                         <li>
-                            <a href="list-view.html#" className="anime-btn btn-dark dropdown-toggle" id="status" data-bs-toggle="dropdown"
+                            <a href="#" className="anime-btn btn-dark dropdown-toggle" id="status" data-bs-toggle="dropdown"
                                 data-bs-auto-close="outside" aria-expanded="false">
                                  {t('status')} <span><i className="fa fa-chevron-down"></i></span>
                             </a>
@@ -189,7 +189,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                             </ul>
                         </li>
                         <li>
-                            <a href="list-view.html#" className="anime-btn btn-dark dropdown-toggle" id="rating" data-bs-toggle="dropdown"
+                            <a href="#" className="anime-btn btn-dark dropdown-toggle" id="rating" data-bs-toggle="dropdown"
                                 data-bs-auto-close="outside" aria-expanded="false">
                                  {t('rating')} <span><i className="fa fa-chevron-down"></i></span>
                             </a>
@@ -227,7 +227,7 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                             </ul>
                         </li>
                         <li>
-                            <a href="list-view.html#" className="anime-btn btn-dark dropdown-toggle" id="sort-by" data-bs-toggle="dropdown"
+                            <a href="#" className="anime-btn btn-dark dropdown-toggle" id="sort-by" data-bs-toggle="dropdown"
                                 data-bs-auto-close="outside" aria-expanded="false">
                                 {t('sort_by')} <span><i className="fa fa-chevron-down"></i></span>
                             </a>

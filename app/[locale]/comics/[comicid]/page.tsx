@@ -7,6 +7,9 @@ import ComicDetail from "@/app/models/comics/ComicDetail";
 import { portalServer } from "@/lib/services/client/baseUrl";
 import dynamic from "next/dynamic";
 
+const ScrollButton = dynamic(() => import('@/app/components/common/ScrollButton'), {
+    ssr: false
+  });
 const DynamicCommentComic = dynamic(() => import('@/app/components/comic/CommentComic'), {
     ssr: false
 });
@@ -25,6 +28,7 @@ export default async function Comic({ params }: { params: { comicid: string | nu
     const comic = await getComic(params.comicid);
     return (
         <>
+            <ScrollButton />
             <Breadcrumb title={comic?.title} friendlyName={comic?.friendlyName} />
             <InfomationComic comic={comic} />
             <ChapterComic contents={comic?.contents} />
