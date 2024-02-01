@@ -44,11 +44,23 @@
         "upgrade_account": "Upgrade Account",
         "shortcut": "Shortcut",
         "read_history": "Read History",
-        "following": "Following"
+        "following": "Following",
+        "level": "Level",
+        "level_list": "Level list"
     },
     "home":{
         "popular": "Popular",
-        "recently_uploaded": "Recently Uploaded"
+        "recently_uploaded": "Recently Uploaded",
+        "to_not_die": "To Not Die",
+        "view_now": "View now",
+        "chapter": "Chapter",
+        "featured_comics": "Featured Comics",
+        "view_more": "View more",
+        "views": "Views",
+        "follow": "Follow",
+        "day": "Day",
+        "month": "Month",
+        "year": "Year"
     },
     "comic_detail":{
         "home_page": "Home Page",
@@ -85,5 +97,13 @@
         "login": "Log in",
         "policy": "By continuing, you agree to Fast Scans Terms of Use and Privacy Policy.",
         "continue_with_google": "Continue with Google"
+    },
+    "footer":{
+        "info": "Fast Scans - Free online comic book store | Good comics. New comics. The website always updates the latest series of unique genres such as fairy tales, swordplay, teen stories, and the best love novels and doesn't cost 500 VND.",
+        "join_us_on": "Join Us on",
+        "right": "All rights reserved by",
+        "privacy_policy": "Privacy Policy",
+        "comment_policy": "Comments Policy",
+        "cooperate": "Cooperate with us"
     }
 }

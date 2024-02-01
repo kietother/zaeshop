@@ -22,8 +22,6 @@ export default async function ContentComic({ content, comic }: { content?: Conte
         isFirstChap = parseInt(currentFriendlyName.split("-")[1]) > startChapNumber || false;
     }
 
-
-
     return (
         <>
             {/*=====================================*/}
@@ -38,7 +36,7 @@ export default async function ContentComic({ content, comic }: { content?: Conte
                     <div className="d-flex justify-content-between mb-4">
                         <div className="left">
                             <a
-                                href="manga-content.html"
+                                href="#"
                                 className="anime-btn btn-dark border-change dropdown-toggle"
                                 id="country"
                                 data-bs-toggle="dropdown"

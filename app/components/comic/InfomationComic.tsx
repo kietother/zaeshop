@@ -75,12 +75,12 @@ export default function InfomationComic({ comic }: { comic?: ComicDetail | null 
                                             </button>
                                             <ul className="dropdown-menu bg-color-black pt-3 pb-3 ps-3 pe-3">
                                                 <li>
-                                                    <a href="manga-detail.html" className="none">
+                                                    <a href="#" className="none">
                                                         <i className="fa fa-check" /> {t('follow')}{" "}
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="manga-detail.html">
+                                                    <a href="#">
                                                         <i className="fas fa-heart" /> {t('love')}{" "}
                                                     </a>
                                                 </li>

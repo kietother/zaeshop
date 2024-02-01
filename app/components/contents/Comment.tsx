@@ -16,7 +16,7 @@ export default function Comment() {
                                 </div>
                                 <p>
                                     We hope you have a good time browsing the comment section! <br />
-                                    Please read our <a href="comments.html">Comment Policy</a> before
+                                    Please read our <a href="#">Comment Policy</a> before
                                     commenting.
                                 </p>
                             </div>
@@ -672,7 +672,7 @@ export default function Comment() {
                                 <a href="streaming-season.html">
                                     <div className="row m-0">
                                         <div className="p-0 col-2">
-                                            <img src="/assets/media/anime-sm-img/anime-img-7.png" alt="" />
+                                            <img src="" alt="" />
                                         </div>
                                         <div className="p-0 col-9">
                                             <div className="anime-blog">
