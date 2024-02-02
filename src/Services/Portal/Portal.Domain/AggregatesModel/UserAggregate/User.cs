@@ -20,4 +20,7 @@ public class User : Entity, IAggregateRoot
 
     [JsonIgnore]
     public virtual ICollection<CollectionView> CollectionViews { get; set; } = new List<CollectionView>();
+
+    [JsonIgnore]
+    public virtual ICollection<UserConnection> UserConnections { get; set; } = new List<UserConnection>();
 }
