@@ -87,7 +87,7 @@ export default function TopPage() {
                                             <a className="active">{t('top_year')}</a>
                                         )
                                     }
-                                    else if (typePage === 'all') {
+                                    else if (typePage === '') {
                                         return (
                                             <a className="active">{t('top_all')}</a>
                                         )

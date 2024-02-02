@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import dynamic from 'next/dynamic'
 import { getTranslations, getLocale } from 'next-intl/server';
 import Initial from "./Initial";
-import Logo from '@/public/assets/media/logo.png'; 
+import Logo from '@/public/assets/media/logo.png';
 import Image from "next/image";
 
 const DynamicLogoutButton = dynamic(() => import('./LogoutButton'), {
@@ -17,7 +17,6 @@ const DynamicLanguageSwitcher = dynamic(() => import('./LanguageSwitcher'), {
 export default async function Header() {
     const session = await getServerSession(authOptions);
     const isLogined = !!session;
-
     const t = await getTranslations('header');
     const locale = await getLocale();
 
@@ -56,7 +55,7 @@ export default async function Header() {
                                 </a>
                                 <ul className="dropdown-menu" aria-labelledby="ranking">
                                     <li>
-                                        <a href="#" className="active">
+                                        <a href="/top-page?typePage=" className="active">
                                             {t('top_all')}
                                         </a>
                                     </li>
@@ -114,9 +113,14 @@ export default async function Header() {
                         </ul>
                         <form action="#">
                             <div className="input-group form-group header-search-box">
-                                <button className="input-group-text anime-btn" type="submit">
+                                <a
+                                    className="input-group-text anime-btn"
+                                    type="button"
+                                    href={`/search?value=`}
+                                    id="searchButton"
+                                >
                                     <i className="fal fa-search" />
-                                </button>
+                                </a>
                                 <input
                                     className="form-control"
                                     type="text"
