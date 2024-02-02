@@ -1,5 +1,8 @@
 import Image from "next/image";
 import { useTranslations } from 'next-intl';
+import Logo from '@/public/assets/media/logo.png';
+import FacebookImage from '@/public/assets/media/footer/facebook.png';
+
 export default function Footer() {
     const t = useTranslations('footer');
     return (
@@ -10,7 +13,7 @@ export default function Footer() {
                         <div className="col-lg-5 col-sm-12 col-12">
                             <div className="footer-widget">
                                 <a href="#">
-                                    <img alt="" src="/assets/media/logo.png" />
+                                    <Image src={Logo} alt="logo" priority />
                                 </a>
                                 <p className="mt-2 mb-5">
                                     {t('info')}
@@ -19,7 +22,7 @@ export default function Footer() {
                                 <ul className="social-icons">
                                     <li>
                                         <a href="https://www.facebook.com/tonotdievietnam">
-                                            <img alt="" src="/assets/media/footer/facebook.png" />
+                                            <Image src={FacebookImage} alt="facebook" />
                                         </a>
                                     </li>
                                 </ul>
