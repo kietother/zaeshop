@@ -27,10 +27,27 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
         pageSize: 5,
         sortColumn: 'createdOnUtc',
         sortDirection: 'desc',
-        isReply: false
+        isReply: false,
+        collectionId: null
     });
     const [totalPages, setTotalPages] = useState<any>();
+    const [selectedOption, setSelectedOption] = useState('All Comment');
 
+    const handleDropdownChange = (event: any) => {
+        const selectedValue = event.target.innerText.trim();
+        setSelectedOption(selectedValue);
+        var dropdownMenu = document.querySelector('#dropdown-menu');
+        dropdownMenu?.classList.remove('show');
+
+        let updatedCollectionId: string | null = '';
+        if (selectedValue === 'Chapter Comment')
+            updatedCollectionId = collectionId;
+    
+        setPagingParams((prevState: any) => ({
+            ...prevState,
+            collectionId: updatedCollectionId
+        }));
+    };
     const userSession = useMemo<UserSession>(() => {
         const session = localStorage.getItem('userSession');
         return session ? JSON.parse(session) : null;
@@ -183,16 +200,16 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
                                             data-bs-auto-close="outside"
                                             aria-expanded="false"
                                         >
-                                            All Comment
+                                            {selectedOption}
                                             <span className='chevron-down'>
                                                 <i className="fa fa-chevron-down" />
                                             </span>
                                         </a>
-                                        <ul className="dropdown-menu" aria-labelledby="country">
+                                        <ul className="dropdown-menu" aria-labelledby="country" id="dropdown-menu">
                                             <div className='chapter-list-content'>
                                                 <li>
-                                                    <a className='page-link'>All Comment</a>
-                                                    <a className='page-link'> Chapter Comment</a>
+                                                    <a className='page-link' onClick={handleDropdownChange}>All Comment</a>
+                                                    <a className='page-link' onClick={handleDropdownChange}>Chapter Comment</a>
                                                 </li>
                                             </div>
                                         </ul>

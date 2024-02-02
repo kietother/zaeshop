@@ -22,7 +22,8 @@ export default function Search() {
     const [albums, setAlbums] = useState();
     const [pagingCount, setPagingCount] = useState({});
     const [isSubmitFilter, setIsSubmitFilter] = useState(false);
-    const urlParams = new URLSearchParams(window.location.search);
+    const location = (window !== undefined) ? window.location.search: '';
+    const urlParams = new URLSearchParams(location);
     const value = urlParams?.get('value');
     const [pagingParams, setPagingParams] = useState<PagingRequest>({
         PageNumber: 1,
@@ -53,7 +54,7 @@ export default function Search() {
                 })
             }
         });
-    }, [pagingParams, filter.firstChar, isSubmitFilter]);
+    }, [filter.firstChar, isSubmitFilter]);
 
     return (
         <>

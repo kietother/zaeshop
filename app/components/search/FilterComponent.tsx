@@ -54,12 +54,15 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
         const updatedYears = selectedYears.includes(year)
             ? selectedYears.filter((x: any) => x !== year)
             : [...selectedYears, year];
-        console.log(updatedYears)
         setFilter({ ...filter, year: updatedYears });
     };
 
     const handleStatusChange = (status: boolean) => {
         setFilter({ ...filter, status: status });
+    };
+
+    const handleSortChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPagingParams({ ...pagingParams, SortColumn: e.target.id, SortDirection: 'desc' })
     };
 
     useEffect(() => {
@@ -189,77 +192,81 @@ export function FilterComponent({ pagingParams, setPagingParams, filter, setFilt
                             </ul>
                         </li>
                         <li>
-                            <a href="#" className="anime-btn btn-dark dropdown-toggle" id="rating" data-bs-toggle="dropdown"
-                                data-bs-auto-close="outside" aria-expanded="false">
-                                 {t('rating')} <span><i className="fa fa-chevron-down"></i></span>
-                            </a>
-                            <ul className="dropdown-menu" aria-labelledby="rating">
+                            <ul className="dropdown-menu" aria-labelledby="status">
                                 <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="rating1" />
-                                        <label className="custom-control-label" htmlFor="rating1">4-5 {t('stars')}</label>
+                                    <div className="custom-control custom-radio">
+                                        <input
+                                            type="radio"
+                                            className="custom-control-input"
+                                            id="status2"
+                                            checked={filter.status === false}
+                                            onChange={() => handleStatusChange(false)}
+                                        />
+                                        <label className="custom-control-label" htmlFor="status2">
+                                            {t('releasing')}
+                                        </label>
                                     </div>
                                 </li>
                                 <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="rating2" />
-                                        <label className="custom-control-label" htmlFor="rating2">3-4 {t('stars')}</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="rating3" />
-                                        <label className="custom-control-label" htmlFor="rating3">2-3 {t('stars')}</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="rating4" />
-                                        <label className="custom-control-label" htmlFor="rating4">1-2 {t('stars')}</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="rating5" />
-                                        <label className="custom-control-label" htmlFor="rating5">0-1 {t('star')}</label>
+                                    <div className="custom-control custom-radio">
+                                        <input
+                                            type="radio"
+                                            className="custom-control-input"
+                                            id="status3"
+                                            checked={filter.status === true}
+                                            onChange={() => handleStatusChange(true)}
+                                        />
+                                        <label className="custom-control-label" htmlFor="status3">
+                                            {t('completed')}
+                                        </label>
                                     </div>
                                 </li>
                             </ul>
-                        </li>
-                        <li>
                             <a href="#" className="anime-btn btn-dark dropdown-toggle" id="sort-by" data-bs-toggle="dropdown"
                                 data-bs-auto-close="outside" aria-expanded="false">
                                 {t('sort_by')} <span><i className="fa fa-chevron-down"></i></span>
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="sort-by">
                                 <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="sort1" />
-                                        <label className="custom-control-label" htmlFor="sort1">{t('recently_updated')}</label>
+                                    <div className="custom-control custom-radio">
+                                        <input
+                                            type="radio"
+                                            className="custom-control-input"
+                                            id="updatedOnUtc"
+                                            checked={pagingParams.SortColumn == 'updatedOnUtc'}
+                                            onChange={handleSortChange}
+                                        />
+                                        <label className="custom-control-label" htmlFor="updatedOnUtc">
+                                            {t('recently_updated')}
+                                        </label>
                                     </div>
                                 </li>
                                 <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="sort2" />
-                                        <label className="custom-control-label" htmlFor="sort2">{t('release_date')}</label>
+                                    <div className="custom-control custom-radio">
+                                        <input
+                                            type="radio"
+                                            className="custom-control-input"
+                                            id="createdOnUtc"
+                                            checked={pagingParams.SortColumn == 'createdOnUtc'}
+                                            onChange={handleSortChange}
+                                        />
+                                        <label className="custom-control-label" htmlFor="createdOnUtc">
+                                            {t('release_date')}
+                                        </label>
                                     </div>
                                 </li>
                                 <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="sort4" />
-                                        <label className="custom-control-label" htmlFor="sort4">{t('rating')}</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="sort5" />
-                                        <label className="custom-control-label" htmlFor="sort5">{t('most_view')}</label>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="sort6" />
-                                        <label className="custom-control-label" htmlFor="sort6">{t('most_popular')}</label>
+                                    <div className="custom-control custom-radio">
+                                        <input
+                                            type="radio"
+                                            className="custom-control-input"
+                                            id="views"
+                                            checked={pagingParams.SortColumn == 'views'}
+                                            onChange={handleSortChange}
+                                        />
+                                        <label className="custom-control-label" htmlFor="views">
+                                            {t('most_view')}
+                                        </label>
                                     </div>
                                 </li>
                             </ul>

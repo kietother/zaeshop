@@ -51,6 +51,7 @@ export default async function Page() {
                                     <br />
                                     <p className={getUserNameClass(roleUser)}>{session.user?.email?.split('@')[0]}</p>
                                     <p className={"pb-3 " + getUserNameClass(roleUser)}>{session.user?.email}</p>
+                                    <br />
                                     <p className={"user-level " + getUserNameClass(roleUser)}>{t('level')}: Base</p>
                                     <div className="progress-container">
                                         {getProgressBar(roleUser, 70)}
