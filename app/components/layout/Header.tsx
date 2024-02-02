@@ -14,6 +14,10 @@ const DynamicLanguageSwitcher = dynamic(() => import('./LanguageSwitcher'), {
     ssr: false
 })
 
+const DynamicSearchHeader = dynamic(() => import('./SearchHeader'), {
+    ssr: false
+});
+
 export default async function Header() {
     const session = await getServerSession(authOptions);
     const isLogined = !!session;
@@ -111,25 +115,7 @@ export default async function Header() {
                                 <DynamicLanguageSwitcher locale={locale} />
                             </li>
                         </ul>
-                        <form action="#">
-                            <div className="input-group form-group header-search-box">
-                                <a
-                                    className="input-group-text anime-btn"
-                                    type="button"
-                                    href={`/search?value=`}
-                                    id="searchButton"
-                                >
-                                    <i className="fal fa-search" />
-                                </a>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    name="query"
-                                    required={true}
-                                    placeholder={t('search')}
-                                />
-                            </div>
-                        </form>
+                        <DynamicSearchHeader />
                         {!isLogined ? (
                             <div className="d-flex right-nav">
                                 <a href="/login" className="anime-btn btn-dark">

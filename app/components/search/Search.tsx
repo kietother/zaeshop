@@ -22,11 +22,13 @@ export default function Search() {
     const [albums, setAlbums] = useState();
     const [pagingCount, setPagingCount] = useState({});
     const [isSubmitFilter, setIsSubmitFilter] = useState(false);
+    const urlParams = new URLSearchParams(window.location.search);
+    const value = urlParams?.get('value');
     const [pagingParams, setPagingParams] = useState<PagingRequest>({
         PageNumber: 1,
         PageSize: 12,
-        SearchTerm: '',
-        SortColumn: '',
+        SearchTerm: value ? value: '',
+        SortColumn: value ? 'title': '',
         SortDirection: 'asc'
     });
     const [filter, setFilter] = useState({
