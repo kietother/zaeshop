@@ -10,7 +10,7 @@ namespace Portal.API.Extensions
         {
             bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
             return (!isDeployed && (context.Host.Contains("localhost") || context.Host.Contains("127.0.0.1")))
-                || context.Host.Contains(CommonHelper.GetServiceUrl(EServiceHost.Portal), StringComparison.OrdinalIgnoreCase);
+                || CommonHelper.GetServiceUrl(EServiceHost.Portal).Contains(context.Host, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
