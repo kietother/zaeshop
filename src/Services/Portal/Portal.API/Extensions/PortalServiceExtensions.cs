@@ -8,6 +8,7 @@ using Common.Interfaces.Messaging;
 using Common.Models.Redis;
 using MassTransit;
 using Microsoft.Extensions.Caching.Distributed;
+using Portal.API.Hubs;
 using Portal.Domain.Interfaces.External;
 using Portal.Domain.Interfaces.Infrastructure;
 using Portal.Domain.Interfaces.Messaging;
@@ -67,6 +68,7 @@ public static class PortalServiceExtensions
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IAmazonS3Service, AmazonS3Service>();
+        services.AddScoped<IPortalHubService, PortalHubService>();
         return services;
     }
 }
