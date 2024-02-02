@@ -2,6 +2,7 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { getTranslations } from 'next-intl/server';
+import { getEnumValueFromString, getProgressBar, getRoleBadge, getUserNameClass } from "@/app/utils/HelperFunctions";
 
 export default async function Page() {
     const t = await getTranslations('profile');
@@ -9,7 +10,7 @@ export default async function Page() {
     if (!session) {
         return redirect('/login');
     }
-
+    const roleUser = getEnumValueFromString((session.user?.token?.roles ? session.user.token.roles : []).join(','));
     return (
         <>
             {/*=====================================*/}
@@ -40,14 +41,19 @@ export default async function Page() {
                                     </div>
                                 </div>
                                 <div className="profile-seting col-lg-8 col-sm-6 col-12">
-                                    <h5>{session.user?.name}</h5>
-                                    <p>{session.user?.email?.split('@')[0]}</p>
-                                    <p className="pb-3">{session.user?.email}</p>
-                                    <p className="user-level">{t('level')}: Base</p>
-                                    <div className="progress-container">
-                                        <div className="progress-bar progress-bar-rgb-s-premium" style={{ width: '78%' }}>
-                                            78%
+                                    <div className="user-name-profile">
+                                        <h5 className={getUserNameClass(roleUser)}>{session.user?.name}
+                                        </h5>
+                                        <div className="profile-tag">
+                                            {getRoleBadge(roleUser)}
                                         </div>
+                                    </div>
+                                    <br />
+                                    <p className={getUserNameClass(roleUser)}>{session.user?.email?.split('@')[0]}</p>
+                                    <p className={"pb-3 " + getUserNameClass(roleUser)}>{session.user?.email}</p>
+                                    <p className={"user-level " + getUserNameClass(roleUser)}>{t('level')}: Base</p>
+                                    <div className="progress-container">
+                                        {getProgressBar(roleUser, 70)}
                                     </div>
                                     <a
                                         href="#"
@@ -59,19 +65,19 @@ export default async function Page() {
                             </div>
                         </div>
                         <div className="col-lg-3 col-sm-12 col-12">
-                        <div className="profile-link bg-color-black">
-                            <a data-hover-text="Hello" className="user-level">
-                                <p className="user-level">{t('level_list')}</p>
-                                <div className="hover-text level-step">Base
-                                    <hr /> SSJ1
-                                    <hr /> SSJ2
-                                    <hr /> SSJ3
-                                    <hr /> GOD
-                                    <hr /> BLUE
-                                    <hr /> UI
-                                    <hr /> MUI
-                                </div>
-                            </a>
+                            <div className="profile-link bg-color-black">
+                                <a data-hover-text="Hello" className="user-level">
+                                    <p className="user-level">{t('level_list')}</p>
+                                    <div className="hover-text level-step">Base
+                                        <hr /> SSJ1
+                                        <hr /> SSJ2
+                                        <hr /> SSJ3
+                                        <hr /> GOD
+                                        <hr /> BLUE
+                                        <hr /> UI
+                                        <hr /> MUI
+                                    </div>
+                                </a>
                             </div>
                         </div>
                         <div className="col-lg-3 offset-lg-0 col-sm-8 offset-sm-2 col-12">

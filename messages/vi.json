@@ -10,7 +10,7 @@
         "top_month": "Theo tháng",
         "top_day": "Theo ngày",
         "top_follow": "Lượng theo dõi",
-        "explore": "Duyệt",
+        "explore": "Khám phá",
         "genre": "Thể loại",
         "manga": "Truyện Nhật",
         "manhwa": "Truyện Hàn Xẻng",
@@ -37,7 +37,13 @@
         "release_date": "Ngày ra mắt",
         "most_view": "Xem nhiều nhất",
         "most_popular": "Phổ biến nhất",
-        "filter_now": "Lọc ngay"
+        "filter_now": "Lọc ngay",
+        "top_year": "Top năm",
+        "top_month": "Top tháng",
+        "top_day": "Top ngày",
+        "top_all": "Top Tổng",
+        "top_follow": "Top theo dõi",
+        "views": "Lượt xem"
     },
     "profile":{
         "profile": "Hồ sơ cá nhân",

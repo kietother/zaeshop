@@ -82,7 +82,7 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
         setPagingParams({ ...pagingParams, pageNumber: page });
         scrollUpByPercentage(80);
     };
-    
+
     const handlePrevClick = () => {
         const prevPage = pagingParams.pageNumber - 1;
         if (prevPage >= 1) {
@@ -171,6 +171,35 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
                                     )
                                 }
                             </div>
+                            <br />
+                            {collectionId &&
+                                <div className="d-flex justify-content-between mb-4">
+                                    <div className="left">
+                                        <a
+                                            href="#"
+                                            className="anime-btn btn-dark border-change dropdown-toggle"
+                                            id="country"
+                                            data-bs-toggle="dropdown"
+                                            data-bs-auto-close="outside"
+                                            aria-expanded="false"
+                                        >
+                                            All Comment
+                                            <span className='chevron-down'>
+                                                <i className="fa fa-chevron-down" />
+                                            </span>
+                                        </a>
+                                        <ul className="dropdown-menu" aria-labelledby="country">
+                                            <div className='chapter-list-content'>
+                                                <li>
+                                                    <a className='page-link'>All Comment</a>
+                                                    <a className='page-link'> Chapter Comment</a>
+                                                </li>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            }
+
                             <div className="site-comment">
                                 {loading && <div className="spinner-border text-primary" role="status"></div>}
                                 {comments?.map((cmt: any, index: number) => (

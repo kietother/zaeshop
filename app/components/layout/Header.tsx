@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import dynamic from 'next/dynamic'
 import { getTranslations, getLocale } from 'next-intl/server';
 import Initial from "./Initial";
-import Logo from '@/public/assets/media/logo.png'; 
+import Logo from '@/public/assets/media/logo.png';
 import Image from "next/image";
 
 const DynamicLogoutButton = dynamic(() => import('./LogoutButton'), {
@@ -14,10 +14,13 @@ const DynamicLanguageSwitcher = dynamic(() => import('./LanguageSwitcher'), {
     ssr: false
 })
 
+const DynamicSearchHeader = dynamic(() => import('./SearchHeader'), {
+    ssr: false
+});
+
 export default async function Header() {
     const session = await getServerSession(authOptions);
     const isLogined = !!session;
-
     const t = await getTranslations('header');
     const locale = await getLocale();
 
@@ -56,18 +59,18 @@ export default async function Header() {
                                 </a>
                                 <ul className="dropdown-menu" aria-labelledby="ranking">
                                     <li>
-                                        <a href="#" className="active">
+                                        <a href="/top-page?typePage=" className="active">
                                             {t('top_all')}
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#">{t('top_year')}</a>
+                                        <a href="/top-page?typePage=year">{t('top_year')}</a>
                                     </li>
                                     <li>
-                                        <a href="#">{t('top_month')}</a>
+                                        <a href="/top-page?typePage=month">{t('top_month')}</a>
                                     </li>
                                     <li>
-                                        <a href="#">{t('top_day')}</a>
+                                        <a href="/top-page?typePage=day">{t('top_day')}</a>
                                     </li>
                                     <li>
                                         <a href="#">{t('top_follow')}</a>
@@ -112,20 +115,7 @@ export default async function Header() {
                                 <DynamicLanguageSwitcher locale={locale} />
                             </li>
                         </ul>
-                        <form action="#">
-                            <div className="input-group form-group header-search-box">
-                                <button className="input-group-text anime-btn" type="submit">
-                                    <i className="fal fa-search" />
-                                </button>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    name="query"
-                                    required={true}
-                                    placeholder={t('search')}
-                                />
-                            </div>
-                        </form>
+                        <DynamicSearchHeader />
                         {!isLogined ? (
                             <div className="d-flex right-nav">
                                 <a href="/login" className="anime-btn btn-dark">
