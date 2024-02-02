@@ -61,13 +61,13 @@ export default async function Header() {
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#">{t('top_year')}</a>
+                                        <a href="/top-page?typePage=year">{t('top_year')}</a>
                                     </li>
                                     <li>
-                                        <a href="#">{t('top_month')}</a>
+                                        <a href="/top-page?typePage=month">{t('top_month')}</a>
                                     </li>
                                     <li>
-                                        <a href="#">{t('top_day')}</a>
+                                        <a href="/top-page?typePage=day">{t('top_day')}</a>
                                     </li>
                                     <li>
                                         <a href="#">{t('top_follow')}</a>

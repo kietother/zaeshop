@@ -1,12 +1,14 @@
 "use client";
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslations } from "next-intl";
 
 export default function ComicSearchResult({ albums, pagingCount, setPagingParams, pagingParams }: { albums: any, pagingCount: any, setPagingParams: any, pagingParams: any }) {
     const [loading, setLoading] = useState(false);
     const pageSize = pagingParams.PageSize;
     const totalAlbums = pagingCount.pageLength;
     const totalPages = Math.ceil(totalAlbums / pageSize);
-    
+    const t = useTranslations('search');
+
     useEffect(() => {
         setLoading(false);
         if (albums == null)
@@ -79,8 +81,7 @@ export default function ComicSearchResult({ albums, pagingCount, setPagingParams
                                             <div className="p-0 col-9">
                                                 <div className="anime-blog">
                                                     <p>{album.title}</p>
-                                                    <p className="text-box">VIE 1</p>
-                                                    <p className="text-box">ENG 1</p>
+                                                    <p className="text">{t('views')}: {album.viewByTopType}</p>
                                                 </div>
                                             </div>
                                             <div className="p-0 col-1 show-type">

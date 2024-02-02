@@ -34,8 +34,8 @@ export default function RootLayout({
   const messages = useMessages();
 
   return (
-    <html lang={locale}>
-      <body className={inter.className + " sticky-header"}>
+    <html lang={locale} className='block-horizal'>
+      <body className={inter.className + " sticky-header block-horizal"}>
         {/* Back To Top Start */}
         <a id="backto-top" className="back-to-top">
           <i className="fas fa-angle-double-up" />

@@ -30,6 +30,24 @@ export const getRoleBadge = (roleType: any): React.ReactNode => {
     return null;
 };
 
+export const getProgressBar = (roleType: any, percent: any): React.ReactNode => {
+    if (roleType === ERoleType.UserSuperPremium)
+        return (<div className="progress-bar progress-bar-rgb-s-premium" style={{ width: `${percent}%` }}>
+            {percent} %
+        </div>);
+
+    if (roleType === ERoleType.UserPremium)
+        return (<div className="progress-bar progress-bar-rgb-premium" style={{ width: `${percent}%` }}>
+            {percent} %
+        </div>);
+
+    if (roleType === ERoleType.User)
+        return (<div className="progress-bar progress-bar-rgb" style={{ width: `${percent}%` }}>
+            {percent} %
+        </div>);
+    return null;
+};
+
 export const getUserNameClass = (roleType: any): string => {
     if (roleType === ERoleType.UserSuperPremium) return "s-glitter-text";
     if (roleType === ERoleType.UserPremium) return "glitter-text";
@@ -42,3 +60,21 @@ export const getHoverTextValue = (roleType: any): string => {
     if (roleType === ERoleType.User) return "70%";
     return "";
 };
+
+export const getEnumValueFromString = (roleString: any): ERoleType | undefined => {
+    console.log(roleString)
+    switch (roleString) {
+        case "User":
+            return ERoleType.User;
+        case "Partner":
+            return ERoleType.Partner;
+        case "Administrator":
+            return ERoleType.Administrator;
+        case "User Premium":
+            return ERoleType.UserPremium;
+        case "User Super Premium":
+            return ERoleType.UserSuperPremium;
+        default:
+            return undefined;
+    }
+}
