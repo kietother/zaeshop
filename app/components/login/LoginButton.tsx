@@ -24,13 +24,26 @@ export default function LoginButton() {
     return (
         <>
             {isLoading && <div id="overlay-loading"></div>}
-            {isFromMessenger ? (
+            {!isFromMessenger ? (
+            <>
                 <button className="hide-link" onClick={onSignIn}>
                     <Image src={GoogleLogo} alt="google" priority width={52} height={33} />{t('continue_with_google')}
                 </button>
+                <div className="custom-control custom-checkbox">
+                    <input
+                        type="checkbox"
+                        className="custom-control-input"
+                        id="check"
+                    />
+                    <label className="custom-control-label" htmlFor="check">
+                        {t('policy')}
+                    </label>
+                </div> 
+            </>
             ) : (
                 <p>{t('is_messenger')}</p>
-            )}       
+            )}     
+             
         </>
     );
 }
