@@ -16,6 +16,10 @@ public class User : Entity, IAggregateRoot
     public string? Avatar { get; set; }
     public ERoleType RoleType { get; set; }
 
+    public int? LevelId { get; set; }
+    public int CurrentExp { get; set; }
+    public int NextLevelExp { get; set; }
+
     [JsonIgnore]
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
@@ -27,4 +31,10 @@ public class User : Entity, IAggregateRoot
 
     [JsonIgnore]
     public virtual ICollection<Following> Followings { get; set; } = new List<Following>();
+
+    [JsonIgnore]
+    public virtual Level? Level { get; set; }
+
+    [JsonIgnore]
+    public virtual ICollection<UserLevel> UserLevels { get; set; } = new List<UserLevel>();
 }
