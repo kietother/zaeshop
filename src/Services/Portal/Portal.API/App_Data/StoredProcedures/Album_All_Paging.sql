@@ -117,7 +117,8 @@ BEGIN
 			   a.FriendlyName,
 			   a.Views,
 			   c.Title AS LastCollectionTitle,
-			   ta.ViewByTopType
+			   ta.ViewByTopType,
+			   a.Tags
         FROM dbo.Album a
 			LEFT JOIN #topAlbums ta ON ta.AlbumId = a.Id
 			LEFT JOIN dbo.AlbumAlertMessage aam ON aam.Id = a.AlbumAlertMessageId
@@ -131,7 +132,8 @@ BEGIN
             ) c
 		WHERE (ISNULL(@searchTerm, '') = '' OR 
 			(a.Title LIKE '' + @searchTerm + '%') OR
-			(a.Description LIKE '' + @searchTerm + '%'))
+			(a.Description LIKE '' + @searchTerm + '%') OR
+			(a.Tags LIKE '%' + @searchTerm + '%'))
 			AND (ISNULL(@firstChar, '') = '' OR
 			(a.FriendlyName LIKE @firstChar + '%'))
 			AND (ISNULL(@genre, '') = '' OR
@@ -154,7 +156,8 @@ BEGIN
 			   a.FriendlyName,
 			   a.Views,
 			   c.Title,
-			   ta.ViewByTopType
+			   ta.ViewByTopType,
+			   a.Tags
 	)
     SELECT COUNT_BIG(1) AS RowNum,
 		 0 Id,
@@ -174,6 +177,7 @@ BEGIN
 		 NULL Views,
 		 NULL LastCollectionTitle,
 		 0 ViewByTopType,
+		 NULL Tags,
 		 1 AS IsTotalRecord
     FROM FilteredData
     UNION
