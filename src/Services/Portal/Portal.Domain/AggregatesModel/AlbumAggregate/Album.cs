@@ -41,6 +41,9 @@ namespace Portal.Domain.AggregatesModel.AlbumAggregate
         public virtual ICollection<Collection> Collections { get; set; } = new List<Collection>();
 
         [JsonIgnore]
+        public virtual ICollection<Following> Followers { get; set; } = new List<Following>();
+
+        [JsonIgnore]
         public virtual ICollection<AlbumContentType> AlbumContentTypes { get; set; } = new List<AlbumContentType>();
 
         [JsonIgnore]

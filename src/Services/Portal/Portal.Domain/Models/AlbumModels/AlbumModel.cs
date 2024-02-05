@@ -63,6 +63,7 @@ namespace Portal.Domain.Models.AlbumModels
         public ulong? Views { get; set; }
         public ulong? ViewByTopType { get; set; }
         public string? LastCollectionTitle { get; set; }
+        public string? Tags { get; set; }
 
         [JsonIgnore]
         public long RowNum { get; set; }

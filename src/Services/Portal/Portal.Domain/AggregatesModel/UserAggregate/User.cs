@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
 using Portal.Domain.Enums;
 using Portal.Domain.SeedWork;
@@ -23,4 +24,7 @@ public class User : Entity, IAggregateRoot
 
     [JsonIgnore]
     public virtual ICollection<UserConnection> UserConnections { get; set; } = new List<UserConnection>();
+
+    [JsonIgnore]
+    public virtual ICollection<Following> Followings { get; set; } = new List<Following>();
 }
