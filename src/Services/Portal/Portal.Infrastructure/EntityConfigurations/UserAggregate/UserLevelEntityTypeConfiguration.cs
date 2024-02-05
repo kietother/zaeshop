@@ -7,7 +7,7 @@ namespace Portal.Infrastructure.EntityConfigurations.UserAggregate
     {
         public void Configure(EntityTypeBuilder<UserLevel> builder)
         {
-            builder.ToTable(nameof(Level));
+            builder.ToTable(nameof(UserLevel));
             builder.HasKey(x => x.Id);
 
             builder.HasOne(x => x.Level).WithMany(y => y.UserLevels).HasForeignKey(z => z.LevelId);
