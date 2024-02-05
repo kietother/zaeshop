@@ -74,7 +74,7 @@ BEGIN
             INSERT INTO #topAlbums
 			select
 				a.Id as [AlbumId],
-				SUM(IIF(cv.Date >= @startDateOfMonth and cv.Date < @endDate, cv.[View], 0)) as [ViewByTopType]
+				SUM(IIF(cv.Date >= @startDateOfYear and cv.Date < @endDate, cv.[View], 0)) as [ViewByTopType]
 			from dbo.Album a
 				join dbo.Collection c on c.AlbumId = a.Id
 				left join dbo.CollectionView cv on cv.CollectionId = c.Id
