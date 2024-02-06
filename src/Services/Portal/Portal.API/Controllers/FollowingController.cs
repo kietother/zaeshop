@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.AlbumModels;
-using Microsoft.AspNetCore.Identity;
+using Common.Models;
+using Portal.Infrastructure.Implements.Business.Services;
 
 namespace Portal.API.Controllers
 {
@@ -18,6 +19,18 @@ namespace Portal.API.Controllers
             _followingService = followingService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetStatusFollowing([FromQuery] FollowingRequestModel model)
+        {
+            model.UserId = GetIdentityUserIdByToken();
+            var response = await _followingService.GetStatusFollowAsync(model);
+
+            if (!response.IsSuccess)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(FollowingRequestModel model)
         {
@@ -30,10 +43,24 @@ namespace Portal.API.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromQuery] FollowingRequestModel model)
         {
-            var response = await _followingService.DeleteAsync(id);
+            model.UserId = GetIdentityUserIdByToken();
+            var response = await _followingService.DeleteAsync(model);
+
+            if (!response.IsSuccess)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetPagingAsync([FromQuery] PagingCommonRequest request)
+        {
+            var filter = new FollowingRequestModel();
+            filter.UserId = GetIdentityUserIdByToken();
+            var response = await _followingService.GetPagingAsync(request, filter);
 
             if (!response.IsSuccess)
                 return BadRequest(response);
