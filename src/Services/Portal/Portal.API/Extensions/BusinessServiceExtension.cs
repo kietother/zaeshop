@@ -15,6 +15,7 @@ namespace Portal.API.Extensions
             services.AddScoped<IContentItemService, ContentItemService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IFollowingService, FollowingService>();
+            services.AddScoped<ILevelService, LevelService>();
 
             return services;
         }
