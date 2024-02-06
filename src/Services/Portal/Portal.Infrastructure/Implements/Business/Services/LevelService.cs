@@ -191,16 +191,10 @@ namespace Portal.Infrastructure.Implements.Business.Services
                         // If exists then skip, other 30 minutes can be again stored
                         bool isValidNextChapter = false;
 
-                        var levelBuildRedisModel = value.Find(o => o.CollectionId == model.CollectionId && !o.CommentId.HasValue && (
-                            o.UserId == user?.Id || o.IpAddress == model.IpAddress || o.SessionId == model.SessionId
-                        ));
+                        var levelBuildRedisModel = value.Find(o => o.CollectionId == model.CollectionId && !o.CommentId.HasValue && o.UserId == user?.Id);
 
                         var lastNextChapterEvent = value
-                            .Where(o => !o.CommentId.HasValue && (
-                                o.UserId == user?.Id ||
-                                o.IpAddress == model.IpAddress ||
-                                o.SessionId == model.SessionId)
-                            )
+                            .Where(o => !o.CommentId.HasValue && o.UserId == user?.Id)
                             .OrderByDescending(o => o.CreatedOnUtc)
                             .FirstOrDefault()?.CreatedOnUtc;
 
@@ -389,9 +383,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                     var user = users.Find(o => o.Id == item.UserId);
                     if (user == null) continue;
 
-                    var userLevel = userLevels.Find(x =>
-                        x.UserId == item.UserId || x.IpAddress == item.IpAddress || x.SessionId == item.SessionId
-                    );
+                    var userLevel = userLevels.Find(x => x.UserId == item.UserId);
 
                     if (userLevel == null)
                     {

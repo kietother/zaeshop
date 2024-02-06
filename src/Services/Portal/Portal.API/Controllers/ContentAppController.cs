@@ -8,6 +8,7 @@ using Portal.API.Attributes;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.CollectionModels;
+using Portal.Domain.Models.LevelModels;
 
 namespace Portal.API.Controllers
 {
@@ -30,8 +31,10 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("comics/{comicFriendlyName}/contents/{contentFriendlyName}")]
-        public async Task<IActionResult> GetByIdAsync(string comicFriendlyName, string contentFriendlyName)
+        public async Task<IActionResult> GetByIdAsync([FromRoute] string comicFriendlyName, [FromRoute] string contentFriendlyName, [FromQuery] int? previousCollectionId = null)
         {
+            var identityUserId = GetIdentityUserIdByToken();
+
             #region Using cache if exists
             var value = await _redisService.GetAsync<ContentAppModel>(string.Format(Const.RedisCacheKey.ComicContent, comicFriendlyName, contentFriendlyName));
             if (value != null)
@@ -40,11 +43,24 @@ namespace Portal.API.Controllers
                 _backgroundJobClient.Enqueue<ICollectionService>(x => x.AddViewFromUserToRedisAsync(new CollectionViewUserBuildModel
                 {
                     CollectionId = value!.Id,
-                    IdentityUserId = User.FindFirstValue("id"),
+                    IdentityUserId = identityUserId,
                     AtViewedOnUtc = DateTime.UtcNow,
                     IpAddress = IpAddress(),
                     SessionId = HttpContext.Session.Id
                 }));
+
+                // User next chap from previous chapter
+                if (previousCollectionId.HasValue && !string.IsNullOrEmpty(identityUserId))
+                {
+                    _backgroundJobClient.Enqueue<ILevelService>(x => x.AddExperienceFromUserToRedisAsync(new LevelBuildRedisRequestModel
+                    {
+                        IdentityUserId = identityUserId,
+                        CollectionId = previousCollectionId.Value,
+                        CreatedOnUtc = DateTime.UtcNow,
+                        IpAddress = IpAddress(),
+                        SessionId = HttpContext.Session.Id
+                    }));
+                }
 
                 return Ok(new ServiceResponse<ContentAppModel>(value));
             }
@@ -77,6 +93,19 @@ namespace Portal.API.Controllers
                 IpAddress = IpAddress(),
                 SessionId = HttpContext.Session.Id
             }));
+
+            // User next chap from previous chapter
+            if (previousCollectionId.HasValue && !string.IsNullOrEmpty(identityUserId))
+            {
+                _backgroundJobClient.Enqueue<ILevelService>(x => x.AddExperienceFromUserToRedisAsync(new LevelBuildRedisRequestModel
+                {
+                    IdentityUserId = identityUserId,
+                    CollectionId = previousCollectionId.Value,
+                    CreatedOnUtc = DateTime.UtcNow,
+                    IpAddress = IpAddress(),
+                    SessionId = HttpContext.Session.Id
+                }));
+            }
             #endregion
 
             return Ok(result);
