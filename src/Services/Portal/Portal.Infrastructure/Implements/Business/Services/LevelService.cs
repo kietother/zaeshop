@@ -261,17 +261,12 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
                         var levelBuildRedisModel = value.Find(o => o.CommentId == model.CommentId && (
                             o.AlbumId == album?.Id || o.CollectionId == collection?.Id
-                        ) &&
-                        (
-                            o.UserId == user?.Id || o.IpAddress == model.IpAddress || o.SessionId == model.SessionId
-                        ));
+                        ) && o.UserId == user?.Id);
 
                         var lastNextChapterEvent = value
                             .Where(o => o.CommentId.HasValue && (
                                 o.AlbumId == album?.Id || o.CollectionId == collection?.Id
-                            ) && (o.UserId == user?.Id ||
-                                o.IpAddress == model.IpAddress ||
-                                o.SessionId == model.SessionId))
+                            ) && o.UserId == user?.Id)
                             .OrderByDescending(o => o.CreatedOnUtc)
                             .FirstOrDefault()?.CreatedOnUtc;
 
@@ -391,6 +386,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                         {
                             new LevelAdditionalInformation
                             {
+                                RoleType = user.RoleType,
                                 AlbumId = item.AlbumId,
                                 CollectionId = item.CollectionId,
                                 CommentId = item.CommentId,
@@ -426,6 +422,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                                 {
                                     new LevelAdditionalInformation
                                     {
+                                        RoleType = user.RoleType,
                                         AlbumId = item.AlbumId,
                                         CollectionId = item.CollectionId,
                                         CommentId = item.CommentId,
@@ -446,6 +443,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                                     {
                                         additionalInformations.Add(new LevelAdditionalInformation
                                         {
+                                            RoleType = user.RoleType,
                                             AlbumId = item.AlbumId,
                                             CollectionId = item.CollectionId,
                                             CommentId = item.CommentId,
@@ -460,17 +458,18 @@ namespace Portal.Infrastructure.Implements.Business.Services
                                 catch
                                 {
                                     var additionalInformations = new List<LevelAdditionalInformation>
-                                {
-                                    new LevelAdditionalInformation
                                     {
-                                        AlbumId = item.AlbumId,
-                                        CollectionId = item.CollectionId,
-                                        CommentId = item.CommentId,
-                                        IpAddress = item.IpAddress,
-                                        SessionId = item.SessionId,
-                                        CreatedOnUtc = DateTime.UtcNow
-                                    }
-                                };
+                                       new LevelAdditionalInformation
+                                       {
+                                           RoleType = user.RoleType,
+                                           AlbumId = item.AlbumId,
+                                           CollectionId = item.CollectionId,
+                                           CommentId = item.CommentId,
+                                           IpAddress = item.IpAddress,
+                                           SessionId = item.SessionId,
+                                           CreatedOnUtc = DateTime.UtcNow
+                                       }
+                                    };
                                     userLevel.AdditionalInformation = JsonSerializationHelper.Serialize(additionalInformations);
                                 }
                             }

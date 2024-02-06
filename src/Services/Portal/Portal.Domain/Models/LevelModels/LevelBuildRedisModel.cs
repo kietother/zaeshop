@@ -1,3 +1,5 @@
+using Portal.Domain.Enums;
+
 namespace Portal.Domain.Models.LevelModels
 {
     public class LevelBuildRedisModel
@@ -32,6 +34,8 @@ namespace Portal.Domain.Models.LevelModels
 
     public class LevelAdditionalInformation
     {
+        public ERoleType RoleType { get; set; }
+
         public int? AlbumId { get; set; }
         public int? CollectionId { get; set; }
         public int? CommentId { get; set; }
