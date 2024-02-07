@@ -34,7 +34,7 @@ namespace Portal.API.Attributes.Business
             var previousCollectionIdString = context.HttpContext.Request.Query["previousCollectionId"].ToString();
             int? previousCollectionId = null;
             bool isSucess = int.TryParse(previousCollectionIdString, out int output);
-            if (!isSucess)
+            if (!string.IsNullOrEmpty(previousCollectionIdString) && !isSucess)
             {
                 context.Result = new ContentResult
                 {
@@ -44,7 +44,7 @@ namespace Portal.API.Attributes.Business
                 };
                 return;
             }
-            else
+            else if (!string.IsNullOrEmpty(previousCollectionIdString))
             {
                 previousCollectionId = output;
             }
