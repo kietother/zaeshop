@@ -1,7 +1,10 @@
+using System.Security.Claims;
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.CommentModels;
+using Portal.Domain.Models.LevelModels;
 
 namespace Portal.API.Controllers
 {
@@ -10,10 +13,14 @@ namespace Portal.API.Controllers
     public class CommentController : BaseApiController
     {
         private readonly ICommentService _commentService;
+        private readonly IBackgroundJobClient _backgroundJobClient;
 
-        public CommentController(ICommentService commentService)
+        public CommentController(
+            ICommentService commentService,
+            IBackgroundJobClient backgroundJobClient)
         {
             _commentService = commentService;
+            _backgroundJobClient = backgroundJobClient;
         }
 
         [Authorize]
@@ -27,10 +34,23 @@ namespace Portal.API.Controllers
             }
 
             var response = await _commentService.CreateAsync(model, identityUserId);
-            if (!response.IsSuccess)
+            if (!response.IsSuccess || response.Data == null)
             {
                 return BadRequest(response);
             }
+
+            #region Hangfire Enqueue Background
+            _backgroundJobClient.Enqueue<ILevelService>(x => x.AddExperienceFromUserToRedisAsync(new LevelBuildRedisRequestModel
+            {
+                IdentityUserId = identityUserId,
+                CommentId = response.Data.Id,
+                AlbumId = response.Data.AlbumId,
+                CollectionId = response.Data.CollectionId,
+                CreatedOnUtc = DateTime.UtcNow,
+                IpAddress = IpAddress(),
+                SessionId = HttpContext.Session.Id
+            }));
+            #endregion
 
             return Ok(response);
         }

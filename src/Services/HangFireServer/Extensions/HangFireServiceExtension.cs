@@ -38,6 +38,9 @@ namespace HangFireServer.Extensions
 
             // 10 Minutes to calculate views from redis
             RecurringJob.AddOrUpdate<ICollectionService>(HangfireJobName.CalculateViewsFromRedis, x => x.CalculateViewsFromRedisTaskAsync(), "*/10 * * * *");
+
+            // 30 Minutes to calculate exps from redis
+            RecurringJob.AddOrUpdate<ILevelService>(HangfireJobName.CalculateExperiencesFromRedis, x => x.CalculateExperiencesFromRedisTaskAsync(), "*/30 * * * *");
         }
     }
 }
