@@ -5,6 +5,7 @@ using Common.ValueObjects;
 using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
+using Portal.API.Attributes.Business;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.CollectionModels;
@@ -31,40 +32,10 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("comics/{comicFriendlyName}/contents/{contentFriendlyName}")]
+        [ContentComicRedisCache]
         public async Task<IActionResult> GetByIdAsync([FromRoute] string comicFriendlyName, [FromRoute] string contentFriendlyName, [FromQuery] int? previousCollectionId = null)
         {
             var identityUserId = GetIdentityUserIdByToken();
-
-            #region Using cache if exists
-            var value = await _redisService.GetAsync<ContentAppModel>(string.Format(Const.RedisCacheKey.ComicContent, comicFriendlyName, contentFriendlyName));
-            if (value != null)
-            {
-                // Hangfire
-                _backgroundJobClient.Enqueue<ICollectionService>(x => x.AddViewFromUserToRedisAsync(new CollectionViewUserBuildModel
-                {
-                    CollectionId = value!.Id,
-                    IdentityUserId = identityUserId,
-                    AtViewedOnUtc = DateTime.UtcNow,
-                    IpAddress = IpAddress(),
-                    SessionId = HttpContext.Session.Id
-                }));
-
-                // User next chap from previous chapter
-                if (previousCollectionId.HasValue && !string.IsNullOrEmpty(identityUserId))
-                {
-                    _backgroundJobClient.Enqueue<ILevelService>(x => x.AddExperienceFromUserToRedisAsync(new LevelBuildRedisRequestModel
-                    {
-                        IdentityUserId = identityUserId,
-                        CollectionId = previousCollectionId.Value,
-                        CreatedOnUtc = DateTime.UtcNow,
-                        IpAddress = IpAddress(),
-                        SessionId = HttpContext.Session.Id
-                    }));
-                }
-
-                return Ok(new ServiceResponse<ContentAppModel>(value));
-            }
-            #endregion
             var parameters = new Dictionary<string, object?>
             {
                 { "comicFriendlyName", comicFriendlyName },
@@ -82,7 +53,7 @@ namespace Portal.API.Controllers
             collection.ContentItems = contentItems;
 
             var result = new ServiceResponse<ContentAppModel>(collection);
-            await _redisService.SetAsync(string.Format(Const.RedisCacheKey.ComicContent, comicFriendlyName, contentFriendlyName), result.Data, 5);
+            await _redisService.SetAsync(string.Format(Const.RedisCacheKey.ComicContent, comicFriendlyName, contentFriendlyName), result.Data, 60);
 
             #region Hangfire Enqueue Background
             _backgroundJobClient.Enqueue<ICollectionService>(x => x.AddViewFromUserToRedisAsync(new CollectionViewUserBuildModel

@@ -26,7 +26,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet]
-        [RedisCache(5)]
+        [RedisCache(30)]
         public async Task<IActionResult> GetAsync()
         {
             var comics = await _albumRepository.GetAllAsync();
@@ -65,7 +65,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpGet("{friendlyName}")]
-        [RedisCache(5)]
+        [RedisCache(15)]
         public async Task<IActionResult> GetByIdAsync(string friendlyName)
         {
             var parameters = new Dictionary<string, object?>
