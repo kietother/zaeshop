@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getTranslations } from 'next-intl/server';
 import { getEnumValueFromString, getLevelNameById, getProgressBar, getRoleBadge, getUserNameClass } from "@/app/utils/HelperFunctions";
 import { getProfile } from "@/lib/services/server/users";
+import { getPercentByDivdeTwoNumber } from "@/lib/math/mathHelper";
 
 export default async function Page() {
     const t = await getTranslations('profile');
@@ -57,7 +58,7 @@ export default async function Page() {
                                     <br />
                                     <p className={"user-level " + getUserNameClass(roleUser)}>{t('level')}: {getLevelNameById(userProfile?.levelId)}</p>
                                     <div className="progress-container">
-                                        {getProgressBar(roleUser, Math.ceil((userProfile?.currentExp ?? 0) / (userProfile?.nextLevelExp ?? 1) * 100))}
+                                        {getProgressBar(roleUser, getPercentByDivdeTwoNumber(userProfile?.currentExp, userProfile?.nextLevelExp))}
                                     </div>
                                     <a
                                         href="/upgrade-package"

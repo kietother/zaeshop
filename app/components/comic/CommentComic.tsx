@@ -6,9 +6,10 @@ import { useEffect, useMemo, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ReplyComic from './ReplyComic';
-import { getHoverText, getHoverTextValue, getLevelBadgeClass, getLevelNameById, getRoleBadge, getUserClass, getUserNameClass } from '@/app/utils/HelperFunctions';
+import { getHoverText, getLevelBadgeClass, getLevelNameById, getRoleBadge, getUserClass, getUserNameClass } from '@/app/utils/HelperFunctions';
 import dayjs from "@/lib/dayjs/dayjs-custom";
 import { v4 as uuidv4 } from 'uuid';
+import { getPercentByDivdeTwoNumber } from '@/lib/math/mathHelper';
 
 const editorStyle = {
     width: '100%',
@@ -226,7 +227,7 @@ export default function CommentComic({ comicId, collectionId }: { comicId: any, 
                                             <a data-hover-text={getHoverText(cmt.roleType)} className={getUserClass(cmt.roleType)}>
                                                 <img src={cmt.avatar} alt="" />
                                                 <span className={getLevelBadgeClass(cmt.roleType)}>{getLevelNameById(cmt.levelId)}</span>
-                                                <div className="hover-text">{cmt.currentExp / (cmt.nextLevelExp !== 0 ? cmt.nextLevelExp : 1) * 100}%</div>
+                                                <div className="hover-text">{getPercentByDivdeTwoNumber(cmt.currentExp, cmt.nextLevelExp)}%</div>
                                             </a>
                                         </div>
                                         <div className="col-lg-11 col-10">
