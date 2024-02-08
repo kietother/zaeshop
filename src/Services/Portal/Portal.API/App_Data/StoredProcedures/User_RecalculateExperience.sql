@@ -18,7 +18,9 @@ BEGIN
     select
         u.Id as [UserId],
         u.CurrentExp,
-        SUM(ul.[Exp]) as [EarnedExp]
+        SUM(ul.[Exp]) as [EarnedExp],
+        0 as NewLevelId,
+        0 as NextTargetExpLEvel
     from [User] u
         join [UserLevel] ul on u.Id = ul.UserId
     where EXISTS (SELECT value
@@ -30,7 +32,7 @@ BEGIN
     Update ult
     SET
         ult.NewLevelId = l.Id,
-        ult.NextTargetExpLEvel = l.TargetExp
+        ult.NextTargetExpLEvel = l.NextExp
     FROM #userLevelTemp ult
         JOIN [Level] l on ult.EarnedExp >= l.TargetExp and ult.EarnedExp < l.NextExp
 
