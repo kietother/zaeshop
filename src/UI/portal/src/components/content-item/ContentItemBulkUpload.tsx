@@ -12,6 +12,7 @@ import { bulkUpdateByLocalServer, bulkUpdateContentItems } from "../../services/
 import { useAppDispatch } from "../../store";
 import { getContentItemsAsyncThunk } from "../../store/reducers/ContentItemSlice";
 import { RegexHelper } from "../../utils/regex";
+import parseJsonFromString from "../../utils/json/parseJsonFromString";
 
 type ContentItemBulkUploadProps = {
     id: string | undefined;
@@ -24,6 +25,12 @@ const ContentItemBulkUpload: React.FC<ContentItemBulkUploadProps> = ({ id, conte
     const dispatch = useAppDispatch();
 
     const [files, setFiles] = useState<(ActualFileObject)[]>([]);
+    const [isLazyLoading, setIsLazyLoading] = useState(parseJsonFromString(localStorage.getItem("content_item_lazy_loading")) ?? true);
+
+    const onChangeLazyLoading = () => {
+        setIsLazyLoading(!isLazyLoading);
+        localStorage.setItem("content_item_lazy_loading", JSON.stringify(!isLazyLoading));
+    }
 
     const onUpdateFiles = (filesPondFiles: FilePondFile[]) => {
         const files = filesPondFiles.sort((a, b) => RegexHelper.getNumberByText(a.filename) - RegexHelper.getNumberByText(b.filename)).map(item => item.file);
@@ -225,6 +232,18 @@ const ContentItemBulkUpload: React.FC<ContentItemBulkUploadProps> = ({ id, conte
                 </div>
                 {/*end card-header*/}
                 <div className="card-body">
+                    <div className="form-check form-switch form-switch-primary mb-3">
+                        <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id="customSwitchPrimary"
+                            checked={isLazyLoading}
+                            onChange={() => onChangeLazyLoading()}
+                        />
+                        <label className="form-check-label" htmlFor="customSwitchPrimary">
+                            {t('content_item.lazy_loading_images')}
+                        </label>
+                    </div>
                     <div className="d-grid">
                         <FilePond
                             files={files}
@@ -252,6 +271,7 @@ const ContentItemBulkUpload: React.FC<ContentItemBulkUploadProps> = ({ id, conte
                                     contentItem={contentItems.find(contentItem => contentItem.id === item.id)!}
                                     updateExistItem={updateExistItem}
                                     deleteExistItem={deleteExistItem}
+                                    isLazyLoading={isLazyLoading}
                                 />
                             ))}
                         </ul>

@@ -9,12 +9,14 @@ import classNames from "classnames";
 import { FilePond } from "react-filepond";
 import { ContentItemBulkUploadItemModel } from "../../models/content-item/ContentItemBulkUploadModel";
 import { RegexHelper } from "../../utils/regex";
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 type ContentItemBulkUploadItemProps = {
     contentItem: ContentItemModel;
     contentItemBulkUploadItemModel: ContentItemBulkUploadItemModel;
     updateExistItem: (id: number, isPublic: boolean, file?: ActualFileObject) => Promise<void>;
     deleteExistItem: (id: number) => void;
+    isLazyLoading: boolean;
 }
 
 type ContentItemBlankUploadItemDialogProps = {
@@ -160,7 +162,7 @@ const ContentItemBlankUploadItemDialog: React.FC<ContentItemBlankUploadItemDialo
     );
 }
 
-const ContentItemBlankUploadItem: React.FC<ContentItemBulkUploadItemProps> = ({ contentItem, contentItemBulkUploadItemModel, updateExistItem, deleteExistItem }) => {
+const ContentItemBlankUploadItem: React.FC<ContentItemBulkUploadItemProps> = ({ contentItem, contentItemBulkUploadItemModel, updateExistItem, deleteExistItem, isLazyLoading }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const openModal = () => setIsOpen(true);
@@ -169,7 +171,7 @@ const ContentItemBlankUploadItem: React.FC<ContentItemBulkUploadItemProps> = ({ 
     return (
         <>
             <li className="list-group-item">
-                <LazyLoadImage
+                {isLazyLoading && <LazyLoadImage
                     style={{
                         maxWidth: "100%",
                         height: "auto",
@@ -177,7 +179,17 @@ const ContentItemBlankUploadItem: React.FC<ContentItemBulkUploadItemProps> = ({ 
                     src={contentItemBulkUploadItemModel.base64File ?? contentItem.displayUrl}
                     alt={contentItem.name}
                     className="rounded d-block mx-auto"
-                />
+                />}
+                {!isLazyLoading && <img
+                    style={{
+                        maxWidth: "100%",
+                        height: "auto",
+                    }}
+                    src={contentItemBulkUploadItemModel.base64File ?? contentItem.displayUrl}
+                    alt={contentItem.name}
+                    className="rounded d-block mx-auto"
+                />}
+                
                 <button className="btn"
                     onClick={openModal}>
                     <i className="fa-solid fa-pen text-secondary font-16"></i>
