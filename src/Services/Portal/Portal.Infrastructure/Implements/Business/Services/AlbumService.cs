@@ -1,6 +1,7 @@
 using Common;
 using Common.Models;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
+using Portal.Domain.Enums;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Interfaces.External;
 using Portal.Domain.Models.AlbumModels;
@@ -303,6 +304,10 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
         public async Task<ServiceResponse<PagingCommonResponse<AlbumPagingResponse>>> GetPagingAsync(PagingCommonRequest request, FilterAdvanced filter)
         {
+            ERegion regionEnum = new ERegion();
+            if (filter.Region != null)
+                regionEnum = (ERegion)Enum.Parse(typeof(ERegion), filter.Region);
+
             var parameters = new Dictionary<string, object?>
             {
                 { "PageNumber", request.PageNumber },
@@ -316,7 +321,8 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 { "Genre", filter.Genre },
                 { "Status", filter.Status },
                 { "Year", filter.Year },
-                { "TopType", filter.TopType }
+                { "TopType", filter.TopType },
+                { "Region", regionEnum }
             };
             var result = await _unitOfWork.QueryAsync<AlbumPagingResponse>("Album_All_Paging", parameters);
 
