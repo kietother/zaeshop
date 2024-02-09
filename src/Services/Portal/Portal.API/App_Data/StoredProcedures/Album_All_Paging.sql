@@ -131,8 +131,8 @@ BEGIN
                 ORDER BY c.CreatedOnUtc DESC
             ) c
 		WHERE (ISNULL(@searchTerm, '') = '' OR 
-			(a.Title LIKE '' + @searchTerm + '%') OR
-			(a.Description LIKE '' + @searchTerm + '%') OR
+			(a.Title LIKE '%' + @searchTerm + '%') OR
+			(a.Description LIKE '%' + @searchTerm + '%') OR
 			(a.Tags LIKE '%' + @searchTerm + '%'))
 			AND (ISNULL(@firstChar, '') = '' OR
 			(a.FriendlyName LIKE @firstChar + '%'))
