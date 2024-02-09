@@ -1,5 +1,6 @@
 using Common.Models;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
+using Portal.Domain.Enums;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.ContentTypeModels;
 using Portal.Domain.SeedWork;
@@ -73,9 +74,11 @@ namespace Portal.Infrastructure.Implements.Business.Services
         }
 
         // Get All
-        public async Task<ServiceResponse<List<ContentTypeResponseModel>>> GetAllAsync()
+        public async Task<ServiceResponse<List<ContentTypeResponseModel>>> GetAllAsync(string region)
         {
-            var contentTypes = await _contentTypeRepository.GetAllAsync();
+            ERegion regionEnum = (ERegion)Enum.Parse(typeof(ERegion), region);
+            var contentTypes = await _contentTypeRepository.GetQueryable()
+                .Where(x => x.Region == regionEnum).ToListAsync();
 
             var response = contentTypes.Select(x => new ContentTypeResponseModel
             {

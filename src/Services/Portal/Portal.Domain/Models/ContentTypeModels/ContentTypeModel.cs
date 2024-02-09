@@ -1,3 +1,4 @@
+using Portal.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Portal.Domain.Models.ContentTypeModels

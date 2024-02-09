@@ -10,7 +10,8 @@ CREATE OR ALTER PROCEDURE Album_All_Paging
 	@genre VARCHAR(100) = null,
 	@status BIT = 0,
 	@year VARCHAR(100) = null,
-	@topType VARCHAR(100) = null
+	@topType VARCHAR(100) = null,
+	@region VARCHAR(100) = null
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -142,6 +143,7 @@ BEGIN
 			AND (ISNULL(@year, '') = '' OR (a.ReleaseYear LIKE @year + '%'))
 			AND (a.AlbumStatus = @status)
 			AND (ISNULL(@topType, '') = '' OR ta.ViewByTopType IS NOT NULL)
+			AND a.Region = @region
         GROUP BY a.Id,
 			   a.Title,
 			   a.Description,

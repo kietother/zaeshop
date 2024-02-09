@@ -10,7 +10,6 @@ namespace Portal.Domain.AggregatesModel.AlbumAggregate
     {
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
-
         public int? AlbumAlertMessageId { get; set; }
 
         #region More Infomation
@@ -26,6 +25,8 @@ namespace Portal.Domain.AggregatesModel.AlbumAggregate
         #endregion
 
         public bool IsPublic { get; set; }
+        public ELevelPublic LevelPublic { get; set; }
+        public ERegion Region { get; set; }
 
         [Column(TypeName = "varchar(350)")]
         public string? FriendlyName { get; set; }

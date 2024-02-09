@@ -10,5 +10,6 @@
         public string? Language { get; set; }
         public string? Rating { get; set; }
         public string? TopType { get; set; }
+        public string? Region { get; set; }
     }
 }
