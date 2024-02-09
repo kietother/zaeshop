@@ -44,6 +44,9 @@ BEGIN
                 c2.Title,
                 a.FriendlyName as AlbumFriendlyName,
                 c2.FriendlyName as FriendlyName,
+                u.LevelId,
+                u.CurrentExp,
+                u.NextLevelExp,
                 u.RoleType,
 				COUNT(reply.Id) AS ReplyCount
             FROM dbo.Comment c
@@ -71,6 +74,9 @@ BEGIN
                 c2.Title,
                 a.FriendlyName,
                 c2.FriendlyName,
+                u.LevelId,
+                u.CurrentExp,
+                u.NextLevelExp,
                 u.RoleType
         )
             SELECT COUNT_BIG(1) AS RowNum,
@@ -88,6 +94,9 @@ BEGIN
             NULL Title,
             NULL AlbumFriendlyName,
             NULL FriendlyName,
+            0 LevelId,
+            0 CurrentExp,
+            0 NextLevelExp,
             0 RoleType,
 			0 ReplyCount,
             1 AS IsTotalRecord

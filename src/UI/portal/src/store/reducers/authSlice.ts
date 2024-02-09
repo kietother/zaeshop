@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import User from '../../models/user/User';
+import parseJsonFromString from '../../utils/json/parseJsonFromString';
 
 interface AuthState {
     token: string | null;
@@ -13,9 +14,9 @@ interface AuthState {
 const initialState: AuthState = {
     token: localStorage.getItem("token"),
     user: {
-        ...JSON.parse(localStorage.getItem("user") ?? '{}')
+        ...parseJsonFromString(localStorage.getItem("user") ?? '{}')
     },
-    roles: JSON.parse(localStorage.getItem("roles") ?? '[]'),
+    roles: parseJsonFromString(localStorage.getItem("roles") ?? '[]'),
     isAuthenticate: !!localStorage.getItem("token"),
     loading: false,
     error: null,

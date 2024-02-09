@@ -20,6 +20,11 @@ namespace Portal.Domain.Models.CommentModels
         public string? Title { get; set; }
         public string? AlbumFriendlyName { get; set; }
         public string? FriendlyName { get; set; }
+
+        public int? LevelId { get; set; }
+        public int CurrentExp { get; set; }
+        public int NextLevelExp { get; set; }
+
         public ERoleType RoleType { get; set; }
         public DateTime CreatedOnUtc { get; set; }
         public DateTime? UpdatedOnUtc { get; set; }
