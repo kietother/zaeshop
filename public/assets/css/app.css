@@ -2043,7 +2043,7 @@ ul.pagination li a.current {
 .anime-blog .action-overlay{
   background-color: #000000b3;
   position: absolute;
-  width: 88%;
+  width: 87%;
   padding-top: 90px;
   text-align: center;
   top: 0;
@@ -5234,10 +5234,6 @@ input:focus,
 .label-filter{
   font-size: 12px !important;
 }
-.progress-text {
-  position: absolute;
-  margin-left: 6vw;
-}
 .package-heading{
   height: 50px;
 }
@@ -5253,9 +5249,6 @@ input:focus,
   }
   .label-filter{
     font-size: 10px !important;
-  }
-  .progress-text {
-    margin-left: 20vw;
   }
   .package-heading{
     height: 100px;
