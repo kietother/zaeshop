@@ -69,7 +69,8 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 Title = requestModel.Title,
                 Description = requestModel.Description,
                 AlbumAlertMessageId = requestModel.AlbumAlertMessageId,
-                FriendlyName = CommonHelper.GenerateFriendlyName(requestModel.Title)
+                FriendlyName = CommonHelper.GenerateFriendlyName(requestModel.Title),
+                Region = requestModel.Region == "en" ? ERegion.en : ERegion.vi
             };
 
             if (requestModel.IsPublic.HasValue)
@@ -122,6 +123,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 Description = entity.Description,
                 AlbumAlertMessageName = entity.AlbumAlertMessage?.Name,
                 ContentTypeNames = contentTypeNames.JoinSeparator(),
+                Region = requestModel.Region,
                 CreatedDate = entity.CreatedOnUtc
             };
 
@@ -175,6 +177,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             existingAlbum.AlbumAlertMessageId = requestModel.AlbumAlertMessageId;
             existingAlbum.FriendlyName = CommonHelper.GenerateFriendlyName(requestModel.Title);
             existingAlbum.OriginalUrl = requestModel.OriginalUrl;
+            existingAlbum.Region = requestModel.Region == "en" ? ERegion.en : ERegion.vi;
 
             if (requestModel.IsPublic.HasValue)
             {
@@ -220,7 +223,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
                 existingAlbum.ThumbnailUrl = result.AbsoluteUrl;
                 existingAlbum.CdnThumbnailUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
-            } else if (requestModel.IsUpdateThumbnail) {
+            }
+            else if (requestModel.IsUpdateThumbnail)
+            {
                 existingAlbum.ThumbnailUrl = null;
                 existingAlbum.CdnThumbnailUrl = null;
 
@@ -239,7 +244,8 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 existingAlbum.OriginalUrl = result.AbsoluteUrl;
                 existingAlbum.CdnOriginalUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
             }
-            else if (requestModel.IsUpdateOriginalUrl) {
+            else if (requestModel.IsUpdateOriginalUrl)
+            {
                 existingAlbum.OriginalUrl = null;
                 existingAlbum.CdnThumbnailUrl = null;
 
@@ -258,6 +264,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 Description = existingAlbum.Description,
                 AlbumAlertMessageName = existingAlbum.AlbumAlertMessage?.Name,
                 ContentTypeNames = contentTypeNames.JoinSeparator(),
+                Region = requestModel.Region,
                 CreatedDate = existingAlbum.CreatedOnUtc
             };
 
@@ -365,7 +372,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 UpdatedDate = album.UpdatedOnUtc,
                 IsPublic = album.IsPublic,
                 CdnThumbnailUrl = album.CdnThumbnailUrl,
-                CdnOriginalUrl = album.CdnOriginalUrl
+                CdnOriginalUrl = album.CdnOriginalUrl,
+                FriendlyName = album.FriendlyName,
+                Region = CommonHelper.GetDescription(album.Region),
             };
 
             return new ServiceResponse<AlbumResponseModel>(albumResponse);

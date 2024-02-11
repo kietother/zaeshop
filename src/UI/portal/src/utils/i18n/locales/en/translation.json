@@ -3,6 +3,8 @@
     "error_album_alert_message_not_found": "Album alert message not found",
     "error_album_content_type_not_found": "Album content type not found",
     "error_album_not_found": "Album not found",
+    "error_album_name_is_required": "Album name is required",
+    "error_album_region_is_required": "Album region is required",
     "toast": {
         "please_wait": "Please wait...",
         "login_sucessfully": "Login Sucessfully",

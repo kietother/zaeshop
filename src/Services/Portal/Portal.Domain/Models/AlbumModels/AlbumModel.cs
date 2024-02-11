@@ -21,6 +21,9 @@ namespace Portal.Domain.Models.AlbumModels
         public string? Base64FileOriginal { get; set; }
         public byte[]? FileDataOriginal => !string.IsNullOrEmpty(Base64FileOriginal) ? Convert.FromBase64String(Base64FileOriginal) : null;
         public bool IsUpdateOriginalUrl { get; set; }
+
+        [Required(ErrorMessage = "error_album_region_is_required")]
+        public string Region { get; set; } = null!;
     }
 
     public class AlbumResponseModel
@@ -39,8 +42,10 @@ namespace Portal.Domain.Models.AlbumModels
         public DateTime? UpdatedDate { get; set; }
 
         public bool IsPublic { get; set; }
-        public string? CdnThumbnailUrl { get; set; } 
+        public string? CdnThumbnailUrl { get; set; }
         public string? CdnOriginalUrl { get; set; }
+
+        public string Region { get; set; } = null!;
     }
 
     public class AlbumPagingResponse
