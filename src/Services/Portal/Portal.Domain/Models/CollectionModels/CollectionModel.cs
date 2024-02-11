@@ -62,6 +62,8 @@ namespace Portal.Domain.Models.CollectionModels
         public DateTime CreatedOnUtc { get; set; }
         public DateTime? UpdatedOnUtc { get; set; }
 
+        public ulong Views { get; set;}
+
         [JsonIgnore]
         public long RowNum { get; set; }
 

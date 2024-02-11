@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StoreState, useAppDispatch } from "../../store";
 import { useSelector } from "react-redux";
-import { useEffect, useMemo, useState } from "react";
 import DropDownOption from "../../models/common/DropDownOption";
 import ContentType from "../../models/content-type/ContentType";
 import AlbumAlertMessage from "../../models/album-alert-mesage/AlbumAlertMessage";
@@ -10,10 +9,11 @@ import { getAlbumAlertMessagesAsyncThunk, getAllContentTypesAsyncThunk } from ".
 import { getAlbumDetailAsyncThunk } from "../../store/reducers/albumDetailCollectionSlice";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { updateAlbumDetail } from "../../services/album-detail-collection/albumDetailCollectionService";
+import { clearCacheComicPage, updateAlbumDetail } from "../../services/album-detail-collection/albumDetailCollectionService";
 import AlbumDetailRequest from "../../models/album-detail-collection/AlbumDetailRequest";
 import Select from "react-select";
 import classNames from "classnames";
+import { ERegion } from "../../models/enums/Eregion";
 
 const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
     const [t] = useTranslation();
@@ -27,15 +27,19 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
 
     const { albumAlertMessages, contentTypes } = useSelector((state: StoreState) => state.album);
     const { albumDetail } = useSelector((state: StoreState) => state.albumDetailCollection);
+    const [region, setRegion] = useState<string>(albumDetail?.region === ERegion.en ? 'en' : 'vi');
 
     // Dropdown options
     const contentTypesDropDown = useMemo((): DropDownOption<number>[] => {
         if (!contentTypes) return [];
-        return contentTypes.map((contentType: ContentType): DropDownOption<number> => ({
+
+        const regionCode = region === 'en' ? ERegion.en : ERegion.vi;
+        return contentTypes.filter(o => o.region === regionCode).map((contentType: ContentType): DropDownOption<number> => ({
             value: contentType.id,
             label: contentType.name ?? ''
         }));
-    }, [contentTypes]);
+    }, [contentTypes, region]);
+
 
     const albumAlertMessageDropDown = useMemo((): DropDownOption<number>[] => {
         if (!albumAlertMessages) return [];
@@ -81,9 +85,10 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
                 description: albumDetail?.description,
                 createdOnUtc: albumDetail?.createdOnUtc ?? new Date(),
                 updatedOnUtc: albumDetail?.updatedOnUtc,
-                isPublic: albumDetail?.isPublic ?? false
+                isPublic: albumDetail?.isPublic ?? false,
+                region: region
             };
-        }, [albumDetail, contentTypeIds, albumAlertMessageDropDown, contentTypesDropDown])
+        }, [albumDetail, contentTypeIds, albumAlertMessageDropDown, contentTypesDropDown, region])
     });
 
     const onSubmit = async (albumRequestModel: AlbumDetailRequest) => {
@@ -114,6 +119,7 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
     };
 
     const onReset = () => {
+        setRegion(albumDetail?.region === ERegion.en ? 'en' : 'vi');
         setAlbumAlertMessageSelectedOption(albumAlertMessageDropDown.find(item => Number(item.value) === albumDetail?.albumAlertMessageId) ?? null);
         setContentTypesSelectedOptions(contentTypesDropDown.filter(item => contentTypeIds.includes(item.value)));
 
@@ -126,6 +132,22 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
             updatedOnUtc: albumDetail?.updatedOnUtc,
             isPublic: albumDetail?.isPublic
         });
+    }
+
+    const onClearCache = async () => {
+        const toastId = toast.loading(t("toast.please_wait"), {
+            hideProgressBar: true
+        });
+
+        await clearCacheComicPage(albumDetail?.title ?? '');
+
+        toast.update(toastId, {
+            render: t("toast.update_sucessfully"),
+            isLoading: false,
+            type: toast.TYPE.SUCCESS,
+            autoClose: 2000
+        });
+        return;
     }
 
     return (
@@ -207,6 +229,18 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
                                         />
                                     </div>
                                 </div>
+                                <div className="mb-3 row">
+                                    <label className="col-sm-2 col-form-label text-end">{t('album.filter_region')}</label>
+                                    <div className="col-sm-10">
+                                        <select className="form-select"
+                                            style={{ width: "auto" }}
+                                            value={region}
+                                            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setRegion((event.target.value))}>
+                                            <option value={'vi'}>{t('album.filter_region_vietnam')}</option>
+                                            <option value={'en'}>{t('album.filter_region_english')}</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div className="col-lg-6">
                                 <div className="mb-3 row">
@@ -263,6 +297,13 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
                             >
                                 {t('album_detail.button_cancel')}
                             </button>
+                            {albumDetail && <button
+                                type="button"
+                                className="btn btn-danger float-end"
+                                onClick={onClearCache}
+                            >
+                                {t('album_detail.clear_cache')}
+                            </button>}
                         </div>
                         {/*end card-body*/}
                     </div>

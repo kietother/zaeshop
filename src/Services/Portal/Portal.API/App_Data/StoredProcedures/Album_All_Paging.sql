@@ -119,7 +119,8 @@ BEGIN
 			   a.Views,
 			   c.Title AS LastCollectionTitle,
 			   ta.ViewByTopType,
-			   a.Tags
+			   a.Tags,
+			   a.Region
         FROM dbo.Album a
 			LEFT JOIN #topAlbums ta ON ta.AlbumId = a.Id
 			LEFT JOIN dbo.AlbumAlertMessage aam ON aam.Id = a.AlbumAlertMessageId
@@ -159,7 +160,8 @@ BEGIN
 			   a.Views,
 			   c.Title,
 			   ta.ViewByTopType,
-			   a.Tags
+			   a.Tags,
+			   a.Region
 	)
     SELECT COUNT_BIG(1) AS RowNum,
 		 0 Id,
@@ -180,6 +182,7 @@ BEGIN
 		 NULL LastCollectionTitle,
 		 0 ViewByTopType,
 		 NULL Tags,
+		 0 [Region],
 		 1 AS IsTotalRecord
     FROM FilteredData
     UNION

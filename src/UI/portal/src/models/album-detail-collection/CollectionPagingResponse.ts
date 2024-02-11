@@ -8,4 +8,5 @@ export default interface CollectionPagingResponse {
     description?: string;
     createdOnUtc: Date;
     updatedOnUtc?: Date;
+    views: number;
 }

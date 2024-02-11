@@ -32,7 +32,9 @@ BEGIN
 			CASE WHEN @sortColumn = 'CreatedOnUtc' AND @sortDirection = 'ASC' THEN c.CreatedOnUtc END,
 			CASE WHEN @sortColumn = 'CreatedOnUtc' AND @sortDirection = 'DESC' THEN c.CreatedOnUtc END DESC,
 			CASE WHEN @sortColumn = 'UpdatedOnUtc' AND @sortDirection = 'ASC' THEN c.UpdatedOnUtc END,
-			CASE WHEN @sortColumn = 'UpdatedOnUtc' AND @sortDirection = 'DESC' THEN c.UpdatedOnUtc END DESC
+			CASE WHEN @sortColumn = 'UpdatedOnUtc' AND @sortDirection = 'DESC' THEN c.UpdatedOnUtc END DESC,
+			CASE WHEN @sortColumn = 'Views' AND @sortDirection = 'ASC' THEN c.Views END,
+			CASE WHEN @sortColumn = 'Views' AND @sortDirection = 'DESC' THEN c.Views END DESC,
 		) AS RowNum,
                c.Id,
 			   c.Title,
@@ -43,7 +45,8 @@ BEGIN
 			   c.Volume,
 			   c.ExtendName,
 			   c.CreatedOnUtc,
-			   c.UpdatedOnUtc
+			   c.UpdatedOnUtc,
+			   c.Views
         FROM dbo.Collection c
 			JOIN dbo.Album a ON a.Id = c.AlbumId
 		WHERE a.Id = @albumId AND 
@@ -64,6 +67,7 @@ BEGIN
 		 NULL ExtendName,
 		 GETDATE() CreatedOnUtc,
 		 NULL UpdatedOnUtc,
+		 0 Views,
 		1 AS IsTotalRecord
     FROM FilteredData
     UNION

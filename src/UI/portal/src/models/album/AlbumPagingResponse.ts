@@ -1,3 +1,5 @@
+import { ERegion } from "../enums/Eregion";
+
 export default interface AlbumPagingResponse {
     id: number;
     title: string;
@@ -12,4 +14,5 @@ export default interface AlbumPagingResponse {
     cdnOriginalUrl?: string;
     views: number;
     viewByTopType?: number | null;
+    region: ERegion;
 }
