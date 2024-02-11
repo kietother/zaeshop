@@ -175,8 +175,8 @@ const ContentItemBlankUploadItem: React.FC<ContentItemBulkUploadItemProps> = ({ 
                         maxWidth: "100%",
                         height: "auto",
                     }}
-                    src={contentItemBulkUploadItemModel.base64File ?? contentItem.displayUrl}
-                    alt={contentItem.name}
+                    src={contentItemBulkUploadItemModel.base64File ?? contentItem?.displayUrl}
+                    alt={contentItem?.name}
                     threshold={75}
                     className="rounded d-block mx-auto"
                 />}
@@ -185,8 +185,8 @@ const ContentItemBlankUploadItem: React.FC<ContentItemBulkUploadItemProps> = ({ 
                         maxWidth: "100%",
                         height: "auto",
                     }}
-                    src={contentItemBulkUploadItemModel.base64File ?? contentItem.displayUrl}
-                    alt={contentItem.name}
+                    src={contentItemBulkUploadItemModel.base64File ?? contentItem?.displayUrl}
+                    alt={contentItem?.name}
                     className="rounded d-block mx-auto"
                 />}
                 
@@ -195,7 +195,7 @@ const ContentItemBlankUploadItem: React.FC<ContentItemBulkUploadItemProps> = ({ 
                     <i className="fa-solid fa-pen text-secondary font-16"></i>
                 </button>
                 <button className="btn"
-                    onClick={() => deleteExistItem(contentItem.id)}>
+                    onClick={() => deleteExistItem(contentItem?.id)}>
                     <i className="fa-solid fa-trash text-danger font-16"></i>
                 </button>
                 <span className="ms-2 float-end text-muted">{contentItemBulkUploadItemModel.orderBy}</span>

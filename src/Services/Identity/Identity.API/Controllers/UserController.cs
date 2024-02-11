@@ -86,7 +86,7 @@ namespace Identity.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPagingAsync(PagingCommonRequest request)
+        public async Task<IActionResult> GetPagingAsync([FromQuery] PagingCommonRequest request)
         {
             var usersPagingResponse = await _userService.GetPagingAsync(request);
             return Ok(usersPagingResponse);

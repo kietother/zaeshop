@@ -198,6 +198,7 @@
         "bulk_upload_description": "Save time by batch uploading all your product images in one go with our easy bulk uploader tool supporting up to 100 photos per upload.",
         "upload_local_server": "Upload local server",
         "upload_cloud_server": "Upload cloud server",
-        "lazy_loading_images": "Show Images by Lazy loading mode"
+        "lazy_loading_images": "Show Images by Lazy loading mode",
+        "coppy_links_to_clipboard": "Copy links to clipboard"
     }
 }
