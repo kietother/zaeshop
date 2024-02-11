@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import Pagination from '../../components/shared/Pagination';
 import DeleteUser from '../../components/user/DeleteUser';
 import { v4 as uuidv4 } from 'uuid';
+import { useDebounce } from 'use-debounce';
 
 const UserPage: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,10 +29,20 @@ const UserPage: React.FC = () => {
     // Paging
     const [pageIndex, setPageIndex] = useState(1);
     const [pageSize, setPageSize] = useState(5);
+    const [search, setSearch] = useState<string>('');
+    const [sortColumn, setSortColumn] = useState<string>('createdOnUtc');
+    const [sortDirection, setSortDirection] = useState<string>('desc');
+    const [debouncedSearchValue] = useDebounce(search, 500);
 
     useEffect(() => {
-        getUsers(pageIndex, pageSize)(dispatch);
-    }, [dispatch, pageIndex, pageSize]);
+        getUsers({
+            pageNumber: pageIndex,
+            pageSize,
+            searchTerm: debouncedSearchValue?.trim(),
+            sortColumn,
+            sortDirection
+        })(dispatch);
+    }, [dispatch, pageIndex, pageSize, debouncedSearchValue, sortColumn, sortDirection]);
 
     const openModal = (actionGrid: ActionTypeGrid, user?: User) => {
         setActionGrid(actionGrid);
@@ -43,7 +54,13 @@ const UserPage: React.FC = () => {
 
     const closeModal = (isReload?: boolean) => {
         if (isReload) {
-            getUsers(pageIndex, pageSize)(dispatch);
+            getUsers({
+                pageNumber: pageIndex,
+                pageSize,
+                searchTerm: debouncedSearchValue?.trim(),
+                sortColumn,
+                sortDirection
+            })(dispatch);
         }
         setIsOpen(false);
     }
@@ -104,6 +121,42 @@ const UserPage: React.FC = () => {
                                     {/*end card-header*/}
                                     <div className="card-body">
                                         <div className="table-responsive">
+                                            <div className="mb-2">
+                                                <input
+                                                    type="search"
+                                                    name="search"
+                                                    className="form-control top-search mb-2"
+                                                    placeholder={t('album_detail.search_placeholder')}
+                                                    onChange={(e) => setSearch(e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="general-label mb-2">
+                                                <div className="row row-cols-lg-auto align-items-center">
+                                                    <div className="col">
+                                                        <label>{t('album.sort_column_label')}</label>
+                                                        <select className="form-select"
+                                                            style={{ width: "auto" }}
+                                                            value={sortColumn}
+                                                            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setSortColumn((event.target.value))}>
+                                                            <option value={'fullName'}>{t('user.sort_column_full_name')}</option>
+                                                            <option value={'userName'}>{t('user.sort_column_username')}</option>
+                                                            <option value={'email'}>{t('user.sort_column_email')}</option>
+                                                            <option value={'createdOnUtc'}>{t('user.sort_column_created_on')}</option>
+                                                            <option value={'updatedOnUtc'}>{t('user.sort_column_updated_on')}</option>
+                                                        </select>
+                                                    </div>
+                                                    <div className="col">
+                                                        <label>{t('album_detail.sort_direction_label')}</label>
+                                                        <select className="form-select"
+                                                            style={{ width: "auto" }}
+                                                            value={sortDirection}
+                                                            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setSortDirection((event.target.value))}>
+                                                            <option value={'asc'}>{t('album_detail.sort_direction_asc')}</option>
+                                                            <option value={'desc'}>{t('album_detail.sort_direction_desc')}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <table className="table table-hover">
                                                 {!userState.loading && <caption className="pt-2 pb-0">{t('paging.caption', {
                                                     start: ((pageIndex - 1) * pageSize) + 1,
@@ -154,7 +207,7 @@ const UserPage: React.FC = () => {
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div className="row">
+                                        <div className="row mt-2">
                                             <div className="col">
                                                 <button className="btn btn-outline-light btn-sm px-4"
                                                     onClick={() => openModal(ActionTypeGrid.CREATE)}>
@@ -167,6 +220,7 @@ const UserPage: React.FC = () => {
                                                     value={pageSize}
                                                     onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setPageSize(Number(event.target.value))}>
                                                     <option value={5}>5</option>
+                                                    <option value={10}>10</option>
                                                     <option value={15}>15</option>
                                                     <option value={25}>25</option>
                                                     <option value={35}>35</option>

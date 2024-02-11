@@ -4,16 +4,17 @@ import api from "../../services/interceptor";
 import { identityServer } from "../../services/baseUrls";
 import UserCreateRequestModel from "../../models/user/UserCreateRequestModel";
 import UserUpdateRequestModel from "../../models/user/UserUpdateRequestModel";
+import UserPagingRequest from "../../models/user/UserPagingRequest.";
+import { AxiosRequestConfig } from "axios";
 
 // GET list user
-export const getUsers = (pageIndex: number, pageSize: number) => async (dispatch: Dispatch) => {
+export const getUsers = (model: UserPagingRequest) => async (dispatch: Dispatch) => {
     try {
         dispatch(fetchUsersStart());
-        const params = {
-            pageIndex,
-            pageSize
+        const config: AxiosRequestConfig<UserPagingRequest> = {
+            params: model
         };
-        const response = await api.get(identityServer + `/api/user`, { params });
+        const response = await api.get(identityServer + `/api/user`, config);
         if (response.status === 200) {
             dispatch(fetchUsersSuccess(response.data));
         }

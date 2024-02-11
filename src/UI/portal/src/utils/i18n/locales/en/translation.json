@@ -69,7 +69,12 @@
         "password_is_required": "Password is required.",
         "password_did_not_match": "Password did not match",
         "confirm_password_is_required": "Confirm password is required.",
-        "role": "Role"
+        "role": "Role",
+        "sort_column_full_name": "Full Name",
+        "sort_column_username": "User Name",
+        "sort_column_email": "Email",
+        "sort_column_created_on": "Created On",
+        "sort_column_updated_on": "Updated On"
     },
     "role": {
         "title": "Role Management",
@@ -158,6 +163,7 @@
         "description": "Description",
         "created_on": "Created On",
         "updated_on": "Updated On",
+        "views": "Views",
         "action": "Action",
         "modal": {
             "create_collection": "Create Collection",
@@ -166,7 +172,16 @@
         },
         "title_is_required": "Title is required.",
         "volume_is_invalid": "Volume is numberic, at least 0.",
-        "search_placeholder": "Search title, description, extend name..."
+        "search_placeholder": "Search title, description, extend name...",
+        "sort_column_label": "Sort Column: ",
+        "sort_column_title": "Titile",
+        "sort_column_uploaded_on": "Uploaded On",
+        "sort_column_views": "Views",
+        "sort_column_updated_on": "Updated On",
+        "sort_direction_label": "Sort Direction: ",
+        "sort_direction_asc": "Ascending",
+        "sort_direction_desc": "Descending",
+        "clear_cache": "Clear Cache"
     },
     "content_item": {
         "title": "Upload images",

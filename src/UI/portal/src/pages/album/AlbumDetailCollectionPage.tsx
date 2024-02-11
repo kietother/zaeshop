@@ -34,12 +34,21 @@ const AlbumDetailCollectionPage: React.FC = () => {
     const [pageSize, setPageSize] = useState(5);
     const [search, setSearch] = useState<string>('');
     const [debouncedSearchValue] = useDebounce(search, 500);
+    const [sortColumn, setSortColumn] = useState<string>('title');
+    const [sortDirection, setSortDirection] = useState<string>('desc');
 
     useEffect(() => {
         if (albumId && Number(albumId)) {
-            dispatch(getCollectionPagingAsyncThunk({ pageNumber: pageIndex, pageSize, albumId: Number(albumId), searchTerm: debouncedSearchValue?.trim() }));
+            dispatch(getCollectionPagingAsyncThunk({
+                pageNumber: pageIndex,
+                pageSize,
+                albumId: Number(albumId),
+                searchTerm: debouncedSearchValue?.trim(),
+                sortColumn,
+                sortDirection
+            }));
         }
-    }, [dispatch, albumId, pageIndex, pageSize, debouncedSearchValue]);
+    }, [dispatch, albumId, pageIndex, pageSize, debouncedSearchValue, sortColumn, sortDirection]);
 
     const openModal = (actionGrid: ActionTypeGrid, collection?: CollectionPagingResponse) => {
         setActionGrid(actionGrid);
@@ -114,7 +123,7 @@ const AlbumDetailCollectionPage: React.FC = () => {
                                     {/*end card-header*/}
                                     <div className="card-body">
                                         <div className="table-responsive">
-                                            <div className="">
+                                            <div className="mb-2">
                                                 <input
                                                     type="search"
                                                     name="search"
@@ -122,6 +131,31 @@ const AlbumDetailCollectionPage: React.FC = () => {
                                                     placeholder={t('album_detail.search_placeholder')}
                                                     onChange={(e) => setSearch(e.target.value)}
                                                 />
+                                            </div>
+                                            <div className="general-label mb-2">
+                                                <div className="row row-cols-lg-auto align-items-center">
+                                                    <div className="col">
+                                                        <label>{t('album.sort_column_label')}</label>
+                                                        <select className="form-select"
+                                                            style={{ width: "auto" }}
+                                                            value={sortColumn}
+                                                            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setSortColumn((event.target.value))}>
+                                                            <option value={'title'}>{t('album_detail.sort_column_title')}</option>
+                                                            <option value={'createdOnUtc'}>{t('album_detail.sort_column_uploaded_on')}</option>
+                                                            <option value={'updatedOnUtc'}>{t('album_detail.sort_column_updated_on')}</option>
+                                                            <option value={'views'}>{t('album_detail.sort_column_views')}</option>                                                        </select>
+                                                    </div>
+                                                    <div className="col">
+                                                        <label>{t('album_detail.sort_direction_label')}</label>
+                                                        <select className="form-select"
+                                                            style={{ width: "auto" }}
+                                                            value={sortDirection}
+                                                            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setSortDirection((event.target.value))}>
+                                                            <option value={'asc'}>{t('album_detail.sort_direction_asc')}</option>
+                                                            <option value={'desc'}>{t('album_detail.sort_direction_desc')}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <table className="table table-hover">
                                                 {!loading && <caption className="pt-2 pb-0">{t('paging.caption', {
@@ -134,28 +168,27 @@ const AlbumDetailCollectionPage: React.FC = () => {
                                                         <th>{t('album_detail.id')}</th>
                                                         <th>{t('album_detail.title')}</th>
                                                         <th>{t('album_detail.volume')}</th>
-                                                        <th>{t('album_detail.extend_name')}</th>
                                                         <th>{t('album_detail.description')}</th>
                                                         <th>{t('album_detail.created_on')}</th>
                                                         <th>{t('album_detail.updated_on')}</th>
+                                                        <th>{t('album_detail.views')}</th>
                                                         <th>{t('album_detail.action')}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {collections.map((collection) => (
                                                         <tr key={uuidv4()}>
-                                                             <td>{collection.id}</td>
+                                                            <td>{collection.id}</td>
                                                             <td>
                                                                 <Link className="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
                                                                     to={`/collections/${collection.id}`}>{collection.title}
                                                                 </Link>
                                                             </td>
-                                                            <td>{collection.title}</td>
                                                             <td>{collection.volume}</td>
-                                                            <td>{collection.extendName}</td>
                                                             <td>{collection.description}</td>
                                                             <td>{dayjsCustom.utc(collection.createdOnUtc).local().format('DD-MM-YYYY HH:mm')}</td>
                                                             <td>{collection.updatedOnUtc && dayjsCustom.utc(collection.updatedOnUtc).local().format('DD-MM-YYYY HH:mm')}</td>
+                                                            <td>{collection.views}</td>
                                                             <td>
                                                                 <button className="btn"
                                                                     onClick={() => openModal(ActionTypeGrid.EDIT, collection)}>
@@ -171,7 +204,7 @@ const AlbumDetailCollectionPage: React.FC = () => {
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div className="row">
+                                        <div className="row mt-2">
                                             <div className="col">
                                                 <button className="btn btn-outline-light btn-sm px-4"
                                                     onClick={() => openModal(ActionTypeGrid.CREATE)}>
@@ -184,6 +217,7 @@ const AlbumDetailCollectionPage: React.FC = () => {
                                                     value={pageSize}
                                                     onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setPageSize(Number(event.target.value))}>
                                                     <option value={5}>5</option>
+                                                    <option value={10}>10</option>
                                                     <option value={15}>15</option>
                                                     <option value={25}>25</option>
                                                     <option value={35}>35</option>

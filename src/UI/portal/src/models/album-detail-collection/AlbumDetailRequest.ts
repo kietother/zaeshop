@@ -6,4 +6,5 @@ export default interface AlbumDetailRequest {
     isPublic: boolean;
     createdOnUtc: Date;
     updatedOnUtc?: Date;
+    region: string;
 }

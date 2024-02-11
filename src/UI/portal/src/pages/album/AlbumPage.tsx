@@ -29,7 +29,7 @@ const AlbumPage: React.FC = () => {
 
     // Paging
     const [pageIndex, setPageIndex] = useState(1);
-    const [pageSize, setPageSize] = useState(15);
+    const [pageSize, setPageSize] = useState(5);
     const [search, setSearch] = useState<string>('');
     const [sortColumn, setSortColumn] = useState<string>('title');
     const [sortDirection, setSortDirection] = useState<string>('asc');
@@ -243,7 +243,7 @@ const AlbumPage: React.FC = () => {
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div className="row">
+                                        <div className="row mt-2">
                                             <div className="col">
                                                 <button className="btn btn-outline-light btn-sm px-4"
                                                     onClick={() => openModal(ActionTypeGrid.CREATE)}>
@@ -256,6 +256,7 @@ const AlbumPage: React.FC = () => {
                                                     value={pageSize}
                                                     onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setPageSize(Number(event.target.value))}>
                                                     <option value={5}>5</option>
+                                                    <option value={10}>10</option>
                                                     <option value={15}>15</option>
                                                     <option value={25}>25</option>
                                                     <option value={35}>35</option>

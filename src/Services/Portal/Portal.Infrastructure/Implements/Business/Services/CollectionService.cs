@@ -477,5 +477,30 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 });
             }
         }
+
+        public async Task<ServiceResponse<CollectionResponseModel>> GetByIdAsync(int id)
+        {
+            var collection = await _repository.GetByIdAsync(id);
+            if (collection == null)
+            {
+                return new ServiceResponse<CollectionResponseModel>("error_collection_not_found");
+            }
+
+            // Map the entities to the response model list
+            var response = new CollectionResponseModel
+            {
+                Id = collection.Id,
+                Title = collection.Title,
+                AlbumId = collection.AlbumId,
+                AlbumTitle = collection.Album.Title,
+                Volume = collection.Volume,
+                ExtendName = collection.ExtendName,
+                Description = collection.Description,
+                AlbumFriendlyName = collection.Album.FriendlyName,
+                FriendlyName = collection.FriendlyName
+            };
+
+            return new ServiceResponse<CollectionResponseModel>(response);
+        }
     }
 }

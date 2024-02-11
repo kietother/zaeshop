@@ -33,3 +33,10 @@ export const deleteCollection = async (id: number | undefined) => {
     const response = await axiosApiInstance.delete(portalServer + `/api/collection/${id}`);
     return response;
 }
+
+// Clear Cache
+export const clearCacheComicPage = async (comicFriendlyName: string) => {
+    const key = `/api/client/comicapp/${comicFriendlyName}`;
+    const response = await axiosApiInstance.post(portalServer + `/test/clear-cache-key?key=${key}`);
+    return response;
+}

@@ -32,7 +32,7 @@ const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
     const [isUpdateOriginalUrl, setIsUpdateOriginalUrl] = useState<boolean>(false);
 
     const { albumAlertMessages, contentTypes } = useSelector((state: StoreState) => state.album);
-    const [region, setRegion] = useState<string>('vi');
+    const [region, setRegion] = useState<string>(album?.region === ERegion.en ? 'en' : 'vi');
 
     const onUpdateFiles = (filesPondFiles: FilePondFile[]) => {
         const files = filesPondFiles.map(item => item.file);

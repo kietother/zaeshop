@@ -45,7 +45,7 @@ namespace Portal.Domain.Models.AlbumModels
         public string? CdnThumbnailUrl { get; set; }
         public string? CdnOriginalUrl { get; set; }
 
-        public string Region { get; set; } = null!;
+        public ERegion Region { get; set; }
     }
 
     public class AlbumPagingResponse
@@ -69,6 +69,7 @@ namespace Portal.Domain.Models.AlbumModels
         public ulong? ViewByTopType { get; set; }
         public string? LastCollectionTitle { get; set; }
         public string? Tags { get; set; }
+        public ERegion Region { get; set; }
 
         [JsonIgnore]
         public long RowNum { get; set; }

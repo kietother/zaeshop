@@ -21,3 +21,9 @@ export const bulkUpdateByLocalServer = async (id: number, model: Array<ContentIt
     const response = await axiosApiInstance.put(portalServer + `/api/collection/${id}/content-items/local`, model);
     return response;
 }
+
+export const clearCacheContentPage = async (comicFriendlyName: string, contentFriendlyName: string) => {
+    const key = `ComicContent_ComicFriendlyName_${comicFriendlyName}_ContentFriendlyName_${contentFriendlyName}`;
+    const response = await axiosApiInstance.post(portalServer + `/test/clear-cache-key?key=${key}`);
+    return response;
+}

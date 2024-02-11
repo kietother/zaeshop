@@ -1,4 +1,5 @@
 using Common.Enums;
+using Common.Models;
 using Identity.API.Attributes;
 using Identity.Domain.Business.Interfaces.Services;
 using Identity.Domain.Models.ErrorCodes;
@@ -85,9 +86,9 @@ namespace Identity.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPagingAsync(int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> GetPagingAsync(PagingCommonRequest request)
         {
-            var usersPagingResponse = await _userService.GetPagingAsync(pageIndex, pageSize);
+            var usersPagingResponse = await _userService.GetPagingAsync(request);
             return Ok(usersPagingResponse);
         }
 

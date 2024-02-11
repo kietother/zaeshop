@@ -1,12 +1,13 @@
-export default interface CollectionPagingResponse {
+export default interface CollectionDetail {
     id: number;
     title: string;
     albumId: number;
     albumTitle?: string;
+    albumFriendlyName: string;
+    friendlyName: string;
     volume?: number;
     extendName?: string;
     description?: string;
     createdOnUtc: Date;
     updatedOnUtc?: Date;
-    views: number;
 }

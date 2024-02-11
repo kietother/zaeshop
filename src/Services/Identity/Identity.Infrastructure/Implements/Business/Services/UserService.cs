@@ -184,14 +184,17 @@ namespace Identity.Infrastructure.Implements.Business.Services
             };
         }
 
-        public async Task<PagingCommonResponse<UserPaging>> GetPagingAsync(int pageNumber, int pageSize)
+        public async Task<PagingCommonResponse<UserPaging>> GetPagingAsync(PagingCommonRequest model)
         {
             const string query = "User_All_Paging";
             var parameters = new DynamicParameters(
             new
             {
-                pageNumber,
-                pageSize
+                model.PageNumber,
+                model.PageSize,
+                model.SearchTerm,
+                model.SortColumn,
+                model.SortDirection
             });
             var result = (await _context.Database.GetDbConnection().QueryAsync<UserPaging>(query, parameters, commandType: CommandType.StoredProcedure)).ToList();
             var record = result.Find(o => o.IsTotalRecord);

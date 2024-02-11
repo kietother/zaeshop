@@ -14,5 +14,6 @@ namespace Portal.Domain.Interfaces.Business.Services
         Task<ServiceResponse<PagingCommonResponse<CollectionPagingResponse>>> GetPagingAsync(CollectionPagingRequest request);
         Task AddViewFromUserToRedisAsync(CollectionViewUserBuildModel model);
         Task CalculateViewsFromRedisTaskAsync();
+        Task<ServiceResponse<CollectionResponseModel>> GetByIdAsync(int id);
     }
 }

@@ -123,7 +123,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 Description = entity.Description,
                 AlbumAlertMessageName = entity.AlbumAlertMessage?.Name,
                 ContentTypeNames = contentTypeNames.JoinSeparator(),
-                Region = requestModel.Region,
+                Region = entity.Region,
                 CreatedDate = entity.CreatedOnUtc
             };
 
@@ -264,7 +264,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 Description = existingAlbum.Description,
                 AlbumAlertMessageName = existingAlbum.AlbumAlertMessage?.Name,
                 ContentTypeNames = contentTypeNames.JoinSeparator(),
-                Region = requestModel.Region,
+                Region = existingAlbum.Region,
                 CreatedDate = existingAlbum.CreatedOnUtc
             };
 
@@ -374,7 +374,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 CdnThumbnailUrl = album.CdnThumbnailUrl,
                 CdnOriginalUrl = album.CdnOriginalUrl,
                 FriendlyName = album.FriendlyName,
-                Region = CommonHelper.GetDescription(album.Region),
+                Region = album.Region
             };
 
             return new ServiceResponse<AlbumResponseModel>(albumResponse);
