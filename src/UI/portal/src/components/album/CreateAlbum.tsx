@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { FilePond } from "react-filepond";
 import { ActualFileObject, FilePondFile } from "filepond";
 import convertFileToBase64 from "../../utils/covert-base64";
+import { ERegion } from "../../models/enums/Eregion";
 
 type CreateAlbumProps = {
     closeModal: (isReload?: boolean) => void;
@@ -24,8 +25,9 @@ const CreateAlbum: React.FC<CreateAlbumProps> = ({ closeModal }) => {
 
     const [thumbnailFiles, setThumbnailFiles] = useState<(ActualFileObject)[]>([]);
     const [backgroundFiles, setBackgroundFiles] = useState<(ActualFileObject)[]>([]);
-    
+
     const { albumAlertMessages, contentTypes } = useSelector((state: StoreState) => state.album);
+    const [region, setRegion] = useState<string>('vi');
 
     const onUpdateFiles = (filesPondFiles: FilePondFile[]) => {
         const files = filesPondFiles.map(item => item.file);
@@ -40,11 +42,13 @@ const CreateAlbum: React.FC<CreateAlbumProps> = ({ closeModal }) => {
     // Dropdown options
     const contentTypesDropDown = useMemo((): DropDownOption<number>[] => {
         if (!contentTypes) return [];
-        return contentTypes.map((contentType: ContentType): DropDownOption<number> => ({
+
+        const regionCode = region === 'en' ? ERegion.en : ERegion.vi;
+        return contentTypes.filter(o => o.region === regionCode).map((contentType: ContentType): DropDownOption<number> => ({
             value: contentType.id,
             label: contentType.name ?? ''
         }));
-    }, [contentTypes]);
+    }, [contentTypes, region]);
 
     const albumAlertMessageDropDown = useMemo((): DropDownOption<number>[] => {
         if (!albumAlertMessages) return [];
@@ -70,7 +74,7 @@ const CreateAlbum: React.FC<CreateAlbumProps> = ({ closeModal }) => {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors }
     } = useForm<AlbumRequestModel>({
         defaultValues: {
             title: ''
@@ -86,6 +90,7 @@ const CreateAlbum: React.FC<CreateAlbumProps> = ({ closeModal }) => {
             ...albumRequestModel,
             albumAlertMessageId: albumAlertMessageSelectedOption ? Number(albumAlertMessageSelectedOption.value) : undefined,
             contentTypeIds: contentTypesSelectedOptions?.map(option => Number(option.value)),
+            region
         };
 
         if (thumbnailFiles.length > 0) {
@@ -206,6 +211,18 @@ const CreateAlbum: React.FC<CreateAlbumProps> = ({ closeModal }) => {
                                                 isSearchable={true}
                                                 isClearable={true}
                                             />
+                                        </div>
+                                    </div>
+                                    <div className="mb-3 row">
+                                        <label className="col-sm-2 col-form-label text-end">{t('album.filter_region')}</label>
+                                        <div className="col-sm-10">
+                                            <select className="form-select"
+                                                style={{ width: "auto" }}
+                                                value={region}
+                                                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setRegion((event.target.value))}>
+                                                <option value={'vi'}>{t('album.filter_region_vietnam')}</option>
+                                                <option value={'en'}>{t('album.filter_region_english')}</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div className="mb-3 row">

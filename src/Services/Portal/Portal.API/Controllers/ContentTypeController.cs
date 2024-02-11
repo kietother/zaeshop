@@ -44,8 +44,8 @@ namespace Portal.API.Controllers
 
         [HttpGet("all")]
         [AllowAnonymous]
-        [RedisCache(5)]
-        public async Task<IActionResult> GetAll([FromQuery] string region = "vi")
+        [RedisCache(60)]
+        public async Task<IActionResult> GetAll([FromQuery] string? region)
         {
             var result = await _contentTypeService.GetAllAsync(region);
             return Ok(result);

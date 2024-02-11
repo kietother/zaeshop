@@ -9,4 +9,5 @@ export default interface AlbumRequestModel {
     fileNameOriginal?: string;
     base64FileOriginal?: string;
     isUpdateOriginalUrl: boolean;
+    region: string;
 }

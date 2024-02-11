@@ -74,11 +74,20 @@ namespace Portal.Infrastructure.Implements.Business.Services
         }
 
         // Get All
-        public async Task<ServiceResponse<List<ContentTypeResponseModel>>> GetAllAsync(string region)
+        public async Task<ServiceResponse<List<ContentTypeResponseModel>>> GetAllAsync(string? region)
         {
-            ERegion regionEnum = (ERegion)Enum.Parse(typeof(ERegion), region);
-            var contentTypes = await _contentTypeRepository.GetQueryable()
-                .Where(x => x.Region == regionEnum).ToListAsync();
+            List<ContentType>? contentTypes = null;
+
+            if (!string.IsNullOrEmpty(region))
+            {
+                ERegion regionEnum = (ERegion)Enum.Parse(typeof(ERegion), region);
+                contentTypes = await _contentTypeRepository.GetQueryable()
+                    .Where(x => x.Region == regionEnum).ToListAsync();
+            }
+            else
+            {
+                contentTypes = await _contentTypeRepository.GetAllAsync();
+            }
 
             var response = contentTypes.Select(x => new ContentTypeResponseModel
             {

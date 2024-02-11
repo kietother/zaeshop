@@ -33,7 +33,7 @@ const AlbumPage: React.FC = () => {
     const [search, setSearch] = useState<string>('');
     const [sortColumn, setSortColumn] = useState<string>('title');
     const [sortDirection, setSortDirection] = useState<string>('asc');
-    const [viewByTopType, setViewByTopType] = useState<string>('day');
+    const [viewByTopType, setViewByTopType] = useState<string>('');
     const [region, setRegion] = useState<string>('vi');
 
     const [debouncedSearchValue] = useDebounce(search, 500);
