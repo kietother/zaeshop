@@ -204,7 +204,7 @@ const AlbumDetailCollectionPage: React.FC = () => {
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div className="row">
+                                        <div className="row mt-2">
                                             <div className="col">
                                                 <button className="btn btn-outline-light btn-sm px-4"
                                                     onClick={() => openModal(ActionTypeGrid.CREATE)}>

@@ -12,7 +12,7 @@ namespace Identity.Domain.Business.Interfaces.Services
         Task<User?> GetByIdAsync(string id);
         Task<UserRegisterResponseModel?> CreateAsync(UserRegisterRequestModel userModel, ErrorResult errorResult);
         Task<UserRegisterResponseModel?> UpdateAsync(string id, UserUpdateRequestModel userModel, ErrorResult errorResult);
-        Task<PagingCommonResponse<UserPaging>> GetPagingAsync(int pageNumber, int pageSize);
+        Task<PagingCommonResponse<UserPaging>> GetPagingAsync(PagingCommonRequest model);
         Task<PagingCommonResponse<RolePaging>> GetRolesPagingAsync(int pageNumber, int pageSize);
         Task<User?> GetByProviderAccountIdAsync(string providerAccountId);
     }

@@ -138,5 +138,17 @@ namespace Portal.API.Controllers
             _backgroundJobClient.Enqueue<IContentItemService>(x => x.BulkUpdateByLocalServer(id, items));
             return Ok();
         }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetById([FromRoute] int id)
+        {
+            var response = await _collectionService.GetByIdAsync(id);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
     }
 }
