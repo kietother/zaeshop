@@ -4,7 +4,7 @@ namespace Portal.Domain.Enums
 {
     public enum ERegion
     {
-        [Description("VietNam")]
+        [Description("Viet Nam")]
         vi = 0,
         [Description("Global")]
         en = 1

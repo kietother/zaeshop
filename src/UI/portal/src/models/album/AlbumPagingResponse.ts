@@ -10,4 +10,6 @@ export default interface AlbumPagingResponse {
     updatedOnUtc?: Date;
     cdnThumbnailUrl?: string;
     cdnOriginalUrl?: string;
+    views: number;
+    viewByTopType?: number | null;
 }

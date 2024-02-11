@@ -29,8 +29,13 @@ const AlbumPage: React.FC = () => {
 
     // Paging
     const [pageIndex, setPageIndex] = useState(1);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(15);
     const [search, setSearch] = useState<string>('');
+    const [sortColumn, setSortColumn] = useState<string>('title');
+    const [sortDirection, setSortDirection] = useState<string>('asc');
+    const [viewByTopType, setViewByTopType] = useState<string>('day');
+    const [region, setRegion] = useState<string>('vi');
+
     const [debouncedSearchValue] = useDebounce(search, 500);
 
     useEffect(() => {
@@ -39,8 +44,16 @@ const AlbumPage: React.FC = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        dispatch(getAlbumsPagingAsyncThunk({ pageNumber: pageIndex, pageSize, searchTerm: debouncedSearchValue?.trim() }));
-    }, [dispatch, pageIndex, pageSize, debouncedSearchValue]);
+        dispatch(getAlbumsPagingAsyncThunk({
+            pageNumber: pageIndex,
+            pageSize,
+            searchTerm: debouncedSearchValue?.trim(),
+            sortColumn,
+            sortDirection,
+            topType: viewByTopType,
+            region
+        }));
+    }, [dispatch, pageIndex, pageSize, debouncedSearchValue, sortColumn, sortDirection, viewByTopType, region]);
 
     const openModal = (actionGrid: ActionTypeGrid, album?: AlbumPagingResponse) => {
         setActionGrid(actionGrid);
@@ -52,7 +65,15 @@ const AlbumPage: React.FC = () => {
 
     const closeModal = (isReload?: boolean) => {
         if (isReload) {
-            dispatch(getAlbumsPagingAsyncThunk({ pageNumber: pageIndex, pageSize }));
+            dispatch(getAlbumsPagingAsyncThunk({
+                pageNumber: pageIndex,
+                pageSize,
+                searchTerm: debouncedSearchValue?.trim(),
+                sortColumn,
+                sortDirection,
+                topType: viewByTopType,
+                region
+            }));
         }
         setIsOpen(false);
     }
@@ -114,7 +135,7 @@ const AlbumPage: React.FC = () => {
                                     {/*end card-header*/}
                                     <div className="card-body">
                                         <div className="table-responsive">
-                                            <div className="">
+                                            <div className="mb-2">
                                                 <input
                                                     type="search"
                                                     name="search"
@@ -122,6 +143,56 @@ const AlbumPage: React.FC = () => {
                                                     placeholder={t('album.search_placeholder')}
                                                     onChange={(e) => setSearch(e.target.value)}
                                                 />
+                                            </div>
+                                            <div className="general-label">
+                                                <div className="row row-cols-lg-auto align-items-center">
+                                                    <div className="col">
+                                                        <label>{t('album.sort_column_label')}</label>
+                                                        <select className="form-select"
+                                                            style={{ width: "auto" }}
+                                                            value={sortColumn}
+                                                            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setSortColumn((event.target.value))}>
+                                                            <option value={'title'}>{t('album.sort_column_title')}</option>
+                                                            <option value={'createdOnUtc'}>{t('album.sort_column_uploaded_on')}</option>
+                                                            <option value={'views'}>{t('album.sort_column_views')}</option>
+                                                            <option value={'viewByTopType'}>{t('album.sort_column_view_by_top_type')}</option>
+                                                        </select>
+                                                    </div>
+                                                    <div className="col">
+                                                        <label>{t('album.sort_direction_label')}</label>
+                                                        <select className="form-select"
+                                                            style={{ width: "auto" }}
+                                                            value={sortDirection}
+                                                            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setSortDirection((event.target.value))}>
+                                                            <option value={'asc'}>{t('album.sort_direction_asc')}</option>
+                                                            <option value={'desc'}>{t('album.sort_direction_desc')}</option>
+                                                        </select>
+                                                    </div>
+                                                    <div className="col">
+                                                        <label>{t('album.filter_top_type')}</label>
+                                                        <select className="form-select"
+                                                            style={{ width: "auto" }}
+                                                            value={viewByTopType}
+                                                            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setViewByTopType((event.target.value))}>
+                                                            <option value={''}>{t('album.filter_top_type_none')}</option>
+                                                            <option value={'day'}>{t('album.filter_top_type_day')}</option>
+                                                            <option value={'week'}>{t('album.filter_top_type_week')}</option>
+                                                            <option value={'month'}>{t('album.filter_top_type_month')}</option>
+                                                            <option value={'year'}>{t('album.filter_top_type_year')}</option>
+                                                        </select>
+                                                    </div>
+                                                    <div className="col">
+                                                        <label>{t('album.filter_region')}</label>
+                                                        <select className="form-select"
+                                                            style={{ width: "auto" }}
+                                                            value={region}
+                                                            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setRegion((event.target.value))}>
+                                                            <option value={''}>{t('album.filter_region_all')}</option>
+                                                            <option value={'vi'}>{t('album.filter_region_vietnam')}</option>
+                                                            <option value={'en'}>{t('album.filter_region_english')}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <table className="table table-hover">
                                                 {!albumState.loading && <caption className="pt-2 pb-0">{t('paging.caption', {
@@ -137,13 +208,15 @@ const AlbumPage: React.FC = () => {
                                                         <th>{t('album.album_content_types')}</th>
                                                         <th>{t('album.created_on')}</th>
                                                         <th>{t('album.updated_on')}</th>
+                                                        <th>{t('album.views')}</th>
+                                                        <th>{t('album.view_by_top_type')}</th>
                                                         <th>{t('album.action')}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {albums.map((album) => (
                                                         <tr key={uuidv4()}>
-                                                             <td>{album.id}</td>
+                                                            <td>{album.id}</td>
                                                             <td>
                                                                 <Link className="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
                                                                     to={`${album.id}`}>{album.title}
@@ -153,6 +226,8 @@ const AlbumPage: React.FC = () => {
                                                             <td>{album.contentTypes}</td>
                                                             <td>{dayjsCustom.utc(album.createdOnUtc).local().format('DD-MM-YYYY HH:mm')}</td>
                                                             <td>{album.updatedOnUtc && dayjsCustom.utc(album.updatedOnUtc).local().format('DD-MM-YYYY HH:mm')}</td>
+                                                            <td>{album.views}</td>
+                                                            <td>{album.viewByTopType}</td>
                                                             <td>
                                                                 <button className="btn"
                                                                     onClick={() => openModal(ActionTypeGrid.EDIT, album)}>
