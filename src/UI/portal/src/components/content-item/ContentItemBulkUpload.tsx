@@ -15,7 +15,7 @@ import { RegexHelper } from "../../utils/regex";
 import parseJsonFromString from "../../utils/json/parseJsonFromString";
 
 type ContentItemBulkUploadProps = {
-    id: string | undefined;
+    id: string | undefined; 
     contentItems: ContentItemModel[];
     isCloudServer: boolean;
 }
