@@ -16,6 +16,7 @@ import AlbumAlertMessage from '../../models/album-alert-mesage/AlbumAlertMessage
 import { FilePond } from "react-filepond";
 import { ActualFileObject, FilePondFile } from "filepond";
 import convertFileToBase64 from "../../utils/covert-base64";
+import { ERegion } from '../../models/enums/Eregion';
 
 type UpdateAlbumProps = {
     album: AlbumPagingResponse,
@@ -31,6 +32,7 @@ const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
     const [isUpdateOriginalUrl, setIsUpdateOriginalUrl] = useState<boolean>(false);
 
     const { albumAlertMessages, contentTypes } = useSelector((state: StoreState) => state.album);
+    const [region, setRegion] = useState<string>('vi');
 
     const onUpdateFiles = (filesPondFiles: FilePondFile[]) => {
         const files = filesPondFiles.map(item => item.file);
@@ -57,11 +59,13 @@ const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
     // Dropdown options
     const contentTypesDropDown = useMemo((): DropDownOption<number>[] => {
         if (!contentTypes) return [];
-        return contentTypes.map((contentType: ContentType): DropDownOption<number> => ({
+
+        const regionCode = region === 'en' ? ERegion.en : ERegion.vi;
+        return contentTypes.filter(o => o.region === regionCode).map((contentType: ContentType): DropDownOption<number> => ({
             value: contentType.id,
             label: contentType.name ?? ''
         }));
-    }, [contentTypes]);
+    }, [contentTypes, region]);
 
     const albumAlertMessageDropDown = useMemo((): DropDownOption<number>[] => {
         if (!albumAlertMessages) return [];
@@ -113,7 +117,8 @@ const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
             albumAlertMessageId: albumAlertMessageSelectedOption ? Number(albumAlertMessageSelectedOption.value) : undefined,
             contentTypeIds: contentTypesSelectedOptions?.map(option => Number(option.value)),
             isUpdateThumbnail,
-            isUpdateOriginalUrl
+            isUpdateOriginalUrl,
+            region
         };
 
         if (thumbnailFiles.length > 0) {
@@ -239,6 +244,18 @@ const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
                                             />
                                         </div>
                                     </div>
+                                    <div className="mb-3 row">
+                                        <label className="col-sm-2 col-form-label text-end">{t('album.filter_region')}</label>
+                                        <div className="col-sm-10">
+                                            <select className="form-select"
+                                                style={{ width: "auto" }}
+                                                value={region}
+                                                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setRegion((event.target.value))}>
+                                                <option value={'vi'}>{t('album.filter_region_vietnam')}</option>
+                                                <option value={'en'}>{t('album.filter_region_english')}</option>
+                                            </select>
+                                        </div>
+                                    </div>
 
                                     <div className="mb-3 row text-center">
                                         <label
@@ -253,7 +270,7 @@ const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
                                                         height: "auto"
                                                     }} />
                                                 <button type='button' onClick={(event) => onChangeImageThumbnail(event)} className='btn'>
-                                                    <i className="fa-solid fa-circle-xmark text-danger font-16 icon-remove-image"                                         
+                                                    <i className="fa-solid fa-circle-xmark text-danger font-16 icon-remove-image"
                                                     ></i>
                                                 </button>
                                             </div>
@@ -289,7 +306,7 @@ const UpdateAlbum: React.FC<UpdateAlbumProps> = ({ album, closeModal }) => {
                                                         height: "auto"
                                                     }} />
                                                 <button type='button' onClick={(event) => onChangeImageBackground(event)} className='btn'>
-                                                    <i className="fa-solid fa-circle-xmark text-danger font-16 icon-remove-image"                                         
+                                                    <i className="fa-solid fa-circle-xmark text-danger font-16 icon-remove-image"
                                                     ></i>
                                                 </button>
                                             </div>

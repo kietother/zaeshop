@@ -7,7 +7,7 @@ namespace Portal.Domain.Interfaces.Business.Services
     {
         Task<ServiceResponse<ContentTypeResponseModel>> CreateAsync(ContentTypeRequestModel request);
         Task<ServiceResponse<ContentTypeResponseModel>> UpdateAsync(int id, ContentTypeRequestModel request);
-        Task<ServiceResponse<List<ContentTypeResponseModel>>> GetAllAsync(string region);
+        Task<ServiceResponse<List<ContentTypeResponseModel>>> GetAllAsync(string? region);
         Task<ServiceResponse<bool>> DeleteAsync(int id);
     }
 }
