@@ -13,4 +13,5 @@ export default interface AlbumDetail {
     views: number;
     viewByTopType?: number | null;
     region: ERegion;
+    friendlyName?: string | null;
 }

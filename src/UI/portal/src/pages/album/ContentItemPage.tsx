@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { StoreState, useAppDispatch } from "../../store";
 import { getCollectionByIdAsyncThunkn, getContentItemsAsyncThunk } from "../../store/reducers/ContentItemSlice";
 import { useSelector } from "react-redux";
@@ -41,6 +41,11 @@ const CotentItemPage: React.FC = () => {
         return;
     }
 
+    const coppyAllLinksIntoClipboard = () => {
+        const urls = contentItems?.map(item => item.displayUrl);
+        navigator.clipboard.writeText(urls.join('\n'));
+    }
+
     return (
         <>
             <div className="page-wrapper">
@@ -62,7 +67,9 @@ const CotentItemPage: React.FC = () => {
                                             </li>
                                             {/*end nav-item*/}
                                             <li className="breadcrumb-item active">Album Detail</li>
-                                            <li className="breadcrumb-item active">{collection?.albumTitle}</li>
+                                            <li className="breadcrumb-item active">
+                                                <Link to={`/albums/${collection?.albumId}`}>{collection?.albumTitle}</Link>
+                                            </li>
                                             <li className="breadcrumb-item active">{collection?.title}</li>
                                         </ol>
                                     </div>
@@ -89,14 +96,21 @@ const CotentItemPage: React.FC = () => {
                                             "btn-primary": isCloudServer,
                                             "btn-outline-primary": !isCloudServer
                                         })}><i className="fa-solid fa-cloud"></i> {t('content_item.upload_cloud_server')}</button>
+                                    {collection && <button
+                                        type="button"
+                                        className="btn btn-danger float-end"
+                                        onClick={onClearCache}
+                                    >
+                                        {t('album_detail.clear_cache')}
+                                    </button>}
+                                    {collection && <button
+                                        type="button"
+                                        className="btn btn-primary float-end"
+                                        onClick={coppyAllLinksIntoClipboard}
+                                    >
+                                        {t('content_item.coppy_links_to_clipboard')}
+                                    </button>}
                                 </div>
-                                {collection && <button
-                                    type="button"
-                                    className="btn btn-danger float-end"
-                                    onClick={onClearCache}
-                                >
-                                    {t('album_detail.clear_cache')}
-                                </button>}
                             </div>
                         </div>
                         {!loading && contentItems?.length === 0 && <ContentItemBlankUpload id={collectionId} isCloudServer={isCloudServer} />}

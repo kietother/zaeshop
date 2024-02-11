@@ -3,6 +3,8 @@
     "error_album_alert_message_not_found": "Không tìm thấy thông báo của Album",
     "error_album_content_type_not_found": "Không tìm thấy loại nội dung của Album",
     "error_album_not_found": "Không tìm thấy Album",
+    "error_album_name_is_required": "Tên album là bắt buộc",
+    "error_album_region_is_required": "Khu vực album là bắt buộc",
     "toast": {
         "please_wait": "Vui lòng đợi...",
         "login_sucessfully": "Đăng nhập thành công",
@@ -67,7 +69,12 @@
         "password_is_required": "Mật khẩu là bắt buộc.",
         "password_did_not_match": "Mật khẩu không khớp",
         "confirm_password_is_required": "Xác nhận mật khẩu là bắt buộc.",
-        "role": "Vai trò"
+        "role": "Vai trò",
+        "sort_column_full_name": "Họ và Tên đầy đủ",
+        "sort_column_username": "Tên người dùng",
+        "sort_column_email": "Email",
+        "sort_column_created_on": "Được tạo lúc",
+        "sort_column_updated_on": "Được cập nhật lúc"
     },
     "role": {
         "title": "Quản lý Vai trò",
@@ -95,6 +102,8 @@
         "album_alert_message": "Thông báo",
         "created_on": "Ngày tạo",
         "updated_on": "Ngày cập nhật",
+        "views": "Lượt xem",
+        "view_by_top_type": "Lượt xem hàng đầu",
         "action": "Hành động",
         "add_new": "Thêm mới",
         "album_title_is_required": "Tiêu đề Album là bắt buộc.",
@@ -112,7 +121,25 @@
         },
         "ongoing": "Đang tiến hành",
         "completed": "Đã hoàn thành",
-        "search_placeholder": "Tìm kiếm tiêu đề hoặc mô tả..."
+        "search_placeholder": "Tìm kiếm tiêu đề hoặc mô tả...",
+        "sort_column_label": "Sắp xếp theo cột: ",
+        "sort_column_title": "Tiêu đề",
+        "sort_column_uploaded_on": "Đã tải lên lúc",
+        "sort_column_views": "Lượt xem",
+        "sort_column_view_by_top_type": "Xem theo loại hàng đầu",
+        "sort_direction_label": "Hướng sắp xếp: ",
+        "sort_direction_asc": "Tăng dần",
+        "sort_direction_desc": "Giảm dần",
+        "filter_top_type": "Loại hàng đầu",
+        "filter_top_type_none": "Không có",
+        "filter_top_type_day": "Ngày",
+        "filter_top_type_week": "Tuần",
+        "filter_top_type_month": "Tháng",
+        "filter_top_type_year": "Năm",
+        "filter_region": "Khu vực",
+        "filter_region_all": "Tất cả",
+        "filter_region_vietnam": "Việt Nam",
+        "filter_region_english": "Tiếng Anh"
     },
     "album_detail": {
         "title_detail": "Chi tiết Album",
@@ -136,6 +163,7 @@
         "description": "Mô tả",
         "created_on": "Ngày tạo",
         "updated_on": "Ngày cập nhật",
+        "views": "Lượt xem",
         "action": "Hành động",
         "modal": {
             "create_collection": "Tạo Bộ sưu tập",
@@ -144,7 +172,16 @@
         },
         "title_is_required": "Tiêu đề là bắt buộc.",
         "volume_is_invalid": "Âm lượng là số, ít nhất là 0.",
-        "search_placeholder": "Tìm kiếm tiêu đề, mô tả, tên mở rộng..."
+        "search_placeholder": "Tìm kiếm tiêu đề, mô tả, tên mở rộng...",
+        "sort_column_label": "Cột Sắp Xếp: ",
+        "sort_column_title": "Tiêu Đề",
+        "sort_column_uploaded_on": "Đã Tải Lên",
+        "sort_column_views": "Lượt Xem",
+        "sort_column_updated_on": "Đã Cập Nhật",
+        "sort_direction_label": "Hướng Sắp Xếp: ",
+        "sort_direction_asc": "Tăng Dần",
+        "sort_direction_desc": "Giảm Dần",
+        "clear_cache": "Xóa Bộ Nhớ Cache"
     },
     "content_item": {
         "title": "Tải lên hình ảnh",
@@ -156,11 +193,12 @@
         "confirm_delete_all": "Bạn chắc chứ muốn xóa tất cả? Hành động này không thể khôi phục.",
         "update_image": "Cập nhật ảnh",
         "order_by": "Sắp xếp theo",
-        "is_public":"Có công khai",
+        "is_public": "Có công khai",
         "bulk_upload_title": "Tải lên hàng loạt",
         "bulk_upload_description": "Tiết kiệm thời gian bằng cách tải lên hàng loạt tất cả các hình ảnh sản phẩm của bạn trong một lần với công cụ tải lên hàng loạt dễ sử dụng của chúng tôi hỗ trợ lên đến 100 ảnh mỗi lần tải lên.",
         "upload_local_server": "Tải lên máy chủ cục bộ",
         "upload_cloud_server": "Tải lên máy chủ đám mây",
-        "lazy_loading_images": "Hiển thị ảnh khi cần thiết"
+        "lazy_loading_images": "Hiển thị ảnh khi cần thiết",
+        "coppy_links_to_clipboard": "Sao chép liên kết vào clipboard"
     }
 }

@@ -139,7 +139,7 @@ const AlbumDetail: React.FC<{ id: string | undefined }> = ({ id }) => {
             hideProgressBar: true
         });
 
-        await clearCacheComicPage(albumDetail?.title ?? '');
+        await clearCacheComicPage(albumDetail?.friendlyName ?? '');
 
         toast.update(toastId, {
             render: t("toast.update_sucessfully"),
