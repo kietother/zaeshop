@@ -36,4 +36,20 @@ namespace Portal.Domain.Models.AlbumModels
 
         public List<ContentAppModel> Contents { get; set; } = [];
     }
+
+    #region Next SEO
+    public class AlbumMetadataModel
+    {
+        public int Id { get; set; }
+        public string Title { get; set; } = null!;
+        public string? FriendlyName { get; set; }
+        public string? LastestChapter { get; set; }
+    }
+
+    public class ComicMetadata
+    {
+        public string Title { get; set; } = null!;
+        public string? LastestChapter { get; set; }
+    }
+    #endregion
 }
