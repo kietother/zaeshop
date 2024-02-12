@@ -97,5 +97,29 @@ namespace Portal.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet]
+        [Route("{comicFriendlyName}/metadata")]
+        [RedisCache(60)]
+        public async Task<IActionResult> GetMetadata([FromRoute] string comicFriendlyName)
+        {
+            var albumMetadata = (await _unitOfWork.QueryAsync<AlbumMetadataModel>("Comic_Metadata", new Dictionary<string, object?>
+            {
+                { "comicFriendlyName",  comicFriendlyName }
+            })).FirstOrDefault();
+
+            if (albumMetadata == null || string.IsNullOrEmpty(albumMetadata.Title))
+            {
+                return Ok(new ComicMetadata());
+            }
+
+            var response = new ComicMetadata
+            {
+                Title = albumMetadata.Title,
+                LastestChapter = albumMetadata.LastestChapter
+            };
+
+            return Ok(response);
+        }
     }
 }

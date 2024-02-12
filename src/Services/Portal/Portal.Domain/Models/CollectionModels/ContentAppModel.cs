@@ -23,4 +23,21 @@ namespace Portal.Domain.Models.CollectionModels
 
         public List<string?>? ContentItems { get; set; }
     }
+
+    #region Next SEO
+    public class CollectionMetaModel
+    {
+        public string ComicTitle { get; set; } = null!;
+        public string? ComicFriendlyName { get; set; } = null!;
+
+        public string ContentTitle { get; set; } = null!;
+        public string? ContentFriendlyName { get; set; } = null!;
+    }
+
+    public class ContentMetadata
+    {
+        public string ComicTitle { get; set; } = null!;
+        public string ContentTitle { get; set; } = null!;
+    }
+    #endregion
 }

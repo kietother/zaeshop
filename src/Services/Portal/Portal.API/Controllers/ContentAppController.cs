@@ -93,5 +93,31 @@ namespace Portal.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("comics/{comicFriendlyName}/contents/{contentFriendlyName}/metadata")]
+        [RedisCache(60)]
+        public async Task<IActionResult> GetMetadata([FromRoute] string comicFriendlyName, [FromRoute] string contentFriendlyName)
+        {
+            var collectionMetadata = await _unitOfWork.Repository<Collection>().GetQueryable()
+                .Select(o => new CollectionMetaModel
+                {
+                    ContentTitle = o.Title,
+                    ContentFriendlyName = o.FriendlyName,
+                    ComicTitle = o.Album.Title,
+                    ComicFriendlyName = o.Album.FriendlyName
+                })
+                .FirstOrDefaultAsync(x => x.ComicFriendlyName == comicFriendlyName && x.ContentFriendlyName == contentFriendlyName);
+
+            if (collectionMetadata == null)
+            {
+                return Ok(new ContentMetadata());
+            }
+
+            return Ok(new ContentMetadata
+            {
+                ComicTitle = collectionMetadata.ComicTitle,
+                ContentTitle = collectionMetadata.ContentTitle
+            });
+        }
     }
 }
