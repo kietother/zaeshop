@@ -18,7 +18,9 @@ BEGIN
         c.Description,
         c.ExtendName,
         c.Volume,
-        c.Views
+        c.Views,
+        a.LevelPublic,
+        a.Region
     from dbo.Collection c
         join dbo.Album a on c.AlbumId = a.Id
     where a.FriendlyName = @comicFriendlyName and c.FriendlyName = @contentFriendlyName

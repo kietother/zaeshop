@@ -117,7 +117,8 @@ namespace Portal.API.Controllers
             return Ok(new ContentMetadata
             {
                 ComicTitle = collectionMetadata.ComicTitle,
-                ContentTitle = collectionMetadata.ContentTitle
+                ContentTitle = collectionMetadata.ContentTitle,
+                ComicImageUrl = collectionMetadata.ComicImageUrl
             });
         }
     }
