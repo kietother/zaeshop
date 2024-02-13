@@ -2,13 +2,14 @@ import ComicSitemap, { ERegion } from '@/app/models/comics/ComicSitemap';
 import { MetadataRoute } from 'next'
 
 export async function generateSitemaps() {
-    return [{ id: 'vi' }, { id: 'en' }]
+    // 0 = vi, 1 = en
+    return [{ id: 0 }, { id: 1 }]
 }
 
 export default async function sitemap({
     id,
 }: {
-    id: string
+    id: number
 }): Promise<MetadataRoute.Sitemap> {
     const baseUrl = process.env.NEXT_BASE_URL!;
     // Google's limit is 50,000 URLs per sitemap
@@ -20,7 +21,7 @@ export default async function sitemap({
     // Build sitemap, from static to dynamic contents
     let sitemap: MetadataRoute.Sitemap = [];
 
-    if (id === 'vi') {
+    if (id === 0) {
         sitemap = [
             // Home Page
             {
@@ -66,7 +67,7 @@ export default async function sitemap({
             }
         ];
     }
-    else if (id === 'en') {
+    else if (id === 1) {
         sitemap = [
             // Home Page
             {
@@ -114,7 +115,7 @@ export default async function sitemap({
     }
 
     comicSitemap.forEach(comic => {
-        const comicRegion = comic.region === ERegion.en ? 'en' : 'vi';
+        const comicRegion = comic.region === ERegion.en ? 1 : 0;
         if (id === comicRegion) {
             // Comics
             sitemap.push({
