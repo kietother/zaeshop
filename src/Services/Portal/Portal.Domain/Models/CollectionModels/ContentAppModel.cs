@@ -23,7 +23,9 @@ namespace Portal.Domain.Models.CollectionModels
         public DateTime CreatedOnUtc { get; set; }
         public DateTime? UpdatedOnUtc { get; set; }
         public ELevelPublic LevelPublic { get; set; }
+        public ELevelPublic AlbumLevelPublic { get; set; }
         public ERegion Region { get; set; }
+
         public List<string?>? ContentItems { get; set; }
     }
 

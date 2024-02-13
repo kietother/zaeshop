@@ -19,7 +19,8 @@ BEGIN
         c.ExtendName,
         c.Volume,
         c.Views,
-        a.LevelPublic,
+        c.LevelPublic,
+        a.LevelPublic as [AlbumLevelPublic],
         a.Region
     from dbo.Collection c
         join dbo.Album a on c.AlbumId = a.Id

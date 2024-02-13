@@ -70,7 +70,8 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 Description = requestModel.Description,
                 AlbumAlertMessageId = requestModel.AlbumAlertMessageId,
                 FriendlyName = CommonHelper.GenerateFriendlyName(requestModel.Title),
-                Region = requestModel.Region == "en" ? ERegion.en : ERegion.vi
+                Region = requestModel.Region == "en" ? ERegion.en : ERegion.vi,
+                LevelPublic = ELevelPublic.Partner
             };
 
             if (requestModel.IsPublic.HasValue)
