@@ -22,6 +22,8 @@ BEGIN
         a.Tags,
         a.CdnThumbnailUrl as [ThumbnailUrl],
         a.Views,
+        a.LevelPublic,
+        a.Region,
         STRING_AGG(ct.Name, ', ') WITHIN GROUP (ORDER BY ct.Name) as ContentTypeNames
     from dbo.Album a
         left join dbo.AlbumAlertMessage am on am.Id = a.AlbumAlertMessageId
@@ -44,5 +46,7 @@ BEGIN
     a.ArtitstNames,
     a.Tags,
     a.CdnThumbnailUrl,
-    a.Views
+    a.Views,
+    a.LevelPublic,
+    a.Region
 END

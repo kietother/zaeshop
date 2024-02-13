@@ -1,3 +1,5 @@
+using Portal.Domain.Enums;
+
 namespace Portal.Domain.Models.CollectionModels
 {
     public class ContentAppModel
@@ -20,7 +22,8 @@ namespace Portal.Domain.Models.CollectionModels
 
         public DateTime CreatedOnUtc { get; set; }
         public DateTime? UpdatedOnUtc { get; set; }
-
+        public ELevelPublic LevelPublic { get; set; }
+        public ERegion Region { get; set; }
         public List<string?>? ContentItems { get; set; }
     }
 
@@ -28,7 +31,8 @@ namespace Portal.Domain.Models.CollectionModels
     public class CollectionMetaModel
     {
         public string ComicTitle { get; set; } = null!;
-        public string? ComicFriendlyName { get; set; } = null!;
+        public string? ComicFriendlyName { get; set; }
+        public string? ComicImageUrl { get; set; }
 
         public string ContentTitle { get; set; } = null!;
         public string? ContentFriendlyName { get; set; } = null!;
@@ -38,6 +42,7 @@ namespace Portal.Domain.Models.CollectionModels
     {
         public string ComicTitle { get; set; } = null!;
         public string ContentTitle { get; set; } = null!;
+        public string? ComicImageUrl { get; set; }
     }
     #endregion
 }

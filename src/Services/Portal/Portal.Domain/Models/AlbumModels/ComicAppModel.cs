@@ -23,6 +23,7 @@ namespace Portal.Domain.Models.AlbumModels
 
         #region Thumbnail
         public string? ThumbnailUrl { get; set; }
+        public string? CdnThumbnailUrl { get; set; }
         #endregion
 
         public DateTime CreatedOnUtc { get; set; }
@@ -30,9 +31,10 @@ namespace Portal.Domain.Models.AlbumModels
 
         public bool IsPublic { get; set; }
         public string? FriendlyName { get; set; }
-        public string? CdnThumbnailUrl { get; set; }
 
         public ulong Views { get; set; }
+        public ELevelPublic LevelPublic { get; set; }
+        public ERegion Region { get; set; }
 
         public List<ContentAppModel> Contents { get; set; } = [];
     }
@@ -44,12 +46,20 @@ namespace Portal.Domain.Models.AlbumModels
         public string Title { get; set; } = null!;
         public string? FriendlyName { get; set; }
         public string? LastestChapter { get; set; }
+        public string? ComicImageUrl { get; set; }
     }
 
     public class ComicMetadata
     {
         public string Title { get; set; } = null!;
         public string? LastestChapter { get; set; }
+        public string? ComicImageUrl { get; set; }
+    }
+
+    public class ComicSitemap
+    {
+        public string? FriendlyName { get; set; }
+        public List<string> ContentFriendlyNames { get; set; } = new List<string>();
     }
     #endregion
 }

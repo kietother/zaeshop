@@ -116,10 +116,26 @@ namespace Portal.API.Controllers
             var response = new ComicMetadata
             {
                 Title = albumMetadata.Title,
-                LastestChapter = albumMetadata.LastestChapter
+                LastestChapter = albumMetadata.LastestChapter,
+                ComicImageUrl = albumMetadata.ComicImageUrl
             };
 
             return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("sitemap")]
+        [RedisCache(60)]
+        public async Task<IActionResult> GetSitemap()
+        {
+            var comicSitemap = await _albumRepository.GetQueryable()
+                                            .Where(o => !string.IsNullOrEmpty(o.FriendlyName))
+                                            .Select(o => new ComicSitemap
+                                            {
+                                                FriendlyName = o.FriendlyName,
+                                                ContentFriendlyNames = o.Collections.Where(c => !string.IsNullOrEmpty(c.FriendlyName)).Select(x => x.FriendlyName!).ToList()
+                                            }).ToListAsync();
+            return Ok(comicSitemap);
         }
     }
 }

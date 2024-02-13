@@ -20,7 +20,8 @@ BEGIN
         (select top 1
             Title
         from #collectionTmp
-        order by ChapterNumber desc ) as LastestChapter
+        order by ChapterNumber desc ) as LastestChapter,
+        a.CdnThumbnailUrl as [ComicImageUrl]
     FROM dbo.Album a
     WHERE a.FriendlyName = @comicFriendlyName
     GROUP BY

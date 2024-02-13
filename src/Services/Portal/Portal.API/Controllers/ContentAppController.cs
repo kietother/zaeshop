@@ -104,7 +104,8 @@ namespace Portal.API.Controllers
                     ContentTitle = o.Title,
                     ContentFriendlyName = o.FriendlyName,
                     ComicTitle = o.Album.Title,
-                    ComicFriendlyName = o.Album.FriendlyName
+                    ComicFriendlyName = o.Album.FriendlyName,
+                    ComicImageUrl = o.Album.CdnThumbnailUrl
                 })
                 .FirstOrDefaultAsync(x => x.ComicFriendlyName == comicFriendlyName && x.ContentFriendlyName == contentFriendlyName);
 
@@ -116,7 +117,8 @@ namespace Portal.API.Controllers
             return Ok(new ContentMetadata
             {
                 ComicTitle = collectionMetadata.ComicTitle,
-                ContentTitle = collectionMetadata.ContentTitle
+                ContentTitle = collectionMetadata.ContentTitle,
+                ComicImageUrl = collectionMetadata.ComicImageUrl
             });
         }
     }
