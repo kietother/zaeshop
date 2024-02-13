@@ -129,12 +129,14 @@ namespace Portal.API.Controllers
         public async Task<IActionResult> GetSitemap()
         {
             var comicSitemap = await _albumRepository.GetQueryable()
-                                            .Where(o => !string.IsNullOrEmpty(o.FriendlyName))
-                                            .Select(o => new ComicSitemap
-                                            {
-                                                FriendlyName = o.FriendlyName,
-                                                ContentFriendlyNames = o.Collections.Where(c => !string.IsNullOrEmpty(c.FriendlyName)).Select(x => x.FriendlyName!).ToList()
-                                            }).ToListAsync();
+                .Where(o => !string.IsNullOrEmpty(o.FriendlyName))
+                .OrderByDescending(o => o.Views)
+                .Select(o => new ComicSitemap
+                {
+                    FriendlyName = o.FriendlyName,
+                    Region = o.Region,
+                    ContentFriendlyNames = o.Collections.Where(c => !string.IsNullOrEmpty(c.FriendlyName)).Select(x => x.FriendlyName!).ToList()
+                }).ToListAsync();
             return Ok(comicSitemap);
         }
     }
