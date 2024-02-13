@@ -116,7 +116,8 @@ namespace Portal.API.Controllers
             var response = new ComicMetadata
             {
                 Title = albumMetadata.Title,
-                LastestChapter = albumMetadata.LastestChapter
+                LastestChapter = albumMetadata.LastestChapter,
+                ComicImageUrl = albumMetadata.ComicImageUrl
             };
 
             return Ok(response);

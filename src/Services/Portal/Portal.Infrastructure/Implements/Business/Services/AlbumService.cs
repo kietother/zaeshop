@@ -93,7 +93,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 {
                     FileName = requestModel.FileName,
                     ImageData = requestModel.FileData
-                }, entity.FriendlyName);
+                }, $"{entity.FriendlyName}/thumbnail");
 
                 entity.ThumbnailUrl = result.AbsoluteUrl;
                 entity.CdnThumbnailUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
@@ -106,7 +106,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 {
                     FileName = requestModel.FileNameOriginal,
                     ImageData = requestModel.FileDataOriginal
-                }, entity.FriendlyName);
+                }, $"{entity.FriendlyName}/background");
 
                 entity.OriginalUrl = result.AbsoluteUrl;
                 entity.CdnOriginalUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
@@ -219,7 +219,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 {
                     FileName = requestModel.FileName,
                     ImageData = requestModel.FileData
-                }, existingAlbum.FriendlyName);
+                }, $"{existingAlbum.FriendlyName}/thumbnail");
 
                 existingAlbum.ThumbnailUrl = result.AbsoluteUrl;
                 existingAlbum.CdnThumbnailUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
@@ -239,7 +239,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 {
                     FileName = requestModel.FileNameOriginal,
                     ImageData = requestModel.FileDataOriginal
-                }, existingAlbum.FriendlyName);
+                }, $"{existingAlbum.FriendlyName}/background");
 
                 existingAlbum.OriginalUrl = result.AbsoluteUrl;
                 existingAlbum.CdnOriginalUrl = $"https://s3.codegota.me/{result.RelativeUrl}";

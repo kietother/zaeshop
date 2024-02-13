@@ -28,7 +28,8 @@ namespace Portal.Domain.Models.CollectionModels
     public class CollectionMetaModel
     {
         public string ComicTitle { get; set; } = null!;
-        public string? ComicFriendlyName { get; set; } = null!;
+        public string? ComicFriendlyName { get; set; }
+        public string? ComicImageUrl { get; set; }
 
         public string ContentTitle { get; set; } = null!;
         public string? ContentFriendlyName { get; set; } = null!;
@@ -38,6 +39,7 @@ namespace Portal.Domain.Models.CollectionModels
     {
         public string ComicTitle { get; set; } = null!;
         public string ContentTitle { get; set; } = null!;
+        public string? ComicImageUrl { get; set; }
     }
     #endregion
 }
