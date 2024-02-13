@@ -6,13 +6,13 @@ namespace Portal.Domain.Enums
     {
         [Description("User")]
         User = 0,
-        [Description("Partner")]
-        Partner = 1,
-        [Description("Admin")]
-        Administrator = 2,
         [Description("User Premium")]
-        UserPremium = 3,
+        UserPremium = 1,
         [Description("User Super Premium")]
-        UserSuperPremium = 4
+        UserSuperPremium = 2,
+        [Description("Partner")]
+        Partner = 3,
+        [Description("Admin")]
+        Administrator = 99
     }
 }
