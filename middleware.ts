@@ -14,14 +14,30 @@ export const config = {
 };
 
 export default async function middleware(request: NextRequest) {
+  // Step: Determine default language when new visit page
+  let locale = null;
+  let localeDetection = true;
+
+  if (!request.cookies.has('NEXT_LOCALE')) {
+    // Get path from request
+    const { pathname } = request.nextUrl;
+    locale = pathname.includes('en') ? 'en' : 'vi';
+    localeDetection = false;
+  }
+
   // Step: Create and call the next-intl middleware (example)
   const handleI18nRouting = createIntlMiddleware({
     defaultLocale: 'vi',
     locales,
     localePrefix,
     pathnames,
-    localeDetection: false
+    localeDetection
   });
   const response = handleI18nRouting(request);
+
+  // Step: When user navigate new page based on url, save langauge to cookie
+  if (locale)
+    response.cookies.set('NEXT_LOCALE', locale);
+
   return response;
 }

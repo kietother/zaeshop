@@ -43,19 +43,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
             changeFrequency: 'daily',
             priority: 0.7,
         },
-        // Search
-        {
-            url: `${baseUrl}/tim-kiem`,
-            lastModified: new Date(),
-            changeFrequency: 'daily',
-            priority: 0.7,
-        },
-        {
-            url: `${baseUrl}/en/search`,
-            lastModified: new Date(),
-            changeFrequency: 'daily',
-            priority: 0.7,
-        },
         // Login
         {
             url: `${baseUrl}/dang-nhap`,
