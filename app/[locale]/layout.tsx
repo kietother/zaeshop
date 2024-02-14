@@ -31,9 +31,6 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     },
     title: t('home'),
     description: t('home_description'),
-    icons: {
-      icon: '/assets/media/icon/head.ico',
-    },
     openGraph: {
       title: t('home'),
       description: t('home_description'),

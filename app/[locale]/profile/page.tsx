@@ -11,10 +11,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
     return {
         title: t('profile'),
-        description: t('profile_description'),
-        icons: {
-            icon: '/assets/media/icon/head.ico',
-        }
+        description: t('profile_description')
     };
 }
 

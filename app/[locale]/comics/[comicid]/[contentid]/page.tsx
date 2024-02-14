@@ -33,9 +33,6 @@ export async function generateMetadata({ params: { comicid, contentid, locale } 
                 comicTitle: contentMetadata.comicTitle,
                 contentTile: contentMetadata.contentTitle
             }),
-            icons: {
-                icon: '/assets/media/icon/head.ico',
-            },
             openGraph: {
                 title: t('content', {
                     comicTitle: contentMetadata.comicTitle,
@@ -55,10 +52,7 @@ export async function generateMetadata({ params: { comicid, contentid, locale } 
 
     return {
         title: t('content_blank'),
-        description: t('content_blank_description'),
-        icons: {
-            icon: '/assets/media/icon/head.ico',
-        }
+        description: t('content_blank_description')
     }
 }
 
