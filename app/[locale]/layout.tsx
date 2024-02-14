@@ -14,7 +14,7 @@ import Footer from '../components/layout/Footer'
 import { NextIntlClientProvider, useMessages } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
 
-const inter = Inter({ subsets: ['latin'], display: 'swap' });
+const inter = Inter({ subsets: ['latin'] });
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations({ locale, namespace: 'metadata' });
@@ -71,8 +71,8 @@ export default function RootLayout({
       </body>
       <Script src="/assets/js/vendor/jquery-3.6.0.min.js" />
       <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" />
-      <Script strategy='lazyOnload' src="/assets/js/vendor/imagesloaded.pkgd.min.js" />
-      <Script strategy='lazyOnload' src="/assets/js/vendor/sal.js" />
+      <Script src="/assets/js/vendor/imagesloaded.pkgd.min.js" />
+      <Script src="/assets/js/vendor/sal.js" />
     </html>
   )
 }
