@@ -35,6 +35,20 @@ export async function generateMetadata({ params: { comicid, contentid, locale } 
             }),
             icons: {
                 icon: '/assets/media/icon/head.ico',
+            },
+            openGraph: {
+                title: t('content', {
+                    comicTitle: contentMetadata.comicTitle,
+                    contentTile: contentMetadata.contentTitle
+                }),
+                description: t('home'),
+                images: [
+                    {
+                        url: contentMetadata.comicImageUrl,
+                        width: 800,
+                        height: 600
+                    }
+                ]
             }
         };
     }

@@ -36,7 +36,14 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     },
     openGraph: {
       title: t('home'),
-      description: t('home_description')
+      description: t('home_description'),
+      images: [
+        {
+          url: `${baseUrl}/assets/media/meta_home_image.png`,
+          width: 800,
+          height: 600
+        }
+      ]
     }
   };
 }
