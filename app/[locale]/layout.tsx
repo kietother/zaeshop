@@ -73,7 +73,6 @@ export default function RootLayout({
       <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" />
       <Script strategy='lazyOnload' src="/assets/js/vendor/imagesloaded.pkgd.min.js" />
       <Script strategy='lazyOnload' src="/assets/js/vendor/sal.js" />
-      <Script strategy='lazyOnload' src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js" />
     </html>
   )
 }
