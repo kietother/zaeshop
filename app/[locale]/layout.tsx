@@ -14,16 +14,29 @@ import Footer from '../components/layout/Footer'
 import { NextIntlClientProvider, useMessages } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations({ locale, namespace: 'metadata' });
+  const baseUrl = process.env.NEXT_BASE_URL!;
 
   return {
+    metadataBase: new URL(baseUrl),
+    alternates: {
+      canonical: '/',
+      languages: {
+        'vi': '/vi',
+        'en': '/en',
+      },
+    },
     title: t('home'),
     description: t('home_description'),
     icons: {
       icon: '/assets/media/icon/head.ico',
+    },
+    openGraph: {
+      title: t('home'),
+      description: t('home_description')
     }
   };
 }
@@ -41,12 +54,6 @@ export default function RootLayout({
   return (
     <html lang={locale} className='block-horizal'>
       <body className={inter.className + " sticky-header block-horizal"}>
-        {/* Back To Top Start */}
-        <a id="backto-top" className="back-to-top">
-          <i className="fas fa-angle-double-up" />
-        </a>
-        {/* Back To Top End */}
-        {/* Main Wrapper Start */}
         <div className="main-wrapper" id="main-wrapper">
           <NextIntlClientProvider messages={messages}>
             <Header />
@@ -57,8 +64,9 @@ export default function RootLayout({
       </body>
       <Script src="/assets/js/vendor/jquery-3.6.0.min.js" />
       <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" />
-      <Script src="/assets/js/vendor/imagesloaded.pkgd.min.js" />
-      <Script src="/assets/js/vendor/sal.js" />
+      <Script strategy='lazyOnload' src="/assets/js/vendor/imagesloaded.pkgd.min.js" />
+      <Script strategy='lazyOnload' src="/assets/js/vendor/sal.js" />
+      <Script strategy='lazyOnload' src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js" />
     </html>
   )
 }
