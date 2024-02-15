@@ -10,7 +10,7 @@ import { headers } from "next/headers";
 import dynamic from "next/dynamic";
 import ComicDetail from "@/app/models/comics/ComicDetail";
 import ClearSearchParams from "@/app/components/contents/ClearSearchParams";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import ContentMetadata from "@/app/models/contents/ContentMetadata";
 import { isbot } from "isbot";
 
@@ -105,14 +105,14 @@ export default async function Page({ params, searchParams }: {
     const ip = headersList.get("cf-connecting-ip") ?? headersList.get("x-forwarded-for");
     const userAgent = headersList.get("user-agent");
     const comic = await getComic(params.comicid);
-
+    const locale = await getLocale();
     const session = await getServerSession(authOptions);
     const content = await getContent(params.comicid, params.contentid, session?.user?.token?.apiToken, ip, isbot(userAgent),searchParams?.previousCollectionId);
     return (
         <>
             <Breadcrumb content={content} />
             <ClearSearchParams />
-            <ContentComic content={content} comic={comic} />
+            <ContentComic content={content} comic={comic} session={session} locale={locale}/>
             <DynamicCommentComic comicId={content?.albumId} collectionId={content?.id} />
         </>
     );
