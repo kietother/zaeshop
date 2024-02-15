@@ -33,7 +33,7 @@ namespace Portal.API.Controllers
 
         [HttpGet("comics/{comicFriendlyName}/contents/{contentFriendlyName}")]
         [ContentComicRedisCache]
-        public async Task<IActionResult> GetByIdAsync([FromRoute] string comicFriendlyName, [FromRoute] string contentFriendlyName, [FromQuery] int? previousCollectionId = null)
+        public async Task<IActionResult> GetByIdAsync([FromRoute] string comicFriendlyName, [FromRoute] string contentFriendlyName, [FromQuery] int? previousCollectionId = null, [FromQuery] bool isBot = false)
         {
             var identityUserId = GetIdentityUserIdByToken();
             var parameters = new Dictionary<string, object?>
@@ -55,41 +55,44 @@ namespace Portal.API.Controllers
             var result = new ServiceResponse<ContentAppModel>(collection);
             await _redisService.SetAsync(string.Format(Const.RedisCacheKey.ComicContent, comicFriendlyName, contentFriendlyName), result.Data, 60);
 
-            #region Hangfire Enqueue Background
-            _backgroundJobClient.Enqueue<ICollectionService>(x => x.AddViewFromUserToRedisAsync(new CollectionViewUserBuildModel
+            if (!isBot)
             {
-                CollectionId = result.Data!.Id,
-                IdentityUserId = User.FindFirstValue("id"),
-                AtViewedOnUtc = DateTime.UtcNow,
-                IpAddress = IpAddress(),
-                SessionId = HttpContext.Session.Id
-            }));
-
-            // User next chap from previous chapter
-            if (previousCollectionId.HasValue && !string.IsNullOrEmpty(identityUserId))
-            {
-                _backgroundJobClient.Enqueue<ILevelService>(x => x.AddExperienceFromUserToRedisAsync(new LevelBuildRedisRequestModel
+                #region Hangfire Enqueue Background
+                _backgroundJobClient.Enqueue<ICollectionService>(x => x.AddViewFromUserToRedisAsync(new CollectionViewUserBuildModel
                 {
-                    IdentityUserId = identityUserId,
-                    CollectionId = previousCollectionId.Value,
-                    CreatedOnUtc = DateTime.UtcNow,
+                    CollectionId = result.Data!.Id,
+                    IdentityUserId = User.FindFirstValue("id"),
+                    AtViewedOnUtc = DateTime.UtcNow,
                     IpAddress = IpAddress(),
                     SessionId = HttpContext.Session.Id
                 }));
-            }
-            else if (DateTime.UtcNow.Subtract(collection.CreatedOnUtc).Hours < 4 && !string.IsNullOrEmpty(identityUserId))
-            {
-                _backgroundJobClient.Enqueue<ILevelService>(x => x.AddExperienceFromUserToRedisAsync(new LevelBuildRedisRequestModel
+
+                // User next chap from previous chapter
+                if (previousCollectionId.HasValue && !string.IsNullOrEmpty(identityUserId))
                 {
-                    IdentityUserId = identityUserId,
-                    CollectionId = collection.Id,
-                    CreatedOnUtc = DateTime.UtcNow,
-                    IpAddress = IpAddress(),
-                    SessionId = HttpContext.Session.Id,
-                    IsViewedNewChapter = true
-                }));
+                    _backgroundJobClient.Enqueue<ILevelService>(x => x.AddExperienceFromUserToRedisAsync(new LevelBuildRedisRequestModel
+                    {
+                        IdentityUserId = identityUserId,
+                        CollectionId = previousCollectionId.Value,
+                        CreatedOnUtc = DateTime.UtcNow,
+                        IpAddress = IpAddress(),
+                        SessionId = HttpContext.Session.Id
+                    }));
+                }
+                else if (DateTime.UtcNow.Subtract(collection.CreatedOnUtc).Hours < 4 && !string.IsNullOrEmpty(identityUserId))
+                {
+                    _backgroundJobClient.Enqueue<ILevelService>(x => x.AddExperienceFromUserToRedisAsync(new LevelBuildRedisRequestModel
+                    {
+                        IdentityUserId = identityUserId,
+                        CollectionId = collection.Id,
+                        CreatedOnUtc = DateTime.UtcNow,
+                        IpAddress = IpAddress(),
+                        SessionId = HttpContext.Session.Id,
+                        IsViewedNewChapter = true
+                    }));
+                }
+                #endregion
             }
-            #endregion
 
             return Ok(result);
         }
