@@ -44,7 +44,8 @@ namespace Portal.API.Controllers
                 LevelId = user.LevelId,
                 CurrentExp = user.CurrentExp,
                 NextLevelExp = user.NextLevelExp,
-                RoleType = user.RoleType
+                RoleType = user.RoleType,
+                ExpriedRoleDate = user.ExpriedRoleDate
             };
 
             return Ok(new ServiceResponse<UserProfileResponse>(response));
