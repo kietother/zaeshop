@@ -31,7 +31,7 @@ public static class PortalServiceExtensions
     {
         services.AddDbContext<ApplicationDbContext>(opt => opt.UseLazyLoadingProxies().UseSqlServer(config.GetConnectionString("PortalConnection")));
         services.Configure<AppSettings>(config.GetSection("AppSettings"));
-
+        services.Configure<SmtpSettings>(config.GetSection("SmtpSettings"));
         services.AddScoped<IAmazonS3>(x => new AmazonS3Client(config["AWS:AccessKey"], config["AWS:SecretKey"], RegionEndpoint.USEast1));
 
         services.AddStackExchangeRedisCache(options =>
