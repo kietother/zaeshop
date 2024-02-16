@@ -14,5 +14,6 @@ namespace Portal.Domain.Models.UserModels
         public int? LevelId { get; set; }
         public int CurrentExp { get; set; }
         public int NextLevelExp { get; set; }
+        public DateTime? ExpriedRoleDate { get; set; }
     }
 }
