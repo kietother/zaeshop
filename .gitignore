@@ -351,3 +351,4 @@ MigrationBackup/
 
 # Others
 dotnet-install.sh
+appsettings.Development.json
