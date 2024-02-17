@@ -31,6 +31,9 @@ public class User : Entity, IAggregateRoot
     public virtual ICollection<UserConnection> UserConnections { get; set; } = new List<UserConnection>();
 
     [JsonIgnore]
+    public virtual ICollection<UserActivityLog> UserActivityLogs { get; set; } = new List<UserActivityLog>();
+
+    [JsonIgnore]
     public virtual ICollection<Following> Followings { get; set; } = new List<Following>();
 
     [JsonIgnore]
