@@ -31,7 +31,6 @@ public static class PortalServiceExtensions
     {
         services.AddDbContext<ApplicationDbContext>(opt => opt.UseLazyLoadingProxies().UseSqlServer(config.GetConnectionString("PortalConnection")));
         services.Configure<AppSettings>(config.GetSection("AppSettings"));
-        services.Configure<SmtpSettings>(config.GetSection("SmtpSettings"));
         services.AddScoped<IAmazonS3>(x => new AmazonS3Client(config["AWS:AccessKey"], config["AWS:SecretKey"], RegionEndpoint.USEast1));
 
         services.AddStackExchangeRedisCache(options =>
@@ -81,18 +80,19 @@ public static class PortalServiceExtensions
 
         // Hangfire use service differnce than Portal
         #region Email Service
-        var appSettingsConfig = config.GetSection("AppSettings");
+        var appSettingsConfig = config.GetSection("SmtpSettings");
         var options = new EmailOptions
         {
             Environment = appSettingsConfig.GetValue<string>("Environment"),
-            SmtpServer = appSettingsConfig.GetValue<string>("SmtpServer"),
-            SmtpPort = appSettingsConfig.GetValue<int>("SmtpPort"),
-            SmtpUser = appSettingsConfig.GetValue<string>("SmtpUser"),
-            SmtpPassword = appSettingsConfig.GetValue<string>("SmtpPass"),
-            MailFrom = appSettingsConfig.GetValue<string>("EmailFrom"),
+            SmtpServer = appSettingsConfig.GetValue<string>("Host"),
+            SmtpPort = appSettingsConfig.GetValue<int>("Port"),
+            SmtpUser = appSettingsConfig.GetValue<string>("Username"),
+            SmtpPassword = appSettingsConfig.GetValue<string>("Password"),
+            MailFrom = appSettingsConfig.GetValue<string>("SenderEmail"),
+            SenderName = appSettingsConfig.GetValue<string>("SenderName"),
         };
         services.AddScoped<IEmailService>(x =>
-            new EmailMockupService(options)
+            new EmailService(options)
         );
         #endregion
 
