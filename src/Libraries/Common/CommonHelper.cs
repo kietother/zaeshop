@@ -91,6 +91,33 @@ namespace Common
             await stream.CopyToAsync(ms);
             return ms.ToArray();
         }
+
+        public static ERoleType GetRoleType(List<string>? roles)
+        {
+            if (roles == null || roles.Count == 0) return ERoleType.User;
+            if (roles.Exists(r => r == GetDescription(ERoleType.Administrator)))
+            {
+                return ERoleType.Administrator;
+            }
+            else if (roles.Exists(r => r == GetDescription(ERoleType.Partner)))
+            {
+                return ERoleType.Partner;
+            }
+            else if (roles.Exists(r => r == GetDescription(ERoleType.UserSuperPremium)))
+            {
+                return ERoleType.UserSuperPremium;
+            }
+            else if (roles.Exists(r => r == GetDescription(ERoleType.UserPremium)))
+            {
+                return ERoleType.UserPremium;
+            }
+            else if (roles.Exists(r => r == GetDescription(ERoleType.User)))
+            {
+                return ERoleType.User;
+            }
+
+            return ERoleType.User;
+        }
     }
 
     public static class JsonSerializationHelper

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
+using Common.Enums;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
-using Portal.Domain.Enums;
 using Portal.Domain.SeedWork;
 
 namespace Portal.Domain.AggregatesModel.UserAggregate;
