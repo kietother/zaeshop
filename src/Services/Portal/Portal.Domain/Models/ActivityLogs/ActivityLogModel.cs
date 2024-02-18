@@ -10,7 +10,7 @@ namespace Portal.Domain.Models.ActivityLogs
         public string? IpV6Address { get; set; }
         public EActivityType? ActivityType { get; set; }
         public int? LogTimes { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public int? LimitTimes { get; set; }
     }
 

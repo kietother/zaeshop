@@ -20,7 +20,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
         public async Task<ServiceResponse<bool>> CreateAsync(ActivityLogRequestModel requestModel)
         {
-            if (requestModel == null || requestModel.ActivityType == null  || requestModel.Description == null)
+            if (requestModel == null || requestModel.ActivityType == null  || requestModel.UserId == null)
                 return new ServiceResponse<bool>("error_log_activity");
 
             var logLastTimesInDay = await _activityRepository.GetQueryable()
@@ -34,7 +34,8 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 Description = requestModel.Description,
                 CreatedOnUtc = DateTime.UtcNow,
                 IpV4Address = requestModel.IpV4Address,
-                IpV6Address = requestModel.IpV6Address
+                IpV6Address = requestModel.IpV6Address,
+                UserId = requestModel.UserId.Value
             };
 
             if (logLastTimesInDay == null)
@@ -46,9 +47,13 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 else
                     return new ServiceResponse<bool>("over_limit");
             }
+            try
+            {
+                _activityRepository.Add(entity);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex) { }
 
-            _activityRepository.Add(entity);
-            await _unitOfWork.SaveChangesAsync();
 
             return new ServiceResponse<bool>(true);
         }
