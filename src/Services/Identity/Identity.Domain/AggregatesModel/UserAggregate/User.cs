@@ -19,6 +19,7 @@ namespace Identity.Domain.AggregatesModel.UserAggregate
         public bool IsClientRegistered { get; set; }
 
         public string? Avatar { get; set; }
+        public DateTime? ExpriedRoleDate { get; set; }
 
         public DateTime CreatedOnUtc { get; set; }
         public DateTime? UpdatedOnUtc { get; set; }
