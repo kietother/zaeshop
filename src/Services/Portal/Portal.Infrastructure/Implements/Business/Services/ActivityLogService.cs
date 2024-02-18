@@ -47,13 +47,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 else
                     return new ServiceResponse<bool>("over_limit");
             }
-            try
-            {
-                _activityRepository.Add(entity);
-                await _unitOfWork.SaveChangesAsync();
-            }
-            catch (Exception ex) { }
 
+            _activityRepository.Add(entity);
+            await _unitOfWork.SaveChangesAsync();
 
             return new ServiceResponse<bool>(true);
         }
