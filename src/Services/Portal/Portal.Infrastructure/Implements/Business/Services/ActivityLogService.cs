@@ -20,7 +20,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
         public async Task<ServiceResponse<bool>> CreateAsync(ActivityLogRequestModel requestModel)
         {
-            if (requestModel == null || requestModel.ActivityType == null  || requestModel.Description == null)
+            if (requestModel == null || requestModel.ActivityType == null  || requestModel.UserId == null)
                 return new ServiceResponse<bool>("error_log_activity");
 
             var logLastTimesInDay = await _activityRepository.GetQueryable()
@@ -34,7 +34,8 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 Description = requestModel.Description,
                 CreatedOnUtc = DateTime.UtcNow,
                 IpV4Address = requestModel.IpV4Address,
-                IpV6Address = requestModel.IpV6Address
+                IpV6Address = requestModel.IpV6Address,
+                UserId = requestModel.UserId.Value
             };
 
             if (logLastTimesInDay == null)
