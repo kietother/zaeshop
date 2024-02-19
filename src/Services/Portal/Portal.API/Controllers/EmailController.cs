@@ -12,12 +12,10 @@ namespace Portal.API.Controllers
     public class EmailController : BaseApiController
     {
         private readonly ISendMailPublisher _sendMailPublisher;
-        private readonly IEmailService _emailService;
 
-        public EmailController(ISendMailPublisher sendMailPublisher, IEmailService emailService)
+        public EmailController(ISendMailPublisher sendMailPublisher)
         {
             _sendMailPublisher = sendMailPublisher;
-            _emailService = emailService;
         }
 
         [HttpPost]
@@ -35,12 +33,5 @@ namespace Portal.API.Controllers
             await _sendMailPublisher.SendMailAsync(message);
             return Ok();
         }
-
-        //[HttpPost("test-noti")]
-        //public async Task<IActionResult> TestNotiAsync()
-        //{
-        //    await _emailService.SendEmailToFollowersAsync();
-        //    return Ok();
-        //}
     }
 }
