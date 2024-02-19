@@ -1,5 +1,4 @@
 import ContentResponse from '@/app/models/contents/ContentResponse';
-import ContentComicItem from './ContentComicItem';
 import ComicDetail from '@/app/models/comics/ComicDetail';
 import dynamic from "next/dynamic";
 import { useTranslations } from 'next-intl';
@@ -7,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getEnumValueFromString } from '@/app/utils/HelperFunctions';
 import { ERoleType } from '@/app/models/enums/ERoleType';
 import dayjs from "@/lib/dayjs/dayjs-custom";
+import ContentComicItemV2 from './ContentComicItemV2';
 
 const ScrollButton = dynamic(() => import('@/app/components/common/ScrollButton'), {
     ssr: false
@@ -96,7 +96,7 @@ export default async function ContentComic({ content, comic, session, locale }: 
                                     </div>
                                 ))}
                                 {process.env.LAZY_LOADING_IMAGE == 'true' && content?.contentItems && content?.contentItems.map((item: any) => (
-                                    <ContentComicItem key={uuidv4()} imageUrl={item} />
+                                    <ContentComicItemV2 key={uuidv4()} imageUrl={item} />
                                 ))}
                             </div>
                         ) : (
