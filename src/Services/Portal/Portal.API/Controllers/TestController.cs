@@ -7,6 +7,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
 using Portal.Domain.AggregatesModel.UserAggregate;
+using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Interfaces.External;
 using Portal.Domain.Interfaces.Messaging;
 using Portal.Domain.Models.ImageUploadModels;
@@ -24,6 +25,7 @@ namespace Portal.API.Controllers
         private readonly ISendMailPublisher _sendMailPublisher;
         private readonly IServiceLogPublisher _serviceLogPublisher;
         private readonly IRedisService _redisService;
+        private readonly IUserService _userService;
 
         public TestController(
             IUnitOfWork unitOfWork,
@@ -32,7 +34,8 @@ namespace Portal.API.Controllers
             IAmazonS3Service amazonS3Service,
             ISendMailPublisher sendMailPublisher,
             IServiceLogPublisher serviceLogPublisher,
-            IRedisService redisService)
+            IRedisService redisService,
+            IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _backgroundJobClient = backgroundJobClient;
@@ -41,6 +44,7 @@ namespace Portal.API.Controllers
             _sendMailPublisher = sendMailPublisher;
             _serviceLogPublisher = serviceLogPublisher;
             _redisService = redisService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -145,6 +149,14 @@ namespace Portal.API.Controllers
         public IActionResult ClearCacheByKey(string key)
         {
             _redisService.Remove(key);
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("reset-role")]
+        public async Task<IActionResult> ResetRoleUser()
+        {
+            await _userService.ResetRoleAsync();
             return Ok();
         }
     }

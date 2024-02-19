@@ -6,6 +6,7 @@ using Common.Implements.Messaging;
 using Common.Interfaces;
 using Common.Interfaces.Messaging;
 using Common.Models.Redis;
+using HangFireServer.Messaging.Publishers;
 using MassTransit;
 using Microsoft.Extensions.Caching.Distributed;
 using Portal.API.Hubs;
@@ -14,7 +15,6 @@ using Portal.Domain.Interfaces.Infrastructure;
 using Portal.Domain.Interfaces.Messaging;
 using Portal.Infrastructure;
 using Portal.Infrastructure.Implements.External;
-using Portal.Infrastructure.Implements.Messaging;
 using Portal.Infrastructure.Implements.Services;
 using Portal.Infrastructure.SeedWork;
 
@@ -59,9 +59,9 @@ public static class PortalServiceExtensions
         });
 
         // Portal registers publishers for MassTransit
-        services.AddScoped<IHelloWorldPublisher, HelloWorldPublisher>();
         services.AddScoped<ISendMailPublisher, SendMailPublisher>();
         services.AddScoped<IServiceLogPublisher, ServiceLogPublisher>();
+        services.AddScoped<ISyncResetExpiredRolePublisher, SyncResetExpiredRolePublisher>();
 
         // Inject Services
         services.AddScoped<IApiService, ApiService>();
