@@ -74,7 +74,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
         }
 
-        private async Task ResetRoleAsync()
+        public async Task ResetRoleAsync()
         {
             var allUserPre = await _userRepository.GetQueryable()
                 .Where(x => (x.RoleType == ERoleType.UserPremium || x.RoleType == ERoleType.UserSuperPremium) && x.ExpriedRoleDate != null)

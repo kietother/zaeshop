@@ -9,7 +9,6 @@ using Portal.API.Attributes;
 using Portal.Domain.AggregatesModel.UserAggregate;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Interfaces.External;
-using Portal.Domain.Interfaces.Messaging;
 using Portal.Domain.Models.ImageUploadModels;
 
 namespace Portal.API.Controllers
