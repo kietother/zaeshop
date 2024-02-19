@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Identity.Domain.SeedWork;
 using Microsoft.AspNetCore.Identity;
@@ -24,6 +25,7 @@ namespace Identity.Domain.AggregatesModel.UserAggregate
         /// <summary>
         /// Current user locale from Google provided
         /// </summary>
+        [Column(TypeName = "varchar(15)")]
         public string? Region { get; set; }
 
         public DateTime CreatedOnUtc { get; set; }
