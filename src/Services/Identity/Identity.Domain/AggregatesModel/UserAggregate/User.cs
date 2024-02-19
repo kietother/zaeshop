@@ -21,6 +21,11 @@ namespace Identity.Domain.AggregatesModel.UserAggregate
         public string? Avatar { get; set; }
         public DateTime? ExpriedRoleDate { get; set; }
 
+        /// <summary>
+        /// Current user locale from Google provided
+        /// </summary>
+        public string? Region { get; set; }
+
         public DateTime CreatedOnUtc { get; set; }
         public DateTime? UpdatedOnUtc { get; set; }
 
