@@ -9,7 +9,6 @@ namespace Portal.Infrastructure.Implements.Business.Services
 {
     public class EmailService : IEmailService
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IGenericRepository<User> _userRepository;
         private readonly ISendMailPublisher _sendMailPublisher;
 
@@ -17,7 +16,6 @@ namespace Portal.Infrastructure.Implements.Business.Services
            IUnitOfWork unitOfWork,
            ISendMailPublisher sendMailPublisher)
         {
-            _unitOfWork = unitOfWork;
             _userRepository = unitOfWork.Repository<User>();
             _sendMailPublisher = sendMailPublisher;
         }
@@ -27,35 +25,46 @@ namespace Portal.Infrastructure.Implements.Business.Services
             var followersSPremium = await _userRepository.GetQueryable()
                 .Include(x => x.Followings).Where(x => x.RoleType == ERoleType.UserSuperPremium)
                 .ToListAsync();
-            var region = ERegion.en;
 
             foreach (var follower in followersSPremium)
             {
+                var region = follower.Region;
                 var toEmail = string.Join(", ", follower.Email);
-                var bodyList = new List<string>();
+                var bodyList = follower.Followings
+                    .Select(comic => comic.Album)
+                    .Select(album =>
+                    {
+                        var newChap = album.Collections
+                            .Where(x => x.CreatedOnUtc.Date == DateTime.UtcNow.Date)
+                            .OrderByDescending(x => x.CreatedOnUtc)
+                            .FirstOrDefault();
 
-                foreach(var comic in follower.Followings)
-                {
-                    var newChap = comic.Album.Collections
-                        .Where(x => x.CreatedOnUtc.Date == DateTime.UtcNow.Date)
-                        .OrderByDescending(x => x.CreatedOnUtc)
-                        .FirstOrDefault();
+                        if (newChap == null)
+                            return null;
 
-                    if (newChap == null)
-                        continue;
+                        var path = region switch
+                        {
+                            ERegion.en => "en/comics",
+                            ERegion.vi => "truyen-tranh",
+                            _ => ""
+                        };
 
-                    var path = region == ERegion.en ? "en/comics" : "truyen-tranh";
-
-                    var content = $"{comic.Album.Title} : " +
-                        $"{newChap?.Title}." +
-                        $" Link: https://fastscans.net/{path}/{comic.Album.FriendlyName}/{newChap?.FriendlyName}\n";
-
-                    bodyList.Add(content);
-                }
+                        return $"{album.Title} : " +
+                               $"{newChap?.Title}." +
+                               $" Link: https://fastscans.net/{path}/{album.FriendlyName}/{newChap?.FriendlyName}\n";
+                    })
+                    .Where(content => content != null)
+                    .ToList();
 
                 if (bodyList.Count > 0)
                 {
-                    string subject = region == ERegion.vi ? "FAST SCANS THÔNG BÁO THEO DÕI" : "FAST SCANS FOLLOWING NOTIFICATION";
+                    var subject = region switch
+                    {
+                        ERegion.en => "FAST SCANS FOLLOWING NOTIFICATION",
+                        ERegion.vi => "FAST SCANS THÔNG BÁO THEO DÕI",
+                        _ => ""
+                    };
+
                     string body = string.Join("\n", bodyList);
 
                     var message = new SendEmailMessage
@@ -68,7 +77,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
                     await _sendMailPublisher.SendMailAsync(message);
                 }
-            }    
+            }
         }
     }
 }
