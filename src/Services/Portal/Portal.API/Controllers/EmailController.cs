@@ -1,8 +1,8 @@
 ﻿using Common.Interfaces.Messaging;
 using Common.Shared.Models.Emails;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
+using Portal.Domain.Interfaces.Business.Services;
 
 namespace Portal.API.Controllers
 {

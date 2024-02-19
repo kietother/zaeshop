@@ -17,6 +17,8 @@ namespace HangFireServer.Extensions
             services.AddScoped<IFollowingService, FollowingService>();
             services.AddScoped<ILevelService, LevelService>();
             services.AddScoped<IActivityLogService, ActivityLogService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }
