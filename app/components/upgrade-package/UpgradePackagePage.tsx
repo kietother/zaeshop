@@ -2,10 +2,13 @@
 import { getEnumValueFromString, getRoleBadge } from "@/app/utils/HelperFunctions";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import Premium from '@/public/assets/media/banner/premium.jpg';
+import SPremium from '@/public/assets/media/banner/s-premium.jpg';
+import Image from "next/image";
+import { ERoleType } from "@/app/models/enums/ERoleType";
 
 export default function UpgradePackagePage({ session }: { session: any }) {
     const t = useTranslations('upgrade');
-    const [currentPackage, setCurrentPackage] = useState<any>("12/04/2024");
     const roleUser = getEnumValueFromString(session.user?.token?.roles);
 
     useEffect(() => {
@@ -16,14 +19,18 @@ export default function UpgradePackagePage({ session }: { session: any }) {
             <div className="container">
                 <div className="heading style-1">
                     <h1>{t('upgrade_package')}</h1>
-                    {session &&
+                    {session && (roleUser === ERoleType.UserPremium || roleUser === ERoleType.UserSuperPremium) &&
                         <>
                             <p className="package-now">{t('current_package')}
                                 <div className="profile-tag">
                                     {getRoleBadge(roleUser)}
                                 </div>
                             </p>
-                            <p className="package-now">{t('expires_on')} <div>{currentPackage}</div></p>
+                            <p className="package-now duration">{t('expires_on')}:
+                                <div>
+                                    {session?.user?.token?.expriedRoleDate ? session.user.token.expriedRoleDate : t('forever')}
+                                </div>
+                            </p>
                         </>
                     }
                 </div>
@@ -31,7 +38,7 @@ export default function UpgradePackagePage({ session }: { session: any }) {
                     <div className="col-lg-6 col-md-6 col-sm-8 offset-lg-0 offset-md-0 offset-sm-2 col-12">
                         <a href="/detail-package?package=premium" className="inner-box">
                             <div className="image-box">
-                                <img src="/assets/media/banner/premium.jpg" alt="" className="attachment-full size-full" />
+                                <Image src={Premium} alt="" className="attachment-full size-full" priority />
                             </div>
                             <div className="author-box text-start">
                                 <div className="detail d-flex align-items-center justify-content-between">
@@ -48,7 +55,7 @@ export default function UpgradePackagePage({ session }: { session: any }) {
                     <div className="col-lg-6 col-md-6 col-sm-8 offset-lg-0 offset-md-0 offset-sm-2 col-12">
                         <a href="/detail-package?package=spremium" className="inner-box">
                             <div className="image-box">
-                                <img src="/assets/media/banner/s-premium.jpg" alt="" className="attachment-full size-full" />
+                                <Image src={SPremium} alt="" className="attachment-full size-full" priority />
                             </div>
                             <div className="author-box text-start">
                                 <div className="detail d-flex align-items-center justify-content-between">
