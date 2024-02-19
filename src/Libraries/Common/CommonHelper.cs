@@ -118,6 +118,35 @@ namespace Common
 
             return ERoleType.User;
         }
+
+        public static string GetSubscriptionByRoleType(ERoleType roleType, int? days)
+        {
+            string subscriptionLevel = string.Empty;
+            if (days == 30)
+            {
+                subscriptionLevel = "1";
+            }
+            else if (days == 90)
+            {
+                subscriptionLevel = "2";
+            }
+            else if (days == 365)
+            {
+                subscriptionLevel = "3";
+            }
+
+            switch (roleType)
+            {
+                case ERoleType.UserSuperPremium:
+                    return "SPremium Lv." + subscriptionLevel;
+                case ERoleType.UserPremium:
+                    return "Premium Lv." + subscriptionLevel;
+                case ERoleType.User:
+                    return "Free";
+            }
+
+            return string.Empty;
+        }
     }
 
     public static class JsonSerializationHelper

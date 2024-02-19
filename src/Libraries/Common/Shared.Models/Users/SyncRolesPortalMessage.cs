@@ -5,6 +5,7 @@ namespace Common.Shared.Models.Users
     public class SyncRolesPortalMessage
     {
         public string IdentityUserId { get; set; } = null!;
+        public int? Days { get; set; }
         public List<string>? Roles { get; set; }
 
         #region For Update Expried Role Date

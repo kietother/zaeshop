@@ -43,10 +43,10 @@ namespace HangFireServer.Extensions
             RecurringJob.AddOrUpdate<ILevelService>(HangfireJobName.CalculateExperiencesFromRedis, x => x.CalculateExperiencesFromRedisTaskAsync(), "*/30 * * * *");
 
             // 12 Hours to send email noti
-            RecurringJob.AddOrUpdate<IEmailService>(HangfireJobName.SendEmailSPremiumFollowers, x => x.SendEmailToFollowersAsync(), "0 */12 * * *");
+            RecurringJob.AddOrUpdate<IEmailService>(HangfireJobName.SendEmailSPremiumFollowers, x => x.SendEmailToFollowersTaskAsync(), "0 */12 * * *");
 
             // 1 Hours to reset role user
-            RecurringJob.AddOrUpdate<IUserService>(HangfireJobName.ResetRoleUsers, x => x.ResetRoleAsync(), "0 */1 * * *");
+            RecurringJob.AddOrUpdate<IUserService>(HangfireJobName.ResetRoleUsers, x => x.ResetRoleTaskAsync(), "0 */1 * * *");
         }
     }
 }

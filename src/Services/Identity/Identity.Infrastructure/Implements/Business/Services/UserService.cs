@@ -352,6 +352,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
             // Sync to Portal and logs
             await _syncRolesPortalPublisher.SyncRolesPortalAsync(new SyncRolesPortalMessage
             {
+                Days = requestModel.Days,
                 IsUpdateSubscription = true,
                 IdentityUserId = user.Id,
                 Roles = [requestModel.Role],

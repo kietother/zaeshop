@@ -65,11 +65,16 @@ namespace HangFireServer.Messaging.Comsumers
 
                 // Log
                 var descriptionBuilder = new StringBuilder();
-
                 if (syncRolesMessage.OldRoleType != syncRolesMessage.NewRoleType)
                 {
+                    descriptionBuilder.AppendFormat("Upgrade Subscription: {0} -> {1}\n", CommonHelper.GetSubscriptionByRoleType(syncRolesMessage.OldRoleType, syncRolesMessage.Days), CommonHelper.GetSubscriptionByRoleType(syncRolesMessage.NewRoleType, syncRolesMessage.Days));
                     descriptionBuilder.AppendFormat("Role: {0} -> {1}\n", CommonHelper.GetDescription(syncRolesMessage.OldRoleType), CommonHelper.GetDescription(syncRolesMessage.NewRoleType));
                 }
+                else
+                {
+                    descriptionBuilder.AppendFormat("Extend Subscription: {0}\n", CommonHelper.GetSubscriptionByRoleType(syncRolesMessage.OldRoleType, syncRolesMessage.Days));
+                }
+
                 if (user.ExpriedRoleDate != syncRolesMessage.ExpriedRoleDate)
                 {
                     descriptionBuilder.AppendFormat("ExpriedRoleDate: {0} -> {1}\n", user.ExpriedRoleDate, syncRolesMessage.ExpriedRoleDate);
@@ -79,9 +84,9 @@ namespace HangFireServer.Messaging.Comsumers
                 {
                     UserId = user.Id,
                     ActivityType = EActivityType.Subscription,
-                    Description = descriptionBuilder.ToString(),
-                    
+                    Description = descriptionBuilder.ToString()
                 };
+                _userActivityLogRepository.Update(userActivityLog);
             }
             #endregion
 
