@@ -1,8 +1,8 @@
 ﻿using Common.Interfaces.Messaging;
 using Common.Shared.Models.Emails;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
+using Portal.Domain.Interfaces.Business.Services;
 
 namespace Portal.API.Controllers
 {
@@ -12,10 +12,12 @@ namespace Portal.API.Controllers
     public class EmailController : BaseApiController
     {
         private readonly ISendMailPublisher _sendMailPublisher;
+        private readonly IEmailService _emailService;
 
-        public EmailController(ISendMailPublisher sendMailPublisher)
+        public EmailController(ISendMailPublisher sendMailPublisher, IEmailService emailService)
         {
             _sendMailPublisher = sendMailPublisher;
+            _emailService = emailService;
         }
 
         [HttpPost]
@@ -33,5 +35,12 @@ namespace Portal.API.Controllers
             await _sendMailPublisher.SendMailAsync(message);
             return Ok();
         }
+
+        //[HttpPost("test-noti")]
+        //public async Task<IActionResult> TestNotiAsync()
+        //{
+        //    await _emailService.SendEmailToFollowersAsync();
+        //    return Ok();
+        //}
     }
 }
