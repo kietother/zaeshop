@@ -87,7 +87,9 @@ export default async function ContentComic({ content, comic, session, locale }: 
                             <div className="row text-center pt-4">
                                 {process.env.LAZY_LOADING_IMAGE == 'false' && content?.contentItems && content?.contentItems.map((item: any) => (
                                     <div key={uuidv4()} className="chapter-image col-lg-10 offset-lg-1 col-12 offset-0 img-chapter">
-                                        <img src={item}
+                                        <img 
+                                            loading='lazy'
+                                            src={item}
                                             alt=""
                                             width={800}
                                         />
