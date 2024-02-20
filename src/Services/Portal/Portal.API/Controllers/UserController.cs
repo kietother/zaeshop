@@ -1,11 +1,11 @@
+using Common.Enums;
 using Common.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
 using Portal.Domain.AggregatesModel.UserAggregate;
+using Portal.Domain.Enums;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.ActivityLogs;
-using Portal.Domain.Models.AlbumModels;
 using Portal.Domain.Models.UserModels;
 
 namespace Portal.API.Controllers
@@ -16,11 +16,13 @@ namespace Portal.API.Controllers
     public class UserController : BaseApiController
     {
         private readonly IGenericRepository<User> _userRepository;
+        private readonly IGenericRepository<UserActivityLog> _userActivityLogRepository;
         private readonly IActivityLogService _activityLogService;
 
         public UserController(IUnitOfWork unitOfWork, IActivityLogService activityLogService)
         {
             _userRepository = unitOfWork.Repository<User>();
+            _userActivityLogRepository = unitOfWork.Repository<UserActivityLog>();
             _activityLogService = activityLogService;
         }
 
@@ -76,6 +78,43 @@ namespace Portal.API.Controllers
                 return BadRequest(response);
 
             return Ok(response);
+        }
+
+        [HttpGet("{identityUserId}/activity-log")]
+        [Authorize(ERoles.Administrator)]
+        public async Task<IActionResult> GetActivityLogByIdentityUserId([FromRoute] string identityUserId, [FromQuery] PagingCommonRequest request)
+        {
+            var user = await _userRepository.GetByIdentityUserIdAsync(identityUserId);
+            if (user == null)
+            {
+                return BadRequest("error_user_not_found");
+            }
+
+            // Paging shortcut linq to get paging user activity
+            var totalRecords = await _userActivityLogRepository.GetQueryable()
+                                        .Where(o => o.UserId == user.Id && o.ActivityType == EActivityType.Subscription)
+                                        .LongCountAsync();
+            var activityLogs = await _userActivityLogRepository.GetQueryable()
+                                        .Where(o => o.UserId == user.Id && o.ActivityType == EActivityType.Subscription)
+                                        .Page(request.PageNumber, request.PageSize)
+                                        .Sort(x => x.CreatedOnUtc, false)
+                                        .ToListAsync();
+
+            var resposne = activityLogs.ConvertAll(x => new ActivityLogResponseModel
+            {
+                Id = x.Id,
+                ActivityType = x.ActivityType,
+                Description = x.Description,
+                IpV4Address = x.IpV4Address,
+                IpV6Address = x.IpV6Address,
+                LogTimes = x.LogTimes,
+                UserId = x.UserId
+            });
+            return Ok(new ServiceResponse<PagingCommonResponse<ActivityLogResponseModel>>(new PagingCommonResponse<ActivityLogResponseModel>
+            {
+                RowNum = totalRecords,
+                Data = resposne
+            }));
         }
     }
 }

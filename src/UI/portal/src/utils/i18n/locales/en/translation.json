@@ -200,5 +200,8 @@
         "upload_cloud_server": "Upload cloud server",
         "lazy_loading_images": "Show Images by Lazy loading mode",
         "coppy_links_to_clipboard": "Copy links to clipboard"
+    },
+    "role_subscription": {
+        "title": "Role Subscription"
     }
 }
