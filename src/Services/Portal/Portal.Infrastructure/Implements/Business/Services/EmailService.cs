@@ -1,26 +1,80 @@
-﻿using Common.Interfaces.Messaging;
+﻿using Common.Enums;
+using Common.Interfaces.Messaging;
 using Common.Shared.Models.Emails;
+using Common.Shared.Models.Logs;
+using Common.ValueObjects;
+using Microsoft.Extensions.Hosting;
+using Portal.Domain.AggregatesModel.TaskAggregate;
 using Portal.Domain.AggregatesModel.UserAggregate;
 using Portal.Domain.Enums;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.SeedWork;
+using Portal.Infrastructure.Helpers;
 
 namespace Portal.Infrastructure.Implements.Business.Services
 {
     public class EmailService : IEmailService
     {
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IGenericRepository<User> _userRepository;
         private readonly ISendMailPublisher _sendMailPublisher;
+        private readonly IServiceLogPublisher _serviceLogPublisher;
+        private readonly IHostEnvironment _hostingEnvironment;
 
         public EmailService(
            IUnitOfWork unitOfWork,
-           ISendMailPublisher sendMailPublisher)
+           ISendMailPublisher sendMailPublisher,
+           IServiceLogPublisher serviceLogPublisher,
+           IHostEnvironment hostingEnvironment)
         {
+            _unitOfWork = unitOfWork;
             _userRepository = unitOfWork.Repository<User>();
             _sendMailPublisher = sendMailPublisher;
+            _serviceLogPublisher = serviceLogPublisher;
+            _hostingEnvironment = hostingEnvironment;
         }
 
-        public async Task SendEmailToFollowersAsync()
+        public async Task SendEmailToFollowersTaskAsync()
+        {
+            bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
+            var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
+
+            var scheduleJob = await _unitOfWork.Repository<HangfireScheduleJob>().GetByNameAsync(Const.HangfireJobName.SendEmailSPremiumFollowers);
+            if (scheduleJob != null && scheduleJob.IsEnabled && !scheduleJob.IsRunning)
+            {
+                try
+                {
+                    scheduleJob.IsRunning = true;
+                    scheduleJob.StartOnUtc = DateTime.UtcNow;
+                    await _unitOfWork.SaveChangesAsync();
+
+                    await SendEmailToFollowersAsync();
+
+                    scheduleJob.EndOnUtc = DateTime.UtcNow;
+                    scheduleJob.IsRunning = false;
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
+                    {
+                        LogLevel = ELogLevel.Error,
+                        EventName = ex.Message,
+                        StackTrace = ex.StackTrace,
+                        ServiceName = "Hangfire",
+                        Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
+                        Description = $"[Exception]: {ex.Message}",
+                        StatusCode = "Internal Server Error"
+                    });
+
+                    scheduleJob.EndOnUtc = DateTime.UtcNow;
+                    scheduleJob.IsRunning = false;
+                    await _unitOfWork.SaveChangesAsync();
+                }
+            }
+        }
+
+        private async Task SendEmailToFollowersAsync()
         {
             var followersSPremium = await _userRepository.GetQueryable()
                 .Include(x => x.Followings).Where(x => x.RoleType == ERoleType.UserSuperPremium)

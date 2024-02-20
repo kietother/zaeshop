@@ -88,29 +88,19 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
 
             // We can upload thumbnail
-            if (!string.IsNullOrEmpty(requestModel.FileName) && requestModel.FileData != null)
+            if (!string.IsNullOrEmpty(requestModel.FileNameThumbnail))
             {
-                var result = await _amazonS3Service.UploadImageAsync(new ImageUploadRequestModel
-                {
-                    FileName = requestModel.FileName,
-                    ImageData = requestModel.FileData
-                }, $"{entity.FriendlyName}/thumbnail");
-
-                entity.ThumbnailUrl = result.AbsoluteUrl;
-                entity.CdnThumbnailUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
+                var relativePath = $"{entity.FriendlyName}/thumbnail";
+                entity.ThumbnailUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameThumbnail}";
+                entity.CdnThumbnailUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameThumbnail}";
             }
 
             // We can upload background
-            if (!string.IsNullOrEmpty(requestModel.FileNameOriginal) && requestModel.FileDataOriginal != null)
+            if (!string.IsNullOrEmpty(requestModel.FileNameBackground))
             {
-                var result = await _amazonS3Service.UploadImageAsync(new ImageUploadRequestModel
-                {
-                    FileName = requestModel.FileNameOriginal,
-                    ImageData = requestModel.FileDataOriginal
-                }, $"{entity.FriendlyName}/background");
-
-                entity.OriginalUrl = result.AbsoluteUrl;
-                entity.CdnOriginalUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
+                var relativePath = $"{entity.FriendlyName}/background";
+                entity.OriginalUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameBackground}";
+                entity.CdnOriginalUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameBackground}";
             }
 
             _repository.Add(entity);
@@ -214,16 +204,11 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
 
             // We can upload thumbnail
-            if (requestModel.IsUpdateThumbnail && !string.IsNullOrEmpty(requestModel.FileName) && requestModel.FileData != null)
+            if (requestModel.IsUpdateThumbnail && !string.IsNullOrEmpty(requestModel.FileNameThumbnail))
             {
-                var result = await _amazonS3Service.UploadImageAsync(new ImageUploadRequestModel
-                {
-                    FileName = requestModel.FileName,
-                    ImageData = requestModel.FileData
-                }, $"{existingAlbum.FriendlyName}/thumbnail");
-
-                existingAlbum.ThumbnailUrl = result.AbsoluteUrl;
-                existingAlbum.CdnThumbnailUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
+                var relativePath = $"{existingAlbum.FriendlyName}/thumbnail";
+                existingAlbum.ThumbnailUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameThumbnail}";
+                existingAlbum.CdnThumbnailUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameThumbnail}";
             }
             else if (requestModel.IsUpdateThumbnail)
             {
@@ -234,18 +219,13 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
 
             // We can upload background
-            if (requestModel.IsUpdateOriginalUrl && !string.IsNullOrEmpty(requestModel.FileNameOriginal) && requestModel.FileDataOriginal != null)
+            if (requestModel.IsUpdateBackground && !string.IsNullOrEmpty(requestModel.FileNameBackground))
             {
-                var result = await _amazonS3Service.UploadImageAsync(new ImageUploadRequestModel
-                {
-                    FileName = requestModel.FileNameOriginal,
-                    ImageData = requestModel.FileDataOriginal
-                }, $"{existingAlbum.FriendlyName}/background");
-
-                existingAlbum.OriginalUrl = result.AbsoluteUrl;
-                existingAlbum.CdnOriginalUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
+                var relativePath = $"{existingAlbum.FriendlyName}/background";
+                existingAlbum.OriginalUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameBackground}";
+                existingAlbum.CdnOriginalUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameBackground}";
             }
-            else if (requestModel.IsUpdateOriginalUrl)
+            else if (requestModel.IsUpdateBackground)
             {
                 existingAlbum.OriginalUrl = null;
                 existingAlbum.CdnThumbnailUrl = null;

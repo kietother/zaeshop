@@ -9,7 +9,6 @@ using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
 using Portal.Domain.AggregatesModel.TaskAggregate;
 using Portal.Domain.AggregatesModel.UserAggregate;
-using Portal.Domain.Enums;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.LevelModels;
 using Portal.Domain.SeedWork;
