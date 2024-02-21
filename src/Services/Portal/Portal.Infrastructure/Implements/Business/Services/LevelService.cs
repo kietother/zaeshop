@@ -362,7 +362,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
 
             // Get redis data from 30 minutes ago
-            var key = string.Format(Const.RedisCacheKey.ViewCount, Math.Abs(DateTime.UtcNow.Minute - (DateTime.UtcNow.Minute % 30) - 30));
+            var key = string.Format(Const.RedisCacheKey.LevelCount, Math.Abs(DateTime.UtcNow.Minute - (DateTime.UtcNow.Minute % 30) - 30));
 
             // Get safely Cache value from key
             List<LevelBuildRedisModel>? value;
