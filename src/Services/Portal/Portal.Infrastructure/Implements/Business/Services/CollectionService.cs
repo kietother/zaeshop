@@ -387,8 +387,19 @@ namespace Portal.Infrastructure.Implements.Business.Services
             var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
 
             // Get redis data from 10 minutes ago
-            var key = string.Format(Const.RedisCacheKey.ViewCount, DateTime.UtcNow.Minute - (DateTime.UtcNow.Minute % 10) - 10);
-            var value = await _redisService.GetAsync<List<CollectionViewModel>>(key);
+            var key = string.Format(Const.RedisCacheKey.ViewCount, Math.Abs(DateTime.UtcNow.Minute - (DateTime.UtcNow.Minute % 10) - 10));
+
+            // Get safely Cache value from key
+            List<CollectionViewModel>? value;
+            try
+            {
+                value = await _redisService.GetAsync<List<CollectionViewModel>>(key);
+            }
+            catch
+            {
+                value = new List<CollectionViewModel>();
+            }
+
             if (value != null && value.Count != 0)
             {
                 var collectionIds = value.Select(x => x.CollectionId).Distinct();
@@ -396,14 +407,22 @@ namespace Portal.Infrastructure.Implements.Business.Services
                     collectionIds.Contains(x.CollectionId) && (x.Date == value[0].CreatedOnUtc.Date)
                 ).ToListAsync();
 
+                var addCollectionViews = new List<CollectionView>();
+                var updateCollectionViews = new List<CollectionView>();
+
                 foreach (var item in value)
                 {
                     var collectionView = collectionViewsInDb.Find(x => x.CollectionId == item.CollectionId && (
                         x.UserId == item.UserId || x.IpAddress == item.IpAddress || x.SessionId == item.SessionId
                     ));
-                    if (collectionView == null)
+                    var newCollectionView = addCollectionViews.Find(x => x.CollectionId == item.CollectionId && (
+                        x.UserId == item.UserId || x.IpAddress == item.IpAddress || x.SessionId == item.SessionId
+                    ));
+
+                    // Case 1: No records today, Create new record
+                    if (collectionView == null && newCollectionView == null)
                     {
-                        _collectionViewRepository.Add(new CollectionView
+                        addCollectionViews.Add(new CollectionView
                         {
                             CollectionId = item.CollectionId,
                             UserId = item.UserId,
@@ -414,7 +433,47 @@ namespace Portal.Infrastructure.Implements.Business.Services
                             Date = item.CreatedOnUtc.Date
                         });
                     }
-                    else
+                    // Case 2: No records today, created record before so we update record that ready to save database
+                    else if (collectionView == null && newCollectionView != null) {
+                         newCollectionView.View++;
+
+                        if (item.UserId != null && newCollectionView.UserId == null)
+                        {
+                            newCollectionView.UserId = item.UserId;
+                        }
+
+                        #region Update lastest IP and stored Previous IPs
+                        if (!string.IsNullOrEmpty(item.IpAddress) && item.IpAddress != newCollectionView.IpAddress)
+                        {
+                            if (string.IsNullOrEmpty(newCollectionView.AnonymousInformation))
+                            {
+                                var ipAddresses = new List<string> { item.IpAddress };
+                                newCollectionView.AnonymousInformation = JsonSerializationHelper.Serialize(ipAddresses);
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    var ipAddresses = JsonSerializationHelper.Deserialize<List<string>>(newCollectionView.AnonymousInformation);
+                                    if (ipAddresses != null)
+                                    {
+                                        ipAddresses.Add(item.IpAddress);
+                                        newCollectionView.AnonymousInformation = JsonSerializationHelper.Serialize(ipAddresses);
+                                    }
+                                }
+                                catch
+                                {
+                                    var ipAddresses = new List<string> { item.IpAddress };
+                                    newCollectionView.AnonymousInformation = JsonSerializationHelper.Serialize(ipAddresses);
+                                }
+                            }
+
+                            newCollectionView.IpAddress = item.IpAddress;
+                        }
+                        #endregion
+                    }
+                    // Case 3: Exists today, we update record
+                    else if (collectionView != null && newCollectionView == null)
                     {
                         collectionView.View++;
 
@@ -450,10 +509,20 @@ namespace Portal.Infrastructure.Implements.Business.Services
                             }
 
                             collectionView.IpAddress = item.IpAddress;
-                            _collectionViewRepository.Update(collectionView);
+                            updateCollectionViews.Add(collectionView);
                         }
                         #endregion
                     }
+                }
+
+                if (addCollectionViews.Count > 0)
+                {
+                    _collectionViewRepository.AddRange(addCollectionViews);
+                }
+
+                if (updateCollectionViews.Count > 0)
+                {
+                    _collectionViewRepository.UpdateRange(updateCollectionViews);
                 }
 
                 await _unitOfWork.SaveChangesAsync();
@@ -472,7 +541,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                     EventName = Const.ServiceLogEventName.StoredViewsCache,
                     ServiceName = "Hangfire",
                     Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
-                    Description = $"Stored total views from redis cache. At {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}",
+                    Description = $"Stored total views from redis cache. Key {key}, At {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}",
                     Request = JsonSerializationHelper.Serialize(value)
                 });
             }
