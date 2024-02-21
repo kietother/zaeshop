@@ -29,6 +29,7 @@ namespace Common.ValueObjects
             public const string CalculateExperiencesFromRedis = "Calculate Experiences From Redis";
             public const string SendEmailSPremiumFollowers = "Send notification to SPremium followers";
             public const string ResetRoleUsers = "Reset role users";
+            public const string ResetJobNotUpdateRunningStatus = "Reset Job Not Update Running Status";
         }
     }
 }

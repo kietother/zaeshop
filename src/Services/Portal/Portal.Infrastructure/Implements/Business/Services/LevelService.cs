@@ -330,7 +330,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                     scheduleJob.StartOnUtc = DateTime.UtcNow;
                     await _unitOfWork.SaveChangesAsync();
 
-                    await CalculateExperiencesFromRedis();
+                    await CalculateExperiencesFromRedisAsync();
 
                     scheduleJob.EndOnUtc = DateTime.UtcNow;
                     scheduleJob.IsRunning = false;
@@ -356,7 +356,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
         }
 
-        private async Task CalculateExperiencesFromRedis()
+        public async Task CalculateExperiencesFromRedisAsync()
         {
             bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
             var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
@@ -430,7 +430,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                     else if (userLevel == null && newUserLevel != null)
                     {
                         newUserLevel.Exp += CalculateEarnExpFromViewOrComment(item.CollectionId, item.AlbumId, item.CommentId, user.RoleType);
-                        
+
                         #region Update lastest IP and stored Previous IPs
                         if (!string.IsNullOrEmpty(item.IpAddress))
                         {
@@ -610,6 +610,11 @@ namespace Portal.Infrastructure.Implements.Business.Services
                     Request = JsonSerializationHelper.Serialize(value)
                 });
             }
+        }
+
+        public async Task ResetJobNotUpdateRunningStatus()
+        {
+            await _unitOfWork.ExecuteAsync("Hangfire_ResetJobNotUpdateRunningStatus");
         }
     }
 }
