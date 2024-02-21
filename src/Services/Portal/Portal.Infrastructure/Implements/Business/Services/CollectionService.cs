@@ -381,7 +381,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
         }
 
-        private async Task CaclculateViewsFromRedisAsync()
+        public async Task CaclculateViewsFromRedisAsync()
         {
             bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
             var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
