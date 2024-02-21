@@ -330,7 +330,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                     scheduleJob.StartOnUtc = DateTime.UtcNow;
                     await _unitOfWork.SaveChangesAsync();
 
-                    await CalculateExperiencesFromRedis();
+                    await CalculateExperiencesFromRedisAsync();
 
                     scheduleJob.EndOnUtc = DateTime.UtcNow;
                     scheduleJob.IsRunning = false;
@@ -356,14 +356,25 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
         }
 
-        private async Task CalculateExperiencesFromRedis()
+        public async Task CalculateExperiencesFromRedisAsync()
         {
             bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
             var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
 
             // Get redis data from 30 minutes ago
-            var key = string.Format(Const.RedisCacheKey.ViewCount, DateTime.UtcNow.Minute - (DateTime.UtcNow.Minute % 30) - 30);
-            var value = await _redisService.GetAsync<List<LevelBuildRedisModel>>(key);
+            var key = string.Format(Const.RedisCacheKey.LevelCount, Math.Abs(DateTime.UtcNow.Minute - (DateTime.UtcNow.Minute % 30) - 30));
+
+            // Get safely Cache value from key
+            List<LevelBuildRedisModel>? value;
+            try
+            {
+                value = await _redisService.GetAsync<List<LevelBuildRedisModel>>(key);
+            }
+            catch
+            {
+                value = new List<LevelBuildRedisModel>();
+            }
+
             if (value != null && value.Count != 0)
             {
                 var userIds = value.Select(x => x.UserId).Distinct();
@@ -374,14 +385,19 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 var level = await _levelRepository.GetQueryable().OrderBy(o => o.TargetExp).ToListAsync();
                 var baseLevel = level[0];
 
+                var addUserLevels = new List<UserLevel>();
+                var updateUserLevels = new List<UserLevel>();
+
                 foreach (var item in value)
                 {
                     var user = users.Find(o => o.Id == item.UserId);
                     if (user == null) continue;
 
                     var userLevel = userLevels.Find(x => x.UserId == item.UserId);
+                    var newUserLevel = addUserLevels.Find(x => x.UserId == item.UserId);
 
-                    if (userLevel == null)
+                    // Case 1: No records today, Create new record
+                    if (userLevel == null && newUserLevel == null)
                     {
                         var additionalInformations = new List<LevelAdditionalInformation>
                         {
@@ -398,7 +414,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                             }
                         };
 
-                        _unitOfWork.Repository<UserLevel>().Add(new UserLevel
+                        addUserLevels.Add(new UserLevel
                         {
                             LevelId = user.LevelId ?? baseLevel.Id,
                             UserId = user.Id,
@@ -410,7 +426,83 @@ namespace Portal.Infrastructure.Implements.Business.Services
                             AdditionalInformation = JsonSerializationHelper.Serialize(additionalInformations)
                         });
                     }
-                    else
+                    // Case 2: No records today, created record before so we update record that ready to save database
+                    else if (userLevel == null && newUserLevel != null)
+                    {
+                        newUserLevel.Exp += CalculateEarnExpFromViewOrComment(item.CollectionId, item.AlbumId, item.CommentId, user.RoleType);
+
+                        #region Update lastest IP and stored Previous IPs
+                        if (!string.IsNullOrEmpty(item.IpAddress))
+                        {
+                            // Case 1 (Optional): When Additional Information empty, then create new records.
+                            if (string.IsNullOrEmpty(newUserLevel.AdditionalInformation))
+                            {
+                                var additionalInformations = new List<LevelAdditionalInformation>
+                                {
+                                    new LevelAdditionalInformation
+                                    {
+                                        RoleType = user.RoleType,
+                                        AlbumId = item.AlbumId,
+                                        CollectionId = item.CollectionId,
+                                        CommentId = item.CommentId,
+                                        IpAddress = item.IpAddress,
+                                        SessionId = item.SessionId,
+                                        CreatedOnUtc = DateTime.UtcNow,
+                                        IsViewedNewChapter = item.IsViewedNewChapter
+                                    }
+                                };
+                                newUserLevel.AdditionalInformation = JsonSerializationHelper.Serialize(additionalInformations);
+                            }
+                            else
+                            {
+                                // Case 2: Push a new record in exist Additional Information
+                                try
+                                {
+                                    var additionalInformations = JsonSerializationHelper.Deserialize<List<LevelAdditionalInformation>>(newUserLevel.AdditionalInformation);
+                                    if (additionalInformations != null)
+                                    {
+                                        additionalInformations.Add(new LevelAdditionalInformation
+                                        {
+                                            RoleType = user.RoleType,
+                                            AlbumId = item.AlbumId,
+                                            CollectionId = item.CollectionId,
+                                            CommentId = item.CommentId,
+                                            IpAddress = item.IpAddress,
+                                            SessionId = item.SessionId,
+                                            CreatedOnUtc = DateTime.UtcNow,
+                                            IsViewedNewChapter = item.IsViewedNewChapter
+                                        });
+                                        newUserLevel.AdditionalInformation = JsonSerializationHelper.Serialize(additionalInformations);
+                                    }
+                                }
+                                // Case (Bad Data): Then we use from case 1
+                                catch
+                                {
+                                    var additionalInformations = new List<LevelAdditionalInformation>
+                                    {
+                                       new LevelAdditionalInformation
+                                       {
+                                           RoleType = user.RoleType,
+                                           AlbumId = item.AlbumId,
+                                           CollectionId = item.CollectionId,
+                                           CommentId = item.CommentId,
+                                           IpAddress = item.IpAddress,
+                                           SessionId = item.SessionId,
+                                           CreatedOnUtc = DateTime.UtcNow,
+                                           IsViewedNewChapter = item.IsViewedNewChapter
+                                       }
+                                    };
+                                    newUserLevel.AdditionalInformation = JsonSerializationHelper.Serialize(additionalInformations);
+                                }
+                            }
+
+                            newUserLevel.IpAddress = item.IpAddress;
+                            newUserLevel.SessionId = item.SessionId;
+                        }
+                        #endregion
+                    }
+                    // Case 3: Exists today, we update record
+                    else if (userLevel != null && newUserLevel == null)
                     {
                         userLevel.Exp += CalculateEarnExpFromViewOrComment(item.CollectionId, item.AlbumId, item.CommentId, user.RoleType);
 
@@ -483,9 +575,19 @@ namespace Portal.Infrastructure.Implements.Business.Services
                             userLevel.SessionId = item.SessionId;
                         }
 
-                        _unitOfWork.Repository<UserLevel>().Update(userLevel);
+                        updateUserLevels.Add(userLevel);
                         #endregion
                     }
+                }
+
+                if (addUserLevels.Count > 0)
+                {
+                    _unitOfWork.Repository<UserLevel>().AddRange(addUserLevels);
+                }
+
+                if (updateUserLevels.Count > 0)
+                {
+                    _unitOfWork.Repository<UserLevel>().UpdateRange(updateUserLevels);
                 }
 
                 await _unitOfWork.SaveChangesAsync();
@@ -504,10 +606,15 @@ namespace Portal.Infrastructure.Implements.Business.Services
                     EventName = Const.ServiceLogEventName.StoredExpCache,
                     ServiceName = "Hangfire",
                     Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
-                    Description = $"Stored total views from redis cache. At {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}",
+                    Description = $"Stored total views from redis cache. Key {key}, At {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}",
                     Request = JsonSerializationHelper.Serialize(value)
                 });
             }
+        }
+
+        public async Task ResetJobNotUpdateRunningStatus()
+        {
+            await _unitOfWork.ExecuteAsync("Hangfire_ResetJobNotUpdateRunningStatus");
         }
     }
 }
