@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Common.Enums;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
 using Portal.Domain.Enums;
@@ -20,6 +21,7 @@ public class User : Entity, IAggregateRoot
     public int CurrentExp { get; set; }
     public int NextLevelExp { get; set; }
     public DateTime? ExpriedRoleDate { get; set; }
+    public ERegion Region { get; set; }
 
     [JsonIgnore]
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();

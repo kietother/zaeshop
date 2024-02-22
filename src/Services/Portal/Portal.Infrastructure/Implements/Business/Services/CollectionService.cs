@@ -10,6 +10,7 @@ using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
 using Portal.Domain.AggregatesModel.TaskAggregate;
 using Portal.Domain.AggregatesModel.UserAggregate;
+using Portal.Domain.Enums;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.CollectionModels;
 using Portal.Domain.Models.ContentItemModels;
@@ -381,14 +382,25 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
         }
 
-        private async Task CaclculateViewsFromRedisAsync()
+        public async Task CaclculateViewsFromRedisAsync()
         {
             bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
             var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
 
             // Get redis data from 10 minutes ago
-            var key = string.Format(Const.RedisCacheKey.ViewCount, DateTime.UtcNow.Minute - (DateTime.UtcNow.Minute % 10) - 10);
-            var value = await _redisService.GetAsync<List<CollectionViewModel>>(key);
+            var key = string.Format(Const.RedisCacheKey.ViewCount, Math.Abs(DateTime.UtcNow.Minute - (DateTime.UtcNow.Minute % 10) - 10));
+
+            // Get safely Cache value from key
+            List<CollectionViewModel>? value;
+            try
+            {
+                value = await _redisService.GetAsync<List<CollectionViewModel>>(key);
+            }
+            catch
+            {
+                value = new List<CollectionViewModel>();
+            }
+
             if (value != null && value.Count != 0)
             {
                 var collectionIds = value.Select(x => x.CollectionId).Distinct();
@@ -396,14 +408,22 @@ namespace Portal.Infrastructure.Implements.Business.Services
                     collectionIds.Contains(x.CollectionId) && (x.Date == value[0].CreatedOnUtc.Date)
                 ).ToListAsync();
 
+                var addCollectionViews = new List<CollectionView>();
+                var updateCollectionViews = new List<CollectionView>();
+
                 foreach (var item in value)
                 {
                     var collectionView = collectionViewsInDb.Find(x => x.CollectionId == item.CollectionId && (
                         x.UserId == item.UserId || x.IpAddress == item.IpAddress || x.SessionId == item.SessionId
                     ));
-                    if (collectionView == null)
+                    var newCollectionView = addCollectionViews.Find(x => x.CollectionId == item.CollectionId && (
+                        x.UserId == item.UserId || x.IpAddress == item.IpAddress || x.SessionId == item.SessionId
+                    ));
+
+                    // Case 1: No records today, Create new record
+                    if (collectionView == null && newCollectionView == null)
                     {
-                        _collectionViewRepository.Add(new CollectionView
+                        addCollectionViews.Add(new CollectionView
                         {
                             CollectionId = item.CollectionId,
                             UserId = item.UserId,
@@ -414,7 +434,47 @@ namespace Portal.Infrastructure.Implements.Business.Services
                             Date = item.CreatedOnUtc.Date
                         });
                     }
-                    else
+                    // Case 2: No records today, created record before so we update record that ready to save database
+                    else if (collectionView == null && newCollectionView != null) {
+                         newCollectionView.View++;
+
+                        if (item.UserId != null && newCollectionView.UserId == null)
+                        {
+                            newCollectionView.UserId = item.UserId;
+                        }
+
+                        #region Update lastest IP and stored Previous IPs
+                        if (!string.IsNullOrEmpty(item.IpAddress) && item.IpAddress != newCollectionView.IpAddress)
+                        {
+                            if (string.IsNullOrEmpty(newCollectionView.AnonymousInformation))
+                            {
+                                var ipAddresses = new List<string> { item.IpAddress };
+                                newCollectionView.AnonymousInformation = JsonSerializationHelper.Serialize(ipAddresses);
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    var ipAddresses = JsonSerializationHelper.Deserialize<List<string>>(newCollectionView.AnonymousInformation);
+                                    if (ipAddresses != null)
+                                    {
+                                        ipAddresses.Add(item.IpAddress);
+                                        newCollectionView.AnonymousInformation = JsonSerializationHelper.Serialize(ipAddresses);
+                                    }
+                                }
+                                catch
+                                {
+                                    var ipAddresses = new List<string> { item.IpAddress };
+                                    newCollectionView.AnonymousInformation = JsonSerializationHelper.Serialize(ipAddresses);
+                                }
+                            }
+
+                            newCollectionView.IpAddress = item.IpAddress;
+                        }
+                        #endregion
+                    }
+                    // Case 3: Exists today, we update record
+                    else if (collectionView != null && newCollectionView == null)
                     {
                         collectionView.View++;
 
@@ -450,10 +510,20 @@ namespace Portal.Infrastructure.Implements.Business.Services
                             }
 
                             collectionView.IpAddress = item.IpAddress;
-                            _collectionViewRepository.Update(collectionView);
+                            updateCollectionViews.Add(collectionView);
                         }
                         #endregion
                     }
+                }
+
+                if (addCollectionViews.Count > 0)
+                {
+                    _collectionViewRepository.AddRange(addCollectionViews);
+                }
+
+                if (updateCollectionViews.Count > 0)
+                {
+                    _collectionViewRepository.UpdateRange(updateCollectionViews);
                 }
 
                 await _unitOfWork.SaveChangesAsync();
@@ -472,7 +542,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                     EventName = Const.ServiceLogEventName.StoredViewsCache,
                     ServiceName = "Hangfire",
                     Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
-                    Description = $"Stored total views from redis cache. At {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}",
+                    Description = $"Stored total views from redis cache. Key {key}, At {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}",
                     Request = JsonSerializationHelper.Serialize(value)
                 });
             }
@@ -501,6 +571,126 @@ namespace Portal.Infrastructure.Implements.Business.Services
             };
 
             return new ServiceResponse<CollectionResponseModel>(response);
+        }
+
+        public async Task<ServiceResponse<string>> BulkCreateAsync(int albumId, List<BulkCreateCollectionRequest> collections)
+        {
+            var album = await _albumRepository.GetByIdAsync(albumId);
+            if (album == null)
+            {
+                return new ServiceResponse<string>("error_album_not_found");
+            }
+
+            var existsCollections = await _repository.GetQueryable().Where(o => o.AlbumId == albumId).ToListAsync();
+
+            var addCollections = new List<Collection>();
+            foreach (var item in collections)
+            {
+                bool isExists = existsCollections.Any(x => x.FriendlyName == item.Name);
+                if (!isExists)
+                {
+                    // convert friendly name to title
+                    string[] words = item.Name.Split('-');
+                    string title = string.Join(" ", words.Select(w => char.ToUpper(w[0]) + w[1..]));
+                    var contentItems = item.ContentItems.ConvertAll(x =>
+                    {
+                        // Prefix relative to stored folder places
+                        string prefixRelative = $"{album.FriendlyName}/{item.Name}";
+                        return new ContentItem
+                        {
+                            Name = x.Name,
+                            OriginalUrl = $"https://s1.codegota.me/{prefixRelative}/{x.Name}",
+                            DisplayUrl = $"https://s1.codegota.me/{prefixRelative}/{x.Name}",
+                            RelativeUrl = prefixRelative + "/" + x.Name,
+                            OrderBy = RegexHelper.GetNumberByText(x.Name)
+                        };
+                    }).OrderBy(x => x.OrderBy).ToList();
+
+                    var newCollection = new Collection
+                    {
+                        AlbumId = albumId,
+                        Title = title,
+                        FriendlyName = item.Name,
+                        ContentItems = contentItems
+                    };
+                    addCollections.Add(newCollection);
+                }
+            }
+
+            if (addCollections.Count > 0)
+            {
+                _repository.AddRange(addCollections);
+                await _unitOfWork.SaveChangesAsync();
+            }
+
+            return new ServiceResponse<string>("success");
+        }
+
+
+        public async Task ResetLevelPublicTaskAsync()
+        {
+            bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
+            var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
+
+            var scheduleJob = await _unitOfWork.Repository<HangfireScheduleJob>().GetByNameAsync(Const.HangfireJobName.SendEmailSPremiumFollowers);
+            if (scheduleJob != null && scheduleJob.IsEnabled && !scheduleJob.IsRunning)
+            {
+                try
+                {
+                    scheduleJob.IsRunning = true;
+                    scheduleJob.StartOnUtc = DateTime.UtcNow;
+                    await _unitOfWork.SaveChangesAsync();
+
+                    await ResetLevelPublicAsync();
+
+                    scheduleJob.EndOnUtc = DateTime.UtcNow;
+                    scheduleJob.IsRunning = false;
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
+                    {
+                        LogLevel = ELogLevel.Error,
+                        EventName = ex.Message,
+                        StackTrace = ex.StackTrace,
+                        ServiceName = "Hangfire",
+                        Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
+                        Description = $"[Exception]: {ex.Message}",
+                        StatusCode = "Internal Server Error"
+                    });
+
+                    scheduleJob.EndOnUtc = DateTime.UtcNow;
+                    scheduleJob.IsRunning = false;
+                    await _unitOfWork.SaveChangesAsync();
+                }
+            }
+        }
+
+        // Reset Level Public
+        private async Task<ServiceResponse<bool>> ResetLevelPublicAsync()
+        {
+            var collections = await _repository.GetQueryable().Where(x => x.LevelPublic != ELevelPublic.AllUser).ToListAsync();
+
+            if (collections == null)
+                return new ServiceResponse<bool>("error_reset_level_public");
+
+            foreach (var collection in collections)
+            {
+                TimeSpan difference = DateTime.UtcNow - collection.CreatedOnUtc;
+
+                if (collection.LevelPublic == ELevelPublic.Partner && difference.TotalMinutes >= 15)
+                    collection.LevelPublic = ELevelPublic.SPremiumUser;
+
+                if (collection.LevelPublic == ELevelPublic.SPremiumUser && difference.TotalHours >= 4 && difference.TotalHours < 12)
+                    collection.LevelPublic = ELevelPublic.PremiumUser;
+
+                if (collection.LevelPublic == ELevelPublic.PremiumUser && difference.TotalHours >= 12)
+                    collection.LevelPublic = ELevelPublic.AllUser;
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+            return new ServiceResponse<bool>(true);
         }
     }
 }

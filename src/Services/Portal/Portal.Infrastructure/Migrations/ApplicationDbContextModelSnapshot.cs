@@ -510,6 +510,9 @@ namespace Portal.Infrastructure.Migrations
                     b.Property<int>("NextLevelExp")
                         .HasColumnType("int");
 
+                    b.Property<int>("Region")
+                        .HasColumnType("int");
+
                     b.Property<int>("RoleType")
                         .HasColumnType("int");
 

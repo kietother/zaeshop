@@ -1,12 +1,18 @@
 using Common;
+using Common.Enums;
+using Common.Interfaces.Messaging;
 using Common.Models;
+using Common.Shared.Models.Logs;
+using Common.ValueObjects;
+using Microsoft.Extensions.Hosting;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
+using Portal.Domain.AggregatesModel.TaskAggregate;
 using Portal.Domain.Enums;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Interfaces.External;
 using Portal.Domain.Models.AlbumModels;
-using Portal.Domain.Models.ImageUploadModels;
 using Portal.Domain.SeedWork;
+using Portal.Infrastructure.Helpers;
 
 namespace Portal.Infrastructure.Implements.Business.Services
 {
@@ -17,16 +23,22 @@ namespace Portal.Infrastructure.Implements.Business.Services
         private readonly IGenericRepository<AlbumAlertMessage> _albumAlertMessageRepository;
         private readonly IGenericRepository<ContentType> _contentTypeRepository;
         private readonly IAmazonS3Service _amazonS3Service;
+        private readonly IServiceLogPublisher _serviceLogPublisher;
+        private readonly IHostEnvironment _hostingEnvironment;
 
         public AlbumService(
             IUnitOfWork unitOfWork,
-            IAmazonS3Service amazonS3Service)
+            IAmazonS3Service amazonS3Service,
+            IServiceLogPublisher serviceLogPublisher,
+            IHostEnvironment hostingEnvironment)
         {
             _unitOfWork = unitOfWork;
             _repository = unitOfWork.Repository<Album>();
             _albumAlertMessageRepository = unitOfWork.Repository<AlbumAlertMessage>();
             _contentTypeRepository = unitOfWork.Repository<ContentType>();
             _amazonS3Service = amazonS3Service;
+            _serviceLogPublisher = serviceLogPublisher;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public async Task<ServiceResponse<AlbumResponseModel>> CreateAsync(AlbumRequestModel requestModel)
@@ -88,29 +100,19 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
 
             // We can upload thumbnail
-            if (!string.IsNullOrEmpty(requestModel.FileName) && requestModel.FileData != null)
+            if (!string.IsNullOrEmpty(requestModel.FileNameThumbnail))
             {
-                var result = await _amazonS3Service.UploadImageAsync(new ImageUploadRequestModel
-                {
-                    FileName = requestModel.FileName,
-                    ImageData = requestModel.FileData
-                }, $"{entity.FriendlyName}/thumbnail");
-
-                entity.ThumbnailUrl = result.AbsoluteUrl;
-                entity.CdnThumbnailUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
+                var relativePath = $"{entity.FriendlyName}/thumbnail";
+                entity.ThumbnailUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameThumbnail}";
+                entity.CdnThumbnailUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameThumbnail}";
             }
 
             // We can upload background
-            if (!string.IsNullOrEmpty(requestModel.FileNameOriginal) && requestModel.FileDataOriginal != null)
+            if (!string.IsNullOrEmpty(requestModel.FileNameBackground))
             {
-                var result = await _amazonS3Service.UploadImageAsync(new ImageUploadRequestModel
-                {
-                    FileName = requestModel.FileNameOriginal,
-                    ImageData = requestModel.FileDataOriginal
-                }, $"{entity.FriendlyName}/background");
-
-                entity.OriginalUrl = result.AbsoluteUrl;
-                entity.CdnOriginalUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
+                var relativePath = $"{entity.FriendlyName}/background";
+                entity.OriginalUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameBackground}";
+                entity.CdnOriginalUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameBackground}";
             }
 
             _repository.Add(entity);
@@ -214,16 +216,11 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
 
             // We can upload thumbnail
-            if (requestModel.IsUpdateThumbnail && !string.IsNullOrEmpty(requestModel.FileName) && requestModel.FileData != null)
+            if (requestModel.IsUpdateThumbnail && !string.IsNullOrEmpty(requestModel.FileNameThumbnail))
             {
-                var result = await _amazonS3Service.UploadImageAsync(new ImageUploadRequestModel
-                {
-                    FileName = requestModel.FileName,
-                    ImageData = requestModel.FileData
-                }, $"{existingAlbum.FriendlyName}/thumbnail");
-
-                existingAlbum.ThumbnailUrl = result.AbsoluteUrl;
-                existingAlbum.CdnThumbnailUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
+                var relativePath = $"{existingAlbum.FriendlyName}/thumbnail";
+                existingAlbum.ThumbnailUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameThumbnail}";
+                existingAlbum.CdnThumbnailUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameThumbnail}";
             }
             else if (requestModel.IsUpdateThumbnail)
             {
@@ -234,18 +231,13 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
 
             // We can upload background
-            if (requestModel.IsUpdateOriginalUrl && !string.IsNullOrEmpty(requestModel.FileNameOriginal) && requestModel.FileDataOriginal != null)
+            if (requestModel.IsUpdateBackground && !string.IsNullOrEmpty(requestModel.FileNameBackground))
             {
-                var result = await _amazonS3Service.UploadImageAsync(new ImageUploadRequestModel
-                {
-                    FileName = requestModel.FileNameOriginal,
-                    ImageData = requestModel.FileDataOriginal
-                }, $"{existingAlbum.FriendlyName}/background");
-
-                existingAlbum.OriginalUrl = result.AbsoluteUrl;
-                existingAlbum.CdnOriginalUrl = $"https://s3.codegota.me/{result.RelativeUrl}";
+                var relativePath = $"{existingAlbum.FriendlyName}/background";
+                existingAlbum.OriginalUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameBackground}";
+                existingAlbum.CdnOriginalUrl = $"https://s1.codegota.me/{relativePath}/{requestModel.FileNameBackground}";
             }
-            else if (requestModel.IsUpdateOriginalUrl)
+            else if (requestModel.IsUpdateBackground)
             {
                 existingAlbum.OriginalUrl = null;
                 existingAlbum.CdnThumbnailUrl = null;
@@ -426,6 +418,72 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
             requestModel.Id = album.Id;
             return new ServiceResponse<AlbumExtraInfoModel>(requestModel);
+        }
+
+        public async Task ResetLevelPublicTaskAsync()
+        {
+            bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
+            var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
+
+            var scheduleJob = await _unitOfWork.Repository<HangfireScheduleJob>().GetByNameAsync(Const.HangfireJobName.SendEmailSPremiumFollowers);
+            if (scheduleJob != null && scheduleJob.IsEnabled && !scheduleJob.IsRunning)
+            {
+                try
+                {
+                    scheduleJob.IsRunning = true;
+                    scheduleJob.StartOnUtc = DateTime.UtcNow;
+                    await _unitOfWork.SaveChangesAsync();
+
+                    await ResetLevelPublicAsync();
+
+                    scheduleJob.EndOnUtc = DateTime.UtcNow;
+                    scheduleJob.IsRunning = false;
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
+                    {
+                        LogLevel = ELogLevel.Error,
+                        EventName = ex.Message,
+                        StackTrace = ex.StackTrace,
+                        ServiceName = "Hangfire",
+                        Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
+                        Description = $"[Exception]: {ex.Message}",
+                        StatusCode = "Internal Server Error"
+                    });
+
+                    scheduleJob.EndOnUtc = DateTime.UtcNow;
+                    scheduleJob.IsRunning = false;
+                    await _unitOfWork.SaveChangesAsync();
+                }
+            }
+        }
+
+        // Reset Level Public
+        private async Task<ServiceResponse<bool>> ResetLevelPublicAsync()
+        {
+            var albums = await _repository.GetQueryable().Where(x => x.LevelPublic != ELevelPublic.AllUser).ToListAsync();
+
+            if (albums == null)
+                return new ServiceResponse<bool>("error_reset_level_public");
+
+            foreach (var album in albums)
+            {
+                TimeSpan difference = DateTime.UtcNow - album.CreatedOnUtc;
+
+                if (album.LevelPublic == ELevelPublic.Partner && difference.TotalMinutes >= 15)
+                    album.LevelPublic = ELevelPublic.SPremiumUser;
+
+                if (album.LevelPublic == ELevelPublic.SPremiumUser && difference.TotalHours >= 4 && difference.TotalHours < 12)
+                    album.LevelPublic = ELevelPublic.PremiumUser;
+
+                if (album.LevelPublic == ELevelPublic.PremiumUser && difference.TotalHours >= 12)
+                    album.LevelPublic = ELevelPublic.AllUser;
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+            return new ServiceResponse<bool>(true);
         }
     }
 }
