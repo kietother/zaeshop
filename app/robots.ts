@@ -10,7 +10,9 @@ export default function robots(): MetadataRoute.Robots {
             disallow: [
                 '/profile',
                 '/theo-doi',
-                '/following'
+                '/following',
+                '/truyen-tranh/*?previousCollectionId=*',
+                '/comics/*?previousCollectionId=*'
             ],
         },
         sitemap: [
