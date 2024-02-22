@@ -670,23 +670,23 @@ namespace Portal.Infrastructure.Implements.Business.Services
         // Reset Level Public
         private async Task<ServiceResponse<bool>> ResetLevelPublicAsync()
         {
-            var albums = await _repository.GetQueryable().Where(x => x.LevelPublic != ELevelPublic.AllUser).ToListAsync();
+            var collections = await _repository.GetQueryable().Where(x => x.LevelPublic != ELevelPublic.AllUser).ToListAsync();
 
-            if (albums == null)
+            if (collections == null)
                 return new ServiceResponse<bool>("error_reset_level_public");
 
-            foreach (var album in albums)
+            foreach (var collection in collections)
             {
-                TimeSpan difference = DateTime.UtcNow - album.CreatedOnUtc;
+                TimeSpan difference = DateTime.UtcNow - collection.CreatedOnUtc;
 
-                if (album.LevelPublic == ELevelPublic.Partner && difference.TotalMinutes >= 15)
-                    album.LevelPublic = ELevelPublic.SPremiumUser;
+                if (collection.LevelPublic == ELevelPublic.Partner && difference.TotalMinutes >= 15)
+                    collection.LevelPublic = ELevelPublic.SPremiumUser;
 
-                if (album.LevelPublic == ELevelPublic.SPremiumUser && difference.TotalHours >= 4 && difference.TotalHours < 12)
-                    album.LevelPublic = ELevelPublic.PremiumUser;
+                if (collection.LevelPublic == ELevelPublic.SPremiumUser && difference.TotalHours >= 4 && difference.TotalHours < 12)
+                    collection.LevelPublic = ELevelPublic.PremiumUser;
 
-                if (album.LevelPublic == ELevelPublic.PremiumUser && difference.TotalHours >= 12)
-                    album.LevelPublic = ELevelPublic.AllUser;
+                if (collection.LevelPublic == ELevelPublic.PremiumUser && difference.TotalHours >= 12)
+                    collection.LevelPublic = ELevelPublic.AllUser;
             }
 
             await _unitOfWork.SaveChangesAsync();
