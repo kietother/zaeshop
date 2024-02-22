@@ -10,6 +10,7 @@ using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.AggregatesModel.CollectionAggregate;
 using Portal.Domain.AggregatesModel.TaskAggregate;
 using Portal.Domain.AggregatesModel.UserAggregate;
+using Portal.Domain.Enums;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Models.CollectionModels;
 using Portal.Domain.Models.ContentItemModels;
@@ -623,6 +624,73 @@ namespace Portal.Infrastructure.Implements.Business.Services
             }
 
             return new ServiceResponse<string>("success");
+        }
+
+
+        public async Task ResetLevelPublicTaskAsync()
+        {
+            bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
+            var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
+
+            var scheduleJob = await _unitOfWork.Repository<HangfireScheduleJob>().GetByNameAsync(Const.HangfireJobName.SendEmailSPremiumFollowers);
+            if (scheduleJob != null && scheduleJob.IsEnabled && !scheduleJob.IsRunning)
+            {
+                try
+                {
+                    scheduleJob.IsRunning = true;
+                    scheduleJob.StartOnUtc = DateTime.UtcNow;
+                    await _unitOfWork.SaveChangesAsync();
+
+                    await ResetLevelPublicAsync();
+
+                    scheduleJob.EndOnUtc = DateTime.UtcNow;
+                    scheduleJob.IsRunning = false;
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
+                    {
+                        LogLevel = ELogLevel.Error,
+                        EventName = ex.Message,
+                        StackTrace = ex.StackTrace,
+                        ServiceName = "Hangfire",
+                        Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
+                        Description = $"[Exception]: {ex.Message}",
+                        StatusCode = "Internal Server Error"
+                    });
+
+                    scheduleJob.EndOnUtc = DateTime.UtcNow;
+                    scheduleJob.IsRunning = false;
+                    await _unitOfWork.SaveChangesAsync();
+                }
+            }
+        }
+
+        // Reset Level Public
+        private async Task<ServiceResponse<bool>> ResetLevelPublicAsync()
+        {
+            var albums = await _repository.GetQueryable().Where(x => x.LevelPublic != ELevelPublic.AllUser).ToListAsync();
+
+            if (albums == null)
+                return new ServiceResponse<bool>("error_reset_level_public");
+
+            foreach (var album in albums)
+            {
+                TimeSpan difference = DateTime.UtcNow - album.CreatedOnUtc;
+
+                if (album.LevelPublic == ELevelPublic.Partner && difference.TotalMinutes >= 15)
+                    album.LevelPublic = ELevelPublic.SPremiumUser;
+
+                if (album.LevelPublic == ELevelPublic.SPremiumUser && difference.TotalHours >= 4 && difference.TotalHours < 12)
+                    album.LevelPublic = ELevelPublic.PremiumUser;
+
+                if (album.LevelPublic == ELevelPublic.PremiumUser && difference.TotalHours >= 12)
+                    album.LevelPublic = ELevelPublic.AllUser;
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+            return new ServiceResponse<bool>(true);
         }
     }
 }

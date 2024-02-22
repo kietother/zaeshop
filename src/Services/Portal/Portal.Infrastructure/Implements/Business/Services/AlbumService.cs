@@ -420,7 +420,6 @@ namespace Portal.Infrastructure.Implements.Business.Services
             return new ServiceResponse<AlbumExtraInfoModel>(requestModel);
         }
 
-
         public async Task ResetLevelPublicTaskAsync()
         {
             bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");

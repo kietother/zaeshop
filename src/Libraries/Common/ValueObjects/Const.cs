@@ -31,6 +31,7 @@ namespace Common.ValueObjects
             public const string ResetRoleUsers = "Reset role users";
             public const string ResetJobNotUpdateRunningStatus = "Reset Job Not Update Running Status";
             public const string ResetLevelPublic = "Reset level public";
+            public const string ResetLevelPublicChap = "Reset level public chap";
         }
     }
 }
