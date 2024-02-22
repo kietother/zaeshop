@@ -47,6 +47,9 @@ namespace HangFireServer.Extensions
 
             // 1 Hours to reset role user
             RecurringJob.AddOrUpdate<IUserService>(HangfireJobName.ResetRoleUsers, x => x.ResetRoleTaskAsync(), "0 */1 * * *");
+        
+            // 5 Minutes to check hangfire job is still running start StartOnUtc > endOnUtc + 5m then stop running status
+            RecurringJob.AddOrUpdate<ILevelService>(HangfireJobName.ResetJobNotUpdateRunningStatus, x => x.ResetJobNotUpdateRunningStatus(), "*/5 * * * *");
         }
     }
 }
