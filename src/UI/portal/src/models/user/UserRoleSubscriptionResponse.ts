@@ -5,6 +5,6 @@ export default interface UserRoleSubscriptionResponse {
     email?: string | null;
     avatar?: string | null;
     role?: string | null;
-    expiredRoleDate?: Date | null;
+    expriedRoleDate?: Date | null;
     createdOnUtc: Date;
 }

@@ -5,6 +5,7 @@
     "error_album_not_found": "Album not found",
     "error_album_name_is_required": "Album name is required",
     "error_album_region_is_required": "Album region is required",
+    "error_upgrade_not_support_downgrade": "Role subscription not support downgrade",
     "toast": {
         "please_wait": "Please wait...",
         "login_sucessfully": "Login Sucessfully",

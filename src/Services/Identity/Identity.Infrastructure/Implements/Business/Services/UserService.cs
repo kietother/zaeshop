@@ -295,7 +295,7 @@ namespace Identity.Infrastructure.Implements.Business.Services
             }
 
             // Three roles in subscription, other roles that we can use Edit User Feature
-            if (newRoleType != ERoleType.User || newRoleType != ERoleType.UserPremium || newRoleType != ERoleType.UserSuperPremium)
+            if (newRoleType != ERoleType.User && newRoleType != ERoleType.UserPremium && newRoleType != ERoleType.UserSuperPremium)
             {
                 return "error_role_not_in_subscription";
             }
@@ -328,14 +328,21 @@ namespace Identity.Infrastructure.Implements.Business.Services
                     user.ExpriedRoleDate = DateTime.UtcNow.AddDays(requestModel.Days.Value);
                 }
                 // Case 2
-                else if (currentUserRole == newRoleType && user.ExpriedRoleDate.HasValue)
+                else if (currentUserRole == newRoleType)
                 {
-                    user.ExpriedRoleDate = user.ExpriedRoleDate.Value.AddDays(requestModel.Days.Value);
+                    if (user.ExpriedRoleDate.HasValue)
+                    {
+                        user.ExpriedRoleDate = user.ExpriedRoleDate.Value.AddDays(requestModel.Days.Value);
+                    }
+                    else
+                    {
+                        user.ExpriedRoleDate = DateTime.UtcNow.AddDays(requestModel.Days.Value);
+                    }
                 }
                 // Case 3
                 else if (currentUserRole == ERoleType.UserPremium && newRoleType == ERoleType.UserSuperPremium && user.ExpriedRoleDate.HasValue)
                 {
-                    var remainDays = DateTime.UtcNow.Subtract(user.ExpriedRoleDate.Value).Days;
+                    var remainDays = Math.Abs(DateTime.UtcNow.Subtract(user.ExpriedRoleDate.Value).Days);
                     // Assume ExpriedRoleDate is expired then remain will be zero
                     var trueRemainDays = remainDays > 0 ? remainDays : 0;
 

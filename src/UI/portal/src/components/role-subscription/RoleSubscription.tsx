@@ -103,7 +103,7 @@ const RoleSubscription: React.FC<Props> = ({ userId, reloadPaging }) => {
 
     const onSubmit = async () => {
         closeModal();
-        
+
         const toastId = toast.loading(t("toast.please_wait"), {
             hideProgressBar: true
         });
@@ -111,14 +111,27 @@ const RoleSubscription: React.FC<Props> = ({ userId, reloadPaging }) => {
         const request: UserRoleSubcriptionRequest = {
             userId: userId!,
             role: roleSelectedOption!.value,
-            days: daySelectedOption?.value
+            days: roleSelectedOption!.value !== 'User' ? daySelectedOption?.value : null
         }
-        await updateRoleSubscription(userId!, request);
+
+        const response: any = await updateRoleSubscription(userId!, request);
+        if (response.status !== 200) {
+            toast.update(toastId, {
+                render: t(response.response.data), type: toast.TYPE.ERROR, isLoading: false,
+                autoClose: 2000
+            });
+            return;
+        }
 
         toast.update(toastId, {
             render: t("toast.create_sucessfully"), type: toast.TYPE.SUCCESS, isLoading: false,
             autoClose: 2000
         });
+
+        // Referesh
+        if (userId) {
+            dispatch(getUserRoleSubscriptionAsyncThunk({ id: userId }));
+        }
 
         reloadPaging();
     }
@@ -126,7 +139,7 @@ const RoleSubscription: React.FC<Props> = ({ userId, reloadPaging }) => {
     const activyHistory = useMemo(() => {
         const history: UserRoleSubscriptionHistoryAction = {
             role: roleSelectedOption?.label,
-            day: daySelectedOption?.value
+            day: roleSelectedOption?.value !== 'User' ? daySelectedOption?.value : null
         };
         return history;
     }, [roleSelectedOption, daySelectedOption]);
@@ -155,12 +168,13 @@ const RoleSubscription: React.FC<Props> = ({ userId, reloadPaging }) => {
                                                 <p className="mb-0 met-user-name-post">
                                                     {roleSubscription?.role}
                                                 </p>
-
-                                                {roleSubscription?.expiredRoleDate && (
-                                                    <p className="mb-0 met-user-name-post">
-                                                        Expried Date: {dayjsCustom.utc(roleSubscription?.expiredRoleDate).local().format('DD-MM-YYYY HH:mm')}
-                                                    </p>
-                                                )}
+                                                <p className="mb-0 met-user-name-post">
+                                                    {t('role_subscription.expried_date')}: {
+                                                        roleSubscription?.expriedRoleDate ?
+                                                            dayjsCustom.utc(roleSubscription?.expriedRoleDate).local().format('DD-MM-YYYY HH:mm') :
+                                                            (roleSubscription?.role === 'User' ? t('role_subscription.none') : t('role_subscription.forever'))
+                                                    }
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -230,24 +244,26 @@ const RoleSubscription: React.FC<Props> = ({ userId, reloadPaging }) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-lg-6">
-                                <div className="mb-3 row">
-                                    <label className="col-sm-2 text-muted text-end align-middle mt-2">
-                                        {t('role_subscription.day')}
-                                    </label>
-                                    <div className="col-sm-10">
-                                        <Select
-                                            className="basic-single"
-                                            classNamePrefix="select"
-                                            options={daysDropDown}
-                                            value={daySelectedOption}
-                                            onChange={onChangeDaySelectedOption}
-                                            isSearchable={true}
-                                            isClearable={true}
-                                        />
+                            {roleSelectedOption?.value !== 'User' && (
+                                <div className="col-lg-6">
+                                    <div className="mb-3 row">
+                                        <label className="col-sm-2 text-muted text-end align-middle mt-2">
+                                            {t('role_subscription.day')}
+                                        </label>
+                                        <div className="col-sm-10">
+                                            <Select
+                                                className="basic-single"
+                                                classNamePrefix="select"
+                                                options={daysDropDown}
+                                                value={daySelectedOption}
+                                                onChange={onChangeDaySelectedOption}
+                                                isSearchable={true}
+                                                isClearable={true}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                         <button
                             type="button"

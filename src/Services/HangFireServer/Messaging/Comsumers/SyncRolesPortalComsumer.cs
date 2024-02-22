@@ -86,7 +86,7 @@ namespace HangFireServer.Messaging.Comsumers
                     ActivityType = EActivityType.Subscription,
                     Description = descriptionBuilder.ToString()
                 };
-                _userActivityLogRepository.Update(userActivityLog);
+                _userActivityLogRepository.Add(userActivityLog);
             }
             #endregion
 

@@ -5,6 +5,7 @@
     "error_album_not_found": "Không tìm thấy Album",
     "error_album_name_is_required": "Tên album là bắt buộc",
     "error_album_region_is_required": "Khu vực album là bắt buộc",
+    "error_upgrade_not_support_downgrade": "Đăng ký vai trò không hỗ trợ hạ cấp",
     "toast": {
         "please_wait": "Vui lòng đợi...",
         "login_sucessfully": "Đăng nhập thành công",
