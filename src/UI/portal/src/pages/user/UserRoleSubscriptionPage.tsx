@@ -130,9 +130,9 @@ const UserRoleSubscriptionPage: React.FC = () => {
                                                         <th>{t('role_subscription.activity_id')}</th>
                                                         <th>{t('role_subscription.acitivy_type')}</th>
                                                         <th>{t('role_subscription.activity_description')}</th>
+                                                        <th>{t('role_subscription.activity_created_on')}</th>
                                                         <th>{t('role_subscription.activity_ipv4_address')}</th>
                                                         <th>{t('role_subscription.activity_ipv6_address')}</th>
-                                                        <th>{t('role_subscription.activity_created_on')}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -142,6 +142,8 @@ const UserRoleSubscriptionPage: React.FC = () => {
                                                             <td>{activity.activityType}</td>
                                                             <td>{activity.description}</td>
                                                             <td>{dayjsCustom.utc(activity.createdOnUtc).local().format('DD-MM-YYYY HH:mm')}</td>
+                                                            <td></td>
+                                                            <td></td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
