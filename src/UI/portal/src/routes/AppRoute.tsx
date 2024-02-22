@@ -13,6 +13,7 @@ import RolePage from "../pages/user/RolePage";
 import AlbumPage from "../pages/album/AlbumPage";
 import AlbumDetailCollectionPage from "../pages/album/AlbumDetailCollectionPage";
 import ContentItemPage from "../pages/album/ContentItemPage";
+import UserRoleSubscriptionPage from "../pages/user/UserRoleSubscriptionPage";
 
 // Lazy load import for large components
 const BulkCreateCollectionPage = lazy(() => import('../pages/album/BulkCreateCollectionPage'));
@@ -38,6 +39,7 @@ const MainComponent: React.FC = () => {
                 <Routes>
                     <Route path="/" Component={UserPage} />;
                     <Route path="/users" Component={UserPage} />;
+                    <Route path="/users/:userId" Component={UserRoleSubscriptionPage} />
                     <Route path="/roles" Component={RolePage} />;
                     <Route path="/albums" Component={AlbumPage} />;
                     <Route path="/albums/:albumId" Component={AlbumDetailCollectionPage} />;

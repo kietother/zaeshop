@@ -1,3 +1,4 @@
+using Common.Enums;
 using Common.Models;
 using Microsoft.AspNetCore.Mvc;
 using Portal.API.Attributes;
@@ -14,12 +15,14 @@ namespace Portal.API.Controllers
     public class UserController : BaseApiController
     {
         private readonly IGenericRepository<User> _userRepository;
+        private readonly IGenericRepository<UserActivityLog> _userActivityLogRepository;
         private readonly IActivityLogService _activityLogService;
         private readonly IUserService _userService;
 
         public UserController(IUnitOfWork unitOfWork, IActivityLogService activityLogService, IUserService userService)
         {
             _userRepository = unitOfWork.Repository<User>();
+            _userActivityLogRepository = unitOfWork.Repository<UserActivityLog>();
             _activityLogService = activityLogService;
             _userService = userService;
         }
@@ -78,6 +81,43 @@ namespace Portal.API.Controllers
                 return BadRequest(response);
 
             return Ok(response);
+        }
+
+        [HttpGet("{identityUserId}/activity-log")]
+        [Authorize(ERoles.Administrator)]
+        public async Task<IActionResult> GetActivityLogByIdentityUserId([FromRoute] string identityUserId, [FromQuery] PagingCommonRequest request, [FromQuery] EActivityType activityType)
+        {
+            var user = await _userRepository.GetByIdentityUserIdAsync(identityUserId);
+            if (user == null)
+            {
+                return BadRequest("error_user_not_found");
+            }
+
+            // Paging shortcut linq to get paging user activity
+            var totalRecords = await _userActivityLogRepository.GetQueryable()
+                                        .Where(o => o.UserId == user.Id && o.ActivityType == activityType)
+                                        .LongCountAsync();
+            var activityLogs = await _userActivityLogRepository.GetQueryable()
+                                        .Where(o => o.UserId == user.Id && o.ActivityType == activityType)
+                                        .Page(request.PageNumber, request.PageSize)
+                                        .Sort(x => x.CreatedOnUtc, false)
+                                        .ToListAsync();
+
+            var resposne = activityLogs.ConvertAll(x => new ActivityLogResponseModel
+            {
+                Id = x.Id,
+                ActivityType = x.ActivityType,
+                Description = x.Description,
+                IpV4Address = x.IpV4Address,
+                IpV6Address = x.IpV6Address,
+                LogTimes = x.LogTimes,
+                UserId = x.UserId
+            });
+            return Ok(new ServiceResponse<PagingCommonResponse<ActivityLogResponseModel>>(new PagingCommonResponse<ActivityLogResponseModel>
+            {
+                RowNum = totalRecords,
+                Data = resposne
+            }));
         }
 
         [HttpGet("ranking")]

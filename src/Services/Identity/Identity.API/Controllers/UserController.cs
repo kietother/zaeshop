@@ -105,5 +105,31 @@ namespace Identity.API.Controllers
             var user = await _userService.GetByIdAsync(id);
             return Ok(user);
         }
+
+        [HttpGet("{id}/role-subscription")]
+        [Authorize(ERoles.Administrator)]
+        public async Task<IActionResult> GetRoleSubcriptionAsync(string id)
+        {
+            var userRoleSubscription = await _userService.GetUserRoleSubcriptionAsync(id);
+            if (!userRoleSubscription.IsSuccess)
+            {
+                return BadRequest(userRoleSubscription.ErrorMessage);
+            }
+
+            return Ok(userRoleSubscription);
+        }
+
+        [HttpPut("{id}/role-subscription")]
+        [Authorize(ERoles.Administrator)]
+        public async Task<IActionResult> UpdateRoleSubcriptionAsync(string id, [FromBody] UserRoleSubcriptionRequestModel requestModel)
+        {
+            requestModel.UserId = id;
+            var response = await _userService.UpdateUserRoleFromSubscriptionAsync(requestModel);
+            if (!string.IsNullOrEmpty(response))
+            {
+                return BadRequest(response);
+            }
+            return Ok("sucesss");
+        }
     }
 }
