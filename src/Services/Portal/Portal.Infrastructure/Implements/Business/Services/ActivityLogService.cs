@@ -24,7 +24,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 return new ServiceResponse<bool>("error_log_activity");
 
             var logLastTimesInDay = await _activityRepository.GetQueryable()
-                .Where(x => x.CreatedOnUtc.Date == DateTime.UtcNow.Date && x.ActivityType == EActivityType.Comment)
+                .Where(x => x.CreatedOnUtc.Date == DateTime.UtcNow.Date && x.ActivityType == EActivityType.Comment && x.UserId == requestModel.UserId)
                 .OrderByDescending(x => x.LogTimes)
                 .FirstOrDefaultAsync();
 
