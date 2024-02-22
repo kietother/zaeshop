@@ -12,21 +12,23 @@ namespace Portal.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class UserController : BaseApiController
     {
         private readonly IGenericRepository<User> _userRepository;
         private readonly IGenericRepository<UserActivityLog> _userActivityLogRepository;
         private readonly IActivityLogService _activityLogService;
+        private readonly IUserService _userService;
 
-        public UserController(IUnitOfWork unitOfWork, IActivityLogService activityLogService)
+        public UserController(IUnitOfWork unitOfWork, IActivityLogService activityLogService, IUserService userService)
         {
             _userRepository = unitOfWork.Repository<User>();
             _userActivityLogRepository = unitOfWork.Repository<UserActivityLog>();
             _activityLogService = activityLogService;
+            _userService = userService;
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetProfile()
         {
             var identityUserId = GetIdentityUserIdByToken();
@@ -60,6 +62,7 @@ namespace Portal.API.Controllers
         }
 
         [HttpPost("activity-log")]
+        [Authorize]
         public async Task<IActionResult> CreateLog(ActivityLogRequestModel model)
         {
             var identityUserId = GetIdentityUserIdByToken();
@@ -115,6 +118,26 @@ namespace Portal.API.Controllers
                 RowNum = totalRecords,
                 Data = resposne
             }));
+        }
+
+        [HttpGet("ranking")]
+        public async Task<IActionResult> GetPagingAsync([FromQuery] ERegion region)
+        {
+            var request = new PagingCommonRequest()
+            {
+                PageNumber = 1,
+                PageSize = 10,
+                SearchTerm = "",
+                SortColumn = "",
+                SortDirection = ""
+            };
+
+            var response = await _userService.GetPagingAsync(request, region);
+
+            if (!response.IsSuccess)
+                return BadRequest(response);
+
+            return Ok(response);
         }
     }
 }

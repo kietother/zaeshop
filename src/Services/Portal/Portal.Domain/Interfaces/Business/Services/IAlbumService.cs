@@ -13,5 +13,6 @@ namespace Portal.Domain.Interfaces.Business.Services
         Task<ServiceResponse<AlbumResponseModel>> GetByIdAsync(int id);
         Task<ServiceResponse<AlbumExtraInfoModel>> GetExtraInfoByIdAsync(int id);
         Task<ServiceResponse<AlbumExtraInfoModel>> UpdateExtraInfoByIdAsync(int id, AlbumExtraInfoModel requestModel);
+        Task ResetLevelPublicTaskAsync();
     }
 }
