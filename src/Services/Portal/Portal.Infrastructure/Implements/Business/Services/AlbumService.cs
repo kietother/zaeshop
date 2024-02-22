@@ -1,12 +1,18 @@
 using Common;
+using Common.Enums;
+using Common.Interfaces.Messaging;
 using Common.Models;
+using Common.Shared.Models.Logs;
+using Common.ValueObjects;
+using Microsoft.Extensions.Hosting;
 using Portal.Domain.AggregatesModel.AlbumAggregate;
+using Portal.Domain.AggregatesModel.TaskAggregate;
 using Portal.Domain.Enums;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Interfaces.External;
 using Portal.Domain.Models.AlbumModels;
-using Portal.Domain.Models.ImageUploadModels;
 using Portal.Domain.SeedWork;
+using Portal.Infrastructure.Helpers;
 
 namespace Portal.Infrastructure.Implements.Business.Services
 {
@@ -17,16 +23,22 @@ namespace Portal.Infrastructure.Implements.Business.Services
         private readonly IGenericRepository<AlbumAlertMessage> _albumAlertMessageRepository;
         private readonly IGenericRepository<ContentType> _contentTypeRepository;
         private readonly IAmazonS3Service _amazonS3Service;
+        private readonly IServiceLogPublisher _serviceLogPublisher;
+        private readonly IHostEnvironment _hostingEnvironment;
 
         public AlbumService(
             IUnitOfWork unitOfWork,
-            IAmazonS3Service amazonS3Service)
+            IAmazonS3Service amazonS3Service,
+            IServiceLogPublisher serviceLogPublisher,
+            IHostEnvironment hostingEnvironment)
         {
             _unitOfWork = unitOfWork;
             _repository = unitOfWork.Repository<Album>();
             _albumAlertMessageRepository = unitOfWork.Repository<AlbumAlertMessage>();
             _contentTypeRepository = unitOfWork.Repository<ContentType>();
             _amazonS3Service = amazonS3Service;
+            _serviceLogPublisher = serviceLogPublisher;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public async Task<ServiceResponse<AlbumResponseModel>> CreateAsync(AlbumRequestModel requestModel)
@@ -406,6 +418,73 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
             requestModel.Id = album.Id;
             return new ServiceResponse<AlbumExtraInfoModel>(requestModel);
+        }
+
+
+        public async Task ResetLevelPublicTaskAsync()
+        {
+            bool isDeployed = bool.Parse(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT_DEPLOYED") ?? "false");
+            var prefixEnvironment = isDeployed ? "[Docker] " : string.Empty;
+
+            var scheduleJob = await _unitOfWork.Repository<HangfireScheduleJob>().GetByNameAsync(Const.HangfireJobName.SendEmailSPremiumFollowers);
+            if (scheduleJob != null && scheduleJob.IsEnabled && !scheduleJob.IsRunning)
+            {
+                try
+                {
+                    scheduleJob.IsRunning = true;
+                    scheduleJob.StartOnUtc = DateTime.UtcNow;
+                    await _unitOfWork.SaveChangesAsync();
+
+                    await ResetLevelPublicAsync();
+
+                    scheduleJob.EndOnUtc = DateTime.UtcNow;
+                    scheduleJob.IsRunning = false;
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
+                    {
+                        LogLevel = ELogLevel.Error,
+                        EventName = ex.Message,
+                        StackTrace = ex.StackTrace,
+                        ServiceName = "Hangfire",
+                        Environment = prefixEnvironment + _hostingEnvironment.EnvironmentName,
+                        Description = $"[Exception]: {ex.Message}",
+                        StatusCode = "Internal Server Error"
+                    });
+
+                    scheduleJob.EndOnUtc = DateTime.UtcNow;
+                    scheduleJob.IsRunning = false;
+                    await _unitOfWork.SaveChangesAsync();
+                }
+            }
+        }
+
+        // Reset Level Public
+        private async Task<ServiceResponse<bool>> ResetLevelPublicAsync()
+        {
+            var albums = await _repository.GetQueryable().Where(x => x.LevelPublic != ELevelPublic.AllUser).ToListAsync();
+
+            if (albums == null)
+                return new ServiceResponse<bool>("error_reset_level_public");
+
+            foreach (var album in albums)
+            {
+                TimeSpan difference = DateTime.UtcNow - album.CreatedOnUtc;
+
+                if (album.LevelPublic == ELevelPublic.Partner && difference.TotalMinutes >= 15)
+                    album.LevelPublic = ELevelPublic.SPremiumUser;
+
+                if (album.LevelPublic == ELevelPublic.SPremiumUser && difference.TotalHours >= 4 && difference.TotalHours < 12)
+                    album.LevelPublic = ELevelPublic.PremiumUser;
+
+                if (album.LevelPublic == ELevelPublic.PremiumUser && difference.TotalHours >= 12)
+                    album.LevelPublic = ELevelPublic.AllUser;
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+            return new ServiceResponse<bool>(true);
         }
     }
 }

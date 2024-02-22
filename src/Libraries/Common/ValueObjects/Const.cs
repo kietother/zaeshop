@@ -30,6 +30,7 @@ namespace Common.ValueObjects
             public const string SendEmailSPremiumFollowers = "Send notification to SPremium followers";
             public const string ResetRoleUsers = "Reset role users";
             public const string ResetJobNotUpdateRunningStatus = "Reset Job Not Update Running Status";
+            public const string ResetLevelPublic = "Reset level public";
         }
     }
 }

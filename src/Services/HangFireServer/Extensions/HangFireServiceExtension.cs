@@ -50,6 +50,9 @@ namespace HangFireServer.Extensions
         
             // 5 Minutes to check hangfire job is still running start StartOnUtc > endOnUtc + 5m then stop running status
             RecurringJob.AddOrUpdate<ILevelService>(HangfireJobName.ResetJobNotUpdateRunningStatus, x => x.ResetJobNotUpdateRunningStatus(), "*/5 * * * *");
+
+            // 30 Minutes to reset level public
+            RecurringJob.AddOrUpdate<IAlbumService>(HangfireJobName.ResetLevelPublic, x => x.ResetLevelPublicTaskAsync(), "*/30 * * * *");
         }
     }
 }
