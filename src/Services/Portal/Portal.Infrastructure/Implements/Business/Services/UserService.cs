@@ -1,5 +1,6 @@
 ﻿using Common.Enums;
 using Common.Interfaces.Messaging;
+using Common.Models;
 using Common.Shared.Models.Logs;
 using Common.Shared.Models.Users;
 using Common.ValueObjects;
@@ -9,6 +10,7 @@ using Portal.Domain.AggregatesModel.UserAggregate;
 using Portal.Domain.Enums;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.Interfaces.Messaging;
+using Portal.Domain.Models.UserModels;
 using Portal.Domain.SeedWork;
 using Portal.Infrastructure.Helpers;
 
@@ -97,6 +99,37 @@ namespace Portal.Infrastructure.Implements.Business.Services
             await _syncResetExpiredRolePublisher.SendAsync(new SyncResetExpiredRoleMessage
             {
                 UserIds = userExpiredRoleIds
+            });
+        }
+
+        public async Task<ServiceResponse<PagingCommonResponse<UserPagingResponse>>> GetPagingAsync(PagingCommonRequest request, ERegion region)
+        {
+            var parameters = new Dictionary<string, object?>
+            {
+                { "PageNumber", request.PageNumber },
+                { "PageSize", request.PageSize },
+                { "SearchTerm", request.SearchTerm },
+                { "SortColumn", request.SortColumn },
+                { "SortDirection", request.SortDirection },
+                { "Region", region }
+            };
+            var result = await _unitOfWork.QueryAsync<UserPagingResponse>("User_Ranking_All_Paging", parameters);
+
+            var record = result.Find(o => o.IsTotalRecord);
+            if (record == null)
+            {
+                return new ServiceResponse<PagingCommonResponse<UserPagingResponse>>(new PagingCommonResponse<UserPagingResponse>
+                {
+                    RowNum = 0,
+                    Data = new List<UserPagingResponse>()
+                });
+            }
+
+            result.Remove(record);
+            return new ServiceResponse<PagingCommonResponse<UserPagingResponse>>(new PagingCommonResponse<UserPagingResponse>
+            {
+                RowNum = record.RowNum,
+                Data = result
             });
         }
     }
