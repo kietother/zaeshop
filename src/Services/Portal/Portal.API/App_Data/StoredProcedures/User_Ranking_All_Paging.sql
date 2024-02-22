@@ -21,7 +21,9 @@ BEGIN
 
     ;WITH FilteredData AS (
         SELECT ROW_NUMBER() OVER (ORDER BY
-            CASE WHEN ISNULL(@sortColumn, '') = '' THEN Id END
+            CASE WHEN ISNULL(@sortColumn, '') = '' THEN Id END,
+			CASE WHEN @sortColumn = 'CurrentExp' AND @sortDirection = 'ASC' THEN CurrentExp END,
+			CASE WHEN @sortColumn = 'CurrentExp' AND @sortDirection = 'DESC' THEN CurrentExp END DESC
         ) AS RowNum,
                Id,
                UserName,
@@ -49,8 +51,6 @@ BEGIN
            1 AS IsTotalRecord
     FROM FilteredData
     WHERE RowNum BETWEEN @offset + 1 AND @offset + @pageSize
-
-    UNION ALL
 
     SELECT 0 AS TotalRecords,
            0 AS Id,

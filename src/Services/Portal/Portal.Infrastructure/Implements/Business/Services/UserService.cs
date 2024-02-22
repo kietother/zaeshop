@@ -109,8 +109,8 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 { "PageNumber", request.PageNumber },
                 { "PageSize", request.PageSize },
                 { "SearchTerm", request.SearchTerm },
-                { "SortColumn", request.SortColumn },
-                { "SortDirection", request.SortDirection },
+                { "SortColumn", "CurrentExp" },
+                { "SortDirection", "DESC" },
                 { "Region", region }
             };
             var result = await _unitOfWork.QueryAsync<UserPagingResponse>("User_Ranking_All_Paging", parameters);
