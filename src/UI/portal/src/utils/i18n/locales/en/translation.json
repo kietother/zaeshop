@@ -206,6 +206,28 @@
         "coppy_links_to_clipboard": "Copy links to clipboard"
     },
     "role_subscription": {
-        "title": "Role Subscription"
+        "title": "Role Subscription",
+        "activity_header": "Activities",
+        "activity_id": "ID",
+        "acitivy_type": "Type",
+        "activity_description": "Description",
+        "activity_ipv4_address": "IPv4 Address",
+        "activity_ipv6_address": "IPv6 Address",
+        "activity_created_on": "Created On",
+        "expried_date": "Expried Date",
+        "username": "Username",
+        "email": "Email",
+        "created_on": "Created On",
+        "role": "Role",
+        "update_subscription": "Update Subscription",
+        "day": "Day",
+        "submit": "Submit",
+        "reset": "Reset",
+        "current_roles": "Current Roles",
+        "days": "Days",
+        "none": "None",
+        "forever": "Forever",
+        "subscription": "Subscription",
+        "payment": "Payment"
     }
 }

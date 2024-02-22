@@ -106,7 +106,7 @@ namespace Identity.API.Controllers
             return Ok(user);
         }
 
-        [HttpGet("{id}/role-subcription")]
+        [HttpGet("{id}/role-subscription")]
         [Authorize(ERoles.Administrator)]
         public async Task<IActionResult> GetRoleSubcriptionAsync(string id)
         {
@@ -119,7 +119,7 @@ namespace Identity.API.Controllers
             return Ok(userRoleSubscription);
         }
 
-        [HttpPut("{id}/role-subcription")]
+        [HttpPut("{id}/role-subscription")]
         [Authorize(ERoles.Administrator)]
         public async Task<IActionResult> UpdateRoleSubcriptionAsync(string id, [FromBody] UserRoleSubcriptionRequestModel requestModel)
         {

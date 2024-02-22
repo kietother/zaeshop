@@ -1,6 +1,6 @@
 import { EActivityType } from "../enums/EActivityType";
 
-export default interface ActivityLogResponseModel {
+export default interface ActivityLogResponse {
     id: number;
     description?: string | null;
     ipv4Address?: string | null;
@@ -8,4 +8,5 @@ export default interface ActivityLogResponseModel {
     activityType: EActivityType;
     logTimes: number;
     userId: number;
+    createdOnUtc: Date;
 }

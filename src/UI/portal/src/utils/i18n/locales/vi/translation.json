@@ -204,5 +204,30 @@
         "upload_cloud_server": "Tải lên máy chủ đám mây",
         "lazy_loading_images": "Hiển thị ảnh khi cần thiết",
         "coppy_links_to_clipboard": "Sao chép liên kết vào clipboard"
+    },
+    "role_subscription": {
+        "title": "Đăng ký vai trò",
+        "activity_header": "Hoạt động",
+        "activity_id": "ID",
+        "activity_type": "Loại",
+        "activity_description": "Mô tả",
+        "activity_ipv4_address": "Địa chỉ IPv4",
+        "activity_ipv6_address": "Địa chỉ IPv6",
+        "activity_created_on": "Được Tạo Lúc",
+        "expired_date": "Ngày Hết Hạn",
+        "username": "Tên người dùng",
+        "email": "Email",
+        "created_on": "Được Tạo Lúc",
+        "role": "Vai trò",
+        "update_subscription": "Cập Nhật Đăng Ký",
+        "day": "Ngày",
+        "submit": "Gửi",
+        "reset": "Đặt Lại",
+        "current_roles": "Vai Trò Hiện Tại",
+        "days": "Ngày",
+        "none": "Không",
+        "forever": "Mãi mãi",
+        "subscription": "Đăng Ký",
+        "payment": "Thanh Toán"
     }
 }

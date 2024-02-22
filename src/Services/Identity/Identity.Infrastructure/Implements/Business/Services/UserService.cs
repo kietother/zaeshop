@@ -270,7 +270,8 @@ namespace Identity.Infrastructure.Implements.Business.Services
                 Username = user.UserName,
                 Avatar = user.Avatar,
                 Role = CommonHelper.GetDescription(currentRoleType),
-                ExpriedRoleDate = user.ExpriedRoleDate
+                ExpriedRoleDate = user.ExpriedRoleDate,
+                CreatedOnUtc = user.CreatedOnUtc
             });
         }
 

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import ActivityLogResponseModel from "../../models/user/ActivityLogResponse";
+import ActivityLogResponse from "../../models/user/ActivityLogResponse";
 import UserRoleSubscriptionResponse from "../../models/user/UserRoleSubscriptionResponse";
 import ServerResponse from "../../models/common/ServerResponse";
 import { PagingResponse } from "../../models/common/PagingResponse";
@@ -7,17 +7,22 @@ import PagingRequest from "../../models/common/PagingRequest";
 import { AxiosRequestConfig } from "axios";
 import axiosApiInstance from "../../services/interceptor";
 import { identityServer, portalServer } from "../../services/baseUrls";
+import { EActivityType } from "../../models/enums/EActivityType";
+import UserRoleSubscriptionActivityPagingRequest from "../../models/user/UserRoleSubscriptionActivityPagingRequest";
 
 // Thunks
 const getActivitiesLogPagingAsyncThunk = createAsyncThunk<
-    ServerResponse<PagingResponse<ActivityLogResponseModel>>,
-    { id: string, params: PagingRequest },
+    ServerResponse<PagingResponse<ActivityLogResponse>>,
+    { id: string, params: PagingRequest, activityType: EActivityType },
     { rejectValue: string }
 >('userRoleSubscription/getActivitiesLogPagingAsyncThunk', async (model, thunkApi) => {
-    const config: AxiosRequestConfig<PagingRequest> = {
-        params: model.params
+    const config: AxiosRequestConfig<UserRoleSubscriptionActivityPagingRequest> = {
+        params: {
+            ...model.params,
+            activityType: model.activityType
+        }
     };
-    const response = await axiosApiInstance.get<ServerResponse<PagingResponse<ActivityLogResponseModel>>>(portalServer + `/api/user/${model.id}/activity-log`, config);
+    const response = await axiosApiInstance.get<ServerResponse<PagingResponse<ActivityLogResponse>>>(portalServer + `/api/user/${model.id}/activity-log`, config);
     return response.data;
 });
 
@@ -32,7 +37,7 @@ const getUserRoleSubscriptionAsyncThunk = createAsyncThunk<
 
 interface UserRoleSubscriptionState {
     roleSubscription: UserRoleSubscriptionResponse | null;
-    activities: ActivityLogResponseModel[];
+    activities: ActivityLogResponse[];
     totalRecords: number;
     loading: boolean;
     error: string | null;
