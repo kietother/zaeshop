@@ -1,5 +1,4 @@
 "use client"
-import { ERoleType } from "@/app/models/enums/ERoleType";
 import { getEnumValueFromString } from "@/app/utils/HelperFunctions";
 import { parseJsonFromString } from "@/lib/json";
 import { checkRoleUpdate, getTokenFromSessionServer } from "@/lib/services/client/auth";

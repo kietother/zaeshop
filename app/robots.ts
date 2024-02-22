@@ -11,6 +11,8 @@ export default function robots(): MetadataRoute.Robots {
                 '/profile',
                 '/theo-doi',
                 '/following',
+                '/vi',
+                '/vi/*',
                 '/truyen-tranh/*?previousCollectionId=*',
                 '/comics/*?previousCollectionId=*'
             ],
