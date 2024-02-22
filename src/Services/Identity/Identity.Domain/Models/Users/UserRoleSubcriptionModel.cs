@@ -12,6 +12,7 @@ namespace Identity.Domain.Models.Users
 
         public string? Role { get; set; }
         public DateTime? ExpriedRoleDate { get; set; }
+        public DateTime? CreatedOnUtc { get; set; }
     }
 
     public class UserRoleSubcriptionRequestModel
