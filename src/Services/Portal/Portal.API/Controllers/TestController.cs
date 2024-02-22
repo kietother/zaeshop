@@ -25,6 +25,7 @@ namespace Portal.API.Controllers
         private readonly IServiceLogPublisher _serviceLogPublisher;
         private readonly IRedisService _redisService;
         private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
 
         public TestController(
             IUnitOfWork unitOfWork,
@@ -34,7 +35,8 @@ namespace Portal.API.Controllers
             ISendMailPublisher sendMailPublisher,
             IServiceLogPublisher serviceLogPublisher,
             IRedisService redisService,
-            IUserService userService)
+            IUserService userService,
+            IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _backgroundJobClient = backgroundJobClient;
@@ -44,6 +46,7 @@ namespace Portal.API.Controllers
             _serviceLogPublisher = serviceLogPublisher;
             _redisService = redisService;
             _userService = userService;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -156,6 +159,14 @@ namespace Portal.API.Controllers
         public async Task<IActionResult> ResetRoleUser()
         {
             await _userService.ResetRoleAsync();
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("noti-following")]
+        public async Task<IActionResult> SendMailToFollowers()
+        {
+            await _emailService.SendEmailToFollowersTaskAsync();
             return Ok();
         }
     }
