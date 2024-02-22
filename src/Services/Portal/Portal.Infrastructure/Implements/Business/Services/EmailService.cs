@@ -4,12 +4,14 @@ using Common.Shared.Models.Emails;
 using Common.Shared.Models.Logs;
 using Common.ValueObjects;
 using Microsoft.Extensions.Hosting;
+using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.AggregatesModel.TaskAggregate;
 using Portal.Domain.AggregatesModel.UserAggregate;
 using Portal.Domain.Enums;
 using Portal.Domain.Interfaces.Business.Services;
 using Portal.Domain.SeedWork;
 using Portal.Infrastructure.Helpers;
+using System;
 
 namespace Portal.Infrastructure.Implements.Business.Services
 {
@@ -84,12 +86,13 @@ namespace Portal.Infrastructure.Implements.Business.Services
             {
                 var region = follower.Region;
                 var toEmail = string.Join(", ", follower.Email);
+
                 var bodyList = follower.Followings
                     .Select(comic => comic.Album)
                     .Select(album =>
                     {
                         var newChap = album.Collections
-                            .Where(x => x.CreatedOnUtc.Date == DateTime.UtcNow.Date)
+                            .Where(x => (DateTime.UtcNow - x.CreatedOnUtc).TotalHours <= 24)
                             .OrderByDescending(x => x.CreatedOnUtc)
                             .FirstOrDefault();
 
