@@ -61,8 +61,6 @@ namespace HangFireServer.Messaging.Comsumers
             #region Update Subscription from new roles
             if (syncRolesMessage.IsUpdateSubscription)
             {
-                user.ExpriedRoleDate = syncRolesMessage.ExpriedRoleDate;
-
                 // Log
                 var descriptionBuilder = new StringBuilder();
                 if (syncRolesMessage.OldRoleType != syncRolesMessage.NewRoleType)
@@ -78,6 +76,7 @@ namespace HangFireServer.Messaging.Comsumers
                 if (user.ExpriedRoleDate != syncRolesMessage.ExpriedRoleDate)
                 {
                     descriptionBuilder.AppendFormat("ExpriedRoleDate: {0} -> {1}\n", user.ExpriedRoleDate, syncRolesMessage.ExpriedRoleDate);
+                    user.ExpriedRoleDate = syncRolesMessage.ExpriedRoleDate;
                 }
 
                 var userActivityLog = new UserActivityLog

@@ -82,7 +82,7 @@ namespace Portal.API.Controllers
 
         [HttpGet("{identityUserId}/activity-log")]
         [Authorize(ERoles.Administrator)]
-        public async Task<IActionResult> GetActivityLogByIdentityUserId([FromRoute] string identityUserId, [FromQuery] PagingCommonRequest request, [FromQuery] EActivityType type)
+        public async Task<IActionResult> GetActivityLogByIdentityUserId([FromRoute] string identityUserId, [FromQuery] PagingCommonRequest request, [FromQuery] EActivityType activityType)
         {
             var user = await _userRepository.GetByIdentityUserIdAsync(identityUserId);
             if (user == null)
@@ -92,10 +92,10 @@ namespace Portal.API.Controllers
 
             // Paging shortcut linq to get paging user activity
             var totalRecords = await _userActivityLogRepository.GetQueryable()
-                                        .Where(o => o.UserId == user.Id && o.ActivityType == type)
+                                        .Where(o => o.UserId == user.Id && o.ActivityType == activityType)
                                         .LongCountAsync();
             var activityLogs = await _userActivityLogRepository.GetQueryable()
-                                        .Where(o => o.UserId == user.Id && o.ActivityType == type)
+                                        .Where(o => o.UserId == user.Id && o.ActivityType == activityType)
                                         .Page(request.PageNumber, request.PageSize)
                                         .Sort(x => x.CreatedOnUtc, false)
                                         .ToListAsync();
