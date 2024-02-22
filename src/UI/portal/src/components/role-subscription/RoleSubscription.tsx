@@ -102,6 +102,8 @@ const RoleSubscription: React.FC<Props> = ({ userId, reloadPaging }) => {
     }
 
     const onSubmit = async () => {
+        closeModal();
+        
         const toastId = toast.loading(t("toast.please_wait"), {
             hideProgressBar: true
         });
