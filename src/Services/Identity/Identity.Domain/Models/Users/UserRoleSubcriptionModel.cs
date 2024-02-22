@@ -24,4 +24,10 @@ namespace Identity.Domain.Models.Users
         [Range(0, int.MaxValue, ErrorMessage = "error_user_role_subcription_days_invalid")]
         public int? Days { get; set; }
     }
+
+    public class UserRoleNewSubscription
+    {
+        public List<string> Role { get; set; } = new List<string>();
+        public DateTime? ExpriedRoleDate { get; set; }
+    }
 }
