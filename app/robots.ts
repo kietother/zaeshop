@@ -29,7 +29,7 @@ export default function robots(): MetadataRoute.Robots {
                 '/vi',
                 '/vi/*',
                 '/truyen-tranh/*?previousCollectionId=*',
-                '/comics/*?previousCollectionId=*',
+                '/en/comics/*?previousCollectionId=*',
                 '/*?typePage=*',
                 '/*tim-kiem*',
                 '/*search*',
