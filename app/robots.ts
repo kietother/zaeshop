@@ -33,7 +33,7 @@ export default function robots(): MetadataRoute.Robots {
                 '/*?typePage=*',
                 '/*tim-kiem*',
                 '/*search*',
-                '/comics/*'
+                '/comics*'
             ],
         },
         sitemap: [
