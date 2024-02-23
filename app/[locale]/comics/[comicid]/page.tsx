@@ -14,6 +14,7 @@ import { headers } from "next/headers";
 import { isbot } from "isbot";
 import { redirect } from "next/navigation";
 import { ERegion } from "@/app/models/comics/ComicSitemap";
+import { pathnames } from "@/navigation";
 
 type Props = {
     params: { comicid: string | null, locale: string }
@@ -22,11 +23,22 @@ type Props = {
 
 export async function generateMetadata({ params: { comicid, locale } }: Props) {
     const t = await getTranslations({ locale, namespace: 'metadata' });
+    const baseUrl = process.env.NEXT_BASE_URL!;
+    const routeVi = pathnames["/comics"]['vi'] + `/${comicid}`;
+    const routeEn = '/en' + pathnames["/comics"]['en'] + `/${comicid}`;
     const comicMetadata: ComicMetadata | null | undefined = await fetch(process.env.PORTAL_API_URL + `/api/client/ComicApp/${comicid}/metadata`)
         .then(res => res.json())
 
     if (comicMetadata) {
         return {
+            metadataBase: new URL(baseUrl),
+            alternates: {
+                canonical: locale === 'vi' ? routeVi : routeEn,
+                languages: {
+                    'vi': routeVi,
+                    'en': routeEn,
+                },
+            },
             title: t('comic', {
                 title: comicMetadata.title,
                 lastedChapter: comicMetadata.lastestChapter
@@ -53,6 +65,14 @@ export async function generateMetadata({ params: { comicid, locale } }: Props) {
     }
 
     return {
+        metadataBase: new URL(baseUrl),
+        alternates: {
+            canonical: locale === 'vi' ? routeVi : routeEn,
+            languages: {
+                'vi': routeVi,
+                'en': routeEn,
+            },
+        },
         title: t('comic'),
         description: t('comic_description')
     }
