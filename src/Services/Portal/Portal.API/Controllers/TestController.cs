@@ -169,5 +169,23 @@ namespace Portal.API.Controllers
             await _emailService.SendEmailToFollowersTaskAsync();
             return Ok();
         }
+
+        [HttpGet]
+        [Route("cache")]
+        [Authorize(ERoles.Administrator)]
+        public async Task<IActionResult> GetCacheValueByKey([FromQuery] string key)
+        {
+            var response = await _redisService.GetStringAsync(key);
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("remove-cache-pattern")]
+        [Authorize(ERoles.Administrator)]
+        public IActionResult RemoveCachePattern([FromQuery] string pattern)
+        {
+            _redisService.RemoveByPattern(pattern);
+            return Ok(pattern);
+        }
     }
 }
