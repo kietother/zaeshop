@@ -19,7 +19,8 @@ export default function robots(): MetadataRoute.Robots {
                 '/*?typePage=comic',
                 '/*?typePage=bande_dessinée',
                 '/*tim-kiem?value=*',
-                '/*search?value=*'
+                '/*search?value=*',
+                '/en/comics/*'
             ],
             disallow: [
                 '/profile',
@@ -31,7 +32,8 @@ export default function robots(): MetadataRoute.Robots {
                 '/comics/*?previousCollectionId=*',
                 '/*?typePage=*',
                 '/*tim-kiem*',
-                '/*search*'
+                '/*search*',
+                '/comics/*'
             ],
         },
         sitemap: [
