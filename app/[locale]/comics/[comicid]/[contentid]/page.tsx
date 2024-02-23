@@ -15,6 +15,7 @@ import { isbot } from "isbot";
 import { getEnumValueFromString } from "@/app/utils/HelperFunctions";
 import { redirect } from "next/navigation";
 import { ERegion } from "@/app/models/comics/ComicSitemap";
+import { pathnames } from "@/navigation";
 
 type Props = {
     params: { comicid: string | null, contentid: string | null, locale: string }
@@ -23,11 +24,22 @@ type Props = {
 
 export async function generateMetadata({ params: { comicid, contentid, locale } }: Props) {
     const t = await getTranslations({ locale, namespace: 'metadata' });
+    const baseUrl = process.env.NEXT_BASE_URL!;
+    const routeVi = pathnames["/comics"]['vi'] + `/${comicid}/${contentid}`;
+    const routeEn = '/en' + pathnames["/comics"]['en'] + `/${comicid}/${contentid}`;
     const contentMetadata: ContentMetadata | null | undefined = await fetch(process.env.PORTAL_API_URL + `/api/client/ContentApp/comics/${comicid}/contents/${contentid}/metadata`)
         .then(res => res.json());
 
     if (contentMetadata && contentMetadata.comicTitle && contentMetadata.contentTitle) {
         return {
+            metadataBase: new URL(baseUrl),
+            alternates: {
+                canonical: locale === 'vi' ? routeVi : routeEn,
+                languages: {
+                    'vi': routeVi,
+                    'en': routeEn,
+                },
+            },
             title: t('content', {
                 comicTitle: contentMetadata.comicTitle,
                 contentTile: contentMetadata.contentTitle
@@ -54,6 +66,14 @@ export async function generateMetadata({ params: { comicid, contentid, locale } 
     }
 
     return {
+        metadataBase: new URL(baseUrl),
+        alternates: {
+            canonical: locale === 'vi' ? routeVi : routeEn,
+            languages: {
+                'vi': routeVi,
+                'en': routeEn,
+            },
+        },
         title: t('content_blank'),
         description: t('content_blank_description')
     }
