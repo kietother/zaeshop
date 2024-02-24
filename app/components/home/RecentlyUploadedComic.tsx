@@ -1,35 +1,13 @@
 "use client"
 import { useTranslations } from 'next-intl';
-import PagingRequest from "@/app/models/paging/PagingRequest";
 import { useEffect, useState, useRef } from 'react';
 import FollowingRequestModel from '@/app/models/comics/FollowingRequestModel';
 import { followAlbum, getStatusFollow, handleRedirect, unFollow } from '@/app/utils/HelperFunctions';
-import { getAlbums } from '@/lib/services/client/album/albumService';
 
-export default function RecentlyUploadedComic({ roleUser, locale }: { roleUser: any, locale: any }) {
+export default function RecentlyUploadedComic({ roleUser, albums }: { roleUser: any, albums: any }) {
     const t = useTranslations('home');
-    const [albums, setAlbums] = useState<any>();
-    const [loading, setLoading] = useState(true);
     const [loadingFollow, setLoadingFollow] = useState(true);
     const [statusFollow, setStatusFollow] = useState(null);
-    const [pagingParams, setPagingParams] = useState<PagingRequest>({
-        PageNumber: 1,
-        PageSize: 12,
-        SearchTerm: '',
-        SortColumn: 'updatedOnUtc',
-        SortDirection: 'desc'
-    });
-
-    const [filter] = useState({
-        firstChar: '',
-        genre: '',
-        country: '',
-        year: '',
-        status: false,
-        language: '',
-        rating: '',
-        region: locale
-    });
 
     const dropdownRef = useRef<HTMLUListElement | null>(null);
 
@@ -80,16 +58,6 @@ export default function RecentlyUploadedComic({ roleUser, locale }: { roleUser: 
         };
     }, []);
 
-    useEffect(() => {
-        getAlbums(pagingParams, filter).then((response: any) => {
-            if (response && response.data) {
-                setAlbums(response.data);
-                if (response.data != null)
-                    setLoading(false)
-            }
-        });
-    }, []);
-
     return (
         <>
             {/*=====================================*/}
@@ -102,17 +70,9 @@ export default function RecentlyUploadedComic({ roleUser, locale }: { roleUser: 
                             <a href="/top-page?typePage=&sort=updateDate">
                                 <span className="view-more">{t('view_more')}</span>
                             </a>
-                        </h1>               
+                        </h1>
                     </div>
-                    {loading && (
-                        // Display the spinner when loading is true
-                        <div className="d-flex justify-content-center align-items-center">
-                            <div className="spinner-border" role="status">
-                                <span className="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                    )}
-                    {!loading && albums && albums.length === 0 && (
+                    {albums && albums.length === 0 && (
                         <div className="no-data-message">
                             {t('no_data')}
                         </div>
@@ -121,10 +81,10 @@ export default function RecentlyUploadedComic({ roleUser, locale }: { roleUser: 
                         {albums?.map((album: any) => (
                             <div key={album.id} className="col-lg-2 col-sm-6 col-12 comic-element">
                                 <div className="anime-blog">
-                                    <a onClick={()=>handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)} className="img-block">
-                                        <img src={album.cdnThumbnailUrl ?? "/assets/media/404/none.jpg"} alt={album.title} />
+                                    <a onClick={() => handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)} className="img-block">
+                                        <img loading='lazy' src={album.cdnThumbnailUrl ?? "/assets/media/404/none.jpg"} alt={album.title} />
                                     </a>
-                                    <a onClick={()=>handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)} className="action-overlay"><i className="fa fa-eye" aria-hidden="true"></i> {t('read_now')}</a>
+                                    <a onClick={() => handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)} className="action-overlay"><i className="fa fa-eye" aria-hidden="true"></i> {t('read_now')}</a>
                                     <div className="d-flex justify-content-between">
                                         <p className="text">{album?.lastCollectionTitle}</p>
                                         <div className="dropdown">
@@ -208,7 +168,7 @@ export default function RecentlyUploadedComic({ roleUser, locale }: { roleUser: 
                                             </ul>
                                         </div>
                                     </div>
-                                    <a onClick={()=>handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)}>
+                                    <a onClick={() => handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)}>
                                         <p>{album.title}</p>
                                     </a>
                                 </div>

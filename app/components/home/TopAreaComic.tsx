@@ -61,10 +61,11 @@ export default function TopAreaComic({ locale, roleUser }: { locale: any, roleUs
                             <h3>Top {t('day')}</h3>
                             {albumsDay?.map((album: any) => (
                                 <div key={album.id} className="anime-box style-2 bg-color-black">
-                                    <a onClick={()=>handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)}>
+                                    <a onClick={() => handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)}>
                                         <div className="row m-0">
                                             <div className="p-0 col-4">
                                                 <img
+                                                    loading='lazy'
                                                     src={album.cdnThumbnailUrl ?? "/assets/media/404/none.jpg"} alt={album.title}
                                                 />
                                             </div>
@@ -83,10 +84,11 @@ export default function TopAreaComic({ locale, roleUser }: { locale: any, roleUs
                             <h3>Top {t('month')}</h3>
                             {albumsMonth?.map((album: any) => (
                                 <div key={album.id} className="anime-box style-2 bg-color-black">
-                                    <a onClick={()=>handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)}>
+                                    <a onClick={() => handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)}>
                                         <div className="row m-0">
                                             <div className="p-0 col-4">
                                                 <img
+                                                    loading='lazy'
                                                     src={album.cdnThumbnailUrl ?? "/assets/media/404/none.jpg"} alt={album.title}
                                                 />
                                             </div>
@@ -105,10 +107,11 @@ export default function TopAreaComic({ locale, roleUser }: { locale: any, roleUs
                             <h3>Top {t('year')}</h3>
                             {albumsYear?.map((album: any) => (
                                 <div key={album.id} className="anime-box style-2 bg-color-black">
-                                    <a onClick={()=>handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)}>
+                                    <a onClick={() => handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)}>
                                         <div className="row m-0">
                                             <div className="p-0 col-4">
                                                 <img
+                                                    loading='lazy'
                                                     src={album.cdnThumbnailUrl ?? "/assets/media/404/none.jpg"} alt={album.title}
                                                 />
                                             </div>
