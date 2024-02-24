@@ -10,10 +10,6 @@ import { authOptions } from "@/lib/auth";
 import { getLocale, getTranslations } from "next-intl/server";
 import ComicMetadata from "@/app/models/comics/ComicMetadata";
 import { getEnumValueFromString } from "@/app/utils/HelperFunctions";
-import { headers } from "next/headers";
-import { isbot } from "isbot";
-import { redirect } from "next/navigation";
-import { ERegion } from "@/app/models/comics/ComicSitemap";
 import { pathnames } from "@/navigation";
 
 type Props = {
@@ -99,15 +95,6 @@ export default async function Comic({ params }: { params: { comicid: string | nu
     const comic = await getComic(params.comicid);
     const session = await getServerSession(authOptions);
     const locale = await getLocale();
-
-    // Validate Bot then checking region by locale, if not valid then redirect home to not index this url
-    const headersList = headers();
-    const userAgent = headersList.get("user-agent");
-    const isBot = isbot(userAgent);
-    const regionLocale = locale === 'vi' ? ERegion.vn : ERegion.en;
-    if (isBot && comic?.region !== regionLocale) {
-        redirect('/');
-    }
 
     const roleUser = getEnumValueFromString(session?.user?.token?.roles);
     return (
