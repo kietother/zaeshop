@@ -19,21 +19,16 @@ export default function robots(): MetadataRoute.Robots {
                 '/*?typePage=comic',
                 '/*?typePage=bande_dessinée',
                 '/*tim-kiem?value=*',
-                '/*search?value=*',
-                '/en/comics/*'
+                '/*search?value=*'
             ],
             disallow: [
-                '/profile',
-                '/theo-doi',
-                '/following',
                 '/vi',
                 '/vi/*',
                 '/truyen-tranh/*?previousCollectionId=*',
                 '/en/comics/*?previousCollectionId=*',
                 '/*?typePage=*',
                 '/*tim-kiem*',
-                '/*search*',
-                '/comics*'
+                '/*search*'
             ],
         },
         sitemap: [
