@@ -74,11 +74,18 @@ const DynamicTopPage = dynamic(() => import('@/app/components/top-page/TopPage')
     ssr: false
 });
 
+const ScrollButton = dynamic(() => import('@/app/components/common/ScrollButton'), {
+    ssr: false
+});
+
 export default async function Page() {
     const session = await getServerSession(authOptions);
     const locale = await getLocale();
     const roleUser = getEnumValueFromString(session?.user?.token?.roles);
     return (
-        <DynamicTopPage locale={locale} roleUser={roleUser} />
+        <>
+            <ScrollButton />
+            <DynamicTopPage locale={locale} roleUser={roleUser} />
+        </>
     );
 }
