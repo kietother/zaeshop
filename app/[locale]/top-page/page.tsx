@@ -5,12 +5,56 @@ import { authOptions } from "@/lib/auth";
 import { getEnumValueFromString } from "@/app/utils/HelperFunctions";
 import { pathnames } from "@/navigation";
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+type Props = {
+    params: { locale: string },
+    searchParams?: { [key: string]: string | string[] | undefined }
+}
+
+export async function generateMetadata({ params: { locale }, searchParams }: Props) {
     const t = await getTranslations({ locale, namespace: 'metadata' });
     const baseUrl = process.env.NEXT_BASE_URL!;
 
     const routeVi = pathnames["/top-page"]['vi'];
     const routeEn = '/en' + pathnames["/top-page"]['en'];
+
+    let title = t('top_popular');
+    if (searchParams?.typePage) {
+        switch (searchParams.typePage) {
+            case 'day':
+                title = t('top_day');
+                break;
+            case 'week':
+                title = t('top_week');
+                break;
+            case 'month':
+                title = t('top_month');
+                break;
+            case 'year':
+                title = t('top_year');
+                break;
+            case 'manga':
+                title = t('top_manga');
+                break;
+            case 'manhwa':
+                title = t('top_manhwa');
+                break;
+            case 'manhua':
+                title = t('top_manhua');
+                break;
+            case 'comic':
+                title = t('top_comic');
+                break;
+            case 'bande_dessinée':
+                title = t('top_bande_dessinee');
+                break;
+            default:
+                title = t('top_popular');
+                break;
+        }
+    }
+    else if (searchParams?.sort === 'updateDate') {
+        title = t('top_recently_updated');
+    }
 
     return {
         metadataBase: new URL(baseUrl),
@@ -21,7 +65,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
                 'en': routeEn,
             },
         },
-        title: t('top'),
+        title: t('top', { title }),
         description: t('top_description')
     };
 }
