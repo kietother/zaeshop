@@ -418,7 +418,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
             if (value != null && value.Count != 0)
             {
-                var collectionIds = value.Select(x => x.CollectionId).Distinct();
+                var collectionIds = value.Select(x => x.CollectionId).Distinct().ToList();
                 var collectionViewsInDb = await _collectionViewRepository.GetQueryable().Where(x =>
                     collectionIds.Contains(x.CollectionId) && (x.Date == value[0].CreatedOnUtc.Date)
                 ).ToListAsync();
@@ -553,6 +553,21 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
                 // Reset cache when calculated successfully
                 _redisService.Remove(key);
+
+                // Remove cache comic details
+                if (collectionIds.Count > 0)
+                {
+                    var albumFriendlyNames = await _repository.GetQueryable()
+                                                    .Where(x => collectionIds.Contains(x.Id))
+                                                    .Select(y => y.Album.FriendlyName)
+                                                    .Distinct()
+                                                    .ToListAsync();
+
+                    foreach (var friendlyName in albumFriendlyNames)
+                    {
+                        _redisService.Remove(string.Format(Const.RedisCacheKey.ComicDetail, friendlyName));
+                    }
+                }
 
                 // Log to service log to stored
                 await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
@@ -731,9 +746,12 @@ namespace Portal.Infrastructure.Implements.Business.Services
             await _unitOfWork.SaveChangesAsync();
 
             // Remove cache comic details
-            foreach (var friendlyName in albumFriendlyNames)
+            if (albumFriendlyNames.Count > 0)
             {
-                _redisService.Remove(string.Format(Const.RedisCacheKey.ComicDetail, friendlyName));
+                foreach (var friendlyName in albumFriendlyNames)
+                {
+                    _redisService.Remove(string.Format(Const.RedisCacheKey.ComicDetail, friendlyName));
+                }
             }
 
             return new ServiceResponse<bool>(true);

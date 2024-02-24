@@ -477,24 +477,42 @@ namespace Portal.Infrastructure.Implements.Business.Services
             if (albums == null)
                 return new ServiceResponse<bool>("error_reset_level_public");
 
+            var albumFriendlyNames = new List<string?>();
             foreach (var album in albums)
             {
                 TimeSpan difference = DateTime.UtcNow - album.CreatedOnUtc;
 
                 if (album.LevelPublic == ELevelPublic.Partner && difference.TotalMinutes >= 15)
+                {
                     album.LevelPublic = ELevelPublic.SPremiumUser;
+                    albumFriendlyNames.Add(album.FriendlyName);
+                }
 
                 if (album.LevelPublic == ELevelPublic.SPremiumUser && difference.TotalHours >= 4 && difference.TotalHours < 12)
+                {
                     album.LevelPublic = ELevelPublic.PremiumUser;
+                    albumFriendlyNames.Add(album.FriendlyName);
+                }
 
                 if (album.LevelPublic == ELevelPublic.PremiumUser && difference.TotalHours >= 12)
+                {
                     album.LevelPublic = ELevelPublic.AllUser;
+                    albumFriendlyNames.Add(album.FriendlyName);
+                }
             }
 
             await _unitOfWork.SaveChangesAsync();
 
             // Remove cache Comic Paging
-            _redisService.RemoveByPattern(Const.RedisCacheKey.ComicPagingPattern);
+            if (albumFriendlyNames.Count > 0)
+            {
+                foreach (var friendlyName in albumFriendlyNames)
+                {
+                    _redisService.Remove(string.Format(Const.RedisCacheKey.ComicDetail, friendlyName));
+                }
+
+                _redisService.RemoveByPattern(Const.RedisCacheKey.ComicPagingPattern);
+            }
 
             return new ServiceResponse<bool>(true);
         }
