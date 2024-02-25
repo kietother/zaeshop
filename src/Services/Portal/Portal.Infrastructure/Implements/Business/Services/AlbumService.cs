@@ -1,5 +1,6 @@
 using Common;
 using Common.Enums;
+using Common.Interfaces;
 using Common.Interfaces.Messaging;
 using Common.Models;
 using Common.Shared.Models.Logs;
@@ -9,7 +10,6 @@ using Portal.Domain.AggregatesModel.AlbumAggregate;
 using Portal.Domain.AggregatesModel.TaskAggregate;
 using Portal.Domain.Enums;
 using Portal.Domain.Interfaces.Business.Services;
-using Portal.Domain.Interfaces.External;
 using Portal.Domain.Models.AlbumModels;
 using Portal.Domain.SeedWork;
 using Portal.Infrastructure.Helpers;
@@ -22,23 +22,23 @@ namespace Portal.Infrastructure.Implements.Business.Services
         private readonly IGenericRepository<Album> _repository;
         private readonly IGenericRepository<AlbumAlertMessage> _albumAlertMessageRepository;
         private readonly IGenericRepository<ContentType> _contentTypeRepository;
-        private readonly IAmazonS3Service _amazonS3Service;
         private readonly IServiceLogPublisher _serviceLogPublisher;
         private readonly IHostEnvironment _hostingEnvironment;
+        private readonly IRedisService _redisService;
 
         public AlbumService(
             IUnitOfWork unitOfWork,
-            IAmazonS3Service amazonS3Service,
             IServiceLogPublisher serviceLogPublisher,
-            IHostEnvironment hostingEnvironment)
+            IHostEnvironment hostingEnvironment,
+            IRedisService redisService)
         {
             _unitOfWork = unitOfWork;
             _repository = unitOfWork.Repository<Album>();
             _albumAlertMessageRepository = unitOfWork.Repository<AlbumAlertMessage>();
             _contentTypeRepository = unitOfWork.Repository<ContentType>();
-            _amazonS3Service = amazonS3Service;
             _serviceLogPublisher = serviceLogPublisher;
             _hostingEnvironment = hostingEnvironment;
+            _redisService = redisService;
         }
 
         public async Task<ServiceResponse<AlbumResponseModel>> CreateAsync(AlbumRequestModel requestModel)
@@ -117,6 +117,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
             _repository.Add(entity);
             await _unitOfWork.SaveChangesAsync();
+
+            // Remove cache Comic Paging
+            _redisService.RemoveByPattern(Const.RedisCacheKey.ComicPagingPattern);
 
             // Map entity to response model
             var responseModel = new AlbumResponseModel
@@ -249,6 +252,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
             _repository.Update(existingAlbum);
             await _unitOfWork.SaveChangesAsync();
 
+            // Remove cache Comic Paging
+            _redisService.RemoveByPattern(Const.RedisCacheKey.ComicPagingPattern);
+
             // Map to response
             var responseModel = new AlbumResponseModel
             {
@@ -292,6 +298,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
             _repository.Delete(existingAlbum);
             await _unitOfWork.SaveChangesAsync();
+
+            // Remove cache Comic Paging
+            _redisService.RemoveByPattern(Const.RedisCacheKey.ComicPagingPattern);
 
             return new ServiceResponse<bool>(true);
         }
@@ -468,21 +477,43 @@ namespace Portal.Infrastructure.Implements.Business.Services
             if (albums == null)
                 return new ServiceResponse<bool>("error_reset_level_public");
 
+            var albumFriendlyNames = new List<string?>();
             foreach (var album in albums)
             {
                 TimeSpan difference = DateTime.UtcNow - album.CreatedOnUtc;
 
                 if (album.LevelPublic == ELevelPublic.Partner && difference.TotalMinutes >= 15)
+                {
                     album.LevelPublic = ELevelPublic.SPremiumUser;
+                    albumFriendlyNames.Add(album.FriendlyName);
+                }
 
                 if (album.LevelPublic == ELevelPublic.SPremiumUser && difference.TotalHours >= 4 && difference.TotalHours < 12)
+                {
                     album.LevelPublic = ELevelPublic.PremiumUser;
+                    albumFriendlyNames.Add(album.FriendlyName);
+                }
 
                 if (album.LevelPublic == ELevelPublic.PremiumUser && difference.TotalHours >= 12)
+                {
                     album.LevelPublic = ELevelPublic.AllUser;
+                    albumFriendlyNames.Add(album.FriendlyName);
+                }
             }
 
             await _unitOfWork.SaveChangesAsync();
+
+            // Remove cache Comic Paging
+            if (albumFriendlyNames.Count > 0)
+            {
+                foreach (var friendlyName in albumFriendlyNames)
+                {
+                    _redisService.Remove(string.Format(Const.RedisCacheKey.ComicDetail, friendlyName));
+                }
+
+                _redisService.RemoveByPattern(Const.RedisCacheKey.ComicPagingPattern);
+            }
+
             return new ServiceResponse<bool>(true);
         }
     }

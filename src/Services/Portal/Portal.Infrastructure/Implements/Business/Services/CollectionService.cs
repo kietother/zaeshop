@@ -82,6 +82,12 @@ namespace Portal.Infrastructure.Implements.Business.Services
             _repository.Add(entity);
             await _unitOfWork.SaveChangesAsync();
 
+            // Remove cache Comic Detail
+            _redisService.Remove(string.Format(Const.RedisCacheKey.ComicDetail, existingAlbum.FriendlyName));
+
+            // Remove cache Comic Paging
+            _redisService.RemoveByPattern(Const.RedisCacheKey.ComicPagingPattern);
+
             // Map the entity to the response model
             var responseModel = new CollectionResponseModel
             {
@@ -136,6 +142,12 @@ namespace Portal.Infrastructure.Implements.Business.Services
             _repository.Update(existingEntity);
             await _unitOfWork.SaveChangesAsync();
 
+            // Remove cache Comic Detail
+            _redisService.Remove(string.Format(Const.RedisCacheKey.ComicDetail, existingAlbum.FriendlyName));
+
+            // Remove cache Comic Paging
+            _redisService.RemoveByPattern(Const.RedisCacheKey.ComicPagingPattern);
+
             // Map the updated entity to the response model
             var responseModel = new CollectionResponseModel
             {
@@ -186,6 +198,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
             // Delete the entity from the repository and save changes
             _repository.Delete(existingEntity);
             await _unitOfWork.SaveChangesAsync();
+
+            // Remove cache Comic Paging
+            _redisService.RemoveByPattern(Const.RedisCacheKey.ComicPagingPattern);
 
             return new ServiceResponse<bool>(true);
         }
@@ -403,7 +418,7 @@ namespace Portal.Infrastructure.Implements.Business.Services
 
             if (value != null && value.Count != 0)
             {
-                var collectionIds = value.Select(x => x.CollectionId).Distinct();
+                var collectionIds = value.Select(x => x.CollectionId).Distinct().ToList();
                 var collectionViewsInDb = await _collectionViewRepository.GetQueryable().Where(x =>
                     collectionIds.Contains(x.CollectionId) && (x.Date == value[0].CreatedOnUtc.Date)
                 ).ToListAsync();
@@ -435,8 +450,9 @@ namespace Portal.Infrastructure.Implements.Business.Services
                         });
                     }
                     // Case 2: No records today, created record before so we update record that ready to save database
-                    else if (collectionView == null && newCollectionView != null) {
-                         newCollectionView.View++;
+                    else if (collectionView == null && newCollectionView != null)
+                    {
+                        newCollectionView.View++;
 
                         if (item.UserId != null && newCollectionView.UserId == null)
                         {
@@ -535,6 +551,24 @@ namespace Portal.Infrastructure.Implements.Business.Services
                 };
                 await _unitOfWork.ExecuteAsync("Collection_Album_RecalculateViews", parameters);
 
+                // Reset cache when calculated successfully
+                _redisService.Remove(key);
+
+                // Remove cache comic details
+                if (collectionIds.Count > 0)
+                {
+                    var albumFriendlyNames = await _repository.GetQueryable()
+                                                    .Where(x => collectionIds.Contains(x.Id))
+                                                    .Select(y => y.Album.FriendlyName)
+                                                    .Distinct()
+                                                    .ToListAsync();
+
+                    foreach (var friendlyName in albumFriendlyNames)
+                    {
+                        _redisService.Remove(string.Format(Const.RedisCacheKey.ComicDetail, friendlyName));
+                    }
+                }
+
                 // Log to service log to stored
                 await _serviceLogPublisher.WriteLogAsync(new ServiceLogMessage
                 {
@@ -621,6 +655,12 @@ namespace Portal.Infrastructure.Implements.Business.Services
             {
                 _repository.AddRange(addCollections);
                 await _unitOfWork.SaveChangesAsync();
+
+                // Remove cache Comic Detail
+                _redisService.Remove(string.Format(Const.RedisCacheKey.ComicDetail, album.FriendlyName));
+
+                // Remove cache Comic Paging
+                _redisService.RemoveByPattern(Const.RedisCacheKey.ComicPagingPattern);
             }
 
             return new ServiceResponse<string>("success");
@@ -670,26 +710,50 @@ namespace Portal.Infrastructure.Implements.Business.Services
         // Reset Level Public
         private async Task<ServiceResponse<bool>> ResetLevelPublicAsync()
         {
-            var collections = await _repository.GetQueryable().Where(x => x.LevelPublic != ELevelPublic.AllUser).ToListAsync();
+            var collections = await _repository.GetQueryable()
+                                    .Include(x => x.Album)
+                                    .Where(x => x.LevelPublic != ELevelPublic.AllUser)
+                                    .ToListAsync();
 
             if (collections == null)
                 return new ServiceResponse<bool>("error_reset_level_public");
+
+            var albumFriendlyNames = new List<string?>();
 
             foreach (var collection in collections)
             {
                 TimeSpan difference = DateTime.UtcNow - collection.CreatedOnUtc;
 
                 if (collection.LevelPublic == ELevelPublic.Partner && difference.TotalMinutes >= 15)
+                {
                     collection.LevelPublic = ELevelPublic.SPremiumUser;
+                    albumFriendlyNames.Add(collection.Album.FriendlyName);
+                }
 
                 if (collection.LevelPublic == ELevelPublic.SPremiumUser && difference.TotalHours >= 4 && difference.TotalHours < 12)
+                {
                     collection.LevelPublic = ELevelPublic.PremiumUser;
+                    albumFriendlyNames.Add(collection.Album.FriendlyName);
+                }
 
                 if (collection.LevelPublic == ELevelPublic.PremiumUser && difference.TotalHours >= 12)
+                {
                     collection.LevelPublic = ELevelPublic.AllUser;
+                    albumFriendlyNames.Add(collection.Album.FriendlyName);
+                }
             }
 
             await _unitOfWork.SaveChangesAsync();
+
+            // Remove cache comic details
+            if (albumFriendlyNames.Count > 0)
+            {
+                foreach (var friendlyName in albumFriendlyNames)
+                {
+                    _redisService.Remove(string.Format(Const.RedisCacheKey.ComicDetail, friendlyName));
+                }
+            }
+
             return new ServiceResponse<bool>(true);
         }
     }
