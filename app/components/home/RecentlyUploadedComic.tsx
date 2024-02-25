@@ -1,11 +1,13 @@
 "use client"
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useEffect, useState, useRef } from 'react';
 import FollowingRequestModel from '@/app/models/comics/FollowingRequestModel';
-import { followAlbum, getStatusFollow, handleRedirect, unFollow } from '@/app/utils/HelperFunctions';
+import { followAlbum, getLangByLocale, getStatusFollow, handleRedirect, unFollow } from '@/app/utils/HelperFunctions';
+import { Link, pathnames } from '@/navigation';
 
-export default function RecentlyUploadedComic({ roleUser, albums }: { roleUser: any, albums: any }) {
+export default function RecentlyUploadedComic({ roleUser, albums, isBot }: { roleUser: any, albums: any, isBot: boolean }) {
     const t = useTranslations('home');
+    const locale = useLocale();
     const [loadingFollow, setLoadingFollow] = useState(true);
     const [statusFollow, setStatusFollow] = useState(null);
 
@@ -81,10 +83,22 @@ export default function RecentlyUploadedComic({ roleUser, albums }: { roleUser: 
                         {albums?.map((album: any) => (
                             <div key={album.id} className="col-lg-2 col-sm-6 col-12 comic-element">
                                 <div className="anime-blog">
-                                    <a onClick={() => handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)} className="img-block">
-                                        <img loading='lazy' src={album.cdnThumbnailUrl ?? "/assets/media/404/none.jpg"} alt={album.title} />
-                                    </a>
-                                    <a onClick={() => handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)} className="action-overlay"><i className="fa fa-eye" aria-hidden="true"></i> {t('read_now')}</a>
+                                    {!isBot && (
+                                        <>
+                                            <a className="img-block" onClick={() => handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)}>
+                                                <img loading='lazy' src={album.cdnThumbnailUrl ?? "/assets/media/404/none.jpg"} alt={album.title} />
+                                            </a>
+                                            <a onClick={() => handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)} className="action-overlay"><i className="fa fa-eye" aria-hidden="true"></i> {t('read_now')}</a>
+                                        </>
+                                    )}
+                                    {isBot && (
+                                        <>
+                                            <Link className="img-block" href={`${pathnames['/comics'][getLangByLocale(locale)]}/${album.friendlyName}`}>
+                                                <img loading='lazy' src={album.cdnThumbnailUrl ?? "/assets/media/404/none.jpg"} alt={album.title} />
+                                            </Link>
+                                            <Link href={`${pathnames['/comics'][getLangByLocale(locale)]}/${album.friendlyName}`} className="action-overlay"><i className="fa fa-eye" aria-hidden="true"></i> {t('read_now')}</Link>
+                                        </>
+                                    )}
                                     <div className="d-flex justify-content-between">
                                         <p className="text">{album?.lastCollectionTitle}</p>
                                         <div className="dropdown">
@@ -168,9 +182,12 @@ export default function RecentlyUploadedComic({ roleUser, albums }: { roleUser: 
                                             </ul>
                                         </div>
                                     </div>
-                                    <a onClick={() => handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)}>
+                                    {!isBot && <a onClick={() => handleRedirect(`truyen-tranh/${album.friendlyName}`, roleUser)}>
                                         <p>{album.title}</p>
-                                    </a>
+                                    </a>}
+                                    {isBot && <Link href={`${pathnames['/comics'][getLangByLocale(locale)]}/${album.friendlyName}`}>
+                                        <p>{album.title}</p>
+                                    </Link>}
                                 </div>
                             </div>
                         ))}

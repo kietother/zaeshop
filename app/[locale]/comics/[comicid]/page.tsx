@@ -11,6 +11,8 @@ import { getLocale, getTranslations } from "next-intl/server";
 import ComicMetadata from "@/app/models/comics/ComicMetadata";
 import { getEnumValueFromString } from "@/app/utils/HelperFunctions";
 import { pathnames } from "@/navigation";
+import { isbot } from "isbot";
+import { headers } from "next/headers";
 
 type Props = {
     params: { comicid: string | null, locale: string }
@@ -95,6 +97,7 @@ export default async function Comic({ params }: { params: { comicid: string | nu
     const comic = await getComic(params.comicid);
     const session = await getServerSession(authOptions);
     const locale = await getLocale();
+    const isBot = isbot(headers().get('user-agent'));
 
     const roleUser = getEnumValueFromString(session?.user?.token?.roles);
     return (
@@ -102,7 +105,7 @@ export default async function Comic({ params }: { params: { comicid: string | nu
             <ScrollButton />
             <Breadcrumb title={comic?.title} friendlyName={comic?.friendlyName} />
             <InfomationComic comic={comic} roleUser={roleUser} region={comic?.region} />
-            <ChapterComic contents={comic?.contents} locale={locale} roleUser={roleUser} genre={comic?.tags} comicId={comic?.id} region={comic?.region} />
+            <ChapterComic contents={comic?.contents} locale={locale} roleUser={roleUser} genre={comic?.tags} comicId={comic?.id} region={comic?.region} isBot={isBot} />
             <DynamicCommentComic comicId={comic?.id} collectionId={null} roleUser={roleUser} />
         </>
     );

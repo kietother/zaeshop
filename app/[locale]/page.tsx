@@ -11,6 +11,8 @@ import { getAxiosInstanceAsync } from "@/lib/axios";
 import PagingRequest from "../models/paging/PagingRequest";
 import ServerResponse from "../models/common/ServerResponse";
 import { cache } from 'react'
+import { isbot } from "isbot";
+import { headers } from "next/headers";
 
 // Fast cache for 1 minutes
 export const revalidate = 1
@@ -74,13 +76,15 @@ export default async function Home() {
     recentlyUploadedComicsApiPromise
   ]);
 
+  const isBot = isbot(headers().get('user-agent'));
+
   return (
     <>
       <ScrollButton />
-      <BannerComic roleUser={roleUser} />
-      <PopularComic roleUser={roleUser} albums={popularComics} />
-      <RecentlyUploadedComic roleUser={roleUser} albums={recentlyUploadedComics} />
-      <TopAreaComic locale={locale} roleUser={roleUser} />
+      <BannerComic roleUser={roleUser} isBot={isBot} />
+      <PopularComic roleUser={roleUser} albums={popularComics} isBot={isBot} />
+      <RecentlyUploadedComic roleUser={roleUser} albums={recentlyUploadedComics} isBot={isBot} />
+      <TopAreaComic locale={locale} roleUser={roleUser} isBot={isBot} />
     </>
   )
 }
