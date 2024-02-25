@@ -22,7 +22,7 @@ export default async function middleware(request: NextRequest) {
   if (!request.cookies.has('NEXT_LOCALE')) {
     // Get path from request
     const { pathname } = request.nextUrl;
-    locale = pathname.includes('en') ? 'en' : 'vi';
+    locale = pathname.includes('/en') ? 'en' : 'vi';
     localeDetection = false;
     // Vietnamese is default can not change langauge by url
   } else if (request.cookies.get('NEXT_LOCALE')?.value === 'vi' && request.nextUrl.searchParams.get('switch') === 'true') {
